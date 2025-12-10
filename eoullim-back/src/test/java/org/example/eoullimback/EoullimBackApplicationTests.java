@@ -1,10 +1,10 @@
-package org.example.eoullim;
+package org.example.eoullimback;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EoullimApplicationTests {
+class EoullimBackApplicationTests {
 
     @Test
     void contextLoads() {

@@ -1,13 +1,13 @@
-package org.example.eoullim;
+package org.example.eoullimback;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EoullimApplication {
+public class EoullimBackApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EoullimApplication.class, args);
+        SpringApplication.run(EoullimBackApplication.class, args);
     }
 
 }
