@@ -7,14 +7,19 @@
 ---
 
 ## 서비스 흐름
-
-1. 회원가입 → 로그인 (JWT 발급)
-2. 카테고리 선택 → 공간 선택
-3. 예약 가능 상태 확인
-   - 하루종일 / 시간대별 타임슬롯
-4. 타임슬롯 선택 → 예약 진행
-5. 결제 → QR코드 발급
-6. QR코드로 무인 공간 입장
+1.회원가입 
+2.로그인 (JWT 인증)
+3.카테고리 선택
+4.장소 선택
+5.룸 선택
+6.날짜 선택 → 해당 날짜의 타임슬롯 조회
+7.타임슬롯 선택 → 예약 생성(PENDING_PAYMENT)
+8.결제 진행
+9.결제 완료 → QR 코드 발급(PAID)
+10.QR 코드 스캔 → 무인 공간 입장(USED)
+11.이용 종료 처리
+12.리뷰 작성 가능
+13.Q&A 게시판 이용 가능
 
 ## DB 테이블 다이어그램
-<img width="7664" height="3812" alt="erd-diagram-2025-12-11T16-14-03" src="https://github.com/user-attachments/assets/39327bb9-30f9-4595-9d78-455e30385b80" />
+<img width="3053" height="3014" alt="diagram-export-2025 -12 -12 -오후-2_42_35" src="https://github.com/user-attachments/assets/e6492746-da6b-4810-a521-3dea0b079295" />

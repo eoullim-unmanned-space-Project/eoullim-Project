@@ -1,8 +1,6 @@
 package org.example.eoullimback.review;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +23,6 @@ public class Review {
     private Long id;
 
     @Column(name = "rating", nullable = false)
-    @Min(1) @Max(5)
     private Integer rating;
 
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
