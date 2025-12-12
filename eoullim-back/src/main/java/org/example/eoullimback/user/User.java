@@ -33,16 +33,13 @@ public class User {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    public User(Long id, String loginId, String password,
-                String name, String phone, Timestamp createAt, Timestamp updatedAt
+    public User(Long id, String loginId, String password, String name, String phone
     ) {
         this.id = id;
         this.loginId = loginId;
         this.password = password;
         this.name = name;
         this.phone = phone;
-        this.createAt = createAt;
-        this.updatedAt = updatedAt;
     }
 
     public void addRole(Role role) {
