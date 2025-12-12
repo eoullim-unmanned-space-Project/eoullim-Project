@@ -15,8 +15,8 @@ CREATE TABLE users (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 계정 생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '사용자 계정(프로필) 수정일',
   
-  UNIQUE KEY `uk_users_login_id` UNIQUE(login_id),
-  UNIQUE KEY `uk_users_email` UNIQUE(email)
+  UNIQUE KEY `uk_users_login_id` (login_id),
+  UNIQUE KEY `uk_users_email` (email)
 ) ENGINE=InnoDB 
 	DEFAULT CHARSET=utf8mb4 
 	COLLATE=utf8mb4_unicode_ci
@@ -69,7 +69,7 @@ CREATE TABLE qaas (
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
 
 	INDEX `idx_qaa_user` (user_id),
-	CONSTRAINT `fk_qaa_user_id FOREIGN KEY` (user_id) REFERENCES users(id)
+	CONSTRAINT `fk_qaa_user_id` FOREIGN KEY (user_id) REFERENCES users(id)
 )
 ENGINE=InnoDB
 DEFAULT CHARSET = utf8mb4
@@ -245,7 +245,7 @@ CREATE TABLE payments (
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
 
-	UNIQUE KEY `uk_payments_payment_key` UNIQUE (payment_key),	
+	UNIQUE KEY `uk_payments_payment_key` (payment_key),	
 
 	INDEX `idx_payments_user_id` (user_id),
 	INDEX `idx_payments_order_id` (order_id),
@@ -310,8 +310,8 @@ CREATE TABLE notifications (
     user_id BIGINT NOT NULL COMMENT '대상 사용자',
     payment_id BIGINT NOT NULL COMMENT '결제 ID (결제 완료 이벤트와 연결)',
     
-    type VARCHAR(20) NOT NULL COMMENT '알림(PAYMENT(결제), REFUND(환불), CANCEL(취소), BOOKIG(예약))', // ENUM
-    status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '전송 상태(PENDING(대기), SENT(전송), FAILED(실패))', // ENUM
+    type VARCHAR(20) NOT NULL COMMENT '알림(PAYMENT(결제), REFUND(환불), CANCEL(취소), BOOKIG(예약))', -- ENUM
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '전송 상태(PENDING(대기), SENT(전송), FAILED(실패))', -- ENUM
     message VARCHAR(255) NOT NULL COMMENT '전송 메시지',
     qr_code VARCHAR(40) NOT NULL COMMENT 'QR 코드 토큰',
     
@@ -341,9 +341,9 @@ CREATE TABLE reviews (
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
 
-	UNIQUE KEY uk_review_once (payment_id),-->  수정
+	UNIQUE KEY `uk_review_once` (payment_id), -- 수정 
 	
-	INDEX `idx_review_room (room_id, rating),
+	INDEX `idx_review_room` (room_id, rating),
 	
 	CONSTRAINT `fk_review_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
 	CONSTRAINT `fk_review_room_id` FOREIGN KEY (room_id) REFERENCES rooms(id),
