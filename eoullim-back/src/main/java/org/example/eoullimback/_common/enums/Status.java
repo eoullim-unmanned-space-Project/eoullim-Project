@@ -1,4 +1,4 @@
-package org.example.eoullimback.common.enums;
+package org.example.eoullimback._common.enums;
 
 public enum Status {
     OPEN,

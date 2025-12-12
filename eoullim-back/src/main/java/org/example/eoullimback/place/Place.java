@@ -2,13 +2,14 @@ package org.example.eoullimback.place;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback.common.enums.Status;
+import org.example.eoullimback._common.enums.Status;
 import org.example.eoullimback.file.PlaceFile;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "places")
@@ -41,5 +42,18 @@ public class Place {
     private Status status;
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PlaceFile> placeFile;
+    private List<PlaceFile> placeFile;
+
+    @Builder
+    public Place(Long id, String name, String address, Double latitude, Double longitude, LocalDateTime openTime, LocalDateTime closeTime, Status status, List<PlaceFile> placeFile) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.status = status;
+        this.placeFile = placeFile;
+    }
 }

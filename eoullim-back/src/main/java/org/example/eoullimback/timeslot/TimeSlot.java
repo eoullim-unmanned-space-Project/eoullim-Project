@@ -2,10 +2,11 @@ package org.example.eoullimback.timeslot;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback.common.base.BaseTimeEntity;
-import org.example.eoullimback.common.enums.Status;
+import org.example.eoullimback._common.base.BaseTimeEntity;
+import org.example.eoullimback._common.enums.Status;
 import org.example.eoullimback.room.Room;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class TimeSlot extends BaseTimeEntity {
     @Column(nullable = false)
     private Status status;
 
+    @Builder
     public TimeSlot(Long id, Room room, LocalDateTime startTime, LocalDateTime emdTime, int capacity, int reserved, Status status) {
         this.id = id;
         this.room = room;

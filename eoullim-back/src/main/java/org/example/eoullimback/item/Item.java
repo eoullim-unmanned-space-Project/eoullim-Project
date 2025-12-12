@@ -2,9 +2,10 @@ package org.example.eoullimback.item;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback.common.base.BaseTimeEntity;
+import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.timeslot.TimeSlot;
 
@@ -41,6 +42,7 @@ public class Item extends BaseTimeEntity {
     @Column(nullable = false)
     private int price;
 
+    @Builder
     public Item(Long id, Room room, TimeSlot timeSlot, String title, String context, int price) {
         this.id = id;
         this.room = room;

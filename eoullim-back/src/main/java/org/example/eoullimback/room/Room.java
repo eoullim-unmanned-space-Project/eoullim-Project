@@ -2,11 +2,11 @@ package org.example.eoullimback.room;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback.common.enums.CapacityPolicy;
-import org.example.eoullimback.common.enums.Category;
-import org.example.eoullimback.place.Place;
+import org.example.eoullimback._common.enums.CapacityPolicy;
+import org.example.eoullimback._common.enums.Category;
 
 @Entity
 @Table(name = "rooms")
@@ -35,6 +35,7 @@ public class Room {
     @Column(nullable = false, length = 20)
     private CapacityPolicy capacityPolicy;
 
+    @Builder
     public Room(Long id, String name, String content, Category category, CapacityPolicy capacityPolicy) {
         this.id = id;
         this.name = name;

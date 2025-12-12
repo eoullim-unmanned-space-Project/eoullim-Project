@@ -2,6 +2,7 @@ package org.example.eoullimback.file;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback.place.Place;
@@ -22,5 +23,9 @@ public class PlaceFile {
             foreignKey = @ForeignKey(name = "fk_place_files_place_files"))
     private Place place;
 
-
+    @Builder
+    public PlaceFile(Long id, Place place) {
+        this.id = id;
+        this.place = place;
+    }
 }

@@ -1,4 +1,4 @@
-package org.example.eoullimback.common.base;
+package org.example.eoullimback._common.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
