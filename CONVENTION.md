@@ -34,14 +34,13 @@
 | feat | 기능 개발 | feat: 예약 기능 개발 |
 | fix | 버그 수정 | fix: 로그인 오류 수정 |
 | docs | 문서 작업 | docs: API 문서 업데이트 |
-| chore | 단순 작업 | chore: 패키지 정리 |
 | refactor | 리팩토링 | refactor: 결제 모듈 리팩토링 |
 ---
 
-**Issue 제목 형식**
+## 05. Issue 제목 
 - [feat] 예약 기능 개발
 - [feat] 결제 기능 개발
 - [fix] 로그인 실패 문제 해결
 
-## Issue 내용
+## 06. Issue 내용
 - User 엔티티 작성 완료. JPA 매핑 및 Lombok 적용.
