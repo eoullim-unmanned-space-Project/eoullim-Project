@@ -1,20 +1,23 @@
 package org.example.eoullimback.comment;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback.qaa.Qaa;
+import org.example.eoullimback.user.User;
 
-@Data
-@NoArgsConstructor
+@Entity
 @Table(
         name = "comments",
         indexes = {
                 @Index(name = "idx_comment_user", columnList = "user_id")
         }
 )
-@Entity
-public class Comment {
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +26,9 @@ public class Comment {
     @Column(name = "comment", columnDefinition = "TEXT", nullable = false)
     private String comment;
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_user_id"))
-//    private User user;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_user_id"))
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "qaa_id", foreignKey = @ForeignKey(name = "fk_comment_qaa_id"))
