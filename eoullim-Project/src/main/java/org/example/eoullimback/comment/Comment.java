@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback.qaa.Qaa;
-import org.example.eoullimback.user.User;
+import org.example.eoullimback.user_auth.user.User;
 
 @Entity
 @Table(

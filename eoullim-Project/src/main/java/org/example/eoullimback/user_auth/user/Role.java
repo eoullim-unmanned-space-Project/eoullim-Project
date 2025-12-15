@@ -1,10 +1,10 @@
-package org.example.eoullimback.user;
+package org.example.eoullimback.user_auth.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback.user.enums.RoleType;
+import org.example.eoullimback._common.enums.RoleType;
 
 @Entity
 @Table(name = "roles")

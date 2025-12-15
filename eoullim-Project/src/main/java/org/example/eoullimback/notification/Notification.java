@@ -3,7 +3,7 @@ package org.example.eoullimback.notification;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback.user.User;
+import org.example.eoullimback.user_auth.user.User;
 
 import java.time.LocalDateTime;
 

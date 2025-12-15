@@ -1,4 +1,4 @@
-package org.example.eoullimback.user;
+package org.example.eoullimback.user_auth.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
