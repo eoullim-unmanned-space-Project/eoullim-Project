@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "payments",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "uk_payments_payment_key"),
-                @UniqueConstraint(columnNames = "uk_payments_booking_id")
+                @UniqueConstraint(name = "uk_payments_payment_key", columnNames = "payment_key"),
+                @UniqueConstraint(name = "uk_payments_booking_id", columnNames = "booking_id")
         },
         indexes = {
                 @Index(name = "idx_payments_user_id", columnList = "user_id"),
@@ -24,8 +24,6 @@ import java.time.LocalDateTime;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-@AllArgsConstructor
 public class Payment extends BaseTimeEntity {
 
         @Id
@@ -77,6 +75,19 @@ public class Payment extends BaseTimeEntity {
         private LocalDateTime approvedAt;
         private LocalDateTime cancelledAt;
 
+
+        @Builder
+        public Payment(User user, Booking booking, String orderId, String paymentKey, Long amount, PaymentMethod method, PaymentStatus status ,String productCode, String productName) {
+            this.user = user;
+            this.booking = booking;
+            this.orderId = orderId;
+            this.paymentKey = paymentKey;
+            this.amount = amount;
+            this.method = (method != null) ? method : PaymentMethod.MOCK;
+            this.status = (status != null) ? status : PaymentStatus.READY;
+            this.productCode = productCode;
+            this.productName = productName;
+        }
 
         public void markSuccess() {
                 this.status = PaymentStatus.SUCCESS;
