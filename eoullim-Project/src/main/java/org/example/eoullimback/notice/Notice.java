@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
-import org.example.eoullimback.user.User;
+import org.example.eoullimback.user_auth.user.User;
 
 @Data
 @NoArgsConstructor
