@@ -6,7 +6,7 @@ import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.payment.PaymentMethod;
 import org.example.eoullimback._common.enums.payment.PaymentStatus;
 import org.example.eoullimback.booking.Booking;
-import org.example.eoullimback.user.User;
+import org.example.eoullimback.user_auth.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
