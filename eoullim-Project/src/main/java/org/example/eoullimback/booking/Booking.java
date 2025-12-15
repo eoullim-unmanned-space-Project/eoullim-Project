@@ -8,7 +8,7 @@ import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback.item.Item;
 import org.example.eoullimback.timeslot.TimeSlot;
-import org.example.eoullimback.user.User;
+import org.example.eoullimback.user_auth.user.User;
 
 import java.time.LocalDate;
 
