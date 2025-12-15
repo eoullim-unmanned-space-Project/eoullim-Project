@@ -318,7 +318,7 @@ CREATE TABLE notifications (
     created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     sent_at DATETIME(6) NULL COMMENT '전송 시각',
     
-    CHECK (type IN('PAYMENT', 'REFUND', 'CANCEL', 'BOOKIG')),
+    CHECK (type IN('PAYMENT', 'REFUND', 'CANCEL', 'BOOKING')),
     CHECK (status IN('PENDING', 'SENT', 'FAILED')),
     
     CONSTRAINT `fk_notification_user` FOREIGN KEY (user_id) REFERENCES users(id),
