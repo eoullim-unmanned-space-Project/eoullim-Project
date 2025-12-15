@@ -5,6 +5,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
+import org.example.eoullimback.payment.Payment;
+import org.example.eoullimback.room.Room;
 import org.example.eoullimback.user_auth.user.User;
 
 @Entity
@@ -35,11 +37,11 @@ public class Review extends BaseTimeEntity {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_review_user_id"))
     private User user;
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "room_id", foreignKey = @ForeignKey(name = "fk_review_room_id"))
-//    private Room room;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "room_id", foreignKey = @ForeignKey(name = "fk_review_room_id"))
+    private Room room;
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "payment_id", foreignKey = @ForeignKey(name = "fk_review_payment_id"))
-//    private Payment payment;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "payment_id", foreignKey = @ForeignKey(name = "fk_review_payment_id"))
+    private Payment payment;
 }
