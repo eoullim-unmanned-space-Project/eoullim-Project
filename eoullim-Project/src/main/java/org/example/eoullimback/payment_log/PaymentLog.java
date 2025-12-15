@@ -1,24 +1,15 @@
 package org.example.eoullimback.payment_log;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.payment.ActionType;
 import org.example.eoullimback._common.enums.payment.PaymentLogStatus;
-import org.example.eoullimback._common.enums.payment.RefundStatus;
-import org.example.eoullimback.payment.Payment;
-import org.example.eoullimback.payment_refund.PaymentRefund;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "payment_logs")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-@AllArgsConstructor
+@Getter
 public class PaymentLog extends BaseTimeEntity {
 
     @Id
@@ -41,6 +32,31 @@ public class PaymentLog extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private PaymentLogStatus status;
+
+    @Builder
+    public PaymentLog(Long paymentId, Long paymentRefundId, Long amount, ActionType actionType, PaymentLogStatus status) {
+        this.paymentId = paymentId;
+        this.paymentRefundId = paymentRefundId;
+        this.amount = amount;
+        this.status = (status != null) ? status : PaymentLogStatus.PENDING;
+        this.actionType = (actionType != null) ? actionType : ActionType.PAYMENT;
+    }
+
+    public static PaymentLog createPayment(Long paymentId, Long amount) {
+        return PaymentLog.builder()
+                .paymentId(paymentId)
+                .amount(amount)
+                .build();
+    }
+
+    public static PaymentLog createRefund(Long paymentId, Long paymentRefundId, Long amount) {
+        return PaymentLog.builder()
+                .paymentId(paymentId)
+                .paymentRefundId(paymentRefundId)
+                .amount(amount)
+                .actionType(ActionType.REFUND)
+                .build();
+    }
 
     public void markSuccess() {
         this.status = PaymentLogStatus.COMPLETED;
