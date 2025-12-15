@@ -341,7 +341,7 @@ CREATE TABLE reviews (
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
 
-	UNIQUE KEY `uk_review_once` (payment_id), -- 수정 
+	UNIQUE KEY `uk_review_once` (payment_id),
 	
 	INDEX `idx_review_room` (room_id, rating),
 	
