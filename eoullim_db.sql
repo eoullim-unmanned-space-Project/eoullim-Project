@@ -1,7 +1,3 @@
-CREATE DATABASE IF NOT EXISTS eoullim_db;
-
-use eoullim_db;
-
 CREATE TABLE users (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   
@@ -15,8 +11,8 @@ CREATE TABLE users (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 계정 생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '사용자 계정(프로필) 수정일',
   
-  UNIQUE KEY `uk_users_login_id` (login_id),
-  UNIQUE KEY `uk_users_email` (email)
+  UNIQUE KEY `uk_users_login_id` UNIQUE(login_id),
+  UNIQUE KEY `uk_users_email` UNIQUE(email)
 ) ENGINE=InnoDB 
 	DEFAULT CHARSET=utf8mb4 
 	COLLATE=utf8mb4_unicode_ci
@@ -41,6 +37,8 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
   COLLATE = utf8mb4_unicode_ci
   COMMENT = '사용자 권한 매핑';
 
+-- 리프레시토큰(refresh_tokens)
+
 CREATE TABLE file_infos (
 id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
@@ -59,16 +57,18 @@ COMMENT = '파일 정보 테이블';
 
 CREATE TABLE qaas (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
-	title VARCHAR(50) NOT NULL COMMENT 'Q&A 제목',
+	
+    user_id BIGINT NOT NULL COMMENT '작성자',
+    
+    title VARCHAR(50) NOT NULL COMMENT 'Q&A 제목',
 	content TEXT NOT NULL COMMENT 'Q&A 내용',
 	view_count BIGINT NOT NULL DEFAULT 0 COMMENT '조회수',
-
-	user_id BIGINT NOT NULL COMMENT '작성자',
 
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
 
 	INDEX `idx_qaa_user` (user_id),
+    
 	CONSTRAINT `fk_qaa_user_id` FOREIGN KEY (user_id) REFERENCES users(id)
 )
 ENGINE=InnoDB
@@ -80,8 +80,8 @@ CREATE TABLE comments (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
 	comment TEXT NOT NULL COMMENT '댓글',
 
-	user_id BIGINT NOT NULL COMMENT '관리자Q&A응답',
-	qaa_id BIGINT NOT NULL COMMENT 'QaA',
+	user_id BIGINT NOT NULL COMMENT '관리자 Q&A 응답',
+	qaa_id BIGINT NOT NULL COMMENT 'Q&A',
 
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
@@ -106,7 +106,7 @@ CREATE TABLE places (
 	
 	open_time DATETIME NOT NULL COMMENT'오픈시간',
 	close_time DATETIME NOT NULL COMMENT'마감시간',
-	status VARCHAR(20) NOT NULL DEFAULT 'SCHEDULED' COMMENT'상태(SCHEDULED,OPEN,CLOSED)', 
+	status VARCHAR(20) NOT NULL DEFAULT 'SCHEDULED' COMMENT'상태(SCHEDULED, OPEN, CLOSED)', 
 	
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일'
@@ -159,7 +159,7 @@ CREATE TABLE timeslots (
 	end_time DATETIME(6) NOT NULL COMMENT '종료시간',
 	capacity INT NOT NULL COMMENT '인원 수 지정',
 	reserved INT NOT NULL DEFAULT 0 COMMENT '예약인원',
-	status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT'슬롯 상태', -- OPEN|CLOSED|CANCELED
+	status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT'슬롯 상태', 
   
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
@@ -202,11 +202,15 @@ CREATE TABLE bookings (
 	timeslot_id BIGINT NOT NULL COMMENT '타임슬롯',
 	item_id BIGINT NOT NULL COMMENT'아이템',
 	
+	qty INT NOT NULL CHECK (qty > 0) COMMENT '인원체크',
+  amount BIGINT NOT NULL COMMENT '가격',
 	booking_date DATE NOT NULL COMMENT '예약 날짜',
-	status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '상태', -- PENDING|CONFIRMED|CANCELED|REFUNDED
+	status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '상태',
 	
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
+	
+	UNIQUE KEY `uk_user_timeslot_item` UNIQUE (user_id, timeslot_id, item_id),	
 	
 	CONSTRAINT `fk_booking_user` FOREIGN KEY (user_id) REFERENCES users(id),
 	CONSTRAINT `fk_booking_timeslot` FOREIGN KEY (timeslot_id) REFERENCES timeslots(id),
@@ -231,6 +235,7 @@ CREATE TABLE payments (
 	payment_key VARCHAR(100) NOT NULL COMMENT '결제 키 (PG 또는 모의 PG 트랜잭션 키)',
 	amount BIGINT NOT NULL COMMENT '결제 금액(포인트)',
 	method VARCHAR(30) NOT NULL COMMENT '결제 수단 (KAKAO_PAY, TOSS_PAY등)',
+	status VARCHAR(30) NOT NULL COMMENT '결제 상태',
 
 	product_code VARCHAR(50) NOT NULL COMMENT '상품 코드',
 	product_name VARCHAR(100) NOT NULL COMMENT '상품 이름',
@@ -245,7 +250,10 @@ CREATE TABLE payments (
 	created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
 
-	UNIQUE KEY `uk_payments_payment_key` (payment_key),	
+	CHECK(status IN('READY', 'SUCCESS', 'FAILED', 'CANCELLED', 'REFUNDED')),
+
+	UNIQUE KEY `uk_payments_booking_id` UNIQUE (booking_id),	
+	UNIQUE KEY `uk_payments_payment_key` UNIQUE (payment_key),
 
 	INDEX `idx_payments_user_id` (user_id),
 	INDEX `idx_payments_order_id` (order_id),
@@ -265,7 +273,7 @@ payment_id BIGINT NOT NULL COMMENT '원 결제 ID',
 amount BIGINT NOT NULL COMMENT '환불 금액',
 reason VARCHAR(255) NULL COMMENT '환불 사유',
 
-status VARCHAR(30) NOT NULL COMMENT '환불 상태 (REQUEST, COMPELETED, FALED)',
+status VARCHAR(30) NOT NULL COMMENT '환불 상태 (REQUEST, COMPLETED, FALED)',
 
 failure_code VARCHAR(50) NULL COMMENT '환불 실패 코드',
 failure_message VARCHAR(255) NULL COMMENT '환불 실패 사유',
@@ -275,6 +283,8 @@ completed_at DATETIME(6) NULL,
 
 created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
 updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+
+CHECK(status IN('REQUESTED', 'COMPLETED' ,'FAILED')),
 
 INDEX `idx_payment_refunds_payment_id` (payment_id),
 
@@ -291,11 +301,14 @@ CREATE TABLE payment_logs (
     payment_refund_id BIGINT NULL COMMENT '환불 결제 ID (환불 시 연결)',
     
     action_type VARCHAR(20) NOT NULL COMMENT 'PAYMENT | REFUND',
-    amount INT NOT NULL COMMENT '금액',
-    status VARCHAR(20) NOT NULL COMMENT 'PENDING | COMPLETED | FAILED' COMMENT'상태(PENDING(대기), COMPLETED(완료) ,FAILED(실패))', 
+    amount BIGINT NOT NULL COMMENT '금액',
+    status VARCHAR(20) NOT NULL COMMENT 'PENDING | COMPLETED | FAILED', 
     
     created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    
+    CHECK(action_type IN('PAYMENT', 'REFUND')),
+	  CHECK(status IN('PENDING', 'COMPLETED', 'FAILED')),
     
     CONSTRAINT `fk_payment_log_payment` FOREIGN KEY (payment_id) REFERENCES payments(id),
     CONSTRAINT `fk_payment_log_refund` FOREIGN KEY (payment_refund_id) REFERENCES payments(id)
@@ -310,8 +323,8 @@ CREATE TABLE notifications (
     user_id BIGINT NOT NULL COMMENT '대상 사용자',
     payment_id BIGINT NOT NULL COMMENT '결제 ID (결제 완료 이벤트와 연결)',
     
-    type VARCHAR(20) NOT NULL COMMENT '알림(PAYMENT(결제), REFUND(환불), CANCEL(취소), BOOKIG(예약))', -- ENUM
-    status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '전송 상태(PENDING(대기), SENT(전송), FAILED(실패))', -- ENUM
+    type VARCHAR(20) NOT NULL COMMENT '알림(PAYMENT(결제), REFUND(환불), CANCEL(취소), BOOKIG(예약))',
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '전송 상태(PENDING(대기), SENT(전송), FAILED(실패))', 
     message VARCHAR(255) NOT NULL COMMENT '전송 메시지',
     qr_code VARCHAR(40) NOT NULL COMMENT 'QR 코드 토큰',
     
@@ -343,7 +356,7 @@ CREATE TABLE reviews (
 
 	UNIQUE KEY `uk_review_once` (payment_id),
 	
-	INDEX `idx_review_room` (room_id, rating),
+	INDEX `idx_review_room (room_id, rating),
 	
 	CONSTRAINT `fk_review_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
 	CONSTRAINT `fk_review_room_id` FOREIGN KEY (room_id) REFERENCES rooms(id),
@@ -354,7 +367,7 @@ DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_unicode_ci
 COMMENT = '리뷰 테이블';
 
--- 공지(Notices) --> 공지사항 (사용자에게 공지사항)
+
 CREATE TABLE notices (
 	id BIGINT PRIMARY KEY AUTO_INCREMENT,
 
