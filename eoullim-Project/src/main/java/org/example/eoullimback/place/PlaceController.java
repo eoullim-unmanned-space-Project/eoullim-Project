@@ -1,9 +1,9 @@
-package org.example.eoullimback.room;
+package org.example.eoullimback.place;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-public class RoomController {
+public class PlaceController {
 }

@@ -1,4 +1,4 @@
-package org.example.eoullimback.room;
+package org.example.eoullimback.file;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,5 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class RoomServiceImpl implements RoomService{
+public class PlaceFileServiceImpl implements PlaceFileService{
 }
