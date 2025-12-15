@@ -1,0 +1,24 @@
+# 📁백엔드 도메인 구조
+
+프로젝트 백엔드 폴더는 **팀 컨벤션에 맞춘 도메인 구조**를 사용  
+각 도메인별로 엔티티(Entity), 레포지토리(Repository), 서비스(Service), 서비스 구현(ServiceImpl) 레이어를 구분하여 유지보수와 확장성을 높였습니다.
+
+### 예시 폴더 구조
+backend/
+├─ domain/
+│ ├─ user/
+│ │ ├─ User.java
+│ │ ├─ UserRepository.java
+│ │ ├─ UserService.java
+│ │ └─ UserServiceImpl.java
+│ ├─ booking/
+│ │ ├─ Booking.java
+│ │ ├─ BookingRepository.java
+│ │ ├─ BookingService.java
+│ │ └─ BookingServiceImpl.java
+│ └─ ...
+├─ config/
+├─ controller/
+└─ ...
+
+❗폴더의 구조를 확인하고 폴더를 생성할 것 
