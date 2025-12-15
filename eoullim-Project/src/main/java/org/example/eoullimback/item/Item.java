@@ -23,11 +23,6 @@ public class Item extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_items_room"))
-    private Room room;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "timeslot_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_items_timeslot"))
@@ -43,9 +38,8 @@ public class Item extends BaseTimeEntity {
     private int price;
 
     @Builder
-    public Item(Long id, Room room, TimeSlot timeSlot, String title, String context, int price) {
+    public Item(Long id, TimeSlot timeSlot, String title, String context, int price) {
         this.id = id;
-        this.room = room;
         this.timeSlot = timeSlot;
         this.title = title;
         this.context = context;
