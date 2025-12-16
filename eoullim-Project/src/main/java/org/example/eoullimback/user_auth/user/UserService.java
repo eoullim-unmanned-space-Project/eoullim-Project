@@ -10,9 +10,9 @@ public interface UserService {
 
     Object getAllUsers();
 
-    Object getUserById(Long id);
+    Object getUserById(Long userId);
 
-    void updateUserRole(Long id, UserRequest.UpdateRoleRequest request);
+    void updateUserRole(Long userId, UserRequest.UpdateRoleRequest request);
 
-    void deleteUser(Long id);
+    void deleteUser(Long userId);
 }

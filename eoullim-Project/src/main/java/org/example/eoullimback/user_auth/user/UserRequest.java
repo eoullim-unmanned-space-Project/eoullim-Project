@@ -27,6 +27,7 @@ public class UserRequest {
         }
     }
 
+    @Data
     public static class UpdateRoleRequest {
         private String role;
 
