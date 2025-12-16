@@ -1,0 +1,46 @@
+{{> layout/header}}
+<link rel="stylesheet" href="/templates/user/css/loginStyle.css">
+<body>
+<main>
+    <div class="container">
+        <div class="inner-wrapper">
+            <div class="inner-left">
+                <img src="/templates/user/img/login.png" alt="">
+            </div>
+            <div class="inner-right">
+                <!-- 추후 form 액션 작성 -->
+                <form action="">
+                    <div class="label-item">
+                        <label>아이디</label>
+                        <input type="text" id="loginId">
+                    </div>
+                    <div class="label-item">
+                        <label>비밀번호</label>
+                        <input type="password" id="password">
+                    </div>
+                    <div class="label-item">
+                        <label>비밀번호 확인</label>
+                        <input type="password" id="passwordCheck">
+                    </div>
+                    <div class="label-item">
+                        <label>이름</label>
+                        <input type="text" id="name">
+                    </div>
+                    <div class="label-item">
+                        <label>이메일</label>
+                        <input type="email" id="email">
+                    </div>
+                    <div class="label-item">
+                        <label>휴대폰 번호</label>
+                        <input type="text" id="phone">
+                    </div>
+                    <div>
+                        <button id="signupBtn">회원가입</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+{{> layout/footer}}
