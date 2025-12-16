@@ -40,7 +40,8 @@ public class User {
     private String email;
 
     @CreationTimestamp
-    private Timestamp createAt;
+    @Column(name = "created_at", updatable = false)
+    private Timestamp createdAt;
 
     @UpdateTimestamp
     private Timestamp updatedAt;
