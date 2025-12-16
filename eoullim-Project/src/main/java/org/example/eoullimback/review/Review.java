@@ -2,6 +2,7 @@ package org.example.eoullimback.review;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
@@ -45,4 +46,19 @@ public class Review extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "payment_id", foreignKey = @ForeignKey(name = "fk_review_payment_id"))
     private Payment payment;
+
+    @Builder
+    public Review(
+            Integer rating,
+            String content,
+            User user,
+            Room room,
+            Payment payment
+    ) {
+        this.rating = rating;
+        this.content = content;
+        this.user = user;
+        this.room = room;
+        this.payment = payment;
+    }
 }

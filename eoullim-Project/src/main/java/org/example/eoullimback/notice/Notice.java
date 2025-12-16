@@ -1,6 +1,7 @@
 package org.example.eoullimback.notice;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
@@ -25,4 +26,11 @@ public class Notice extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_notices_user"))
     private User user;
+
+    @Builder
+    public Notice(String title, String content, User user) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+    }
 }
