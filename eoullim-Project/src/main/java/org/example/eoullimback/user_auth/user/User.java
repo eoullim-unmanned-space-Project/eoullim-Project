@@ -13,19 +13,31 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
-@Table(name = "users")
+@Table(name = "users",
+        uniqueConstraints = {
+            @UniqueConstraint(name = "uk_users_login_id", columnNames = "login_id"),
+            @UniqueConstraint(name = "uk_users_email", columnNames = "email")
+        })
 @NoArgsConstructor
 @Entity
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "login_id", nullable = false, length = 50)
     private String loginId;
+
+    @Column(nullable = false, length = 255)
     private String password;
+
+    @Column(nullable = false, length = 50)
     private String name;
+
+    @Column(length = 30)
     private String phone;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRole> userRoles = new HashSet<>();
+    @Column(nullable = false, length = 255)
+    private String email;
 
     @CreationTimestamp
     private Timestamp createAt;
@@ -33,13 +45,17 @@ public class User {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    public User(Long id, String loginId, String password, String name, String phone
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserRole> userRoles = new HashSet<>();
+
+    public User(Long id, String loginId, String password, String name, String phone, String email
     ) {
         this.id = id;
         this.loginId = loginId;
         this.password = password;
         this.name = name;
         this.phone = phone;
+        this.email = email;
     }
 
     public void addRole(Role role) {
