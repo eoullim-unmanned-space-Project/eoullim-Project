@@ -36,20 +36,20 @@ public class Review extends BaseTimeEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_review_user_id"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_reviews_user_id"))
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "room_id", foreignKey = @ForeignKey(name = "fk_review_room_id"))
+    @JoinColumn(name = "room_id", foreignKey = @ForeignKey(name = "fk_reviews_room_id"))
     private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "payment_id", foreignKey = @ForeignKey(name = "fk_review_payment_id"))
+    @JoinColumn(name = "payment_id", foreignKey = @ForeignKey(name = "fk_reviews_payment_id"))
     private Payment payment;
 
     @Builder
     public Review(
-            Integer rating,
+            Byte rating,
             String content,
             User user,
             Room room,
