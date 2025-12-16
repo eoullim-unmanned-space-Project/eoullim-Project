@@ -43,8 +43,7 @@ CREATE TABLE IF NOT EXISTS roles (
 CREATE TABLE IF NOT EXISTS user_roles (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   user_id BIGINT NOT NULL COMMENT '사용자',
-  role_name VARCHAR(30) NOT NULL COMMENT '사용자 권한', 
-  PRIMARY KEY(user_id, role_name),
+  role_name VARCHAR(30) NOT NULL COMMENT '사용자 권한',
   CONSTRAINT `fk_user_roles_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT `fk_user_roles_role_name` FOREIGN KEY (role_name) REFERENCES roles(role_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 권한 매핑';
