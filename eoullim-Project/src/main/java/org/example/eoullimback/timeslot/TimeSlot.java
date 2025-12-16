@@ -22,7 +22,7 @@ public class TimeSlot extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_timeslots_room"))
+            foreignKey = @ForeignKey(name = "fk_time_slots_room"))
     private Room room;
 
     @Column(nullable = false)
