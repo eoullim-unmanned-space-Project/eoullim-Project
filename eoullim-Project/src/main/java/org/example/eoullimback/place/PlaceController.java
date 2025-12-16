@@ -19,7 +19,7 @@ public class PlaceController {
     @PostMapping("/place/save")
     public String saveProc() {
 
-        return "redirect:place/list";
+        return "redirect:/place/list";
     }
 
     // 전체 조회
@@ -45,7 +45,7 @@ public class PlaceController {
     @PostMapping("/place/{placeId}/update")
     public String UpdateProc(@PathVariable Long placeId) {
 
-        return "redirect:place/" + placeId;
+        return "redirect:/place/" + placeId;
     }
 
     // 삭제
