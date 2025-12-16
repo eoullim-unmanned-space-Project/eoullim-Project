@@ -1,6 +1,7 @@
 package org.example.eoullimback.notification;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.notification.NotificationStatus;
@@ -46,4 +47,15 @@ public class Notification {
 
     private LocalDateTime sentAt;
 
+    @Builder
+    public Notification(NotificationType type, NotificationStatus status, String message, String qrCode, User user, Payment payment, LocalDateTime createdAt, LocalDateTime sentAt) {
+        this.type = type;
+        this.status = status;
+        this.message = message;
+        this.qrCode = qrCode;
+        this.user = user;
+        this.payment = payment;
+        this.createdAt = createdAt;
+        this.sentAt = sentAt;
+    }
 }

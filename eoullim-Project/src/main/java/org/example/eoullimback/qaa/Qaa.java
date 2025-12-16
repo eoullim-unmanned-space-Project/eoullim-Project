@@ -2,6 +2,7 @@ package org.example.eoullimback.qaa;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
@@ -34,4 +35,17 @@ public class Qaa extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_qaa_user_id"))
     private User user;
+
+    @Builder
+    public Qaa(
+            String title,
+            String content,
+            Long viewCount,
+            User user
+    ) {
+        this.title = title;
+        this.content = content;
+        this.viewCount = viewCount;
+        this.user = user;
+    }
 }

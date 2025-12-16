@@ -24,8 +24,8 @@ public class Item extends BaseTimeEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "timeslot_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_items_timeslot"))
+    @JoinColumn(name = "time_slot_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_items_time_slot"))
     private TimeSlot timeSlot;
 
     @Column(nullable = false, length = 50, unique = true)

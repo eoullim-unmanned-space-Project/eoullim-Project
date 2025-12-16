@@ -18,14 +18,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings",
     uniqueConstraints = {
-        @UniqueConstraint(name = "uk_user_timeslot_item", columnNames = {"user_id", "timeslot_id", "item_id"})
+        @UniqueConstraint(name = "uk_user_time_slot_item", columnNames = {"user_id", "timeslot_id", "item_id"})
     },
     indexes = {
             @Index(
-                    name = "idx_bookings_user_item",
-                    columnList = "user_id, item_id"
+                    name = "idx_bookings_user",
+                    columnList = "user_id, status"
             ),
-            @Index(name = "idx_bookings_timeslot",
+            @Index(name = "idx_bookings_time_slot",
                 columnList = "timeslot_id"
             )
    }
@@ -43,7 +43,7 @@ public class Booking extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "timeslot_id", nullable = false)
+    @JoinColumn(name = "time_slot_id", nullable = false)
     private TimeSlot timeSlot;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

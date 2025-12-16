@@ -29,9 +29,11 @@ public class Room {
     @Column(nullable = false)
     private String content;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private CapacityPolicy capacityPolicy;
 
