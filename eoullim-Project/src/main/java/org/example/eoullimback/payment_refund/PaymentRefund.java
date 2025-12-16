@@ -32,7 +32,7 @@ public class PaymentRefund extends BaseTimeEntity {
     private Long amount;
 
     @Column(length = 255)
-    private String message;
+    private String reason;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
@@ -51,10 +51,10 @@ public class PaymentRefund extends BaseTimeEntity {
     private LocalDateTime completedAt;
 
     @Builder
-    public PaymentRefund(Payment payment, Long amount, String message, RefundStatus status, LocalDateTime requestedAt) {
+    public PaymentRefund(Payment payment, Long amount, String reason, RefundStatus status, LocalDateTime requestedAt) {
         this.payment = payment;
         this.amount = amount;
-        this.message = message;
+        this.reason = reason;
         this.status = (status != null) ? status : RefundStatus.REQUESTED;
         this.requestedAt = (requestedAt != null) ? requestedAt : LocalDateTime.now();
     }

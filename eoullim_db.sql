@@ -1,7 +1,10 @@
-CREATE DATABASE eoullim_db;
+DROP DATABASE IF EXISTS eoullim_db;
+
+CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notifications;
 DROP TABLE IF EXISTS payment_logs;
 DROP TABLE IF EXISTS payment_refunds;
@@ -18,6 +21,7 @@ DROP TABLE IF EXISTS file_infos;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE users (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -62,8 +66,8 @@ CREATE TABLE qaas (
   view_count BIGINT NOT NULL DEFAULT 0 COMMENT '조회수',
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
-  INDEX `idx_qaa_user` (user_id),
-  CONSTRAINT `fk_qaa_user_id` FOREIGN KEY (user_id) REFERENCES users(id)
+  INDEX `idx_qaas_user` (user_id),
+  CONSTRAINT `fk_qaas_user_id` FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Q&A 테이블';
 
 CREATE TABLE comments (
@@ -73,9 +77,9 @@ CREATE TABLE comments (
   qaa_id BIGINT NOT NULL COMMENT 'Q&A',
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
-  INDEX `idx_comment_user` (user_id),
-  CONSTRAINT `fk_comment_user_id` FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT `fk_comment_qaa_id` FOREIGN KEY (qaa_id) REFERENCES qaas(id) ON DELETE CASCADE
+  INDEX `idx_comments_user` (user_id),
+  CONSTRAINT `fk_comments_user_id` FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT `fk_comments_qaa_id` FOREIGN KEY (qaa_id) REFERENCES qaas(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Q&A 댓글 테이블';
 
 CREATE TABLE places (
@@ -112,7 +116,7 @@ CREATE TABLE rooms (
   CONSTRAINT `fk_rooms_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
 
-CREATE TABLE timeslots (
+CREATE TABLE time_slots (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   room_id BIGINT NOT NULL COMMENT '방 번호',
   start_time DATETIME(6) NOT NULL COMMENT '시작시간',
@@ -125,40 +129,43 @@ CREATE TABLE timeslots (
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
   CHECK (status IN('OPEN','CLOSED','CANCELED')),
   CHECK (reserved >= 0 AND reserved <= capacity),
-  UNIQUE KEY `uk_slot_time` (room_id, start_time),
-  INDEX `idx_slot_time` (start_time, end_time)
+  UNIQUE KEY `uk_time_slots_room_id` (room_id),
+  UNIQUE KEY `uk_time_slots_start_time` (start_time),
+  INDEX `idx_time_slots_start_time` (start_time),
+  INDEX `idx_time_slots_end_timee` (end_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
 
 CREATE TABLE items (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  timeslot_id BIGINT NOT NULL COMMENT '시간대',
+  time_slot_id BIGINT NOT NULL COMMENT '시간대',
   title VARCHAR(50) NOT NULL COMMENT '상품 이름',
   context VARCHAR(150) NOT NULL COMMENT '상품 설명',
   price INT NOT NULL DEFAULT 0 COMMENT '상품 가격',
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
-  CONSTRAINT `fk_times_timeslot` FOREIGN KEY (timeslot_id) REFERENCES timeslots(id)
+  CONSTRAINT `fk_items_time_slot` FOREIGN KEY (time_slot_id) REFERENCES time_slots(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='아이템 테이블';
 
 CREATE TABLE bookings (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   user_id BIGINT NOT NULL COMMENT '사용자',
-  timeslot_id BIGINT NOT NULL COMMENT '타임슬롯',
+  time_slot_id BIGINT NOT NULL COMMENT '타임슬롯',
   item_id BIGINT NOT NULL COMMENT '아이템',
   qty INT NOT NULL COMMENT '인원체크',
   amount BIGINT NOT NULL COMMENT '가격',
   booking_date DATE NOT NULL COMMENT '예약 날짜',
+  cancelled_at DATETIME(6) NOT NULL  COMMENT '취소일',
   status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '상태',
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
-  UNIQUE KEY `uk_user_timeslot_item` (user_id, timeslot_id, item_id),
-  CONSTRAINT `fk_booking_user` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_booking_timeslot` FOREIGN KEY (timeslot_id) REFERENCES timeslots(id),
-  CONSTRAINT `fk_booking_item` FOREIGN KEY (item_id) REFERENCES items(id),
+  UNIQUE KEY `uk_user_time_slot_item` (user_id, time_slot_id, item_id),
+  CONSTRAINT `fk_bookings_user` FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT `fk_bookings_time_slot` FOREIGN KEY (time_slot_id) REFERENCES time_slots(id),
+  CONSTRAINT `fk_bookings_item` FOREIGN KEY (item_id) REFERENCES items(id),
   CHECK (qty > 0),
   CHECK (status IN('PENDING','CONFIRMED','CANCELED','REFUNDED')),
   INDEX `idx_bookings_user` (user_id, status),
-  INDEX `idx_bookings_timeslot` (timeslot_id)
+  INDEX `idx_bookings_time_slot` (time_slot_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='예약 테이블';
 
 CREATE TABLE payments (

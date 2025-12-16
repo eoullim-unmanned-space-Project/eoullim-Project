@@ -3,6 +3,7 @@ package org.example.eoullimback.user_auth.user;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.RoleType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @Table(name = "users")
 @NoArgsConstructor
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String loginId;
@@ -26,12 +27,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles = new HashSet<>();
-
-    @CreationTimestamp
-    private Timestamp createAt;
-
-    @UpdateTimestamp
-    private Timestamp updatedAt;
 
     public User(Long id, String loginId, String password, String name, String phone
     ) {
