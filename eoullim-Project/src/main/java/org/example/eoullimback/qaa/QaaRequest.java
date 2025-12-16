@@ -26,7 +26,6 @@ public class QaaRequest {
             if(title == null || title.trim().isEmpty()) {
                 throw new RuntimeException("제목은 필수 입니다.");
             }
-
             if(content == null || content.trim().isEmpty()) {
                 throw new RuntimeException("내용은 필수 입니다.");
             }

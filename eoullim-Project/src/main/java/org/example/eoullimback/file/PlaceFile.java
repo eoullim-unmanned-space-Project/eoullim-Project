@@ -20,7 +20,7 @@ public class PlaceFile {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_place_files_place_files"))
+            foreignKey = @ForeignKey(name = "fk_place_files_place"))
     private Place place;
 
     @Builder

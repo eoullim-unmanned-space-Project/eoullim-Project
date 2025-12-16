@@ -1,7 +1,10 @@
 package org.example.eoullimback.qaa;
 
 import lombok.Data;
-import org.example.eoullimback._common.base.BaseTimeEntity;
+import org.example.eoullimback.comment.CommentResponse;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class QaaResponse {
 
@@ -11,7 +14,7 @@ public class QaaResponse {
         private String title;
         private String name;
         private Long viewCount;
-        private String createAt;
+        private LocalDateTime createAt;
 
         public QaaListDto(Qaa qaa) {
             this.id = qaa.getId();
@@ -36,6 +39,8 @@ public class QaaResponse {
         private Long viewCount;
         private String createAt;
 
+        private List<CommentResponse.CommentListDto> commentList;
+
         public QaaDetailDto(Qaa qaa) {
             this.id = qaa.getId();
             this.title = qaa.getTitle();
@@ -48,6 +53,9 @@ public class QaaResponse {
             if(qaa.getCreatedAt() != null) {
                 this.createAt = getCreateAt();
             }
+            this.commentList = qaa.getCommentList().stream()
+                    .map(CommentResponse.CommentListDto::new)
+                    .toList();
         }
     }
 
@@ -57,12 +65,14 @@ public class QaaResponse {
         private String title;
         private String content;
         private String name;
+        private LocalDateTime updateAt;
 
         public QaaUpdateFormDto(Qaa qaa) {
             this.id = qaa.getId();
             this.title = qaa.getTitle();
             this.content = qaa.getContent();
             this.name = qaa.getUser().getName();
+            this.updateAt = qaa.getUpdatedAt();
         }
     }
 }
