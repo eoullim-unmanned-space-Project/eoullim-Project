@@ -13,7 +13,7 @@ import org.example.eoullimback.user_auth.user.User;
 @Table(
         name = "comments",
         indexes = {
-                @Index(name = "idx_comment_user", columnList = "user_id")
+                @Index(name = "idx_comments_user", columnList = "user_id")
         }
 )
 @Getter
@@ -28,11 +28,11 @@ public class Comment extends BaseTimeEntity {
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comment_user_id"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comments_user_id"))
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "qaa_id", foreignKey = @ForeignKey(name = "fk_comment_qaa_id"))
+    @JoinColumn(name = "qaa_id", foreignKey = @ForeignKey(name = "fk_comments_qaa_id"))
     private Qaa qaa;
 
     @Builder
