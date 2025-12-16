@@ -100,7 +100,7 @@ CREATE TABLE place_files (
   place_id BIGINT NOT NULL COMMENT '장소',
   file_id BIGINT NOT NULL COMMENT '파일',
   display_order INT DEFAULT 0 COMMENT '파일순서',
-  CONSTRAINT `fk_place_files_place_files` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE,
+  CONSTRAINT `fk_place_files_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE,
   CONSTRAINT `fk_place_files_file_info` FOREIGN KEY(file_id) REFERENCES file_infos(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='장소 파일 테이블';
 

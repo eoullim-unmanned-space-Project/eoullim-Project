@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.Status;
 import org.example.eoullimback.file.PlaceFile;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Table(name = "places")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Place {
+public class Place extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
