@@ -3,6 +3,9 @@ package org.example.eoullimback.notification;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.eoullimback._common.enums.notification.NotificationStatus;
+import org.example.eoullimback._common.enums.notification.NotificationType;
+import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.user_auth.user.User;
 
 import java.time.LocalDateTime;
@@ -35,9 +38,9 @@ public class Notification {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_notification_user"))
     private User user;
 
-//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @JoinColumn(name = "payment_id", foreignKey = @ForeignKey(name = "fk_notification_payment"))
-//    private Payment payment;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "payment_id", foreignKey = @ForeignKey(name = "fk_notification_payment"))
+    private Payment payment;
 
     private LocalDateTime createdAt;
 
