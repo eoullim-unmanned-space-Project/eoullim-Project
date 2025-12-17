@@ -39,9 +39,6 @@ public class Qaa extends BaseTimeEntity {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_qaas_user_id"))
     private User user;
 
-    @OneToMany(mappedBy = "qaa")
-    private List<Comment> commentList;
-
     @Builder
     public Qaa(
             String title,
