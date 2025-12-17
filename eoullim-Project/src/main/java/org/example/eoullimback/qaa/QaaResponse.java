@@ -1,10 +1,8 @@
 package org.example.eoullimback.qaa;
 
 import lombok.Data;
-import org.example.eoullimback.comment.CommentResponse;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class QaaResponse {
 
@@ -39,8 +37,6 @@ public class QaaResponse {
         private Long viewCount;
         private String createAt;
 
-        private List<CommentResponse.CommentListDto> commentList;
-
         public QaaDetailDto(Qaa qaa) {
             this.id = qaa.getId();
             this.title = qaa.getTitle();
@@ -53,9 +49,6 @@ public class QaaResponse {
             if(qaa.getCreatedAt() != null) {
                 this.createAt = getCreateAt();
             }
-            this.commentList = qaa.getCommentList().stream()
-                    .map(CommentResponse.CommentListDto::new)
-                    .toList();
         }
     }
 
