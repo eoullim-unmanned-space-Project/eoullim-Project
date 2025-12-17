@@ -50,6 +50,12 @@ public class Booking extends BaseTimeEntity {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
+    @Column(nullable = false, length = 50)
+    private String itemCode;
+
+    @Column(nullable = false, length = 50)
+    private String itemName;
+
     @Column(nullable = false)
     private int qty;
 
@@ -67,7 +73,7 @@ public class Booking extends BaseTimeEntity {
     private BookingStatus status;
 
     @Builder
-    public Booking (User user, TimeSlot timeSlot, Item item, int qty, Long amount, LocalDate bookingDate, BookingStatus status) {
+    public Booking (User user, TimeSlot timeSlot, Item item, String itemCode, String itemName, int qty, Long amount, LocalDate bookingDate, BookingStatus status) {
 
         if (qty <= 0) {
             throw new IllegalArgumentException("예약 수량은 0보다 커야합니다.");
@@ -76,6 +82,8 @@ public class Booking extends BaseTimeEntity {
         this.user = user;
         this.timeSlot = timeSlot;
         this.item = item;
+        this.itemCode = itemCode;
+        this.itemName = itemName;
         this.qty = qty;
         this.amount = amount;
         this.bookingDate = (bookingDate != null) ? bookingDate : LocalDate.now();
