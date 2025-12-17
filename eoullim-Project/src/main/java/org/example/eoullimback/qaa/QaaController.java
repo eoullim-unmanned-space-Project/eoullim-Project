@@ -1,13 +1,14 @@
 package org.example.eoullimback.qaa;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
+import org.example.eoullimback.qaa.dto.request.QaaUpdateRequest;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -16,55 +17,65 @@ public class QaaController {
     private final QaaService qaaService;
 
     // Q&A 작성 화면 요청
-    @GetMapping("/qaas")
-    public String createQaa(HttpSession session) {
+    // http://localhost:8080/qaas/new
+    @GetMapping("/qaas/new")
+    public String createQaaForm(HttpSession session) {
         session.getAttribute("sessionUser");
         return "qaas/create-form";
     }
 
     // Q&A 작성 요청 기능
+    // http://localhost:8080/qaas
     @PostMapping("/qaas")
-    public String createQaaProc(HttpSession session, QaaRequest.SaveDto saveDto) {
-//        User sessionUser = (User)session.getAttribute("sessionUser");
-//        qaaService.createQaa(saveDto, sessionUser);
-        return "redirect:/qaas/list";
+    public String createQaa(
+            HttpSession session,
+            @Valid QaaSaveRequest request
+    ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        qaaService.save(request, sessionUser);
+
+        return "redirect:/qaas";
     }
 
     // Q&A 목록 화면 요청
-    @GetMapping("/qaas/list")
-    public String listQaa(Model model
-    ) {
-//        List<QaaResponse.QaaListDto> qaaList = qaaService.qaaList();
-//        model.addAttribute("qaaList", qaaList);
+    // http://localhost:8080/qaas
+    @GetMapping("/qaas")
+    public String listQaa(Model model) {
+        model.addAttribute("qaaList", qaaService.findAll());
         return "qaas/list";
     }
 
-//    // Q&A 수정 화면 요청
-//    @GetMapping("/qaas/{id}")
-//    public String updateQaa() {
-//
-//        return "qaas/update-form";
-//    }
-//
-//    // Q&A 수정 요청 기능
-//    @PutMapping("/qaas/{qaaId}")
-//    public String updateQaaProc() {
-//
-//        return "redirect:/qaas/list";
-//    }
-//
-//    // Q&A 삭제 요청 기능
-//    @DeleteMapping("/qaas/{id}")
-//    public String deleteQaa() {
-//
-//        return "qaas/list";
-//    }
-//
-//    // Q&A 상세 보기 화면 요청
-//    @GetMapping("/qaas/{id}")
-//    public String detailQaa() {
-//
-//        return "qaas/detail";
-//    }
+    // Q&A 상세 보기 화면 요청
+    // http://localhost:8080/qaas/{id}
+    @GetMapping("/qaas/{id}")
+    public String detailQaaForm(@PathVariable Long id, Model model) {
+        model.addAttribute("qaa", qaaService.findById(id));
+        return "qaas/detail";
+    }
 
+    // Q&A 수정 화면 요청
+    // http://localhost:8080/qaas/{id}/edit
+    @PostMapping("/qaas/{id}/edit")
+    public String editForm(@PathVariable Long id, Model model) {
+        model.addAttribute("qaa", qaaService.findUpdateForm(id));
+        return "qaas/update-form";
+    }
+
+    // Q&A 수정 요청 기능
+    // http://localhost:8080/qaas/{id}
+    @PostMapping("/qaas/{id}")
+    public String updateQaa(
+            @PathVariable Long id,
+            @Valid QaaUpdateRequest request
+    ) {
+        return "redirect:/qaas/{id}";
+    }
+
+    // Q&A 삭제 요청 기능
+    // http://localhost:8080/qaas/{id}/delete
+    @PostMapping("/qaas/{id}/delete")
+    public String deleteQaa(@PathVariable Long id) {
+        qaaService.delete(id);
+        return "redirect:/qaas";
+    }
 }
