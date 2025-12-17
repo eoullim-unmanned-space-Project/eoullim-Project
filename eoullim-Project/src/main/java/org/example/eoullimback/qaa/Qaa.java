@@ -51,4 +51,23 @@ public class Qaa extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.user = user;
     }
+
+    public void update(String title, String content) {
+        validate(title, content);
+        this.title = title;
+        this.content = content;
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
+
+    private void validate(String title, String content) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("제목은 필수입니다.");
+        }
+        if (content == null || content.isBlank()) {
+            throw new IllegalArgumentException("내용은 필수입니다.");
+        }
+    }
 }

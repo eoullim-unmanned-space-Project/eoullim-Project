@@ -2,6 +2,7 @@ package org.example.eoullimback.qaa;
 
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
+import org.example.eoullimback.qaa.dto.request.QaaUpdateRequest;
 import org.example.eoullimback.qaa.dto.response.QaaDetailResponse;
 import org.example.eoullimback.qaa.dto.response.QaaListResponse;
 import org.example.eoullimback.qaa.dto.response.QaaUpdateFormResponse;
@@ -36,16 +37,16 @@ public class QaaService {
     }
 
     @Transactional
-    public Object findById(Long id) {
-        qaaRepository.increaseViewCount(id);
-
+    public QaaDetailResponse findById(Long id) {
         Qaa qaa = qaaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 Q&A 입니다."));
+
+        qaa.increaseViewCount();
 
         return new QaaDetailResponse(qaa);
     }
 
-    public Object findUpdateForm(Long id) {
+    public QaaUpdateFormResponse findUpdateForm(Long id) {
         Qaa qaa = qaaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 Q&A 입니다."));
 
@@ -53,11 +54,26 @@ public class QaaService {
     }
 
     @Transactional
-    public void delete(Long id) {
-        if (!qaaRepository.existsById(id)) {
-            throw new RuntimeException("존재하지 않는 Q&A 입니다.");
+    public void update(Long id, QaaUpdateRequest request, User sessionUser) {
+        Qaa qaa = qaaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 Q&A 입니다."));
+
+        if (!qaa.getUser().getId().equals(sessionUser.getId())) {
+            throw new RuntimeException("수정 권한이 없습니다.");
         }
 
-        qaaRepository.deleteById(id);
+        qaa.update(request.title(), request.content());
+    }
+
+    @Transactional
+    public void delete(Long id, User sessionUser) {
+        Qaa qaa = qaaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 Q&A 입니다."));
+
+        if (!qaa.getUser().getId().equals(sessionUser.getId())) {
+            throw new RuntimeException("삭제 권한이 없습니다.");
+        }
+
+        qaaRepository.delete(qaa);
     }
 }
