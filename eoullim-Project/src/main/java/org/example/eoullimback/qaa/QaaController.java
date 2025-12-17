@@ -74,8 +74,17 @@ public class QaaController {
     // Q&A 삭제 요청 기능
     // http://localhost:8080/qaas/{id}/delete
     @PostMapping("/qaas/{id}/delete")
-    public String deleteQaa(@PathVariable Long id) {
-        qaaService.delete(id);
+    public String deleteQaa(
+            @PathVariable Long id,
+            HttpSession session
+    ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
+
+        qaaService.delete(id, sessionUser);
         return "redirect:/qaas";
     }
 }

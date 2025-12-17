@@ -85,16 +85,16 @@ CREATE TABLE qaas (
 CREATE TABLE comments (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
-  user_id BIGINT NOT NULL COMMENT '관리자 Q&A 응답',
+  user_id BIGINT NOT NULL COMMENT '댓글 작성자(관리자)',
   qaa_id BIGINT NOT NULL COMMENT 'Q&A',
   
-  comment TEXT NOT NULL COMMENT '댓글',
+  content TEXT NOT NULL COMMENT '댓글',
 
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
   INDEX `idx_comments_user` (user_id),
-  
+  INDEX `idx_comments_qaa` (qaa_id),
   CONSTRAINT `fk_comments_user_id` FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT `fk_comments_qaa_id` FOREIGN KEY (qaa_id) REFERENCES qaas(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Q&A 댓글 테이블';
