@@ -35,7 +35,7 @@ public class UserController {
     }
 
     // 관리자 컨트롤러
-    @GetMapping
+    @GetMapping("/all")
     public String allUsers(Model model) {
         model.addAttribute("users", userService.getAllUsers());
 
