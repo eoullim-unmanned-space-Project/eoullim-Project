@@ -90,7 +90,7 @@ public class QaaController {
             throw new RuntimeException("로그인이 필요합니다.");
         }
 
-        QaaUpdateFormResponse qaa = qaaService.update(id, updateRequest, sessionUser);
+        qaaService.update(id, updateRequest, sessionUser);
         return "redirect:/qaas/{id}";
     }
 
