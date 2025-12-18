@@ -1,16 +1,19 @@
 package org.example.eoullimback.qaa;
 
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.dto.PageDTO;
 import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
 import org.example.eoullimback.qaa.dto.request.QaaUpdateRequest;
 import org.example.eoullimback.qaa.dto.response.QaaDetailResponse;
 import org.example.eoullimback.qaa.dto.response.QaaListResponse;
 import org.example.eoullimback.qaa.dto.response.QaaUpdateFormResponse;
 import org.example.eoullimback.user_auth.user.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,20 +23,31 @@ public class QaaService {
     private final QaaRepository qaaRepository;
 
     @Transactional
-    public void save(QaaSaveRequest request, User sessionUser) {
+    public Qaa save(QaaSaveRequest request, User sessionUser) {
         if (sessionUser == null) {
             throw new RuntimeException("로그인이 필요합니다.");
         }
 
         Qaa qaa = request.toEntity(sessionUser);
         qaaRepository.save(qaa);
+        return qaa;
     }
 
-    public List<QaaListResponse> findAll() {
-        return qaaRepository.findAllByOrderByIdDesc()
-                .stream()
-                .map(QaaListResponse::new)
-                .toList();
+    public PageDTO<QaaListResponse> qaaListFindAll(int page, int size, String keyword) {
+        int validPage = Math.max(0, page);
+        int validSize = Math.max(1, Math.min(50, size));
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(validPage, validSize, sort);
+
+        Page<Qaa> qaaPage;
+        if(keyword != null && !keyword.trim().isEmpty()) {
+            qaaPage = qaaRepository.findByTitleContainingOrContentContaining(keyword.trim(), pageable);
+        } else {
+            qaaPage = qaaRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
+        }
+
+        return PageDTO.from(qaaPage, QaaListResponse::new);
     }
 
     @Transactional
@@ -54,15 +68,18 @@ public class QaaService {
     }
 
     @Transactional
-    public void update(Long id, QaaUpdateRequest request, User sessionUser) {
-        Qaa qaa = qaaRepository.findById(id)
+    public QaaUpdateFormResponse update(Long qaaId, QaaUpdateRequest updateRequest, User sessionUser) {
+
+        Qaa qaa = qaaRepository.findById(qaaId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 Q&A 입니다."));
 
         if (!qaa.getUser().getId().equals(sessionUser.getId())) {
             throw new RuntimeException("수정 권한이 없습니다.");
         }
 
-        qaa.update(request.title(), request.content());
+        qaa.update(updateRequest.title(), updateRequest.content());
+
+        return new QaaUpdateFormResponse(qaa);
     }
 
     @Transactional
