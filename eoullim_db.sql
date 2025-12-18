@@ -11,9 +11,9 @@ DROP TABLE IF EXISTS payment_refunds;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS timeslots;
+DROP TABLE IF EXISTS time_slots;
+DROP TABLE IF EXISTS room_files;
 DROP TABLE IF EXISTS rooms;
-DROP TABLE IF EXISTS place_files;
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS qaas;
@@ -106,25 +106,13 @@ CREATE TABLE places (
   address VARCHAR(100) NOT NULL COMMENT '장소 주소',
   latitude DECIMAL(10,8) NOT NULL COMMENT '위도',
   longitude DECIMAL(11,8) NOT NULL COMMENT '경도',
-  open_time DATETIME NOT NULL COMMENT '오픈시간',
-  close_time DATETIME NOT NULL COMMENT '마감시간',
-  status VARCHAR(20) NOT NULL DEFAULT 'SCHEDULED' COMMENT '상태(SCHEDULED, OPEN, CLOSED)',
+  category VARCHAR(100) NOT NULL COMMENT '방 종류',
+
+  CHECK (category IN('PARTY','STUDY','PRACTICE')),
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='장소 테이블';
-
-CREATE TABLE place_files (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  
-  place_id BIGINT NOT NULL COMMENT '장소',
-  file_id BIGINT NOT NULL COMMENT '파일',
-  
-  display_order INT DEFAULT 0 COMMENT '파일순서',
-  
-  CONSTRAINT `fk_place_files_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE,
-  CONSTRAINT `fk_place_files_file_info` FOREIGN KEY(file_id) REFERENCES file_infos(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='장소 파일 테이블';
 
 CREATE TABLE rooms (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -133,14 +121,24 @@ CREATE TABLE rooms (
   
   name VARCHAR(150) NOT NULL COMMENT '방 이름',
   content VARCHAR(255) NOT NULL COMMENT '방 내용',
-  category VARCHAR(100) NOT NULL COMMENT '방 종류',
-  capacity_policy VARCHAR(20) NOT NULL DEFAULT 'PER_SLOT' COMMENT '시간 타입(PER_DAY, PER_SLOT)',
-  
-  CHECK (category IN('PARTY','STUDY','PRACTICE')),
-  CHECK (capacity_policy IN('PER_DAY','PER_SLOT')),
+  status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '상태(OPEN, CLOSED)',
+ 
+  CHECK (status IN('OPEN', 'CLOSED')),
   
   CONSTRAINT `fk_rooms_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
+
+CREATE TABLE room_files (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  
+  room_id BIGINT NOT NULL COMMENT '방',
+  file_id BIGINT NOT NULL COMMENT '파일',
+  
+  display_order INT DEFAULT 0 COMMENT '파일순서',
+  
+  CONSTRAINT `fk_room_files_place` FOREIGN KEY(room_id) REFERENCES rooms(id) ON DELETE CASCADE,
+  CONSTRAINT `fk_room_files_file_info` FOREIGN KEY(file_id) REFERENCES file_infos(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방 파일 테이블';
 
 CREATE TABLE time_slots (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -150,7 +148,6 @@ CREATE TABLE time_slots (
   start_time DATETIME(6) NOT NULL COMMENT '시작시간',
   end_time DATETIME(6) NOT NULL COMMENT '종료시간',
   capacity INT NOT NULL COMMENT '인원 수 지정',
-  reserved INT NOT NULL DEFAULT 0 COMMENT '예약인원',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
@@ -159,7 +156,6 @@ CREATE TABLE time_slots (
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
   
   CHECK (status IN('OPEN','CLOSED','CANCELED')),
-  CHECK (reserved >= 0 AND reserved <= capacity),
   
   UNIQUE KEY `uk_time_slots_room_id` (room_id),
   UNIQUE KEY `uk_time_slots_start_time` (start_time),

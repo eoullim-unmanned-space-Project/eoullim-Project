@@ -11,30 +11,30 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ItemController {
 
     // 생성
-    @GetMapping("/time-slot/{timeSlotId}/item/save")
-    public String saveForm(@PathVariable Long timeSlotId) {
+    @GetMapping("/room/{roomId}/item/create")
+    public String saveForm(@PathVariable Long roomId) {
 
-        return "item/save";
+        return "item/create";
     }
 
-    @PostMapping("/time-slot/{timeSlotId}/item/save")
-    public String saveProc(@PathVariable Long timeSlotId) {
+    @PostMapping("/room/{roomId}/item/create")
+    public String saveProc(@PathVariable Long roomId) {
 
-        return "redirect:/timeSlot/detail";
+        return "redirect:/room/detail";
     }
 
     // 목록 조회
-    @GetMapping("/time-slot/{timeSlotId}/item")
-    public String ListForm(@PathVariable Long timeSlotId) {
+    @GetMapping("/room/{roomId}/item")
+    public String ListForm(@PathVariable Long roomId) {
 
-        return "timeslot/detail";
+        return "room/detail";
     }
 
     // 단건 조회
     @GetMapping("/item/{itemId}")
     public String DetailForm(@PathVariable Long itemId) {
 
-        return "timeslot/detail";
+        return "room/detail";
     }
 
     // 수정
@@ -54,6 +54,6 @@ public class ItemController {
     @PostMapping("/item/{itemId}/delete")
     public String deleteProc(@PathVariable Long itemId) {
 
-        return "redirect:/timeslot/detail";
+        return "redirect:/room/detail";
     }
 }

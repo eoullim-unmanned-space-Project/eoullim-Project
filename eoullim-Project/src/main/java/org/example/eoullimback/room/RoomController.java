@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class RoomController {
 
     // 생성
-    @GetMapping("/place/{placeId}/room/save")
-    public String saveForm(@PathVariable Long placeId) {
+    @GetMapping("/place/{placeId}/room/create")
+    public String createForm(@PathVariable Long placeId) {
 
-        return "room/save";
+        return "room/create";
     }
 
-    @PostMapping("/place/{placeId}/room/save")
-    public String saveProc(@PathVariable Long placeId) {
+    @PostMapping("/place/{placeId}/room/create")
+    public String createProc(@PathVariable Long placeId) {
 
         return "redirect:/place/detail";
     }

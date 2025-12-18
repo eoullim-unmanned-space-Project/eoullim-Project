@@ -7,5 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PlaceFileServiceImpl implements PlaceFileService{
+public class RoomFileServiceImpl implements RoomFileService {
 }

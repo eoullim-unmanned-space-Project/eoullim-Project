@@ -6,12 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
-import org.example.eoullimback._common.enums.Status;
-import org.example.eoullimback.file.PlaceFile;
+import org.example.eoullimback._common.enums.place.PlaceStatus;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "places")
@@ -34,29 +31,12 @@ public class Place extends BaseTimeEntity {
     @Column(nullable = false, precision = 11, scale = 8)
     private BigDecimal longitude;
 
-    @Column(nullable = false)
-    private LocalDateTime openTime;
-
-    @Column(nullable = false)
-    private LocalDateTime closeTime;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
-
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PlaceFile> placeFile;
-
     @Builder
-    public Place(Long id, String name, String address, BigDecimal latitude, BigDecimal longitude, LocalDateTime openTime, LocalDateTime closeTime, Status status, List<PlaceFile> placeFile) {
+    public Place(Long id, String name, String address, BigDecimal latitude, BigDecimal longitude) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
-        this.status = status;
-        this.placeFile = placeFile;
     }
 }
