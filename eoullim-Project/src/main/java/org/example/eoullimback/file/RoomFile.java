@@ -5,13 +5,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback.place.Place;
+import org.example.eoullimback.room.Room;
 
 @Entity
-@Table(name = "place_files")
+@Table(name = "room_files")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlaceFile {
+public class RoomFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,13 +19,13 @@ public class PlaceFile {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_place_files_place"))
-    private Place place;
+    @JoinColumn(name = "room_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_room_files_place"))
+    private Room room;
 
     @Builder
-    public PlaceFile(Long id, Place place) {
+    public RoomFile(Long id, Room room) {
         this.id = id;
-        this.place = place;
+        this.room = room;
     }
 }

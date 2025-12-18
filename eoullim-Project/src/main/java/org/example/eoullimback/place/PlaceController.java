@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class PlaceController {
 
     // 생성
-    @GetMapping("/place/save")
-    public String saveForm() {
-        return "place/save";
+    @GetMapping("/place/create")
+    public String createForm() {
+        return "place/create";
     }
 
-    @PostMapping("/place/save")
-    public String saveProc() {
+    @PostMapping("/place/create")
+    public String createProc() {
 
         return "redirect:/place/list";
     }
