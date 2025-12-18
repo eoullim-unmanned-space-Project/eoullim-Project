@@ -8,14 +8,16 @@ public record CommentListResponse(
         Long id,
         String content,
         String name,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        boolean isOwner
 ) {
-    public CommentListResponse(Comment comment) {
+    public CommentListResponse(Comment comment, Long sessionUserId) {
         this(
                 comment.getId(),
                 comment.getContent(),
                 comment.getUser().getName(),
-                comment.getCreatedAt()
+                comment.getCreatedAt(),
+                comment.isOwner(sessionUserId)
         );
     }
 }

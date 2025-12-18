@@ -2,6 +2,7 @@ package org.example.eoullimback.qaa;
 
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageDTO;
+import org.example.eoullimback.comment.CommentRepository;
 import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
 import org.example.eoullimback.qaa.dto.request.QaaUpdateRequest;
 import org.example.eoullimback.qaa.dto.response.QaaDetailResponse;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class QaaService {
 
     private final QaaRepository qaaRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public Qaa save(QaaSaveRequest request, User sessionUser) {
@@ -83,13 +85,15 @@ public class QaaService {
     }
 
     @Transactional
-    public void delete(Long id, User sessionUser) {
-        Qaa qaa = qaaRepository.findById(id)
+    public void delete(Long qaaId, User sessionUser) {
+        Qaa qaa = qaaRepository.findById(qaaId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 Q&A 입니다."));
 
         if (!qaa.getUser().getId().equals(sessionUser.getId())) {
             throw new RuntimeException("삭제 권한이 없습니다.");
         }
+
+        commentRepository.deleteByQaaId(qaaId);
 
         qaaRepository.delete(qaa);
     }

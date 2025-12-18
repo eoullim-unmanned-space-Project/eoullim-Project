@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback.user_auth.user.User;
 
-import java.util.List;
-
 @Entity
 @Table(
         name = "qaas",
