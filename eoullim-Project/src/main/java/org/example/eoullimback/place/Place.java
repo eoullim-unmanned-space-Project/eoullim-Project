@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
-import org.example.eoullimback._common.enums.place.PlaceStatus;
+import org.example.eoullimback._common.enums.place.Category;
 
 import java.math.BigDecimal;
 
@@ -31,12 +31,17 @@ public class Place extends BaseTimeEntity {
     @Column(nullable = false, precision = 11, scale = 8)
     private BigDecimal longitude;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category;
+
     @Builder
-    public Place(Long id, String name, String address, BigDecimal latitude, BigDecimal longitude) {
+    public Place(Long id, String name, String address, BigDecimal latitude, BigDecimal longitude, Category category) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.category = category;
     }
 }

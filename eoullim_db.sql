@@ -170,7 +170,6 @@ CREATE TABLE items (
   time_slot_id BIGINT NOT NULL COMMENT '시간대',
   
   title VARCHAR(50) NOT NULL COMMENT '상품 이름',
-  context VARCHAR(150) NOT NULL COMMENT '상품 설명',
   price INT NOT NULL DEFAULT 0 COMMENT '상품 가격',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
