@@ -16,7 +16,7 @@ public record CommentSaveRequest(
 ) {
     public Comment toEntity(User user, Qaa qaa) {
         return Comment.builder()
-                .content(content)
+                .content(this.content)
                 .user(user)
                 .qaa(qaa)
                 .build();

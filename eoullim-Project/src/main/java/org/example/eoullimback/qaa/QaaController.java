@@ -3,12 +3,18 @@ package org.example.eoullimback.qaa;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.dto.PageDTO;
 import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
 import org.example.eoullimback.qaa.dto.request.QaaUpdateRequest;
+import org.example.eoullimback.qaa.dto.response.QaaListResponse;
+import org.example.eoullimback.qaa.dto.response.QaaUpdateFormResponse;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
@@ -40,8 +46,17 @@ public class QaaController {
     // Q&A 목록 화면 요청
     // http://localhost:8080/qaas
     @GetMapping("/qaas")
-    public String listQaa(Model model) {
-        model.addAttribute("qaaList", qaaService.findAll());
+    public String listQaa(Model model,
+                          @RequestParam(defaultValue = "1") int page,
+                          @RequestParam(defaultValue = "5") int size,
+                          @RequestParam(required = false) String keyword
+    ) {
+        int pageIndex = Math.max(0, page - 1);
+        PageDTO<QaaListResponse> qaaPage = qaaService.qaaListFindAll(pageIndex, size, keyword);
+
+        model.addAttribute("qaaPage", qaaPage);
+        model.addAttribute("keyword", keyword != null ? keyword: "");
+
         return "qaas/list";
     }
 
@@ -66,8 +81,16 @@ public class QaaController {
     @PostMapping("/qaas/{id}")
     public String updateQaa(
             @PathVariable Long id,
-            @Valid QaaUpdateRequest request
+            QaaUpdateRequest updateRequest,
+            HttpSession session
     ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
+
+        qaaService.update(id, updateRequest, sessionUser);
         return "redirect:/qaas/{id}";
     }
 
