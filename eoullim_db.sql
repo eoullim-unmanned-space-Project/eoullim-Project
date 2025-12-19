@@ -184,13 +184,13 @@ CREATE TABLE bookings (
   user_id BIGINT NOT NULL COMMENT '사용자',
   time_slot_id BIGINT NOT NULL COMMENT '타임슬롯',
   item_id BIGINT NOT NULL COMMENT '아이템',
+
+  item_snapshot_price BIGINT NOT NULL comment '아이템 가격 저장본',
   
-  item_code VARCHAR(50) NOT NULL COMMENT '아이템 코드',
-  item_name VARCHAR(50) NOT NULL COMMENT '아이템 이름',
   qty INT NOT NULL COMMENT '인원체크',
   amount BIGINT NOT NULL COMMENT '가격',
   booking_date DATE NOT NULL COMMENT '예약 날짜',
-  cancelled_at DATETIME(6) NOT NULL  COMMENT '취소일',
+  cancelled_at DATETIME(6) NULL COMMENT '취소일', 
   status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '상태',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
@@ -242,7 +242,6 @@ CREATE TABLE payments (
   CONSTRAINT `fk_payments_user` FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT `fk_payments_booking` FOREIGN KEY (booking_id) REFERENCES bookings(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='결제 테이블';
-
 CREATE TABLE payment_refunds (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
