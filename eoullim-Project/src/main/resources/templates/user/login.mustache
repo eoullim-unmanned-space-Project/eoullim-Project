@@ -1,12 +1,12 @@
-<link rel="stylesheet" href="/templates/layout/css/header.css">
-<link rel="stylesheet" href="/templates/user/css/loginStyle.css">
+<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
 <body>
 <main>
     <div class="container">
         <div class="inner-wrapper">
             <div class="inner-left">
-                <img src="../register/img/login.png" alt="">
+                <img src="/img/user/login.png" alt="">
             </div>
             <div class="inner-right">
                 <form>
@@ -22,14 +22,14 @@
                     <button type="button" id="signupBtn">로그인</button>
                     <div class="social-login">
                         <button type="button" class="kakao-login">
-                            <img src="./img/kakao.png"> 카카오로 로그인
+                            <img src="/img/user/kakao.png"> 카카오로 로그인
                         </button>
                         <button type="button" class="naver-login">
-                            <img src="./img/naver.png"> 네이버로 로그인
+                            <img src="/img/user/naver.png"> 네이버로 로그인
                         </button>
                     </div>
                     <div class="register-box">
-                        <a href="#">아이디 찾기</a> | <a href="./signUp.mustache">회원가입</a>
+                        <a href="#">아이디 찾기</a> | <a href="/auth/signup">회원가입</a>
                     </div>
                 </form>
             </div>

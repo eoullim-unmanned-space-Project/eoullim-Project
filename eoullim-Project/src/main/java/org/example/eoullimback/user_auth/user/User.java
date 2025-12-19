@@ -1,6 +1,7 @@
 package org.example.eoullimback.user_auth.user;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
@@ -39,6 +40,7 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles;
 
+    @Builder
     public User(Long id, String loginId, String password, String name, String phone, String  email
     ) {
         this.id = id;

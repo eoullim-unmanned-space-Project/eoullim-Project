@@ -1,0 +1,188 @@
+<link rel="stylesheet" href="/css/layout/header.css">
+<link rel="stylesheet" href="/css/user/register.css">
+{{> layout/header}}
+<main>
+    <div class="container">
+        <div class="inner-wrapper">
+            <div class="inner-left">
+                <img src="/img/user/login.png" alt="">
+            </div>
+            <div class="inner-right">
+                <!-- 추후 form 액션 작성 -->
+                <form action="/auth/signup" method="post" >
+                    <div class="label-item">
+                        <label>아이디</label>
+                        <input type="text" id="loginId" name="loginId" placeholder="아이디 입력(영문 소문자, 숫자 조합 6~20자)">
+                        <span class="input-check"></span>
+                    </div>
+                    <div class="label-item">
+                        <label>비밀번호</label>
+                        <input type="password" id="password" name="password" placeholder="비밀번호 입력(문자, 숫자, 특수문자 포함 8~20자)">
+                        <span class="input-check"></span>
+                    </div>
+                    <div class="label-item">
+                        <label>비밀번호 확인</label>
+                        <input type="password" id="passwordCheck" placeholder="비밀번호 재입력">
+                        <span class="input-check"></span>
+                    </div>
+                    <div class="label-item">
+                        <label>이름</label>
+                        <input type="text" id="name" name="name" placeholder="이름을 입력해주세요">
+                        <span class="input-check"></span>
+                    </div>
+                    <div class="label-item">
+                        <label>이메일</label>
+                        <input type="email" id="email" name="email" placeholder="이메일 주소를 입력해주세요 '@' 포함">
+                        <span class="input-check"></span>
+                    </div>
+                    <div class="label-item">
+                        <label>휴대폰 번호</label>
+                        <input type="text" id="phone" name="phone" placeholder="휴대폰 번호 입력 ('-' 제외 11자리 입력)">
+                        <span class="input-check"></span>
+                    </div>
+                    <div>
+                        <button id="signupBtn" type="submit">회원가입</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const  loginId = document.getElementById('loginId');
+        const  password = document.getElementById('password');
+        const  passwordCheck = document.getElementById('passwordCheck');
+        const  name = document.getElementById('name');
+        const  email = document.getElementById('email');
+        const  phone = document.getElementById('phone');
+        const  checkMsg = document.getElementById('input-check');
+
+        const idRegex = /^[a-z0-9]{6,20}$/;
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/;
+        const nameRegex = /^[가-힣]{2,5}$/;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const phoneRegex = /^010[0-9]{7,8}$/;
+
+        const successColor = '#10b981';
+        const errorColor = '#ef4444';
+
+        loginId.addEventListener('input', () => {
+            const checkMsg = loginId.nextElementSibling;
+
+            if (idRegex.test(loginId.value.trim())) {
+                checkMsg.textContent = '사용가능한 아이디입니다.';
+                checkMsg.style.color = successColor;
+                loginId.style.borderColor = successColor;
+            } else {
+                checkMsg.textContent = '올바른 형식이 아닙니다.';
+                checkMsg.style.color = errorColor;
+                loginId.style.borderColor = errorColor;
+            }
+        });
+
+        password.addEventListener('input', () => {
+            const checkMsg = password.nextElementSibling;
+
+            if (passwordRegex.test(password.value.trim())) {
+                checkMsg.textContent = '사용 가능한 비밀번호 입니다.';
+                checkMsg.style.color = successColor;
+                password.style.borderColor = successColor;
+            } else {
+                checkMsg.textContent = '올바른 형식이 아닙니다.';
+                checkMsg.style.color = errorColor;
+                password.style.borderColor = errorColor;
+            }
+        });
+
+        passwordCheck.addEventListener('input', () => {
+            const checkMsg = passwordCheck.nextElementSibling;
+
+            if (password.value.trim() === passwordCheck.value.trim()) {
+                checkMsg.textContent = '동일한 비밀번호 입니다.';
+                checkMsg.style.color = successColor;
+                passwordCheck.style.borderColor = successColor;
+            } else {
+                checkMsg.textContent = '비밀번호가 불일치합니다. 다시 확인해주세요';
+                checkMsg.style.color = errorColor;
+                passwordCheck.style.borderColor = errorColor;
+            }
+        });
+
+        name.addEventListener('input', () => {
+            const checkMsg = name.nextElementSibling;
+
+            if (nameRegex.test(name.value.trim())) {
+                checkMsg.textContent = '사용 가능한 이름 입니다.';
+                checkMsg.style.color = successColor;
+                name.style.borderColor = successColor;
+            } else {
+                checkMsg.textContent = '올바른 형식이 아닙니다.';
+                checkMsg.style.color = errorColor;
+                name.style.borderColor = errorColor;
+            }
+        })
+
+        email.addEventListener('input', () => {
+            const checkMsg = email.nextElementSibling;
+
+            if (emailRegex.test(email.value.trim())) {
+                checkMsg.textContent = '사용 가능한 이름 입니다.';
+                checkMsg.style.color = successColor;
+                email.style.borderColor = successColor;
+            } else {
+                checkMsg.textContent = '올바른 형식이 아닙니다.';
+                checkMsg.style.color = errorColor;
+                email.style.borderColor = errorColor;
+            }
+        })
+
+        phone.addEventListener('input', () => {
+            const checkMsg = phone.nextElementSibling;
+
+            if (phoneRegex.test(phone.value.trim())) {
+                checkMsg.textContent = '사용 가능한 이름 입니다.';
+                checkMsg.style.color = successColor;
+                phone.style.borderColor = successColor;
+            } else {
+                checkMsg.textContent = '올바른 형식이 아닙니다.';
+                checkMsg.style.color = errorColor;
+                phone.style.borderColor = errorColor;
+            }
+        })
+
+
+    document.getElementById('signupBtn').addEventListener('click', async function(e) {
+
+            if (!loginId.value.trim()) {
+                alert("ID의 공백을 입력해주세요.");
+                loginId.focus();
+            }
+
+            if (!password.value.trim()) {
+                alert("password의 공백을 입력해주세요.");
+                password.focus();
+            }
+
+            if (!passwordCheck.value.trim()) {
+                alert("passwordCheck의 공백을 입력해주세요.");
+                passwordCheck.focus();
+            }
+
+            if (!name.value.trim()) {
+                alert("name의 공백을 입력해주세요.");
+                name.focus();
+            }
+
+            if (!email.value.trim()) {
+                alert("email의 공백을 입력해주세요.");
+                email.focus();
+            }
+
+            if (!phone.value.trim()) {
+                alert("phone의 공백을 입력해주세요.");
+                phone.focus();
+            }
+
+        });
+    </script>
+</main>
+{{> layout/footer}}

@@ -1,21 +1,26 @@
 <header class="app-header">
     <div class="header-inner">
-        <div class="logo">
-            <a href=""><span>E</span>oullim</a>
+        <div class="header-left">
+            <div class="logo">
+                <a href="/"><span>E</span>oullim</a>
+            </div>
             <div class="mode-toggle">
-                <a href="/test/main.html" class="toggle-btn active">홈페이지</a>
-                <a href="/test/map.html" class="toggle-btn">지도</a>
+                <a href="/" class="toggle-btn active">홈페이지</a>
+                <a href="/map" class="toggle-btn">지도</a>
             </div>
         </div>
+
         <nav class="nav">
             <a href="#">지도</a>
-            <a href="">공간대여</a>
+            <a href="#">공간대여</a>
             <a href="#">이벤트</a>
             <a href="#">문의</a>
         </nav>
-        <div class="register-box">
-            <a href="../user/login.mustache">로그인</a>
-            <a href="../user/signUp.mustache">회원가입</a>
+
+        <div class="header-auth">
+            <a href="/auth/login">로그인</a>
+            <span class="divider">|</span>
+            <a href="/auth/signup">회원가입</a>
         </div>
     </div>
 </header>
