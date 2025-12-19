@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="/templates/layout/css/header.css">
+<link rel="stylesheet" href="/templates/map/css/map.css">
+{{> layout/header}}
+<body>
+<section class="section">
+    <div class="map-container">
+        <span>내 주변 무인 대여공간</span>
+        <span class="second">내 주변에 가까운 무인공간을 찾아보세요.</span>
+        <div id="map"></div>
+        <div class="space-card">
+            <div class="card">1</div>
+            <div class="card">2</div>
+            <div class="card">3</div>
+            <div class="card">4</div>
+            <div class="card">5</div>
+            <div class="card">6</div>
+            <div class="card">7</div>
+            <div class="card">8</div>
+            <div class="card">5</div>
+            <div class="card">6</div>
+            <div class="card">7</div>
+            <div class="card">8</div>
+        </div>
+        <div class="img-wrapper">
+            <img src="./img/맵이벤트.png" alt="">
+        </div>
+        <div class="pagination-container">
+            <button class="prev">&lt;</button>
+            <div class="pages"></div>
+            <button class="next">&gt;</button>
+        </div>
+    </div>
+</section>
+<section class="section">
+</section>
+<div class="section">
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17"></script>
+<script>
+    kakao.maps.load(function() {
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+
+                var mapContainer = document.getElementById('map');
+                var mapOption = {
+                    center: new kakao.maps.LatLng(lat, lng),
+                    level: 6
+                };
+
+                var map = new kakao.maps.Map(mapContainer, mapOption);
+
+                var markerPosition  = new kakao.maps.LatLng(lat, lng);
+                var marker = new kakao.maps.Marker({
+                    position: markerPosition
+                });
+                marker.setMap(map);
+
+            }, function(error) {
+                console.error("위치 정보를 가져올 수 없습니다.", error);
+            });
+        } else {
+            alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+        }
+    });
+</script>
+</body>
+{{> layout/footer}}
