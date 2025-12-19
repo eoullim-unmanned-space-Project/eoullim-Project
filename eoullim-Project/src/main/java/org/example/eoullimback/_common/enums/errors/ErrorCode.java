@@ -1,4 +1,4 @@
-package org.example.eoullimback._common.enums.error;
+package org.example.eoullimback._common.enums.errors;
 
 import lombok.Getter;
 
@@ -14,7 +14,7 @@ public enum ErrorCode {
     // ====
     // 401 Unauthorized
     // ====
-    UNAUTHORIZED("인증이 필요합니다."),
+    LOGIN_UNAUTHORIZED("로그인 인증이 필요합니다."),
 
 
     // ====
