@@ -18,22 +18,22 @@ public class ReviewService {
     private final RoomRepository roomRepository;
 //    private final PaymentRepository paymentRepository;
 
-    public Long saveReview(ReviewSaveRequest request, User user) {
-
-        Room room = roomRepository.findById(request.roomId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 방입니다."));
-
-//        Payment payment = paymentRepository
-
-        Review review = Review.builder()
-                .rating(request.rating())
-                .content(request.content())
-                .user(user)
-                .room(room)
-//                .payment(payment)
-                .build();
-
-        reviewRepository.save(review);
-        return review.getId();
-    }
+//    public Long saveReview(ReviewSaveRequest request, User user) {
+//
+//        Room room = roomRepository.findById(request.roomId())
+//                .orElseThrow(() -> new RuntimeException("존재하지 않는 방입니다."));
+//
+//      Payment payment = paymentRepository
+//
+//        Review review = Review.builder()
+//                .rating(request.rating())
+//                .content(request.content())
+//                .user(user)
+//                .room(room)
+//              .payment(payment)
+//                .build();
+//
+//        reviewRepository.save(review);
+//        return review.getId();
+//    }
 }

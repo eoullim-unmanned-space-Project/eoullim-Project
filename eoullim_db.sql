@@ -301,8 +301,8 @@ CREATE TABLE notifications (
   CHECK (type IN('PAYMENT','REFUND','CANCEL','BOOKING')),
   CHECK (status IN('PENDING','SENT','FAILED')),
   
-  CONSTRAINT `fk_notification_user` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_notification_payment` FOREIGN KEY (payment_id) REFERENCES payments(id)
+  CONSTRAINT `fk_notifications_user` FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT `fk_notifications_payment` FOREIGN KEY (payment_id) REFERENCES payments(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 결제 알림 테이블';
 
 CREATE TABLE reviews (
@@ -322,9 +322,9 @@ CREATE TABLE reviews (
   
   INDEX `idx_review_room` (room_id, rating),
   
-  CONSTRAINT `fk_review_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_review_room_id` FOREIGN KEY (room_id) REFERENCES rooms(id),
-  CONSTRAINT `fk_review_payment_id` FOREIGN KEY (payment_id) REFERENCES payments(id)
+  CONSTRAINT `fk_reviews_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT `fk_reviews_room_id` FOREIGN KEY (room_id) REFERENCES rooms(id),
+  CONSTRAINT `fk_reviews_payment_id` FOREIGN KEY (payment_id) REFERENCES payments(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='리뷰 테이블';
 
 CREATE TABLE notices (
