@@ -40,13 +40,12 @@ public class Qaa extends BaseTimeEntity {
     public Qaa(
             String title,
             String content,
-            Long viewCount,
             User user
     ) {
         this.title = title;
         this.content = content;
-        this.viewCount = viewCount;
         this.user = user;
+        this.viewCount = 0L;
     }
 
     public void update(String title, String content) {
@@ -56,5 +55,9 @@ public class Qaa extends BaseTimeEntity {
 
     public void increaseViewCount() {
         this.viewCount++;
+    }
+
+    public boolean isOwner(Long userId) {
+        return this.user.getId().equals(userId);
     }
 }

@@ -22,7 +22,6 @@ public record QaaSaveRequest(
         return new Qaa(
                 title,
                 content,
-                0L,
                 user
         );
     }
