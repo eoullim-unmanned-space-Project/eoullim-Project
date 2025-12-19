@@ -29,7 +29,7 @@ public class Review extends BaseTimeEntity {
     private Long id;
 
     @Column(name = "rating", nullable = false)
-    private Integer rating;
+    private Byte rating;
 
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
@@ -48,7 +48,7 @@ public class Review extends BaseTimeEntity {
 
     @Builder
     public Review(
-            Integer rating,
+            Byte rating,
             String content,
             User user,
             Room room,

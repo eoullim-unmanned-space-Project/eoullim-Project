@@ -14,18 +14,18 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping
-    public String saveReview(
-            @Valid ReviewSaveRequest request,
-            HttpSession session
-    ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            throw new RuntimeException("로그인이 필요합니다.");
-        }
-
-        reviewService.saveReview(request, sessionUser);
-        return "redirect:/rooms" + request.roomId();
-    }
+//    @PostMapping
+//    public String saveReview(
+//            @Valid ReviewSaveRequest request,
+//            HttpSession session
+//    ) {
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+//
+//        if (sessionUser == null) {
+//            throw new RuntimeException("로그인이 필요합니다.");
+//        }
+//
+//        reviewService.saveReview(request, sessionUser);
+//        return "redirect:/rooms" + request.roomId();
+//    }
 }

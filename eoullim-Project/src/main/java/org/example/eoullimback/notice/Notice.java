@@ -28,9 +28,18 @@ public class Notice extends BaseTimeEntity {
     private User user;
 
     @Builder
-    public Notice(String title, String content, User user) {
+    public Notice(
+            String title,
+            String content,
+            User user
+    ) {
         this.title = title;
         this.content = content;
         this.user = user;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }
