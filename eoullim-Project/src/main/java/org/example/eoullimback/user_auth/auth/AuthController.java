@@ -14,11 +14,13 @@ public class AuthController {
 
     private final AuthService authService;
 
+    // http://localhost:8080/auth/signup
     @GetMapping("/signup")
     public String signupForm(Model model) {
         model.addAttribute("signupRequest", new AuthRequest.SignupRequest());
-        return "signup";
+        return "/user/signup";
     }
+
 
     @PostMapping("/signup")
     public String signup(@ModelAttribute AuthRequest.SignupRequest request) {
@@ -27,11 +29,12 @@ public class AuthController {
         return  "redirect:/auth/login";
     }
 
+    // http://localhost:8080/auth/login
     @GetMapping("/login")
     public String loginForm(Model model) {
         model.addAttribute("loginRequest", new AuthRequest.LoginRequest());
 
-        return "login";
+        return "/user/login";
     }
 
     @PostMapping("/login")

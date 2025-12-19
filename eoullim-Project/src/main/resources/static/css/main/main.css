@@ -151,7 +151,7 @@
 
 
 .left-img {
-    background-image: url('../img/크리스마스파티룸.jpg');
+    background-image: url('../../img/main/크리스마스파티룸.jpg');
 }
 .left-img:hover {
     filter: brightness(0.7);
@@ -159,7 +159,7 @@
 }
 
 .right-img {
-    background-image: url('../img/연습실이미지.jpg');
+    background-image: url('../../img/main/연습실이미지.jpg');
     filter: brightness(1);
 }
 
