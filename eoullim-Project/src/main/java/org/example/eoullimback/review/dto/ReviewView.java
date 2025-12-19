@@ -10,7 +10,7 @@ public record ReviewView(
         Long id,
         String username,
         String content,
-        Integer rating,
+        Byte rating,
         List<Boolean> stars,
         LocalDateTime createdAt
 ) {
