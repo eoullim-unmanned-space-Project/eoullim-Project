@@ -28,17 +28,13 @@ public class Item extends BaseTimeEntity {
             foreignKey = @ForeignKey(name = "fk_items_time_slot"))
     private TimeSlot timeSlot;
 
-    @Column(nullable = false, length = 50, unique = true)
-    private String title;
-
     @Column(nullable = false)
     private int price;
 
     @Builder
-    public Item(Long id, TimeSlot timeSlot, String title, int price) {
+    public Item(Long id, TimeSlot timeSlot, int price) {
         this.id = id;
         this.timeSlot = timeSlot;
-        this.title = title;
         this.price = price;
     }
 }

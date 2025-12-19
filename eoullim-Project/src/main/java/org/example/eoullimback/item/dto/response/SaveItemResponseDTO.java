@@ -6,13 +6,11 @@ import org.example.eoullimback.timeslot.TimeSlot;
 
 public record SaveItemResponseDTO(
         TimeSlot timeSlot,
-        String title,
         int price
 ) {
     public static SaveItemRequestDTO from(Item item) {
         return new SaveItemRequestDTO(
                 item.getTimeSlot(),
-                item.getTitle(),
                 item.getPrice()
         );
     }
