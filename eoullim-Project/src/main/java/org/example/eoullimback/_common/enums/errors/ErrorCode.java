@@ -23,6 +23,7 @@ public enum ErrorCode {
     ACCESS_DENIED("접근 권한이 없습니다."),
     MY_ONLY("본인만 접근할 수 있습니다."),
     ADMIN_OLLY("관리자만 접근 할 수 있습니다."),
+    LOGIN_ONLY("로그인이 필요합니다."),
 
     // ====
     // 404 Not Found
@@ -32,6 +33,8 @@ public enum ErrorCode {
     ROOM_NOT_FOUND("방을 찾을 수 없습니다."),
     TIMESLOT_NOT_FOUND("시간대를 찾을 수 없습니다."),
     ITEM_NOT_FOUND("정보을 찾을 수 없습니다."),
+    QAA_NOT_FOUND("Q&A을 찾을 수 없습니다."),
+    COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다."),
 
     // ====
     // 500 Internal Server Error

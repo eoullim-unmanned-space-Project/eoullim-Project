@@ -4,8 +4,11 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageDTO;
+import org.example.eoullimback.comment.CommentServiceImpl;
+import org.example.eoullimback.comment.dto.response.CommentListResponse;
 import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
 import org.example.eoullimback.qaa.dto.request.QaaUpdateRequest;
+import org.example.eoullimback.qaa.dto.response.QaaDetailResponse;
 import org.example.eoullimback.qaa.dto.response.QaaListResponse;
 import org.example.eoullimback.qaa.dto.response.QaaUpdateFormResponse;
 import org.example.eoullimback.user_auth.user.User;
@@ -16,11 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Controller
 public class QaaController {
 
-    private final QaaService qaaService;
+    private final QaaServiceImpl qaaService;
+    private final CommentServiceImpl commentService;
 
     // Q&A 작성 화면 요청
     // http://localhost:8080/qaas/new
@@ -31,16 +37,15 @@ public class QaaController {
     }
 
     // Q&A 작성 요청 기능
-    // http://localhost:8080/qaas
-    @PostMapping("/qaas")
+    // http://localhost:8080/qaas/new
+    @PostMapping("/qaas/new")
     public String createQaa(
             HttpSession session,
             @Valid QaaSaveRequest request
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        qaaService.save(request, sessionUser);
-
-        return "redirect:/qaas";
+        qaaService.createQaa(request, sessionUser);
+        return "redirect:/";
     }
 
     // Q&A 목록 화면 요청
@@ -56,40 +61,56 @@ public class QaaController {
 
         model.addAttribute("qaaPage", qaaPage);
         model.addAttribute("keyword", keyword != null ? keyword: "");
-
         return "qaas/list";
     }
 
     // Q&A 상세 보기 화면 요청
     // http://localhost:8080/qaas/{id}
     @GetMapping("/qaas/{id}")
-    public String detailQaaForm(@PathVariable Long id, Model model) {
-        model.addAttribute("qaa", qaaService.findById(id));
+    public String detailQaaForm(@PathVariable(name = "id") Long qaaId,
+                                Model model,
+                                HttpSession session
+    ) {
+        qaaService.increaseViewCount(qaaId);
+        QaaDetailResponse qaa = qaaService.qaaDetailResponse(qaaId);
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        boolean isOwner = false;
+        if(sessionUser != null && qaa.userId() != null) {
+            isOwner = qaa.userId().equals(sessionUser.getId());
+        }
+
+        Long sessionUserId = sessionUser != null ? sessionUser.getId() : null;
+        List<CommentListResponse> commentList = commentService.listComment(qaaId, sessionUserId);
+
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("qaa", qaa);
+        model.addAttribute("commentList", commentList);
+
         return "qaas/detail";
     }
 
     // Q&A 수정 화면 요청
-    // http://localhost:8080/qaas/{id}/edit
-    @PostMapping("/qaas/{id}/edit")
-    public String editForm(@PathVariable Long id, Model model) {
-        model.addAttribute("qaa", qaaService.findUpdateForm(id));
+    // http://localhost:8080/qaas/{id}/update
+    @GetMapping("/qaas/{id}/update")
+    public String editForm(@PathVariable Long id,
+                           Model model,
+                           HttpSession session
+    ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        QaaUpdateFormResponse qaa = qaaService.findUpdateForm(id, sessionUser.getId());
+        model.addAttribute("qaa", qaa);
         return "qaas/update-form";
     }
 
     // Q&A 수정 요청 기능
-    // http://localhost:8080/qaas/{id}
-    @PostMapping("/qaas/{id}")
-    public String updateQaa(
-            @PathVariable Long id,
-            QaaUpdateRequest updateRequest,
-            HttpSession session
+    // http://localhost:8080/qaas/{id}/update
+    @PostMapping("/qaas/{id}/update")
+    public String updateQaa(@PathVariable Long id,
+                            QaaUpdateRequest updateRequest,
+                            HttpSession session
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            throw new RuntimeException("로그인이 필요합니다.");
-        }
-
         qaaService.update(id, updateRequest, sessionUser);
         return "redirect:/qaas/{id}";
     }
@@ -97,17 +118,11 @@ public class QaaController {
     // Q&A 삭제 요청 기능
     // http://localhost:8080/qaas/{id}/delete
     @PostMapping("/qaas/{id}/delete")
-    public String deleteQaa(
-            @PathVariable Long id,
-            HttpSession session
+    public String deleteQaa(@PathVariable Long id,
+                            HttpSession session
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            throw new RuntimeException("로그인이 필요합니다.");
-        }
-
         qaaService.delete(id, sessionUser);
-        return "redirect:/qaas";
+        return "redirect:/";
     }
 }

@@ -3,8 +3,11 @@ package org.example.eoullimback.qaa;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface QaaRepository extends JpaRepository<Qaa, Long> {
 
@@ -20,4 +23,11 @@ public interface QaaRepository extends JpaRepository<Qaa, Long> {
                     "WHERE LOWER(q.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
                     "   OR LOWER(q.content) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Qaa> findByTitleContainingOrContentContaining(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query("SELECT q FROM Qaa q JOIN FETCH q.user WHERE q.id = :id")
+    Optional<Qaa> findByIdWithUser(@Param("id") Long id);
+
+    @Modifying
+    @Query("UPDATE Qaa q SET q.viewCount = q.viewCount + 1 WHERE q.id = :id")
+    void increaseViewCount(@Param("id") Long id);
 }

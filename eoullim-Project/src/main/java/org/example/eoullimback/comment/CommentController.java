@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class CommentController {
 
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
 
     // 댓글 작성
-    @PostMapping("comments/save")
+    @PostMapping("comments/new")
     public String createComment(CommentSaveRequest saveRequest, HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         commentService.createComment(saveRequest, sessionUser.getId());
@@ -29,10 +29,9 @@ public class CommentController {
 
     //수정 화면 요청
     @GetMapping("/comments/{id}/update")
-    public String updateForm(
-            @PathVariable Long id,
-            Model model,
-            HttpSession session
+    public String updateForm(@PathVariable Long id,
+                             Model model,
+                             HttpSession session
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         Long qaaId = commentService.deleteComment(id, sessionUser.getId());
@@ -46,10 +45,9 @@ public class CommentController {
 
     // 수정 요청 기능
     @PostMapping("/comments/{id}/update")
-    public String updateComment(
-            @PathVariable Long id,
-            CommentUpdateRequest updateRequest,
-            HttpSession session
+    public String updateComment(@PathVariable Long id,
+                                CommentUpdateRequest updateRequest,
+                                HttpSession session
     ) {
         User sessionUser =  (User)session.getAttribute("sessionUser");
         Long qaaId = commentService.deleteComment(id, sessionUser.getId());
@@ -60,7 +58,9 @@ public class CommentController {
     }
 
     @PostMapping("comments/{id}/delete")
-    public String deleteComment(@PathVariable(name = "id") Long commentId, HttpSession session) {
+    public String deleteComment(@PathVariable(name = "id") Long commentId,
+                                HttpSession session
+    ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         Long qaaId = commentService.deleteComment(commentId, sessionUser.getId());
