@@ -10,6 +10,7 @@ public enum ErrorCode {
     // ====
     INVALID_INPUT("잘못된 입력값입니다."),
     MISSING_PARAMETER("비워 둘수 없는 항목입니다."),
+    ONLY_FILE_IMG("이미지 파일만 업로드 가능합니다."),
 
     // ====
     // 401 Unauthorized
@@ -35,6 +36,15 @@ public enum ErrorCode {
     ITEM_NOT_FOUND("정보을 찾을 수 없습니다."),
     QAA_NOT_FOUND("Q&A을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다."),
+
+    // ====
+    // 409 Conflict
+    // ====
+    USER_CONFLICT_ID("이미 존재하는 아이디입니다."),
+    USER_CONFLICT_PASSWORD("이미 존재하는 비밀번호입니다."),
+    USER_CONFLICT_EMAIL("이미 존재하는 이메일입니다."),
+    USER_CONFLICT_PHONE_NUMBER("이미 존재하는 휴대폰 번호 입니다."),
+    USER_STATUS_WITHDRAWN("이미 탈퇴한 회원입니다. 고객센터에 문의해주세요."),
 
     // ====
     // 500 Internal Server Error

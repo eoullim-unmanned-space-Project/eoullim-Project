@@ -1,6 +1,8 @@
 package org.example.eoullimback.user_auth.user;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,54 +14,48 @@ public class UserController {
 
     private final UserService userService;
 
+    // // http://localhost:8080/users/me
     // 유저 컨트롤러
     @GetMapping("/me")
     public String myProfile(@RequestParam("userId") Long userId, Model model) {
-        model.addAttribute("user", userService.getMyProfile(userId));
 
-        return "profile";
+        User user = userService.getMyProfile(userId);
+
+        model.addAttribute("user", user);
+
+        return "user/profile";
     }
 
-    @PatchMapping("/me")
-    public String updateMyProfile(@RequestParam("userId") Long userId,
-                                  @ModelAttribute UserRequest.UpdateProfileRequest request) {
-        userService.updateMyProfile(userId, request);
+    /**
+     * 회원 수정(프로필 생성)
+     */
+    @PostMapping("/me")
+    public String updateProfile(@RequestParam("userId") Long userId, @ModelAttribute @Valid UserRequest.UpDateDTO upDateDTO, Model model) {
 
-        return "redirect:/users/me?userId=" + userId;
+        userService.updateProfile(userId, upDateDTO);
+
+        return "redirect:/users/me?userId="+ userId;
     }
 
-    @DeleteMapping("/me")
-    public String deleteMyProfile(@RequestParam("userId") Long userId) {
-        userService.deleteMyProfile(userId);
-        return "redirect:/";
+    /**
+     * 회원 수정(프로필 삭제)
+     */
+    @PostMapping("/profile-image/delete")
+    public String deleteProfileImage(@RequestParam("userId") Long userId) {
+
+        userService.deleteProfileImage(userId);
+
+        return "redirect:/user/me";
     }
 
-    // 관리자 컨트롤러
-    @GetMapping
-    public String allUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
+    /**
+     * 회원 탈퇴
+     */
+    @PostMapping("/leave")
+    public String leaveUser(@RequestParam("userId") Long userId) {
 
-        return "user-list";
-    }
+        userService.leaveUser(userId);
 
-    @GetMapping("/{id}")
-    public String getUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-
-        return "user-detail";
-    }
-
-    @PutMapping("/{id}/role")
-    public String updateRole(@PathVariable("id") Long id,
-                             @ModelAttribute UserRequest.UpdateRoleRequest request) {
-        userService.updateUserRole(id, request);
-        return "redirect:/users/" + id;
-    }
-
-    @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
-
-        return "redirect:/users";
+        return "redirect:/logout";
     }
 }

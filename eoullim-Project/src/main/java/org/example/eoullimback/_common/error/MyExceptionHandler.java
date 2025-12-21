@@ -42,6 +42,14 @@ public class MyExceptionHandler {
         return "err/404";
     }
 
+    @ExceptionHandler(Exception409.class)
+    public String ex409(Exception409 e, HttpServletRequest request) {
+        log.warn("== 409 에러 발생 ==");
+        handleLog(e, request);
+
+        return "err/409";
+    }
+
     @ExceptionHandler(Exception500.class)
     public String ex500(Exception500 e, HttpServletRequest request) {
         log.warn("== 500 에러 발생 ==");
