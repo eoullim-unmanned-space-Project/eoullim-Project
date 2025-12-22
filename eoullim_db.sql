@@ -39,9 +39,9 @@ CREATE TABLE users (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 계정 생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '사용자 계정(프로필) 수정일',
   withdrawn_at DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 탈퇴일',
-  
+
   CHECK(status IN('ACTIVE', 'WITHDRAWN', 'SUSPENDED')),
-  
+
   UNIQUE KEY `uk_users_login_id` (login_id),
   UNIQUE KEY `uk_users_email` (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 정보 테이블';
