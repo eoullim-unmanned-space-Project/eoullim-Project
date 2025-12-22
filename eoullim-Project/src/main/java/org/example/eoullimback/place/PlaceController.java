@@ -25,7 +25,7 @@ public class PlaceController {
     // 전체 조회
     @GetMapping("/place/list")
     public String ListForm() {
-        return "place/list";
+        return "map/map";
     }
 
 
