@@ -6,7 +6,7 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.util.FileUtil;
-import org.example.eoullimback.room.dto.request.SaveRoomRequestDTO;
+import org.example.eoullimback.room.RoomRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -75,7 +75,7 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public PlaceResponse placeUpdate(Long placeId, SaveRoomRequestDTO request) {
+    public PlaceResponse placeUpdate(Long placeId, RoomRequest request) {
         return null;
     }
 

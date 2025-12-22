@@ -75,12 +75,11 @@ public class PageResponse {
 
             return links;
         }
+    }
 
-
-        @Data
-        public static class PageLink {
-            private int displayNumber;
-            private boolean active;
-        }
+    @Data
+    public static class PageLink {
+        private int displayNumber;
+        private boolean active;
     }
 }

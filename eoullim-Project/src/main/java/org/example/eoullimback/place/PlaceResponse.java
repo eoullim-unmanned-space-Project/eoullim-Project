@@ -1,5 +1,6 @@
 package org.example.eoullimback.place;
 
+import lombok.Data;
 import org.example.eoullimback._common.enums.place.Category;
 import org.example.eoullimback._common.util.DateTimeUtil;
 
@@ -7,6 +8,7 @@ import java.math.BigDecimal;
 
 public class PlaceResponse {
 
+    @Data
     public static class ListDTO {
         private String name;
         private String address;
@@ -19,6 +21,7 @@ public class PlaceResponse {
         }
     }
 
+    @Data
     public static class DetailDTO {
         private String name;
         private String address;
