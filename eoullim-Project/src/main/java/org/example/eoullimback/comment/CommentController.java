@@ -2,9 +2,6 @@ package org.example.eoullimback.comment;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback.comment.dto.request.CommentSaveRequest;
-import org.example.eoullimback.comment.dto.request.CommentUpdateRequest;
-import org.example.eoullimback.comment.dto.response.CommentUpdateFormResponse;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,11 +17,12 @@ public class CommentController {
 
     // 댓글 작성
     @PostMapping("comments/new")
-    public String createComment(CommentSaveRequest saveRequest, HttpSession session) {
+    public String createComment(CommentRequest.CreateDTO saveRequest, HttpSession session) {
+
         User sessionUser = (User) session.getAttribute("sessionUser");
         commentService.createComment(saveRequest, sessionUser.getId());
 
-        return "redirect:/qaa/" + saveRequest.qaaId();
+        return "redirect:/qaa/" + saveRequest.getQaaId();
     }
 
     //수정 화면 요청
@@ -36,7 +34,7 @@ public class CommentController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         Long qaaId = commentService.deleteComment(id, sessionUser.getId());
 
-        CommentUpdateFormResponse comment = commentService.updateCommentForm(id, sessionUser.getId());
+        CommentResponse.UpdateFormDTO comment = commentService.updateCommentForm(id, sessionUser.getId());
 
         model.addAttribute("comment", comment);
 
@@ -46,13 +44,13 @@ public class CommentController {
     // 수정 요청 기능
     @PostMapping("/comments/{id}/update")
     public String updateComment(@PathVariable Long id,
-                                CommentUpdateRequest updateRequest,
+                                CommentRequest.UpdateDTO request,
                                 HttpSession session
     ) {
         User sessionUser =  (User)session.getAttribute("sessionUser");
         Long qaaId = commentService.deleteComment(id, sessionUser.getId());
 
-        commentService.updateComment(updateRequest, id, sessionUser.getId());
+        commentService.updateComment(request, id, sessionUser.getId());
 
         return "redirect:/qaa/" + qaaId;
     }

@@ -6,11 +6,6 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.comment.CommentRepository;
-import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
-import org.example.eoullimback.qaa.dto.request.QaaUpdateRequest;
-import org.example.eoullimback.qaa.dto.response.QaaDetailResponse;
-import org.example.eoullimback.qaa.dto.response.QaaListResponse;
-import org.example.eoullimback.qaa.dto.response.QaaUpdateFormResponse;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,16 +24,17 @@ public class QaaServiceImpl implements QaaService {
 
     @Transactional
     @Override
-    public Qaa createQaa(QaaSaveRequest request, User sessionUser) {
+    public Qaa createQaa(QaaRequest.CreateDTO request, User sessionUser) {
         if (sessionUser == null) {
             throw new Exception403(ErrorCode.LOGIN_ONLY);
         }
+
         Qaa qaa = request.toEntity(sessionUser);
         qaaRepository.save(qaa);
         return qaa;
     }
 
-    public PageResponse<QaaListResponse> qaaListFindAll(int page, int size, String keyword) {
+    public PageResponse.PageDTO<Qaa, QaaResponse.ListDTO> qaaListFindAll(int page, int size, String keyword) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(50, size)
         );
@@ -52,15 +48,18 @@ public class QaaServiceImpl implements QaaService {
         } else {
             qaaPage = qaaRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
         }
-        return PageResponse.from(qaaPage, QaaListResponse::new);
+        return new PageResponse.PageDTO<>(
+                qaaPage,
+                QaaResponse.ListDTO::new
+        );
     }
 
     @Override
-    public QaaDetailResponse qaaDetailResponse(Long qaaId) {
+    public QaaResponse.DetailDTO qaaDetailResponse(Long qaaId) {
         Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
-                .orElseThrow(() -> new Exception404(ErrorCode.ACCESS_DENIED));
+                .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
 
-        return new QaaDetailResponse(qaa);
+        return new QaaResponse.DetailDTO(qaa);
     }
 
     @Transactional
@@ -69,7 +68,7 @@ public class QaaServiceImpl implements QaaService {
         qaaRepository.increaseViewCount(id);
     }
 
-    public QaaUpdateFormResponse findUpdateForm(Long qaaId, Long sessionUserId) {
+    public QaaResponse.UpdateFormDTO findUpdateForm(Long qaaId, Long sessionUserId) {
         Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
                 .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
 
@@ -77,12 +76,12 @@ public class QaaServiceImpl implements QaaService {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
 
-        return new QaaUpdateFormResponse(qaa);
+        return new QaaResponse.UpdateFormDTO(qaa);
     }
 
     @Transactional
     @Override
-    public QaaUpdateFormResponse update(Long qaaId, QaaUpdateRequest updateRequest, User sessionUser) {
+    public QaaResponse.UpdateFormDTO update(Long qaaId, QaaRequest.UpdateDTO updateRequest, User sessionUser) {
 
         Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
                 .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
@@ -91,8 +90,8 @@ public class QaaServiceImpl implements QaaService {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
 
-        qaa.update(updateRequest.title(), updateRequest.content());
-        return new QaaUpdateFormResponse(qaa);
+        updateRequest.updateEntity(qaa);
+        return new QaaResponse.UpdateFormDTO(qaa);
     }
 
     @Transactional

@@ -36,6 +36,7 @@ public enum ErrorCode {
     ITEM_NOT_FOUND("정보을 찾을 수 없습니다."),
     QAA_NOT_FOUND("Q&A을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다."),
+    NOTICE_NOT_FOUND("존재하지 않는 공지사항 입니다."),
 
     // ====
     // 409 Conflict

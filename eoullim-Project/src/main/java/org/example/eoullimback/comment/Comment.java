@@ -47,6 +47,10 @@ public class Comment extends BaseTimeEntity {
         this.qaa = qaa;
     }
 
+    public void update(String content) {
+        this.content = content;
+    }
+
     public boolean isOwner(Long userId) {
         if(this.user == null || userId == null) {
             return false;
@@ -59,8 +63,7 @@ public class Comment extends BaseTimeEntity {
         return result;
     }
 
-    public void updateContent(String content, Qaa qaa) {
+    public void updateContent(String content) {
         this.content = content;
-        this.qaa = qaa;
     }
 }
