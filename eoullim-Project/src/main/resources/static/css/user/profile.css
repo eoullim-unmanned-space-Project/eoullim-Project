@@ -1,0 +1,171 @@
+  * {
+  box-sizing: border-box;
+  font-family: 'Pretendard', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: white;
+}
+
+/* 전체 레이아웃 */
+.mypage-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* 왼쪽 사이드바 */
+.mypage-sidebar {
+  width: 280px;
+  padding: 32px 24px;
+}
+
+.mypage-sidebar h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.welcome {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 32px;
+}
+
+.welcome span {
+  font-weight: bold;
+  color: #4f46e5;
+}
+
+.menu-section {
+  margin-bottom: 32px;
+}
+
+.menu-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.menu-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-section li {
+  padding: 8px 0;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+}
+
+.menu-section li:hover {
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+.menu-section span {
+  font-weight: bold;
+}
+
+/* 오른쪽 메인 */
+.mypage-main {
+  flex: 1;
+  padding: 48px;
+  background: #ffffff;
+  border-radius: 0 12px 12px 0;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 16px;
+  position: relative;
+}
+
+.profile-label {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.profile-label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #e5e7eb;
+}
+
+.edit-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  border-radius: 50%;
+  transition: opacity 0.2s ease;
+}
+
+/* 이름 */
+.username {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* 정보 줄 */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.label {
+  color: #6b7280;
+}
+
+.value {
+  font-weight: 500;
+}
+
+.username span {
+  font-weight: bold;
+}
+
+/* 버튼 */
+.edit-btn {
+  margin-top: 32px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  background: #4f46e5;
+  transition: background 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: #4338ca;
+}
+
+hr {
+  border: none;
+  border: 0.6px solid #e5e7eb;
+}
+
+.info-row input {
+  border: none;
+}
