@@ -1,0 +1,102 @@
+   * { box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+
+    body {
+      margin: 0;
+      background: white;
+    }
+
+    /* 전체 레이아웃 */
+    .mypage-container {
+      display: flex;
+      max-width: 1200px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    /* 왼쪽 사이드바 */
+    .mypage-sidebar {
+      width: 280px;
+      padding: 32px 24px;
+    }
+
+    .mypage-sidebar h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .welcome {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 32px;
+    }
+
+    .welcome span { font-weight: bold; color: #4f46e5; }
+
+    .menu-section { margin-bottom: 32px; }
+
+    .menu-section h3 { font-size: 16px; margin-bottom: 12px; }
+
+    .menu-section ul { list-style: none; padding: 0; margin: 0; }
+
+    .menu-section li {
+      padding: 8px 0;
+      font-size: 14px;
+      color: #374151;
+      cursor: pointer;
+    }
+
+    .menu-section li:hover { font-weight: 600; color: #4f46e5; }
+
+    .menu-section span { font-weight: bold; }
+
+    hr { border: 0.6px solid #e5e7eb; margin: 16px 0; }
+
+    /* 오른쪽 메인 */
+    .mypage-main {
+      flex: 1;
+      padding: 48px;
+      background: #ffffff;
+      border-radius: 0 12px 12px 0;
+    }
+
+    /* 예약조회 폼 */
+    .reservation-box h2 {
+      margin-bottom: 24px;
+      font-size: 22px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .info-row label {
+      width: 100px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .info-row input.booking-input {
+      flex: 1;
+      padding: 10px 12px;
+      font-size: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+    }
+
+    .edit-btn {
+      padding: 10px 20px;
+      margin-left: 8px;
+      border: none;
+      border-radius: 6px;
+      background: #4f46e5;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s ease;
+    }
+
+    .edit-btn:hover { background: #4338ca; }
