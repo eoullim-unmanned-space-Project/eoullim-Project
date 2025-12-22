@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="/templates/layout/css/header.css">
-<link rel="stylesheet" href="/templates/map/css/map.css">
+<link rel="stylesheet" href="/css/layout/header.css">
+<link rel="stylesheet" href="/css/map/map.css">
 {{> layout/header}}
 <body>
 <section class="section">
@@ -35,29 +35,64 @@
 </section>
 <div class="section">
 </div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17&autoload=false"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    kakao.maps.load(function() {
+    const mockPlaces = [
+        {
+            id: 1,
+            name: "어울림 스터디룸 서면점",
+            address: "부산 부산진구 중앙대로 691",
+            latitude: 35.157774,
+            longitude: 129.059175,
+            category: "STUDY"
+        },
+        {
+            id: 2,
+            name: "어울림 회의실 서면역점",
+            address: "부산 부산진구 중앙대로 708",
+            latitude: 35.156917,
+            longitude: 129.059484,
+            category: "MEETING"
+        },
+        {
+            id: 3,
+            name: "어울림 연습실 전포점",
+            address: "부산 부산진구 전포대로 199",
+            latitude: 35.154673,
+            longitude: 129.063286,
+            category: "PRACTICE"
+        },
+        {
+            id: 4,
+            name: "어울림 스터디카페 부전점",
+            address: "부산 부산진구 부전로 57",
+            latitude: 35.159012,
+            longitude: 129.057842,
+            category: "STUDY"
+        }
+    ];
 
+
+    let map = null;
+    kakao.maps.load(function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
+                // 위도
+                const lat = position.coords.latitude;
+                // 경도
+                const lng = position.coords.longitude;
 
-                var mapContainer = document.getElementById('map');
-                var mapOption = {
+                const mapContainer = document.getElementById('map');
+                const mapOption = {
                     center: new kakao.maps.LatLng(lat, lng),
                     level: 6
                 };
 
-                var map = new kakao.maps.Map(mapContainer, mapOption);
+                // map에 Container와 center 위도 경도 담아준다
+                map = new kakao.maps.Map(mapContainer, mapOption);
 
-                var markerPosition  = new kakao.maps.LatLng(lat, lng);
-                var marker = new kakao.maps.Marker({
-                    position: markerPosition
-                });
-                marker.setMap(map);
-
+                displayMarker();
             }, function(error) {
                 console.error("위치 정보를 가져올 수 없습니다.", error);
             });
@@ -65,6 +100,53 @@
             alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
         }
     });
+
+    // async 비동기 처리
+    async function displayMarker() {
+        try {
+            // 배열로 되어 있는 객체 mockPlaces를 담아서 변수화
+            const places = mockPlaces;
+
+            // 장소를 forEach 반복문을 돌린다
+            places.forEach((place) => {
+                // 객체에 담겨있는 장소의 위도, 경도를 maps.LatLng를 통해 position생성
+             const position = new kakao.maps.LatLng(place.latitude, place.longitude);
+
+             var imageSrc = "/css/map/맵마커.png",
+                 imageSize = new kakao.maps.Size(32, 32),
+                 imageOption = {offset: new kakao.maps.Point(16, 32)};
+
+             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+
+             // 새로운 마커 생성
+               var marker = new kakao.maps.Marker({
+                   // map : 지도
+                   map: map,
+                   // position: 위도, 경도
+                   position: position,
+                   // marker 이미지
+                   image: markerImage,
+                   // title: 제목
+                   title: place.name
+               });
+
+               // click했을 때 보여줄 정보
+               const infowindow = new kakao.maps.InfoWindow({
+                   content: `<div style="padding:5px; color:black;">${place.name}</div>`
+               });
+
+               kakao.maps.event.addListener(marker, 'click', function() {
+                   infowindow.open(map, marker);
+               });
+
+            });
+
+        } catch (error) {
+            console.error("데이터를 불러오는 중 오류가 발생했습니다.", error);
+        }
+    }
+
+
 </script>
 </body>
 {{> layout/footer}}
