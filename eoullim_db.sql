@@ -25,8 +25,6 @@ DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
 
-select * from users;
-
 CREATE TABLE users (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   
@@ -35,9 +33,14 @@ CREATE TABLE users (
   name VARCHAR(50) NOT NULL COMMENT '사용자 이름',
   phone VARCHAR(30) NULL COMMENT '휴대폰 번호',
   email VARCHAR(255) NOT NULL COMMENT 'Email 주소',
-  
+  profile_image VARCHAR(255) NULL COMMENT '사용자 프로필',
+  status VARCHAR(20) NOT NULL COMMENT '사용자 상태',
+
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 계정 생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '사용자 계정(프로필) 수정일',
+  withdrawn_at DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 탈퇴일',
+  
+  CHECK(status IN('ACTIVE', 'WITHDRAWN', 'SUSPENDED')),
   
   UNIQUE KEY `uk_users_login_id` (login_id),
   UNIQUE KEY `uk_users_email` (email)
@@ -155,9 +158,9 @@ CREATE TABLE time_slots (
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
-  
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
+
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
-  
   CHECK (status IN('OPEN','CLOSED','CANCELED')),
   
   UNIQUE KEY `uk_time_slots_room_id` (room_id),
@@ -175,6 +178,7 @@ CREATE TABLE items (
   price INT NOT NULL DEFAULT 0 COMMENT '상품 가격',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
 
   CONSTRAINT `fk_items_time_slot` FOREIGN KEY (time_slot_id) REFERENCES time_slots(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='아이템 테이블';
