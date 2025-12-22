@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="/css/layout/header.css">
+<link rel="stylesheet" href="/css/user/booking.css">
+{{> layout/header}}
+<main>
+    <div class="mypage-container">
+
+        <!-- 왼쪽 사이드바 -->
+        <aside class="mypage-sidebar">
+            <h2>마이페이지</h2>
+            <p class="welcome"><span>홍길동</span>님, 안녕하세요</p>
+            <hr />
+
+            <section class="menu-section">
+                <h3>예약정보</h3>
+                <ul>
+                    <li><span>예약내역</span></li>
+                </ul>
+            </section>
+            <hr />
+
+            <section class="menu-section">
+                <h3>활동정보</h3>
+                <ul>
+                    <li><span>리뷰</span></li>
+                    <li><span>Q&A</span></li>
+                </ul>
+            </section>
+            <hr />
+        </aside>
+
+        <!-- 오른쪽 메인 -->
+        <main class="mypage-main">
+            <div class="reservation-box">
+                <h2>예약 조회</h2>
+                <form action="/mypage/reservation" method="post">
+                    <div class="info-row">
+                        <input class="booking-input" type="text" name="booking" placeholder="예약 코드를 입력하세요" />
+                        <button type="submit" class="edit-btn">조회</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</main>
+{{> layout/footer}}
