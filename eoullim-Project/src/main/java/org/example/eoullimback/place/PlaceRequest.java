@@ -38,13 +38,13 @@ public class PlaceRequest {
 
                 private MultipartFile profileImage;
 
-                public Place toEntity (String profileImageFileName){
+                public Place toEntity (String profileImageFileName) {
                         return Place.builder()
-                                .name(this.name)
-                                .address(this.address)
-                                .latitude(this.latitude)
-                                .longitude(this.longitude)
-                                .category(this.category)
+                                .name(name)
+                                .address(address)
+                                .latitude(latitude)
+                                .longitude(longitude)
+                                .category(category)
                                 .profileImage(profileImageFileName)
                                 .build();
                 }

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
-import org.example.eoullimback.room.Room;
 import org.example.eoullimback.timeslot.TimeSlot;
 
 @Entity

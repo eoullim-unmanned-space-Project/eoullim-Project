@@ -2,7 +2,7 @@ package org.example.eoullimback.place;
 
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
-import org.example.eoullimback.room.dto.request.SaveRoomRequestDTO;
+import org.example.eoullimback.room.RoomRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,7 +61,7 @@ public class PlaceController {
 
     @PostMapping("/place/{placeId}/update")
     public String UpdateProc(@PathVariable Long placeId,
-                             SaveRoomRequestDTO request
+                             RoomRequest request
     ) {
         PlaceResponse place = placeService.placeUpdate(placeId, request);
 
