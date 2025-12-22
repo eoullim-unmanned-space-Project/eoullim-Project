@@ -87,7 +87,7 @@ public class QaaController {
         model.addAttribute("qaa", qaa);
         model.addAttribute("commentList", commentList);
 
-        return "qaas/detail";
+        return "qaa/detail";
     }
 
     // Q&A 수정 화면 요청

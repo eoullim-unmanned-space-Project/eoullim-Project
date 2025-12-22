@@ -2,12 +2,12 @@ package org.example.eoullimback.notice;
 
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback.user_auth.user.User;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Table(name = "notices")
 @Entity
