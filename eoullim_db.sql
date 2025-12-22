@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS file_infos;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
-SET FOREIGN_KEY_CHECKS = 1;
+SET FOREIGN_KEY_HECKS = 1;
 
 select * from users;
 
@@ -35,9 +35,13 @@ CREATE TABLE users (
   name VARCHAR(50) NOT NULL COMMENT '사용자 이름',
   phone VARCHAR(30) NULL COMMENT '휴대폰 번호',
   email VARCHAR(255) NOT NULL COMMENT 'Email 주소',
+  profile_image VARCHAR(255) COMMENT '프로필 이미지',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 계정 생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '사용자 계정(프로필) 수정일',
+  withdrawn_at DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 탈퇴일',
+  
+  CHECK(status IN('ACTIVE', 'WITHDRAWN', 'SUSPENDED')),
   
   UNIQUE KEY `uk_users_login_id` (login_id),
   UNIQUE KEY `uk_users_email` (email)

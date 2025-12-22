@@ -43,7 +43,7 @@ public class AuthController {
      * 로그인 기능
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute @Valid AuthRequest.LoginRequest requestDTO, Model model) {
+    public String login(@ModelAttribute @Valid AuthRequest.LoginRequest requestDTO) {
        User user = authService.login(requestDTO);
 
         return "redirect:/main/main";
