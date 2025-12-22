@@ -4,13 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
+import org.example.eoullimback.comment.CommentResponse;
 import org.example.eoullimback.comment.CommentServiceImpl;
-import org.example.eoullimback.comment.dto.response.CommentListResponse;
-import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
-import org.example.eoullimback.qaa.dto.request.QaaUpdateRequest;
-import org.example.eoullimback.qaa.dto.response.QaaDetailResponse;
-import org.example.eoullimback.qaa.dto.response.QaaListResponse;
-import org.example.eoullimback.qaa.dto.response.QaaUpdateFormResponse;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,7 +36,7 @@ public class QaaController {
     @PostMapping("/qaas/new")
     public String createQaa(
             HttpSession session,
-            @Valid QaaSaveRequest request
+            @Valid QaaRequest.CreateDTO request
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         qaaService.createQaa(request, sessionUser);
@@ -57,7 +52,8 @@ public class QaaController {
                           @RequestParam(required = false) String keyword
     ) {
         int pageIndex = Math.max(0, page - 1);
-        PageResponse<QaaListResponse> qaaPage = qaaService.qaaListFindAll(pageIndex, size, keyword);
+
+        PageResponse.PageDTO<Qaa, QaaResponse.ListDTO> qaaPage = qaaService.qaaListFindAll(pageIndex, size, keyword);
 
         model.addAttribute("qaaPage", qaaPage);
         model.addAttribute("keyword", keyword != null ? keyword: "");
@@ -72,16 +68,17 @@ public class QaaController {
                                 HttpSession session
     ) {
         qaaService.increaseViewCount(qaaId);
-        QaaDetailResponse qaa = qaaService.qaaDetailResponse(qaaId);
+
+        QaaResponse.DetailDTO qaa = qaaService.qaaDetailResponse(qaaId);
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-        boolean isOwner = false;
-        if(sessionUser != null && qaa.userId() != null) {
-            isOwner = qaa.userId().equals(sessionUser.getId());
-        }
+
+        boolean isOwner = sessionUser != null
+                && qaa.getUserId() != null
+                && qaa.getUserId().equals(sessionUser.getId());
 
         Long sessionUserId = sessionUser != null ? sessionUser.getId() : null;
-        List<CommentListResponse> commentList = commentService.listComment(qaaId, sessionUserId);
+        List<CommentResponse.ListDTO> commentList = commentService.listComment(qaaId, sessionUserId);
 
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("qaa", qaa);
@@ -98,7 +95,8 @@ public class QaaController {
                            HttpSession session
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        QaaUpdateFormResponse qaa = qaaService.findUpdateForm(id, sessionUser.getId());
+
+        QaaResponse.UpdateFormDTO qaa = qaaService.findUpdateForm(id, sessionUser.getId());
         model.addAttribute("qaa", qaa);
         return "qaa/update-form";
     }
@@ -107,7 +105,7 @@ public class QaaController {
     // http://localhost:8080/qaas/{id}/update
     @PostMapping("/qaas/{id}/update")
     public String updateQaa(@PathVariable Long id,
-                            QaaUpdateRequest updateRequest,
+                            @Valid QaaRequest.UpdateDTO updateRequest,
                             HttpSession session
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");

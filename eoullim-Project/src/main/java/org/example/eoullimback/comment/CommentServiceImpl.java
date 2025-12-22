@@ -4,10 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
-import org.example.eoullimback.comment.dto.request.CommentSaveRequest;
-import org.example.eoullimback.comment.dto.request.CommentUpdateRequest;
-import org.example.eoullimback.comment.dto.response.CommentListResponse;
-import org.example.eoullimback.comment.dto.response.CommentUpdateFormResponse;
 import org.example.eoullimback.qaa.Qaa;
 import org.example.eoullimback.qaa.QaaRepository;
 import org.example.eoullimback.user_auth.user.User;
@@ -32,15 +28,15 @@ public class CommentServiceImpl implements CommentService{
      */
     @Transactional
     @Override
-    public Comment createComment(CommentSaveRequest saveRequest, Long sessionUserId) {
+    public Comment createComment(CommentRequest.CreateDTO request, Long sessionUserId) {
 
         User userEntity = userRepository.findById(sessionUserId)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
-        Qaa qaaEntity = qaaRepository.findById(saveRequest.qaaId())
+        Qaa qaaEntity = qaaRepository.findById(request.getQaaId())
                 .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
 
-        Comment comment = saveRequest.toEntity(userEntity, qaaEntity);
+        Comment comment = request.toEntity(userEntity, qaaEntity);
         return commentRepository.save(comment);
     }
 
@@ -48,11 +44,11 @@ public class CommentServiceImpl implements CommentService{
      * 댓글 리스트
      */
     @Override
-    public List<CommentListResponse> listComment(Long qaaId, Long sessionUserId) {
+    public List<CommentResponse.ListDTO> listComment(Long qaaId, Long sessionUserId) {
 
         List<Comment> commentList = commentRepository.findByQaaIdWithUser(qaaId);
         return commentList.stream()
-                .map(comment -> new CommentListResponse(comment, sessionUserId))
+                .map(comment -> new CommentResponse.ListDTO(comment, sessionUserId))
                 .collect(Collectors.toList());
     }
 
@@ -61,15 +57,15 @@ public class CommentServiceImpl implements CommentService{
      */
     @Transactional
     @Override
-    public CommentUpdateFormResponse updateCommentForm(Long commentId, Long sessionUserId) {
-        Comment commentEntity = commentRepository.findById(commentId)
+    public CommentResponse.UpdateFormDTO updateCommentForm(Long commentId, Long sessionUserId) {
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new Exception404(ErrorCode.COMMENT_NOT_FOUND));
 
-        if(!commentEntity.isOwner(sessionUserId)){
+        if(!comment.isOwner(sessionUserId)){
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
 
-        return new CommentUpdateFormResponse(commentEntity);
+        return new CommentResponse.UpdateFormDTO(comment);
     }
 
     /**
@@ -77,16 +73,16 @@ public class CommentServiceImpl implements CommentService{
      */
     @Transactional
     @Override
-    public CommentUpdateFormResponse updateComment(CommentUpdateRequest updateRequest, Long commentId, Long sessionUserId) {
+    public CommentResponse.UpdateFormDTO updateComment(CommentRequest.UpdateDTO request, Long commentId, Long sessionUserId) {
 
-        Comment commentEntity = commentRepository.findById(commentId)
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new Exception404(ErrorCode.COMMENT_NOT_FOUND));
 
-        if(!commentEntity.isOwner(sessionUserId)) {
+        if(!comment.isOwner(sessionUserId)) {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
-        commentEntity.updateContent(updateRequest.content(), updateRequest.qaaId());
-        return new CommentUpdateFormResponse(commentEntity);
+        comment.updateContent(request.getContent());
+        return new CommentResponse.UpdateFormDTO(comment);
     }
 
     /**
