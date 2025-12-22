@@ -27,10 +27,6 @@ public class AuthServiceImpl implements AuthService {
             throw new Exception409(ErrorCode.USER_CONFLICT_ID);
         }
 
-        if (authRepository.existsByPassword(requestDTO.password())) {
-            throw new Exception409(ErrorCode.USER_CONFLICT_PASSWORD);
-        }
-
         if (authRepository.existsByEmail(requestDTO.email())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_EMAIL);
         }
@@ -39,7 +35,8 @@ public class AuthServiceImpl implements AuthService {
             throw new Exception409(ErrorCode.USER_CONFLICT_PHONE_NUMBER);
         }
 
-         authRepository.save(requestDTO.toEntity());
+        User user = requestDTO.toEntity();
+         authRepository.save(user);
     }
 
     @Override
