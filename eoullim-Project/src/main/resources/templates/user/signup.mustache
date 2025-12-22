@@ -56,7 +56,7 @@
         const  phone = document.getElementById('phone');
         const  checkMsg = document.getElementById('input-check');
 
-        const idRegex = /^[a-z0-9]{6,20}$/;
+        const idRegex = /^(?=.*[a-z])(?=.*\d)[a-z0-9]{6,20}$/;
         const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/;
         const nameRegex = /^[가-힣]{2,5}$/;
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -67,34 +67,80 @@
 
         loginId.addEventListener('input', () => {
             const checkMsg = loginId.nextElementSibling;
+            const value = loginId.value.trim();
 
-            if (idRegex.test(loginId.value.trim())) {
+            if (!value) {
+                checkMsg.textContent = '';
+                password.style.borderColor = '';
+                return;
+            }
+
+            if (value.length < 6 || value.length > 20) {
+                checkMsg.textContent = '아이디는 6~20자 이내여야 합니다.';
+                checkMsg.style.color = errorColor;
+                loginId.style.borderColor = errorColor;
+            } else if (!/^[a-z0-9]+$/.test(value)) {
+                checkMsg.textContent = '영소문자와 숫자만 사용 가능합니다.';
+                checkMsg.style.color = errorColor;
+                loginId.style.borderColor = errorColor;
+            } else if (!idRegex.test(value)) {
+                checkMsg.textContent = '영문과 숫자를 반드시 함께 사용해야 합니다.';
+                checkMsg.style.color = errorColor;
+                loginId.style.borderColor = errorColor;
+            } else {
                 checkMsg.textContent = '사용가능한 아이디입니다.';
                 checkMsg.style.color = successColor;
                 loginId.style.borderColor = successColor;
-            } else {
-                checkMsg.textContent = '올바른 형식이 아닙니다.';
-                checkMsg.style.color = errorColor;
-                loginId.style.borderColor = errorColor;
             }
         });
 
         password.addEventListener('input', () => {
             const checkMsg = password.nextElementSibling;
+            const value = password.value.trim();
 
-            if (passwordRegex.test(password.value.trim())) {
+            if (!value) {
+                checkMsg.textContent = '';
+                password.style.borderColor = '';
+                return;
+            }
+
+            if (value.length < 8 || value.length > 20) {
+                checkMsg.textContent = '비밀번호는 8~20자 이내여야 합니다.';
+                checkMsg.style.color = errorColor;
+                password.style.borderColor = errorColor;
+            } else if (!passwordRegex.test(value)) {
+                checkMsg.textContent = '문자, 숫자, 특수문자를 모두 포함해야 합니다.';
+                checkMsg.style.color = errorColor;
+                password.style.borderColor = errorColor;
+            } else {
                 checkMsg.textContent = '사용 가능한 비밀번호 입니다.';
                 checkMsg.style.color = successColor;
                 password.style.borderColor = successColor;
-            } else {
-                checkMsg.textContent = '올바른 형식이 아닙니다.';
-                checkMsg.style.color = errorColor;
-                password.style.borderColor = errorColor;
+            }
+
+            if (passwordCheck.value.trim()) {
+                const checkMsg2 = passwordCheck.nextElementSibling;
+
+                if (password.value.trim() === passwordCheck.value.trim()) {
+                    checkMsg2.textContent = '동일한 비밀번호 입니다.';
+                    checkMsg2.style.color = successColor;
+                    passwordCheck.style.borderColor = successColor;
+                } else {
+                    checkMsg2.textContent = '비밀번호가 불일치합니다. 다시 확인해주세요';
+                    checkMsg2.style.color = errorColor;
+                    passwordCheck.style.borderColor = errorColor;
+                }
             }
         });
 
         passwordCheck.addEventListener('input', () => {
             const checkMsg = passwordCheck.nextElementSibling;
+
+            if (!passwordCheck.value.trim()) {
+                checkMsg.textContent = '';
+                passwordCheck.style.borderColor = '';
+                return;
+            }
 
             if (password.value.trim() === passwordCheck.value.trim()) {
                 checkMsg.textContent = '동일한 비밀번호 입니다.';
@@ -125,7 +171,7 @@
             const checkMsg = email.nextElementSibling;
 
             if (emailRegex.test(email.value.trim())) {
-                checkMsg.textContent = '사용 가능한 이름 입니다.';
+                checkMsg.textContent = '사용 가능한 이메일 입니다.';
                 checkMsg.style.color = successColor;
                 email.style.borderColor = successColor;
             } else {
@@ -139,7 +185,7 @@
             const checkMsg = phone.nextElementSibling;
 
             if (phoneRegex.test(phone.value.trim())) {
-                checkMsg.textContent = '사용 가능한 이름 입니다.';
+                checkMsg.textContent = '사용 가능한 휴대폰번호 입니다.';
                 checkMsg.style.color = successColor;
                 phone.style.borderColor = successColor;
             } else {

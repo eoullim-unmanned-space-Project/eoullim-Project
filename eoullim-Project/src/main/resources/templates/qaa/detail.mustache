@@ -1,0 +1,19 @@
+{{> layout/header}}
+<div>
+    {{#isOwner}}
+        <div>
+            <form action="/qaas/{{qaa.id}}/update" method="post">
+                <button>수정</button>
+            </form>
+            <form action="/qaas/{{qaa.id}}/delete" method="post">
+                <button>삭제</button>
+            </form>
+        </div>
+    {{/isOwner}}
+
+    <div>
+        <b>작성자</b> : {{qaa.user
+    </div>
+
+</div>
+{{> layout/footer}}
