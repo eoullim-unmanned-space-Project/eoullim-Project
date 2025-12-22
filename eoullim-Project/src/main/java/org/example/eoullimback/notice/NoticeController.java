@@ -3,7 +3,7 @@ package org.example.eoullimback.notice;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback._common.dto.PageDTO;
+import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback.notice.dto.request.NoticeSaveRequest;
 import org.example.eoullimback.notice.dto.request.NoticeUpdateRequest;
 import org.example.eoullimback.notice.dto.response.NoticeListResponse;
@@ -56,7 +56,7 @@ public class NoticeController {
                              @RequestParam(required = false) String keyword
     ) {
         int pageIndex = Math.max(0, page - 1);
-        PageDTO<NoticeListResponse> noticePage = noticeService.noticeListFindAll(pageIndex, size, keyword);
+        PageResponse<NoticeListResponse> noticePage = noticeService.noticeListFindAll(pageIndex, size, keyword);
 
         model.addAttribute("noticePage", noticePage);
         model.addAttribute("keyword", keyword != null ? keyword: "");

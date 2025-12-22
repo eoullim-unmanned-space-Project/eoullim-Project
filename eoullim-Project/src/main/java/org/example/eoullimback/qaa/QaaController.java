@@ -3,7 +3,7 @@ package org.example.eoullimback.qaa;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback._common.dto.PageDTO;
+import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback.comment.CommentServiceImpl;
 import org.example.eoullimback.comment.dto.response.CommentListResponse;
 import org.example.eoullimback.qaa.dto.request.QaaSaveRequest;
@@ -57,7 +57,7 @@ public class QaaController {
                           @RequestParam(required = false) String keyword
     ) {
         int pageIndex = Math.max(0, page - 1);
-        PageDTO<QaaListResponse> qaaPage = qaaService.qaaListFindAll(pageIndex, size, keyword);
+        PageResponse<QaaListResponse> qaaPage = qaaService.qaaListFindAll(pageIndex, size, keyword);
 
         model.addAttribute("qaaPage", qaaPage);
         model.addAttribute("keyword", keyword != null ? keyword: "");
