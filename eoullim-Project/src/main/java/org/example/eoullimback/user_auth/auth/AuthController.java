@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,8 +45,9 @@ public class AuthController {
      * 로그인 기능
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute @Valid AuthRequest.LoginRequest requestDTO, Model model) {
-       User user = authService.login(requestDTO);
+    public String login(@ModelAttribute @Valid AuthRequest.LoginRequest requestDTO) {
+        System.out.println("111111111111111111111111111111111111111");
+        User user = authService.login(requestDTO);
 
         return "redirect:/main/main";
     }

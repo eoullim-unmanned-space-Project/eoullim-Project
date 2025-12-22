@@ -2,12 +2,13 @@ package org.example.eoullimback.file;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Table(name = "file_infos")
 @Entity

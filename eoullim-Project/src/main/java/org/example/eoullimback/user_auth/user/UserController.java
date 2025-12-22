@@ -30,7 +30,7 @@ public class UserController {
      * 회원 수정(프로필 생성)
      */
     @PostMapping("/me")
-    public String updateProfile(@RequestParam("userId") Long userId, @ModelAttribute @Valid UserRequest.UpDateDTO upDateDTO, Model model) {
+    public String updateProfile(@RequestParam("userId") Long userId, @ModelAttribute @Valid UserRequest.UpDateDTO upDateDTO) {
 
         userService.updateProfile(userId, upDateDTO);
 

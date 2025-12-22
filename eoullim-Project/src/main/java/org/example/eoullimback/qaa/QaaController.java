@@ -33,7 +33,7 @@ public class QaaController {
     @GetMapping("/qaas/new")
     public String createQaaForm(HttpSession session) {
         session.getAttribute("sessionUser");
-        return "qaas/create-form";
+        return "qaa/create-form";
     }
 
     // Q&A 작성 요청 기능
@@ -61,7 +61,7 @@ public class QaaController {
 
         model.addAttribute("qaaPage", qaaPage);
         model.addAttribute("keyword", keyword != null ? keyword: "");
-        return "qaas/list";
+        return "qaa/list";
     }
 
     // Q&A 상세 보기 화면 요청
@@ -87,7 +87,7 @@ public class QaaController {
         model.addAttribute("qaa", qaa);
         model.addAttribute("commentList", commentList);
 
-        return "qaas/detail";
+        return "qaa/detail";
     }
 
     // Q&A 수정 화면 요청
@@ -100,7 +100,7 @@ public class QaaController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         QaaUpdateFormResponse qaa = qaaService.findUpdateForm(id, sessionUser.getId());
         model.addAttribute("qaa", qaa);
-        return "qaas/update-form";
+        return "qaa/update-form";
     }
 
     // Q&A 수정 요청 기능
@@ -112,7 +112,7 @@ public class QaaController {
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         qaaService.update(id, updateRequest, sessionUser);
-        return "redirect:/qaas/{id}";
+        return "redirect:/qaa/{id}";
     }
 
     // Q&A 삭제 요청 기능

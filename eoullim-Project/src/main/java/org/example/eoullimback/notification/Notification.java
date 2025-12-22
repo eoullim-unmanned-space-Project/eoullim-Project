@@ -3,6 +3,7 @@ package org.example.eoullimback.notification;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.notification.NotificationStatus;
 import org.example.eoullimback._common.enums.notification.NotificationType;
@@ -11,7 +12,7 @@ import org.example.eoullimback.user_auth.user.User;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Table(name = "notifications")
 @Entity

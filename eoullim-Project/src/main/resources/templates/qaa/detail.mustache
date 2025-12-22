@@ -1,0 +1,63 @@
+{{> layout/header}}
+    <div>
+        <div>
+            <b>작성자</b> : {{qaa.username}}
+        </div>
+
+        <div>
+            <h2><b>{{qaa.title}}</b></h2>
+            <hr />
+            <div>
+                {{qaa.content}}
+            </div>
+        </div>
+
+        {{#isOwner}}
+            <div>
+                <form action="/qaas/{{qaa.id}}/update" method="post">
+                    <button>수정</button>
+                </form>
+                <form action="/qaas/{{qaa.id}}/delete" method="post">
+                    <button>삭제</button>
+                </form>
+            </div>
+        {{/isOwner}}
+
+        <div>
+            <form action="comments/new" method="post">
+                <input type="hidden" name="qaaId" value="{{qaa.id}}">
+                <label>
+                    <textarea rows="2" name="comment" placeholder="댓글을 입력하세요."></textarea>
+                </label>
+                <div>
+                    <button type="submit">댓글 등록</button>
+                </div>
+            </form>
+        </div>
+
+        {{#commentList}}
+            <div>
+                <div>
+                    <div>{{username}}</div>
+                    <small>{{createdAt}}</small>
+                    <div>
+                        {{comment}}
+                        <form action="/comments/{{id}}/update" method="get">
+                            <button type="submit">수정</button>
+                        </form>
+                        <form action="/comments/{{id}}/delete" method="post">
+                            <button type="submit">삭제</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        {{/commentList}}
+
+        {{^commentList}}
+            <div>
+                작성된 댓글이 없습니다.
+            </div>
+        {{/commentList}}
+    </div>
+{{> layout/footer}}
