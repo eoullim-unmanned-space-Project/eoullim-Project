@@ -1,0 +1,18 @@
+{{> layout/header}}
+<div>
+    <div>
+        <div><b>Q&A 작성</b></div>
+        <div>
+            <form action="/qaas/new" method="post">
+                <div>
+                    <input type="text" placeholder="title" name="title">
+                </div>
+                <div>
+                    <textarea rows="10" name="content"></textarea>
+                </div>
+                <button>Q&A 작성 완료</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{> layout/footer}}

@@ -1,0 +1,29 @@
+{{> layout/header}}
+<div>
+    <div>
+        <div>
+            <b>Q&A 수정</b>
+            <div>
+                <form>
+                    <div>
+                        <input type="text"
+                        placeholder="Enter name"
+                        name="name"
+                        value="{{qaa.name}}">
+                    </div>
+                    <div>
+                        <input type="text"
+                               placeholder="Enter title"
+                               name="title"
+                               value="{{qaa.title}}">
+                    </div>
+                    <div>
+                        <textarea rows="10" name="content"></textarea>
+                    </div>
+                    <button>Q&A 수정 완료</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{> layout/footer}}
