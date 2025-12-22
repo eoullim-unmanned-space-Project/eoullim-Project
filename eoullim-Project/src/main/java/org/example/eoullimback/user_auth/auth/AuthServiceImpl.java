@@ -23,7 +23,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void signup(AuthRequest.@Valid SignupRequest requestDTO) {
 
-        if (authRepository.existsByLodInId(requestDTO.loginId())) {
+        if (authRepository.existsByLoginId(requestDTO.loginId())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_ID);
         }
 
