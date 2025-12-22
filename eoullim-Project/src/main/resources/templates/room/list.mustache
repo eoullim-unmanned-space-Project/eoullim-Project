@@ -1,0 +1,221 @@
+<link rel="stylesheet" href="/templates/layout/css/header.css">
+<link rel="stylesheet" href="/templates/room/css/listStyle.css">
+{{> layout/header}}
+<body>
+<div class="container">
+    <section class="section"></section>
+    <section class="sub-section">
+        <div class="left">
+            <div class="main-content">
+                <p>어울림 스터디카페</p>
+                <span><img src="./img/주소.png" alt=""> 부산광역시 부산진구 신천대로 62번길</span>
+                <p>룸 선택</p>
+                <div class="room-list">
+                    <div class="room-card"><img src="img/room1.jpg" alt="스터디룸 A"><p>스터디룸 A</p></div>
+                    <div class="room-card"><img src="img/room2.jpg" alt="스터디룸 B"><p>스터디룸 B</p></div>
+                    <div class="room-card"><img src="img/room3.jpg" alt="스터디룸 C"><p>스터디룸 C</p></div>
+                </div>
+                <p>위치</p>
+                <div id="map"></div>
+            </div>
+            <section class="rules-section">
+                <h2>📌 이용 규칙 안내</h2>
+                <ul class="rules-list">
+                    <li> ☑ <strong>예약 시간 엄수</strong> – 예약한 시간에 맞춰 입·퇴실해 주세요.</li>
+                    <li> ☑ <strong>무단 이용 금지</strong> – 예약자 외 출입은 금지됩니다.</li>
+                    <li> ☑ <strong>소음 주의</strong> – 주변 이용자를 위해 큰 소음은 삼켜주세요.</li>
+                    <li> ☑ <strong>화기 사용 금지</strong> – 흡연 및 인화물 사용은 절대 금지입니다.</li>
+                    <li> ☑ <strong>정리 정돈 필수</strong> – 이용 후 공간을 깨끗하게 정리해 주세요.</li>
+                    <li> ☑ <strong>시설물 훼손 금지</strong> – 훼손 시 배상 책임이 발생할 수 있습니다.</li>
+                    <li> ☑ <strong>CCTV 운영 중</strong> – 안전 및 분쟁 방지를 위해 촬영 중입니다.</li>
+                    <li> ☑ <strong>문제 발생 시 즉시 연락</strong> – 비상 연락처로 바로 문의해주세요.</li>
+                </ul>
+            </section>
+        </div>
+        <div class="right">
+            <div class="room-box">
+                <h3 class="room-title">스터디룸 A</h3>
+                <div class="room-img"></div>
+                <p class="room-desc">
+                    · 조용한 스터디와 회의에 적합한 공간입니다.sdh[plf,hsfpl,hpfl,hplfs,hplf,plh,plg;ld,gpl[d,glpdfgplfpg,fdlhpklfd,hplfg,dhlpgd,plhgdl,h]]
+                </p>
+                <hr>
+                <p class="room-info">
+                    · 최대 인원: <strong>6</strong>
+                </p>
+                <hr>
+                <p class="room-info">
+                    · 최소: 1시간부터 이용 가능
+                </p>
+                <hr>
+                <p class="room-warning">
+                    · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
+                </p>
+            </div>
+            <p><img src="./img/user.png" alt=""> 인원 수</p>
+            <div class="people-box">
+                <button type="button" id="minusBtn">−</button>
+                <input type="text" id="peopleCount" value="1" min="1" readonly>
+                <button type="button" id="plusBtn">+</button>
+            </div>
+            <div class="timeslot-container" id="timeslot">
+                <div class="timeslot">11:00~12:00</div>
+                <div class="timeslot">12:00~13:00</div>
+                <div class="timeslot">13:00~14:00</div>
+                <div class="timeslot">14:00~15:00</div>
+                <div class="timeslot">15:00~16:00</div>
+                <div class="timeslot">16:00~17:00</div>
+                <div class="timeslot">17:00~18:00</div>
+            </div>
+            <div class="booking-box">
+                <button id="bookingBtn">예약하기</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- 리뷰 섹션 -->
+<section class="review-section">
+    <hr />
+    <div class="container">
+        <h2 class="review-title">리뷰</h2>
+        <div class="review-grid">
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="img/user1.jpg" alt="사용자1" class="review-profile">
+                    <div class="review-user">
+                        <p class="user-name">사용자1</p>
+                        <p class="user-star">★★★★☆</p>
+                    </div>
+                </div>
+                <p class="review-content">룸이 깨끗하고 조용해서 공부하기 좋았습니다.</p>
+            </div>
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="img/user2.jpg" alt="사용자2" class="review-profile">
+                    <div class="review-user">
+                        <p class="user-name">사용자2</p>
+                        <p class="user-star">★★★★★</p>
+                    </div>
+                </div>
+                <p class="review-content">친절한 직원과 편안한 분위기!</p>
+            </div>
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="img/user2.jpg" alt="사용자2" class="review-profile">
+                    <div class="review-user">
+                        <p class="user-name">사용자2</p>
+                        <p class="user-star">★★★★★</p>
+                    </div>
+                </div>
+                <p class="review-content">친절한 직원과 편안한 분위기!</p>
+            </div>
+            <div class="review-card">
+                <div class="review-header">
+                    <img src="img/user3.jpg" alt="사용자3" class="review-profile">
+                    <div class="review-user">
+                        <p class="user-name">사용자3</p>
+                        <p class="user-star">★★★☆☆</p>
+                    </div>
+                </div>
+                <p class="review-content">방이 조금 작았지만, 전반적으로 만족합니다.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17"></script>
+<script>
+    kakao.maps.load(function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                var mapContainer = document.getElementById('map');
+                var mapOption = { center: new kakao.maps.LatLng(lat, lng), level: 6 };
+                var map = new kakao.maps.Map(mapContainer, mapOption);
+                var marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(lat, lng) });
+                marker.setMap(map);
+            }, function(error) {
+                console.error("위치 정보를 가져올 수 없습니다.", error);
+            });
+        } else {
+            alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+        }
+    });
+
+    const slider = document.querySelector('.timeslot-container');
+    const slots = slider.querySelectorAll('.timeslot');
+
+    let isDown = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+    let moved = false;
+
+    slider.addEventListener('mousedown', (e) => {
+        isDown = true;
+        moved = false;
+
+        startX = e.clientX;
+        startScrollLeft = slider.scrollLeft;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+
+        const dx = e.clientX - startX;
+
+        if (Math.abs(dx) > 3) moved = true;
+
+        if (moved) {
+            e.preventDefault();
+            slider.scrollLeft = startScrollLeft - dx;
+        }
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDown = false;
+    });
+
+    slots.forEach(slot => {
+        slot.addEventListener('click', () => {
+            slot.classList.toggle('selected');
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const maxPeople = 6;
+
+        const minusBtn = document.getElementById('minusBtn');
+        const plusBtn = document.getElementById('plusBtn');
+        const input = document.getElementById('peopleCount');
+
+        minusBtn.addEventListener('click', () => {
+            let value = Number(input.value);
+            if (value > 1) {
+                input.value = value - 1;
+            }
+        });
+
+        plusBtn.addEventListener('click', () => {
+            let value = Number(input.value);
+            if (value < maxPeople) {
+                input.value = value + 1;
+            }
+        });
+
+        // 초기 상태 버튼 제어
+        const updateButtons = () => {
+            minusBtn.disabled = Number(input.value) <= 1;
+            plusBtn.disabled = Number(input.value) >= maxPeople;
+        };
+
+        updateButtons();
+
+        minusBtn.addEventListener('click', updateButtons);
+        plusBtn.addEventListener('click', updateButtons);
+    });
+</script>
+</body>
+
+{{> layout/footer}}

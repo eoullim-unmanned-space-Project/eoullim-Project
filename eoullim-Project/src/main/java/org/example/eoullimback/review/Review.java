@@ -28,7 +28,6 @@ public class Review extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(name = "rating", nullable = false)
     private Byte rating;
 

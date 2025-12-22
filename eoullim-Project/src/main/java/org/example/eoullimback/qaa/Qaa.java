@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
-import org.example.eoullimback.comment.Comment;
 import org.example.eoullimback.user_auth.user.User;
-
-import java.util.List;
 
 @Entity
 @Table(
@@ -39,19 +36,28 @@ public class Qaa extends BaseTimeEntity {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_qaas_user_id"))
     private User user;
 
-    @OneToMany(mappedBy = "qaa")
-    private List<Comment> commentList;
-
     @Builder
     public Qaa(
             String title,
             String content,
-            Long viewCount,
             User user
     ) {
         this.title = title;
         this.content = content;
-        this.viewCount = viewCount;
         this.user = user;
+        this.viewCount = 0L;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
+
+    public boolean isOwner(Long userId) {
+        return this.user.getId().equals(userId);
     }
 }

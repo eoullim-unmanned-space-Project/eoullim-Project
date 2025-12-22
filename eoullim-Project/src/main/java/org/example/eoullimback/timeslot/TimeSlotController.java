@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class TimeSlotController {
     // 생성
-    @GetMapping("/room/{roomId}/time-slot/save")
-    public String saveForm(@PathVariable Long roomId) {
+    @GetMapping("/room/{roomId}/time-slot/create")
+    public String createForm(@PathVariable Long roomId) {
 
-        return "timeslot/save";
+        return "timeslot/create";
     }
 
-    @PostMapping("/room/{roomId}/time-slot/save")
-    public String saveProc(@PathVariable Long roomId) {
+    @PostMapping("/room/{roomId}/time-slot/create")
+    public String createProc(@PathVariable Long roomId) {
 
         return "redirect:/room/detail";
     }

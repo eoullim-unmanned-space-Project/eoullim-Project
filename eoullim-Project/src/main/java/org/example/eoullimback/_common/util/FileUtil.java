@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class FileUtil {
 
-    public static final String IMAGES_DIR = "images/";
+    public static String IMAGES_DIR = "D:/uploads/";
 
     public static String saveFile(MultipartFile file) throws IOException {
         return saveFile(file, IMAGES_DIR);
@@ -30,27 +30,41 @@ public class FileUtil {
 
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new IOException("파일명이 없습니다.");
+            throw new IOException("파일명이 존재하지 않습니다.");
         }
 
         String uuid = UUID.randomUUID().toString();
-        String saveFileName = uuid + "_" + originalFilename;
+        String savedFileName = uuid + "_" + originalFilename;
 
-        Path filePath = uploadPath.resolve(saveFileName);
+        Path filePath = uploadPath.resolve(savedFileName);
 
         Files.copy(file.getInputStream(), filePath);
 
-        return saveFileName;
+        return savedFileName;
     }
 
     public static boolean isImageFile(MultipartFile file) {
-
         if (file == null || file.isEmpty()) {
             return false;
         }
 
         String contentType = file.getContentType();
 
-        return contentType != null && contentType.startsWith("image/");
+        return  contentType != null && contentType.startsWith("image/");
+    }
+
+    public static void deleteFile(String filename) throws IOException {
+        deleteFile(filename, IMAGES_DIR);
+    }
+
+    public static void deleteFile(String filename, String uploadDir) throws IOException {
+        if (filename == null || filename.isEmpty()) {
+            return;
+        }
+
+        Path filePath = Paths.get(uploadDir, filename);
+        if (Files.exists(filePath)) {
+            Files.delete(filePath);
+        }
     }
 }

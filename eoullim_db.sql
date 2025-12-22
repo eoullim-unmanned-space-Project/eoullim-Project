@@ -5,15 +5,17 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 USE eoullim_db;
 
 SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS notices;
+DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS notifications;
 DROP TABLE IF EXISTS payment_logs;
 DROP TABLE IF EXISTS payment_refunds;
 DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS timeslots;
+DROP TABLE IF EXISTS time_slots;
+DROP TABLE IF EXISTS room_files;
 DROP TABLE IF EXISTS rooms;
-DROP TABLE IF EXISTS place_files;
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS qaas;
@@ -22,6 +24,8 @@ DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
+
+select * from users;
 
 CREATE TABLE users (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -85,16 +89,16 @@ CREATE TABLE qaas (
 CREATE TABLE comments (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
-  user_id BIGINT NOT NULL COMMENT '관리자 Q&A 응답',
+  user_id BIGINT NOT NULL COMMENT '댓글 작성자(관리자)',
   qaa_id BIGINT NOT NULL COMMENT 'Q&A',
   
-  comment TEXT NOT NULL COMMENT '댓글',
+  content TEXT NOT NULL COMMENT '댓글',
 
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
   INDEX `idx_comments_user` (user_id),
-  
+  INDEX `idx_comments_qaa` (qaa_id),
   CONSTRAINT `fk_comments_user_id` FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT `fk_comments_qaa_id` FOREIGN KEY (qaa_id) REFERENCES qaas(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Q&A 댓글 테이블';
@@ -106,25 +110,13 @@ CREATE TABLE places (
   address VARCHAR(100) NOT NULL COMMENT '장소 주소',
   latitude DECIMAL(10,8) NOT NULL COMMENT '위도',
   longitude DECIMAL(11,8) NOT NULL COMMENT '경도',
-  open_time DATETIME NOT NULL COMMENT '오픈시간',
-  close_time DATETIME NOT NULL COMMENT '마감시간',
-  status VARCHAR(20) NOT NULL DEFAULT 'SCHEDULED' COMMENT '상태(SCHEDULED, OPEN, CLOSED)',
+  category VARCHAR(100) NOT NULL COMMENT '방 종류',
+
+  CHECK (category IN('PARTY','STUDY','PRACTICE')),
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='장소 테이블';
-
-CREATE TABLE place_files (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  
-  place_id BIGINT NOT NULL COMMENT '장소',
-  file_id BIGINT NOT NULL COMMENT '파일',
-  
-  display_order INT DEFAULT 0 COMMENT '파일순서',
-  
-  CONSTRAINT `fk_place_files_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE,
-  CONSTRAINT `fk_place_files_file_info` FOREIGN KEY(file_id) REFERENCES file_infos(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='장소 파일 테이블';
 
 CREATE TABLE rooms (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -133,14 +125,24 @@ CREATE TABLE rooms (
   
   name VARCHAR(150) NOT NULL COMMENT '방 이름',
   content VARCHAR(255) NOT NULL COMMENT '방 내용',
-  category VARCHAR(100) NOT NULL COMMENT '방 종류',
-  capacity_policy VARCHAR(20) NOT NULL DEFAULT 'PER_SLOT' COMMENT '시간 타입(PER_DAY, PER_SLOT)',
-  
-  CHECK (category IN('PARTY','STUDY','PRACTICE')),
-  CHECK (capacity_policy IN('PER_DAY','PER_SLOT')),
+  status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '상태(OPEN, CLOSED)',
+ 
+  CHECK (status IN('OPEN', 'CLOSED')),
   
   CONSTRAINT `fk_rooms_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
+
+CREATE TABLE room_files (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  
+  room_id BIGINT NOT NULL COMMENT '방',
+  file_id BIGINT NOT NULL COMMENT '파일',
+  
+  display_order INT DEFAULT 0 COMMENT '파일순서',
+  
+  CONSTRAINT `fk_room_files_place` FOREIGN KEY(room_id) REFERENCES rooms(id) ON DELETE CASCADE,
+  CONSTRAINT `fk_room_files_file_info` FOREIGN KEY(file_id) REFERENCES file_infos(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방 파일 테이블';
 
 CREATE TABLE time_slots (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -150,16 +152,13 @@ CREATE TABLE time_slots (
   start_time DATETIME(6) NOT NULL COMMENT '시작시간',
   end_time DATETIME(6) NOT NULL COMMENT '종료시간',
   capacity INT NOT NULL COMMENT '인원 수 지정',
-  reserved INT NOT NULL DEFAULT 0 COMMENT '예약인원',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
-  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
   
   CHECK (status IN('OPEN','CLOSED','CANCELED')),
-  CHECK (reserved >= 0 AND reserved <= capacity),
   
   UNIQUE KEY `uk_time_slots_room_id` (room_id),
   UNIQUE KEY `uk_time_slots_start_time` (start_time),
@@ -172,14 +171,11 @@ CREATE TABLE items (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
   time_slot_id BIGINT NOT NULL COMMENT '시간대',
-  
-  title VARCHAR(50) NOT NULL COMMENT '상품 이름',
-  context VARCHAR(150) NOT NULL COMMENT '상품 설명',
+
   price INT NOT NULL DEFAULT 0 COMMENT '상품 가격',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
-  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
-  
+
   CONSTRAINT `fk_items_time_slot` FOREIGN KEY (time_slot_id) REFERENCES time_slots(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='아이템 테이블';
 
@@ -189,13 +185,13 @@ CREATE TABLE bookings (
   user_id BIGINT NOT NULL COMMENT '사용자',
   time_slot_id BIGINT NOT NULL COMMENT '타임슬롯',
   item_id BIGINT NOT NULL COMMENT '아이템',
+
+  item_snapshot_price BIGINT NOT NULL comment '아이템 가격 저장본',
   
-  item_code VARCHAR(50) NOT NULL COMMENT '아이템 코드',
-  item_name VARCHAR(50) NOT NULL COMMENT '아이템 이름',
   qty INT NOT NULL COMMENT '인원체크',
   amount BIGINT NOT NULL COMMENT '가격',
   booking_date DATE NOT NULL COMMENT '예약 날짜',
-  cancelled_at DATETIME(6) NOT NULL  COMMENT '취소일',
+  cancelled_at DATETIME(6) NULL COMMENT '취소일', 
   status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '상태',
   
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
@@ -247,7 +243,6 @@ CREATE TABLE payments (
   CONSTRAINT `fk_payments_user` FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT `fk_payments_booking` FOREIGN KEY (booking_id) REFERENCES bookings(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='결제 테이블';
-
 CREATE TABLE payment_refunds (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
@@ -307,8 +302,8 @@ CREATE TABLE notifications (
   CHECK (type IN('PAYMENT','REFUND','CANCEL','BOOKING')),
   CHECK (status IN('PENDING','SENT','FAILED')),
   
-  CONSTRAINT `fk_notification_user` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_notification_payment` FOREIGN KEY (payment_id) REFERENCES payments(id)
+  CONSTRAINT `fk_notifications_user` FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT `fk_notifications_payment` FOREIGN KEY (payment_id) REFERENCES payments(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 결제 알림 테이블';
 
 CREATE TABLE reviews (
@@ -328,9 +323,9 @@ CREATE TABLE reviews (
   
   INDEX `idx_review_room` (room_id, rating),
   
-  CONSTRAINT `fk_review_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_review_room_id` FOREIGN KEY (room_id) REFERENCES rooms(id),
-  CONSTRAINT `fk_review_payment_id` FOREIGN KEY (payment_id) REFERENCES payments(id)
+  CONSTRAINT `fk_reviews_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT `fk_reviews_room_id` FOREIGN KEY (room_id) REFERENCES rooms(id),
+  CONSTRAINT `fk_reviews_payment_id` FOREIGN KEY (payment_id) REFERENCES payments(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='리뷰 테이블';
 
 CREATE TABLE notices (

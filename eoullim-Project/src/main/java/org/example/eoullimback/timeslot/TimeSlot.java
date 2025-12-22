@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
-import org.example.eoullimback._common.enums.Status;
+import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback.room.Room;
 
 import java.time.LocalDateTime;
@@ -34,21 +34,17 @@ public class TimeSlot extends BaseTimeEntity {
     @Column(nullable = false)
     private int capacity;
 
-    @Column(nullable = false)
-    private int reserved;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private RoomStatus status;
 
     @Builder
-    public TimeSlot(Long id, Room room, LocalDateTime startTime, LocalDateTime endTime, int capacity, int reserved, Status status) {
+    public TimeSlot(Long id, Room room, LocalDateTime startTime, LocalDateTime endTime, int capacity, RoomStatus status) {
         this.id = id;
         this.room = room;
         this.startTime = startTime;
         this.endTime = endTime;
         this.capacity = capacity;
-        this.reserved = reserved;
         this.status = status;
     }
 }

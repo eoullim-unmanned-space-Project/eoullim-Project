@@ -1,15 +1,19 @@
 package org.example.eoullimback.user_auth.user;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.RoleType;
+import org.example.eoullimback._common.enums.user.Status;
+import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Data
 @Table(name = "users",
         uniqueConstraints = {
             @UniqueConstraint(name = "uk_users_login_id", columnNames = "login_id"),
@@ -17,6 +21,8 @@ import java.util.stream.Collectors;
         })
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
+@Getter
 public class User extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,10 +42,18 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 255)
     private String email;
 
+    private String profileImage;
+
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles;
 
-    public User(Long id, String loginId, String password, String name, String phone, String  email
+    private LocalDateTime withdrawnAt;
+
+    @Builder
+    public User(Long id, String loginId, String password, String name, String phone, String  email, Status status, String profileImage
     ) {
         this.id = id;
         this.loginId = loginId;
@@ -47,6 +61,25 @@ public class User extends BaseTimeEntity {
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.profileImage = profileImage;
+        this.status = status != null ? status : Status.ACTIVE;
+    }
+
+    public void update(UserRequest.UpDateDTO upDateDTO) {
+        this.name = upDateDTO.name();
+        this.email = upDateDTO.email();
+        if (upDateDTO.useProfileFileName() != null && !upDateDTO.useProfileFileName().trim().isEmpty()) {
+            this.profileImage = upDateDTO.useProfileFileName();
+        }
+    }
+
+    public void userWithdrawn(Status status) {
+        this.status = status;
+        this.withdrawnAt = LocalDateTime.now();
+    }
+
+    public void clearProfileImage() {
+        this.profileImage = null;
     }
 
     public void addRole(Role role) {

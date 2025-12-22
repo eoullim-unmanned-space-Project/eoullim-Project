@@ -13,7 +13,8 @@ import org.example.eoullimback.user_auth.user.User;
 @Table(
         name = "comments",
         indexes = {
-                @Index(name = "idx_comments_user", columnList = "user_id")
+                @Index(name = "idx_comments_user", columnList = "user_id"),
+                @Index(name = "idx_comments_qaa", columnList = "qaa_id")
         }
 )
 @Getter
@@ -24,8 +25,8 @@ public class Comment extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "comment", columnDefinition = "TEXT", nullable = false)
-    private String comment;
+    @Column(name = "content", columnDefinition = "TEXT", nullable = false)
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_comments_user_id"))
@@ -37,12 +38,29 @@ public class Comment extends BaseTimeEntity {
 
     @Builder
     public Comment(
-            String comment,
+            String content,
             User user,
             Qaa qaa
     ) {
-        this.comment = comment;
+        this.content = content;
         this.user = user;
+        this.qaa = qaa;
+    }
+
+    public boolean isOwner(Long userId) {
+        if(this.user == null || userId == null) {
+            return false;
+        }
+        Long replyUserId = this.user.getId();
+        if(replyUserId == null) {
+            return false;
+        }
+        boolean result =  replyUserId.equals(userId);
+        return result;
+    }
+
+    public void updateContent(String content, Qaa qaa) {
+        this.content = content;
         this.qaa = qaa;
     }
 }

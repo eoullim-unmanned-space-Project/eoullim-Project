@@ -1,0 +1,81 @@
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 3단 분할의 핵심 */
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.logo a { text-decoration: none; color: #111827; }
+.logo span { color: #4f46e5; }
+
+.nav {
+    display: flex;
+    gap: 32px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.header-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-auth a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.header-auth .divider {
+    color: #e5e7eb;
+}
+
+/* 토글 버튼 스타일은 유지 */
+.mode-toggle {
+    display: flex;
+    background: #f3f4f6;
+    border-radius: 999px;
+    padding: 4px;
+    border: 1px solid #4f46e5;
+}
+
+.toggle-btn {
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #6b7280;
+}
+
+.toggle-btn.active {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: #fff;
+}

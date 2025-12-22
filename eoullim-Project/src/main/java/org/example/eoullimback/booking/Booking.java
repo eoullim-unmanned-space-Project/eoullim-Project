@@ -1,7 +1,6 @@
 package org.example.eoullimback.booking;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,6 @@ import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback.item.Item;
 import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.user_auth.user.User;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings",
     uniqueConstraints = {
-        @UniqueConstraint(name = "uk_user_time_slot_item", columnNames = {"user_id", "timeslot_id", "item_id"})
+        @UniqueConstraint(name = "uk_user_time_slot_item", columnNames = {"user_id", "time_slot_id", "item_id"})
     },
     indexes = {
             @Index(
@@ -26,7 +24,7 @@ import java.time.LocalDateTime;
                     columnList = "user_id, status"
             ),
             @Index(name = "idx_bookings_time_slot",
-                columnList = "timeslot_id"
+                columnList = "time_slot_id"
             )
    }
 )
@@ -51,10 +49,7 @@ public class Booking extends BaseTimeEntity {
     private Item item;
 
     @Column(nullable = false, length = 50)
-    private String itemCode;
-
-    @Column(nullable = false, length = 50)
-    private String itemName;
+    private Long itemSnapshotPrice;
 
     @Column(nullable = false)
     private int qty;
@@ -65,7 +60,6 @@ public class Booking extends BaseTimeEntity {
     @Column(nullable = false)
     private LocalDate bookingDate;
 
-    @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;
 
     @Enumerated(value = EnumType.STRING)
@@ -73,7 +67,7 @@ public class Booking extends BaseTimeEntity {
     private BookingStatus status;
 
     @Builder
-    public Booking (User user, TimeSlot timeSlot, Item item, String itemCode, String itemName, int qty, Long amount, LocalDate bookingDate, BookingStatus status) {
+    public Booking (User user, TimeSlot timeSlot, Item item, Long itemSnapshotPrice, int qty, Long amount, LocalDate bookingDate, BookingStatus status) {
 
         if (qty <= 0) {
             throw new IllegalArgumentException("예약 수량은 0보다 커야합니다.");
@@ -82,8 +76,7 @@ public class Booking extends BaseTimeEntity {
         this.user = user;
         this.timeSlot = timeSlot;
         this.item = item;
-        this.itemCode = itemCode;
-        this.itemName = itemName;
+        this.itemSnapshotPrice = itemSnapshotPrice;
         this.qty = qty;
         this.amount = amount;
         this.bookingDate = (bookingDate != null) ? bookingDate : LocalDate.now();
