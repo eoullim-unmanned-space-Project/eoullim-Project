@@ -1,7 +1,7 @@
 package org.example.eoullimback.qaa;
 
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback._common.dto.PageDTO;
+import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
@@ -38,7 +38,7 @@ public class QaaServiceImpl implements QaaService {
         return qaa;
     }
 
-    public PageDTO<QaaListResponse> qaaListFindAll(int page, int size, String keyword) {
+    public PageResponse<QaaListResponse> qaaListFindAll(int page, int size, String keyword) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(50, size)
         );
@@ -52,7 +52,7 @@ public class QaaServiceImpl implements QaaService {
         } else {
             qaaPage = qaaRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
         }
-        return PageDTO.from(qaaPage, QaaListResponse::new);
+        return PageResponse.from(qaaPage, QaaListResponse::new);
     }
 
     @Override

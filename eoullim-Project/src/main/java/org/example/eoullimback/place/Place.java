@@ -35,13 +35,16 @@ public class Place extends BaseTimeEntity {
     @Column(nullable = false)
     private Category category;
 
+    private String profileImage;
+
     @Builder
-    public Place(Long id, String name, String address, BigDecimal latitude, BigDecimal longitude, Category category) {
+    public Place(Long id, String name, String address, BigDecimal latitude, BigDecimal longitude, Category category, String profileImage) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
         this.category = category;
+        this.profileImage = profileImage;
     }
 }

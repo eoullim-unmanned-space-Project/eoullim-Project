@@ -1,0 +1,55 @@
+package org.example.eoullimback.place;
+
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import org.example.eoullimback._common.enums.place.Category;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
+
+public class PlaceRequest {
+
+        @Data
+        public static class CreateDTO {
+                @NotBlank(message = "장소명은 필수입니다.")
+                @Size(max = 50, message = "최대 50자 까지 입력 가능합니다.")
+                private String name;
+
+                @NotBlank(message = "주소명은 필수입니다.")
+                @Size(max = 50, message = "최대 100자 까지 입력 가능합니다.")
+                private String address;
+
+                @NotBlank(message = "위도값은 필수입니다.")
+                @DecimalMin(value = "-90.0", inclusive = true, message = "위도는 -90 이상이어 합니다.")
+                @DecimalMax(value = "90.0", inclusive = true, message = "위도는 90 이상이어 합니다.")
+                private BigDecimal latitude;
+
+                @NotBlank(message = "경도값은 필수입니다.")
+                @DecimalMin(value = "-180.0", inclusive = true, message = "위도는 -180 이상이어 합니다.")
+                @DecimalMax(value = "180.0", inclusive = true, message = "위도는 180 이상이어 합니다.")
+                private BigDecimal longitude;
+
+                @NotBlank(message = "카테고리는 필수 입니다.")
+                private Category category;
+
+
+                private MultipartFile profileImage;
+
+                public Place toEntity (String profileImageFileName){
+                        return Place.builder()
+                                .name(this.name)
+                                .address(this.address)
+                                .latitude(this.latitude)
+                                .longitude(this.longitude)
+                                .category(this.category)
+                                .profileImage(profileImageFileName)
+                                .build();
+                }
+        }
+
+}
+
+

@@ -1,7 +1,7 @@
 package org.example.eoullimback.notice;
 
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback._common.dto.PageDTO;
+import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback.notice.dto.request.NoticeSaveRequest;
 import org.example.eoullimback.notice.dto.request.NoticeUpdateRequest;
 import org.example.eoullimback.notice.dto.response.NoticeDetailResponse;
@@ -33,7 +33,7 @@ public class NoticeService {
         return notice;
     }
 
-    public PageDTO<NoticeListResponse> noticeListFindAll(int page, int size, String keyword) {
+    public PageResponse<NoticeListResponse> noticeListFindAll(int page, int size, String keyword) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(50, size));
 
@@ -47,7 +47,7 @@ public class NoticeService {
             noticePage = noticeRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
         }
 
-        return PageDTO.from(noticePage, NoticeListResponse::new);
+        return PageResponse.from(noticePage, NoticeListResponse::new);
     }
 
     @Transactional
