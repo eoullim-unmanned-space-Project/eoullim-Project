@@ -16,45 +16,45 @@ public class UserController {
 
     // // http://localhost:8080/users/me
     // 유저 컨트롤러
-    @GetMapping("/me")
+    @GetMapping("/me/{id}")
     public String myProfile(@RequestParam("userId") Long userId, Model model) {
 
         User user = userService.getMyProfile(userId);
 
         model.addAttribute("user", user);
 
-        return "user/profile";
+        return "users/profile";
     }
 
     /**
      * 회원 수정(프로필 생성)
      */
-    @PostMapping("/me")
-    public String updateProfile(@RequestParam("userId") Long userId, @ModelAttribute @Valid UserRequest.UpDateDTO upDateDTO) {
+    @PostMapping("/me/{id}")
+    public String updateProfile(@RequestParam("userId") Long id, @ModelAttribute @Valid UserRequest.UpDateDTO update) {
 
-        userService.updateProfile(userId, upDateDTO);
+        userService.updateProfile(id, update);
 
-        return "redirect:/users/me?userId="+ userId;
+        return "redirect:/users/me?userId="+ id;
     }
 
     /**
      * 회원 수정(프로필 삭제)
      */
     @PostMapping("/profile-image/delete")
-    public String deleteProfileImage(@RequestParam("userId") Long userId) {
+    public String deleteProfileImage(@RequestParam("userId") Long id) {
 
-        userService.deleteProfileImage(userId);
+        userService.deleteProfileImage(id);
 
-        return "redirect:/user/me";
+        return "redirect:/users/me";
     }
 
     /**
      * 회원 탈퇴
      */
     @PostMapping("/leave")
-    public String leaveUser(@RequestParam("userId") Long userId) {
+    public String leaveUser(@RequestParam("userId") Long id) {
 
-        userService.leaveUser(userId);
+        userService.leaveUser(id);
 
         return "redirect:/logout";
     }

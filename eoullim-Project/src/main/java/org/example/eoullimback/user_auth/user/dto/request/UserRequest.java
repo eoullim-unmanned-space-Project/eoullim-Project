@@ -1,21 +1,24 @@
 package org.example.eoullimback.user_auth.user.dto.request;
 
-import lombok.Builder;
-import org.example.eoullimback.user_auth.user.User;
+import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-public record UserRequest() {
+public class UserRequest {
 
-    @Builder
-    public record UpDateDTO(
-            String name,
-            String email,
-            MultipartFile userProfile,
-            String useProfileFileName
-    ) {
+    @Data
+    public static class UpDateDTO {
+            private String name;
+            private String email;
+            private MultipartFile userProfile;
+            private String useProfileFileName;
 
-        public static UpDateDTO of(UpDateDTO dto, String fileName) {
-            return new UpDateDTO(dto.name(), dto.email(), dto.userProfile(), fileName);
+            public static UpDateDTO of(UpDateDTO dto, String fileName) {
+                UpDateDTO newDTO = new UpDateDTO();
+                newDTO.setName(dto.getName());
+                newDTO.setEmail(dto.getEmail());
+                newDTO.setUserProfile(dto.getUserProfile());
+                newDTO.setUseProfileFileName(fileName);
+                return newDTO;
         }
     }
 }

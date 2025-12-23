@@ -21,28 +21,28 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void signup(AuthRequest.@Valid SignupRequest requestDTO) {
+    public void signup(AuthRequest.@Valid SignupRequestDTO request) {
 
-        if (authRepository.existsByLoginId(requestDTO.loginId())) {
+        if (authRepository.existsByLoginId(request.getLoginId())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_ID);
         }
 
-        if (authRepository.existsByEmail(requestDTO.email())) {
+        if (authRepository.existsByEmail(request.getEmail())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_EMAIL);
         }
 
-        if (authRepository.existsByPhone(requestDTO.phone())) {
+        if (authRepository.existsByPhone(request.getPhone())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_PHONE_NUMBER);
         }
 
-        User user = requestDTO.toEntity();
+        User user = request.toEntity();
          authRepository.save(user);
     }
 
     @Override
-    public User login(AuthRequest.@Valid LoginRequest requestDTO) {
+    public User login(AuthRequest.@Valid LoginRequestDTO request) {
 
-        User userEntity = authRepository.findByLoginIdAndPassword(requestDTO.loginId(), requestDTO.password())
+        User userEntity = authRepository.findByLoginIdAndPassword(request.getLoginId(), request.getPassword())
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         if (userEntity.getStatus() == Status.WITHDRAWN) {
