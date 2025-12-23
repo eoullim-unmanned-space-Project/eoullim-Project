@@ -1,7 +1,7 @@
 {{> layout/header}}
     <div>
         <div>
-            <b>작성자</b> : {{qaa.username}}
+            <b>작성자</b> : {{qaa.name}}
         </div>
 
         <div>
@@ -12,7 +12,6 @@
             </div>
         </div>
 
-        {{#isOwner}}
             <div>
                 <form action="/qaas/{{qaa.id}}/update" method="post">
                     <button>수정</button>
@@ -21,7 +20,6 @@
                     <button>삭제</button>
                 </form>
             </div>
-        {{/isOwner}}
 
         <div>
             <form action="comments/new" method="post">
@@ -38,10 +36,10 @@
         {{#commentList}}
             <div>
                 <div>
-                    <div>{{username}}</div>
+                    <div>{{name}}</div>
                     <small>{{createdAt}}</small>
                     <div>
-                        {{comment}}
+                        {{content}}
                         <form action="/comments/{{id}}/update" method="get">
                             <button type="submit">수정</button>
                         </form>

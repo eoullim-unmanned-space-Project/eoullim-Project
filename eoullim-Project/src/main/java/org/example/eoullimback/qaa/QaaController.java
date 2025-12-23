@@ -110,7 +110,7 @@ public class QaaController {
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         qaaService.update(id, updateRequest, sessionUser);
-        return "redirect:/qaa/{id}";
+        return "redirect:/qaas/{id}";
     }
 
     // Q&A 삭제 요청 기능

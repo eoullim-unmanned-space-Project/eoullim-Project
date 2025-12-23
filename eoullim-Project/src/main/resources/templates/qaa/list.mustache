@@ -1,11 +1,15 @@
 {{> layout/header}}
 <div>
+    <div>
+        <a href="/qaas/new">Q&A 작성</a>
+    </div>
+
     {{#qaaPage.content}}
         <div>
             <div>
                 <h4>{{title}}</h4>
                 <p>작성자 : {{name}} | 작성일 : {{createdAt}}</p>
-                <a href="/qaa/{{id}}">상세보기</a>
+                <a href="/qaas/{{id}}">상세보기</a>
             </div>
         </div>
     {{/qaaPage.content}}
@@ -42,10 +46,10 @@
 
     <div>
         <div>
-            <form action="/qaa" method="get" class="row g-3">
-                <div class="col-md-8">
+            <form action="/qaa" method="get">
+                <div>
                     <label>
-                        <input type="text" class="form-control" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
+                        <input type="text" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
                     </label>
                 </div>
                 <div class="col-md-2">
@@ -53,8 +57,8 @@
                     <input type="hidden" name="size" value="{{qaaPage.size}}">
                     <button type="submit">검색</button>
                 </div>
-                <div class="col-md-2">
-                    <a href="/qaa">초기화</a>
+                <div>
+                    <a href="/qaa/list">초기화</a>
                 </div>
             </form>
         </div>
