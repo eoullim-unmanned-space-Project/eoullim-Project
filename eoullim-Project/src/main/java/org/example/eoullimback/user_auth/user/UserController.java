@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+//    private final Long userId = 1L;
 
-    // // http://localhost:8080/users/me
-    // 유저 컨트롤러
-    @GetMapping("/me")
-    public String myProfile(@RequestParam("userId") Long userId, Model model) {
+    // // http://localhost:8080/users/me/1
+    // 유저 컨트롤러 , @PathVariable Long id,
+    @GetMapping("/me/{id}")
+    public String myProfile(@PathVariable Long id, Model model) {
 
-        User user = userService.getMyProfile(userId);
+        User user = userService.getMyProfile(id);
 
         model.addAttribute("user", user);
 
@@ -29,32 +30,32 @@ public class UserController {
     /**
      * 회원 수정(프로필 생성)
      */
-    @PostMapping("/me")
-    public String updateProfile(@RequestParam("userId") Long userId, @ModelAttribute @Valid UserRequest.UpDateDTO upDateDTO) {
+    @PostMapping("/me/{id}")
+    public String updateProfile(@PathVariable Long id, @ModelAttribute @Valid UserRequest.UpDateDTO update) {
 
-        userService.updateProfile(userId, upDateDTO);
+        userService.updateProfile(id, update);
 
-        return "redirect:/users/me?userId="+ userId;
+        return "redirect:users/me/"+ id;
     }
 
     /**
      * 회원 수정(프로필 삭제)
      */
     @PostMapping("/profile-image/delete")
-    public String deleteProfileImage(@RequestParam("userId") Long userId) {
+    public String deleteProfileImage(@PathVariable Long id) {
 
-        userService.deleteProfileImage(userId);
+        userService.deleteProfileImage(id);
 
-        return "redirect:/user/me";
+        return "redirect:user/me";
     }
 
     /**
      * 회원 탈퇴
      */
     @PostMapping("/leave")
-    public String leaveUser(@RequestParam("userId") Long userId) {
+    public String leaveUser(@PathVariable Long id) {
 
-        userService.leaveUser(userId);
+        userService.leaveUser(id);
 
         return "redirect:/logout";
     }

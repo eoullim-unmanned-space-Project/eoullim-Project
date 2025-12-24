@@ -65,15 +65,45 @@
         const successColor = '#10b981';
         const errorColor = '#ef4444';
 
+        let isLoginIdAvailable = false;
+        let debounceTimer = null;
+
         loginId.addEventListener('input', () => {
             const checkMsg = loginId.nextElementSibling;
             const value = loginId.value.trim();
 
-            if (!value) {
-                checkMsg.textContent = '';
-                password.style.borderColor = '';
-                return;
-            }
+            isLoginIdAvailable = false;
+
+            if (debounceTimer) clearTimeout(debounceTimer);
+
+            // if (!value) {
+            //     checkMsg.textContent = '';
+            //     password.style.borderColor = '';
+            //     return;
+            // }
+            //
+            // if (!idRegex.text(value)) {
+            //     checkMsg.textContent = '아이디 형식이 올바르지 않습니다.';
+            //     checkMsg.style.color = errorColor;
+            //     loginId.style.borderColor = errorColor;
+            //     return;
+            // }
+            //
+            // debounceTimer = setTimeout(() => {
+            //     fetch(`/auth/signup-check-login-id?loginId=${value}`)
+            //             .then(res => res.json())
+            //             .then(isDuplicate => {
+            //                 if (isDuplicate) {
+            //                     checkMsg.textContent = '이미 사용 중인 아이디입니다.';
+            //                     checkMsg.style.color = errorColor;
+            //                     loginId.style.borderColor = errorColor;
+            //                 } else {
+            //                     checkMsg.textContent = '사용가능한 아이디입니다.';
+            //                     checkMsg.style.color = successColor;
+            //                     loginId.style.borderColor = successColor;
+            //                 }
+            //             });
+            // }, 400);
 
             if (value.length < 6 || value.length > 20) {
                 checkMsg.textContent = '아이디는 6~20자 이내여야 합니다.';

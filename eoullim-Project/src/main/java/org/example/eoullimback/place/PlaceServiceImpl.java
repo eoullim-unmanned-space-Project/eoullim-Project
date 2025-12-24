@@ -70,7 +70,7 @@ public class PlaceServiceImpl implements PlaceService{
 
     @Override
     public PlaceResponse placeUpdateView(Long placeId) {
-
+        return null;
 
     }
 

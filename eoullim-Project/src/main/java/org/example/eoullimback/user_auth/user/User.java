@@ -53,7 +53,8 @@ public class User extends BaseTimeEntity {
     private LocalDateTime withdrawnAt;
 
     @Builder
-    public User(Long id, String loginId, String password, String name, String phone, String  email, Status status, String profileImage
+    public User(Long id, String loginId, String password, String name,
+                String phone, String  email, Status status, String profileImage
     ) {
         this.id = id;
         this.loginId = loginId;
@@ -66,10 +67,12 @@ public class User extends BaseTimeEntity {
     }
 
     public void update(UserRequest.UpDateDTO upDateDTO) {
-        this.name = upDateDTO.name();
-        this.email = upDateDTO.email();
-        if (upDateDTO.useProfileFileName() != null && !upDateDTO.useProfileFileName().trim().isEmpty()) {
-            this.profileImage = upDateDTO.useProfileFileName();
+        this.name = upDateDTO.getName();
+        this.email = upDateDTO.getEmail();
+
+        if (upDateDTO.getUseProfileFileName() != null
+                && !upDateDTO.getUseProfileFileName().trim().isEmpty()) {
+            this.profileImage = upDateDTO.getUseProfileFileName();
         }
     }
 
