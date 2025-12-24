@@ -17,7 +17,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Room {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,21 +32,30 @@ public class Room {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private int defaultPrice;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoomStatus status;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoomFile> roomFile;
-
     @Builder
-
-    public Room(Long id, Place place, String name, String content, RoomStatus status, List<RoomFile> roomFile) {
+    public Room(Long id, Place place, String name, String content, int defaultPrice, RoomStatus status) {
         this.id = id;
         this.place = place;
         this.name = name;
+        this.defaultPrice = defaultPrice;
         this.content = content;
         this.status = status;
-        this.roomFile = roomFile;
+    }
+
+    public void update(RoomRequest.UpdateDTO updateDTO) {
+
+        updateDTO.validate();
+
+        this.name = updateDTO.name;
+        this.content = updateDTO.content;
+        this.status = updateDTO.status;
+        this.defaultPrice = updateDTO.defaultPrice;
     }
 }

@@ -11,6 +11,7 @@ public enum ErrorCode {
     INVALID_INPUT("잘못된 입력값입니다."),
     MISSING_PARAMETER("비워 둘수 없는 항목입니다."),
     ONLY_FILE_IMG("이미지 파일만 업로드 가능합니다."),
+    MAX_FILE_IMG("파일 이미지는 5장 이어야 합니다."),
 
     // ====
     // 401 Unauthorized
@@ -32,6 +33,7 @@ public enum ErrorCode {
     USER_NOT_FOUND("사용자를 찾을 수 없습니다."),
     PLACE_NOT_FOUND("장소를 찾을 수 없습니다."),
     ROOM_NOT_FOUND("방을 찾을 수 없습니다."),
+    ROOM_IMG_NOT_FOUND("이미지를 찾을 수 없습니다."),
     TIMESLOT_NOT_FOUND("시간대를 찾을 수 없습니다."),
     ITEM_NOT_FOUND("정보을 찾을 수 없습니다."),
     QAA_NOT_FOUND("Q&A을 찾을 수 없습니다."),
