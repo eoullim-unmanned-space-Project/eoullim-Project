@@ -8,6 +8,5 @@ public interface UserService {
     void updateProfile(Long id, UserRequest.@Valid UpDateDTO update);
     void leaveUser(Long id);
     void deleteProfileImage(Long id);
-
     boolean existsByLoginId(String loginId);
 }

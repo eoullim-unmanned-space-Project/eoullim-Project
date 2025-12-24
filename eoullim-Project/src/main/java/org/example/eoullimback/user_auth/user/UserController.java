@@ -15,9 +15,9 @@ public class UserController {
     private final UserService userService;
 //    private final Long userId = 1L;
 
-    // // http://localhost:8080/users/me/1
+    // // http://localhost:8080/users/profile/1
     // 유저 컨트롤러 , @PathVariable Long id,
-    @GetMapping("/me/{id}")
+    @GetMapping("/profile/{id}")
     public String myProfile(@PathVariable Long id, Model model) {
 
         User user = userService.getMyProfile(id);
@@ -30,7 +30,8 @@ public class UserController {
     /**
      * 회원 수정(프로필 생성)
      */
-    @PostMapping("/me/{id}")
+    // // http://localhost:8080/users/profile/1
+    @PostMapping("/profile/{id}")
     public String updateProfile(@PathVariable Long id, @ModelAttribute @Valid UserRequest.UpDateDTO update) {
 
         userService.updateProfile(id, update);
@@ -41,7 +42,8 @@ public class UserController {
     /**
      * 회원 수정(프로필 삭제)
      */
-    @PostMapping("/profile-image/delete")
+    // // http://localhost:8080/users/profile-delete/1
+    @PostMapping("/profile-delete/{id}")
     public String deleteProfileImage(@PathVariable Long id) {
 
         userService.deleteProfileImage(id);
@@ -52,7 +54,8 @@ public class UserController {
     /**
      * 회원 탈퇴
      */
-    @PostMapping("/leave")
+    // // http://localhost:8080/users/leave/1
+    @PostMapping("/leave/{id}")
     public String leaveUser(@PathVariable Long id) {
 
         userService.leaveUser(id);

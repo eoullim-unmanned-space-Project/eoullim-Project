@@ -6,7 +6,7 @@
     <!-- 왼쪽 영역 -->
     <aside class="mypage-sidebar">
         <h2>마이페이지</h2>
-        <p class="welcome"><span>홍길동</span>님, 안녕하세요</p>
+        <p class="welcome"><span>{{user.name}}</span>님, 안녕하세요</p>
         <hr />
 
         <section class="menu-section">
@@ -43,7 +43,7 @@
                         hidden
                     />
                 </div>
-                <p class="username"><span>홍길동</span>님</p>
+                <p class="username"><span>{{user.name}}</span>님</p>
                 <div class="info-row">
                     <label class="label">휴대전화</label>
                     <input
