@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthRepository authRepository;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -37,10 +37,10 @@ public class AuthServiceImpl implements AuthService {
             throw new Exception409(ErrorCode.USER_CONFLICT_PHONE_NUMBER);
         }
 
-//        String hashPwd = passwordEncoder.encode(request.getPassword());
+        String hashPwd = passwordEncoder.encode(request.getPassword());
 
         User user = request.toEntity();
-//        user.setPassword(hashPwd);
+        user.setPassword(hashPwd);
 
         return authRepository.save(user);
     }
