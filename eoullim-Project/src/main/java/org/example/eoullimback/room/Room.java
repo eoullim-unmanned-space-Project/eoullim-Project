@@ -32,7 +32,7 @@ public class Room {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "default_price")
     private int defaultPrice;
 
     @Enumerated(EnumType.STRING)

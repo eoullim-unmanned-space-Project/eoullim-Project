@@ -1,10 +1,7 @@
 package org.example.eoullimback.user_auth.user;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.RoleType;
 import org.example.eoullimback._common.enums.user.Status;
@@ -23,6 +20,7 @@ import java.util.stream.Collectors;
 @Entity
 @AllArgsConstructor
 @Getter
+@Setter
 public class User extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

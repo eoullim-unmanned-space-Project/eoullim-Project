@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS time_slots;
 DROP TABLE IF EXISTS room_files;
+DROP TABLE IF EXISTS room_images;
 DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS comments;
@@ -45,6 +46,8 @@ CREATE TABLE users (
   UNIQUE KEY `uk_users_login_id` (login_id),
   UNIQUE KEY `uk_users_email` (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 정보 테이블';
+
+select * from users;
 
 CREATE TABLE IF NOT EXISTS roles (
   role_name VARCHAR(30) PRIMARY KEY COMMENT '사용자 권한'
@@ -128,6 +131,7 @@ CREATE TABLE rooms (
   
   name VARCHAR(150) NOT NULL COMMENT '방 이름',
   content VARCHAR(255) NOT NULL COMMENT '방 내용',
+  default_price int NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '상태(OPEN, CLOSED)',
  
   CHECK (status IN('OPEN', 'CLOSED')),
@@ -146,6 +150,20 @@ CREATE TABLE room_files (
   CONSTRAINT `fk_room_files_place` FOREIGN KEY(room_id) REFERENCES rooms(id) ON DELETE CASCADE,
   CONSTRAINT `fk_room_files_file_info` FOREIGN KEY(file_id) REFERENCES file_infos(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방 파일 테이블';
+
+CREATE TABLE room_images (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    original_name VARCHAR(255) NOT NULL,
+    stored_name VARCHAR(255) NOT NULL,
+    content_type VARCHAR(100) NOT NULL,
+    file_size BIGINT NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    display_order INT NOT NULL DEFAULT 0,
+    room_id BIGINT NOT NULL,
+    
+    CONSTRAINT fk_room_images_room FOREIGN KEY (room_id) REFERENCES rooms (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE time_slots (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
