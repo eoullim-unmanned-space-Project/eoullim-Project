@@ -21,7 +21,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void signup(AuthRequest.@Valid SignupRequestDTO request) {
+    public User signup(AuthRequest.@Valid SignupRequestDTO request) {
 
         if (authRepository.existsByLoginId(request.getLoginId())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_ID);
@@ -37,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = request.toEntity();
          authRepository.save(user);
+        return user;
     }
 
     @Override

@@ -85,6 +85,13 @@ public class User extends BaseTimeEntity {
         this.profileImage = null;
     }
 
+    public String getProfileImageUrl() {
+        if (profileImage == null || profileImage.isEmpty()) {
+            return "/images/default-profile.png";
+        }
+        return "/uploads/" + profileImage;
+    }
+
     public void addRole(Role role) {
         boolean exists = userRoles.stream().anyMatch(u -> u.getRole().equals(role));
 
