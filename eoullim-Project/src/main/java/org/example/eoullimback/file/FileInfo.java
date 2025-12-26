@@ -1,39 +1,27 @@
 package org.example.eoullimback.file;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Timestamp;
+import java.nio.file.Path;
 
 @Getter
-@NoArgsConstructor
-@Table(name = "file_infos")
-@Entity
+@AllArgsConstructor
 public class FileInfo {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private String originalName;
     private String storedName;
     private String contentType;
     private Long fileSize;
-    private String filePath;
+    private Path filePath;
 
-    @CreationTimestamp
-    private Timestamp createdAt;
 
-    public FileInfo(Long id, String originalName, String storedName,
-                    String contentType, Long fileSize, String filePath, Timestamp createdAt
-    ) {
-        this.id = id;
+    @Builder
+    public FileInfo(String contentType, Path filePath, Long fileSize, String originalName, String storedName) {
+        this.contentType = contentType;
+        this.filePath = filePath;
+        this.fileSize = fileSize;
         this.originalName = originalName;
         this.storedName = storedName;
-        this.contentType = contentType;
-        this.fileSize = fileSize;
-        this.filePath = filePath;
-        this.createdAt = createdAt;
     }
 }
