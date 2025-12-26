@@ -1,3 +1,31 @@
+<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-
+<div>
+    <div>
+        <div>
+            <button>공지사항 수정</button>
+            <div>
+                <form>
+                    <div>
+                        <input type="text"
+                               placeholder="Enter name"
+                               name="name"
+                               value="{{notice.name}}">
+                    </div>
+                    <div>
+                        <input type="text"
+                               placeholder="Enter title"
+                               name="title"
+                               value="{{notice.title}}">
+                    </div>
+                    <div>
+                        <textarea rows="10" name="content"></textarea>
+                    </div>
+                    <button>공지사항 수정 완료</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {{> layout/footer}}

@@ -1,3 +1,26 @@
+<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
+<div>
+    <div>
+        <b>작성자</b> : {{notice.name}}
+    </div>
 
+    <div>
+        <h2><b>{{notice.title}}</b></h2>
+        <hr />
+        <div>
+            {{notice.content}}
+        </div>
+    </div>
+
+    <div>
+        <form action="/notices/{{notice.id}}/update" method="post">
+            <button>수정</button>
+        </form>
+        <form action="/notices/{{notice.id}}/delete" method="post">
+            <button>삭제</button>
+        </form>
+    </div>
+</div>
 {{> layout/footer}}
