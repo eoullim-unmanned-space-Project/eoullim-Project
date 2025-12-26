@@ -60,4 +60,9 @@ public class Review extends BaseTimeEntity {
         this.room = room;
         this.payment = payment;
     }
+
+    public void update(Byte rating ,String content) {
+        if (rating != null) this.rating = rating;
+        if (content != null) this.content = content;
+    }
 }
