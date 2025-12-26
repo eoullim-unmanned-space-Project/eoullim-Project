@@ -1,5 +1,6 @@
 package org.example.eoullimback.user_auth.user;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
@@ -9,57 +10,75 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
-//    private final Long userId = 1L;
 
     // // http://localhost:8080/users/profile/1
     // 유저 컨트롤러 , @PathVariable Long id,
-    @GetMapping("/profile/{id}")
-    public String myProfile(@PathVariable Long id, Model model) {
-
-        User user = userService.getMyProfile(id);
+    @GetMapping("/profile")
+    public String myProfile(HttpSession session, Model model) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userService.getMyProfile(sessionUser.getId());
 
         model.addAttribute("user", user);
 
         return "user/profile";
     }
 
-    /**
-     * 회원 수정(프로필 생성)
-     */
-    // // http://localhost:8080/users/profile/1
-    @PostMapping("/profile/{id}")
-    public String updateProfile(@PathVariable Long id, @ModelAttribute @Valid UserRequest.UpDateDTO update) {
+    @GetMapping("/profile/edit")
+    public String editProfile(HttpSession session, Model model) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userService.getMyProfile(sessionUser.getId());
 
-        userService.updateProfile(id, update);
+//        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("user", user);
 
-        return "redirect:users/me/"+ id;
+        return "user/update-profile";
     }
 
     /**
-     * 회원 수정(프로필 삭제)
+     * 회원 수정(프로필)
+     */
+    // // http://localhost:8080/users/profile/1
+    @PostMapping("/profile")
+    public String updateProfile(HttpSession session,
+                                @ModelAttribute @Valid UserRequest.UpDateDTO update
+    ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        User updateUser = userService.updateProfile(sessionUser.getId(), update);
+
+        session.setAttribute("sessionUser", updateUser);
+
+        return "redirect:/user/profile";
+    }
+
+    /**
+     * 회원 수정(프로필 이미지 삭제)
      */
     // // http://localhost:8080/users/profile-delete/1
-    @PostMapping("/profile-delete/{id}")
-    public String deleteProfileImage(@PathVariable Long id) {
+    @PostMapping("/profile-delete")
+    public String deleteProfileImage(HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        userService.deleteProfileImage(sessionUser.getId());
 
-        userService.deleteProfileImage(id);
+        User updateUser = userService.getMyProfile(sessionUser.getId());
+        session.setAttribute("sessionUser", updateUser);
 
-        return "redirect:user/me";
+        return "redirect:/user/profile";
     }
 
     /**
      * 회원 탈퇴
      */
     // // http://localhost:8080/users/leave/1
-    @PostMapping("/leave/{id}")
-    public String leaveUser(@PathVariable Long id) {
+    @PostMapping("/leave")
+    public String leaveUser(HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        userService.leaveUser(sessionUser.getId());
 
-        userService.leaveUser(id);
-
-        return "redirect:/logout";
+        session.invalidate();
+        return "redirect:/auth/login";
     }
 }

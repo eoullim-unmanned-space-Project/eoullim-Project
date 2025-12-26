@@ -9,6 +9,7 @@ import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception409;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,10 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthRepository authRepository;
+//    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
-    public void signup(AuthRequest.@Valid SignupRequestDTO request) {
+    public User signup(AuthRequest.@Valid SignupRequestDTO request) {
 
         if (authRepository.existsByLoginId(request.getLoginId())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_ID);
@@ -35,8 +37,12 @@ public class AuthServiceImpl implements AuthService {
             throw new Exception409(ErrorCode.USER_CONFLICT_PHONE_NUMBER);
         }
 
+//        String hashPwd = passwordEncoder.encode(request.getPassword());
+
         User user = request.toEntity();
-         authRepository.save(user);
+//        user.setPassword(hashPwd);
+
+        return authRepository.save(user);
     }
 
     @Override

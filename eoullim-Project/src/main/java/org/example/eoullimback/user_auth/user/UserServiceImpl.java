@@ -34,10 +34,12 @@ public class UserServiceImpl implements UserService{
 
     /**
      * 기능: 프로필 수정
+     *
+     * @return
      */
     @Override
     @Transactional
-    public void updateProfile(Long id, UserRequest.@Valid UpDateDTO update) {
+    public User updateProfile(Long id, UserRequest.@Valid UpDateDTO update) {
 
         User userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
@@ -57,6 +59,7 @@ public class UserServiceImpl implements UserService{
         }
 
         userEntity.update(finalDTO);
+        return userEntity;
     }
 
     /**

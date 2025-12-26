@@ -1,5 +1,6 @@
 package org.example.eoullimback.user_auth.auth;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
@@ -20,7 +21,7 @@ public class AuthController {
     // http://localhost:8080/auth/signup
     @GetMapping("/signup")
     public String signupForm() {
-        return "/user/signup";
+        return "user/signup";
     }
 
     /**
@@ -29,10 +30,14 @@ public class AuthController {
      * @return
      */
     @PostMapping("/signup")
-    public String signup(@ModelAttribute @Valid AuthRequest.SignupRequestDTO request) {
-        authService.signup(request);
+    public String signup(@ModelAttribute @Valid AuthRequest.SignupRequestDTO request,
+                         HttpSession session
+    ) {
+        User newUser = authService.signup(request);
 
-        return  "redirect:/auth/login";
+        session.setAttribute("sessionUser", newUser);
+
+        return  "redirect:/user/profile";
     }
 
     @GetMapping("/signup-check-login-id")
@@ -45,27 +50,30 @@ public class AuthController {
     // http://localhost:8080/auth/login
     @GetMapping("/login")
     public String loginForm() {
-        return "/user/login";
+        return "user/login";
     }
 
     /**
      * 로그인 기능
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute @Valid AuthRequest.LoginRequestDTO request) {
-        System.out.println("111111111111111111111111111111111111111");
-        User user = authService.login(request);
+    public String login(@ModelAttribute @Valid AuthRequest.LoginRequestDTO request,
+                        HttpSession session
+    ) {
+        User sessionUser = authService.login(request);
+
+        session.setAttribute("sessionUser", sessionUser);
 
         return "redirect:/main/main";
     }
 
     /**
-     * 추후 구현
+     * 로그아웃
      */
-//    @PostMapping("logout")
-//    public String logout(@RequestParam("userId") Long userId) {
-//        authService.logout(userId);
-//
-//        return "redirect:/auth/login";
-//    }
+    @PostMapping("logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+
+        return "redirect:/auth/login";
+    }
 }

@@ -30,11 +30,11 @@ public class AuthRequest {
 
        public User toEntity() {
            return User.builder()
-                   .loginId(loginId)
-                   .password(password)
-                   .name(name)
-                   .email(email)
-                   .phone(phone)
+                   .loginId(this.loginId)
+                   .password(this.password)
+                   .name(this.name)
+                   .email(this.email)
+                   .phone(this.phone)
                    .build();
        }
     }
