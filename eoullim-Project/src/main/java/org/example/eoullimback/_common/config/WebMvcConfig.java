@@ -49,8 +49,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:///D:/uploads/");
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
