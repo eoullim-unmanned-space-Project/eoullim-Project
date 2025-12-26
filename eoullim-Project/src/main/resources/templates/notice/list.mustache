@@ -1,3 +1,69 @@
+<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
+<div>
+    <div>
+        <a href="/notices/new">공지사항 작성</a>
+    </div>
 
+    {{#noticePage.content}}
+        <div>
+            <div>
+                <h4>{{title}}</h4>
+                <p>작성자 : {{name}} | 작성일 : {{createdAt}}</p>
+                <a href="/notices/{{id}}">상세보기</a>
+            </div>
+        </div>
+    {{/noticePage.content}}
+
+    <ul>
+        {{#noticePage.previousPageNumber}}
+            <li>
+                <a href="/notices?page={{noticePage.previousPageNumber}}">Previous
+            </li>
+        {{/noticePage.previousPageNumber}}
+        {{^noticePage.previousPageNumber}}
+            <li>
+                <a href="#">Previous</a>
+            </li>
+        {{/noticePage.previousPageNumber}}
+
+        {{#noticePage.pageLinks}}
+            <li>
+                <a href="/notices?page={{displayNumber}}&size={{noticePage.size}}">{{displayNumber}}
+            </li>
+        {{/noticePage.pageLinks}}
+
+        {{#noticePage.nextPageNumber}}
+            <li>
+                <a href="/notices?page={{noticePage.nextPageNumber}}">Next
+            </li>
+        {{/noticePage.nextPageNumber}}
+        {{^noticePage.nextPageNumber}}
+            <li>
+                <a href="#">Next</a>
+            </li>
+        {{/noticePage.nextPageNumber}}
+    </ul>
+
+    <div>
+        <div>
+            <form action="/notices" method="get">
+                <div>
+                    <label>
+                        <input type="text" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
+                    </label>
+                </div>
+                <div class="col-md-2">
+                    <input type="hidden" name="page" value="1">
+                    <input type="hidden" name="size" value="{{noticePage.size}}">
+                    <button type="submit">검색</button>
+                </div>
+                <div>
+                    <a href="/notices">초기화</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {{> layout/footer}}

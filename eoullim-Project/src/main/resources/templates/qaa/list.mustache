@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
 <div>
     <div>
@@ -17,7 +19,7 @@
     <ul>
         {{#qaaPage.previousPageNumber}}
             <li>
-                <a href="/qaas/page={{qaaPage.previousPageNumber}}">Previous
+                <a href="/qaas?page={{qaaPage.previousPageNumber}}">Previous
             </li>
         {{/qaaPage.previousPageNumber}}
         {{^qaaPage.previousPageNumber}}
@@ -28,13 +30,13 @@
 
         {{#qaaPage.pageLinks}}
             <li>
-                <a href="/qaas/page={{displayNumber}}&size={{qaaPage.size}}">{{displayNumber}}
+                <a href="/qaas?page={{displayNumber}}&size={{qaaPage.size}}">{{displayNumber}}
             </li>
         {{/qaaPage.pageLinks}}
 
         {{#qaaPage.nextPageNumber}}
             <li>
-                <a href="/qaas/page={{boardPage.nextPageNumber}}">Next
+                <a href="/qaas?page={{qaaPage.nextPageNumber}}">Next
             </li>
         {{/qaaPage.nextPageNumber}}
         {{^qaaPage.nextPageNumber}}
@@ -46,7 +48,7 @@
 
     <div>
         <div>
-            <form action="/qaa" method="get">
+            <form action="/qaas" method="get">
                 <div>
                     <label>
                         <input type="text" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
@@ -58,7 +60,7 @@
                     <button type="submit">검색</button>
                 </div>
                 <div>
-                    <a href="/qaa/list">초기화</a>
+                    <a href="/qaas">초기화</a>
                 </div>
             </form>
         </div>
