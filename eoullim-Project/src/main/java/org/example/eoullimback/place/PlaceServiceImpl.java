@@ -5,8 +5,11 @@ import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
+import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.FileUtil;
+import org.example.eoullimback.room.RoomRepository;
 import org.example.eoullimback.room.RoomRequest;
+import org.example.eoullimback.room.RoomService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,19 +17,24 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PlaceServiceImpl implements PlaceService{
     private final PlaceRepository placeRepository;
+    private final RoomService roomService;
+    private final RoomRepository roomRepository;
 
     @Override
+    @Transactional
     public Place placeCreate(PlaceRequest.CreateDTO request) {
         String profileImageFileName = null;
 
-        if (request.getProfileImage() != null) {
+        if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
             try {
-                if (FileUtil.isImageFile((request.getProfileImage()))) {
+                if (!FileUtil.isImageFile((request.getProfileImage()))) {
                     throw new Exception400(ErrorCode.ONLY_FILE_IMG);
                 }
 
@@ -69,18 +77,51 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public PlaceResponse placeUpdateView(Long placeId) {
+    public Place placeUpdateForm(Long placeId) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
 
-
+        return place;
     }
 
     @Override
-    public PlaceResponse placeUpdate(Long placeId, RoomRequest request) {
-        return null;
+    @Transactional
+    public Place placeUpdate(Long placeId, PlaceRequest.UpdateDTO request) {
+
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
+
+        String oldProfileImage = place.getProfileImage();
+        if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
+            if (!FileUtil.isImageFile(request.getProfileImage())) {
+                throw new Exception400(ErrorCode.ONLY_FILE_IMG);
+            }
+
+            try {
+                String newProfileImageFileName = FileUtil.saveFile(request.getProfileImage());
+                request.setProfileImageFileName(newProfileImageFileName);
+
+                if (oldProfileImage != null && !oldProfileImage.isEmpty()) {
+                    FileUtil.deleteFile(oldProfileImage);
+                }
+            } catch (IOException e) {
+                throw new Exception500(ErrorCode.FILE_SAVE_FAILED);
+            }
+        } else {
+            request.setProfileImageFileName(oldProfileImage);
+        }
+
+        place.update(request);
+
+        return place;
     }
 
     @Override
+    @Transactional
     public void placeDelete(Long placeId) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
 
+        placeRepository.deleteById(placeId);
     }
 }

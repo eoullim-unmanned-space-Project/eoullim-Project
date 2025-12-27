@@ -114,6 +114,7 @@ CREATE TABLE places (
   latitude DECIMAL(10,8) NOT NULL COMMENT '위도',
   longitude DECIMAL(11,8) NOT NULL COMMENT '경도',
   category VARCHAR(100) NOT NULL COMMENT '방 종류',
+  profile_image VARCHAR(500) NOT NULL COMMENT '장소 사진'
 
   CHECK (category IN('PARTY','STUDY','PRACTICE')),
   
@@ -344,3 +345,8 @@ CREATE TABLE notices (
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   CONSTRAINT `fk_notices_user` FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='대여시설 공지사항';
+
+-- --------------------------
+USE eoullim_db;
+
+SELECT * FROM places;

@@ -1,0 +1,38 @@
+{{> layout/header}}
+<div class="container p-5">
+
+    <div class="card">
+        <div class="card-header"><b>새로운 장소 만들기</b></div>
+        <div class="card-body">
+            <form action="/place/create" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="name" name="name">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="address" name="address">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="latitude" name="latitude">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="longitude" name="longitude">
+                </div>
+                <div class="mb-3">
+                    <select class="form-control" placeholder="category" name="category">
+                        <option VALUE="">선택하세요</option>
+                        <option VALUE="PARTY">PARTY</option>
+                        <option VALUE="STUDY">STUDY</option>
+                        <option VALUE="PRACTICE">PRACTICE</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="profileImage" class="form-label"> 장소 사진(선택사항)</label>
+                    <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*">
+                    <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
+                </div>
+                <button type="submit" class="btn btn-primary form-control">장소 생성</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{> layout/footer}}

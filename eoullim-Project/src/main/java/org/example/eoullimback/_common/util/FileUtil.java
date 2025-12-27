@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class FileUtil {
 
-    public static String IMAGES_DIR = "D:/uploads/";
+    public static String IMAGES_DIR = "images/";
 
     public static String saveFile(MultipartFile file) throws IOException {
         return saveFile(file, IMAGES_DIR);
