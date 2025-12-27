@@ -1,18 +1,13 @@
 package org.example.eoullimback.room;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
-import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.util.FileUtil;
 import org.example.eoullimback.file.FileInfo;
-import org.example.eoullimback.file.RoomFile;
 import org.example.eoullimback.place.Place;
 import org.example.eoullimback.place.PlaceRepository;
 import org.example.eoullimback.room_image.RoomImage;
@@ -21,16 +16,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RoomServiceImpl implements RoomService{
+    @Override
+    public List<RoomResponse.ListDTO> roomList(Long placeId) {
+        return List.of();
+    }
 
     private final PlaceRepository placeRepository;
     private final RoomRepository roomRepository;
@@ -102,16 +98,16 @@ public class RoomServiceImpl implements RoomService{
         for (RoomImage images : roomImageEntity) {
             FileUtil.deleteFile(images.getFilePath());
         }
-        
+
         // 4. image전부 삭제
         roomImageRepository.deleteAll(roomImageEntity);
-        
+
         // 5. room도 삭제
         roomRepository.delete(roomEntity);
     }
 
     /**
-     * 룸 수정 
+     * 룸 수정
      * 제목, 내용, 상태, 초기 값, 상태만 가능
      */
     @Override
@@ -137,7 +133,7 @@ public class RoomServiceImpl implements RoomService{
 
                 // 디렉토리에 있는 파일을 삭제
                 FileUtil.deleteFile(roomImageEntity.getFilePath());
-                
+
                 // DB에서 삭제
                 roomImageRepository.deleteById(imageId);
             }

@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class FileUtil {
 
-    public static String IMAGES_DIR = "D:/uploads/";
+    public static String IMAGES_DIR = "images/";
     public static String ROOM_FILE_DIR = IMAGES_DIR + "roomImages/";
 
     public static String saveFile(MultipartFile file) throws IOException {
@@ -64,7 +64,7 @@ public class FileUtil {
             return null;
         }
 
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(IMAGES_DIR);
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);

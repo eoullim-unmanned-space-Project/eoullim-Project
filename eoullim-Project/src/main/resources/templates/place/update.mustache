@@ -1,0 +1,50 @@
+{{> layout/header}}
+<div class="container p-5">
+
+    <!-- 요청을 하면 localhost:8080/join POST로 요청됨
+    username=사용자입력값&password=사용자값&email=사용자입력값 -->
+
+    <div class="card">
+        <div class="card-header"><b>장소 수정을 해주세요</b></div>
+        <div class="card-body">
+        <div class="text-center mb-4">
+            {{#place.profileImage}}
+            {{!어 src 경로가 /images/ 이네... 스프링에 등록한 리소드 핸들러가 동작 함 }}
+                <img src="{{place.profilePath}}" alt="프로필사진" class="rounded-circle border"
+                     style="width: 200px;height: 200px; object-fit: cover">
+            {{/place.profileImage}}
+            {{^place.profileImage}}
+                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center border"
+                     style="width: 200px; height: 200px;">
+                    <span class="text-white fs-5">프로필 사진 없음</span>
+                </div>
+            </div>
+            {{/place.profileImage}}
+        </div>
+
+
+        <!-- 필수! form 태그에 enctype 타입을 반드시 multipart/form-data 로 변경 해야 한다.       -->
+        <form action="/place/{{place.id}}/update" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="name" name="name", value="{{place.name}}">
+            </div>
+            <div class="mb-3">
+                <select class="form-control" placeholder="category" name="category" required>
+                    <option VALUE="">선택하세요</option>
+                    <option VALUE="PARTY">PARTY</option>
+                    <option VALUE="STUDY">STUDY</option>
+                    <option VALUE="PRACTICE">PRACTICE</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="profileImage" class="form-label"> 장소 사진(선택사항)</label>
+                <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*">
+                <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
+            </div>
+            <button type="submit" class="btn btn-primary form-control">수정 완료</button>
+        </form>
+    </div>
+</div>
+</div>
+
+{{> layout/footer}}

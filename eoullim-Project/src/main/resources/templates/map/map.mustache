@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="/css/layout/header.css">
-<link rel="stylesheet" href="/css/map/map.css">
+
 {{> layout/header}}
 <body>
 <section class="section">
@@ -7,6 +6,24 @@
         <span>내 주변 무인 대여공간</span>
         <span class="second">내 주변에 가까운 무인공간을 찾아보세요.</span>
         <div id="map"></div>
+        <a href="/place/create" class="btn btn-secondary">장소 생성</a>
+        {{#placePage.content}}
+            <div class="space-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">{{name}}</h4>
+                    <p class="text-muted">주소 : {{address}} | 카테고리 : {{category}}</p>
+                    <a href="/place/{{id}}" class="btn btn-primary">상세보기</a>
+
+                    <div class="d-flex justify-content-end mb-2">
+                        <a href="/place/{{id}}/update" class="btn btn-warning me-2">수정</a>
+                        <form action="/place/{{id}}/delete" method="post">
+                            <button class="btn btn-danger">삭제</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        {{/placePage.content}}
         <div class="space-card">
             <div class="card">1</div>
             <div class="card">2</div>
@@ -35,7 +52,7 @@
 </section>
 <div class="section">
 </div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17&autoload=false"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=751c729462a97efdaec886e824711651&autoload=false"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     const mockPlaces = [
