@@ -27,36 +27,39 @@ public class UserServiceImpl implements UserService{
      * 화면: 프로필 정보
      */
     @Override
-    public User getMyProfile(Long userId) {
-        return  userRepository.findById(userId)
+    public User getMyProfile(Long id) {
+        return  userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
     }
 
     /**
      * 기능: 프로필 수정
+     *
+     * @return
      */
     @Override
     @Transactional
-    public void updateProfile(Long userId, UserRequest.@Valid UpDateDTO upDateDTO) {
+    public User updateProfile(Long id, UserRequest.@Valid UpDateDTO update) {
 
-        User userEntity = userRepository.findById(userId)
+        User userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
-        UserRequest.UpDateDTO finalDTO = upDateDTO;
+        UserRequest.UpDateDTO finalDTO = update;
 
-        if (upDateDTO.userProfile() != null && !upDateDTO.userProfile().isEmpty()) {
-            if (!FileUtil.isImageFile(upDateDTO.userProfile())) {
+        if (update.getUserProfile() != null && !update.getUserProfile().isEmpty()) {
+            if (!FileUtil.isImageFile(update.getUserProfile())) {
                 throw new Exception400(ErrorCode.ONLY_FILE_IMG);
             }
             try {
-                String newFileName = FileUtil.saveFile(upDateDTO.userProfile());
-                finalDTO = UserRequest.UpDateDTO.of(upDateDTO, newFileName); // 파일명 채워서 새로 생성
+                String newFileName = FileUtil.saveFile(update.getUserProfile());
+                finalDTO = UserRequest.UpDateDTO.of(update, newFileName); // 파일명 채워서 새로 생성
             } catch (IOException e) {
                 throw new Exception500(ErrorCode.INTERNAL_ERROR);
             }
         }
 
         userEntity.update(finalDTO);
+        return userEntity;
     }
 
     /**
@@ -64,9 +67,9 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     @Transactional
-    public void deleteProfileImage(Long userId) {
+    public void deleteProfileImage(Long id) {
 
-        User userEntity = userRepository.findById(userId)
+        User userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
 
@@ -80,6 +83,11 @@ public class UserServiceImpl implements UserService{
         }
 
         userEntity.clearProfileImage();
+    }
+
+    @Override
+    public boolean existsByLoginId(String loginId) {
+        return userRepository.existsByLoginId(loginId);
     }
 
     /**

@@ -1,10 +1,7 @@
 package org.example.eoullimback.user_auth.user;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.RoleType;
 import org.example.eoullimback._common.enums.user.Status;
@@ -23,6 +20,7 @@ import java.util.stream.Collectors;
 @Entity
 @AllArgsConstructor
 @Getter
+@Setter
 public class User extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -53,7 +51,8 @@ public class User extends BaseTimeEntity {
     private LocalDateTime withdrawnAt;
 
     @Builder
-    public User(Long id, String loginId, String password, String name, String phone, String  email, Status status, String profileImage
+    public User(Long id, String loginId, String password, String name,
+                String phone, String  email, Status status, String profileImage
     ) {
         this.id = id;
         this.loginId = loginId;
@@ -66,10 +65,12 @@ public class User extends BaseTimeEntity {
     }
 
     public void update(UserRequest.UpDateDTO upDateDTO) {
-        this.name = upDateDTO.name();
-        this.email = upDateDTO.email();
-        if (upDateDTO.useProfileFileName() != null && !upDateDTO.useProfileFileName().trim().isEmpty()) {
-            this.profileImage = upDateDTO.useProfileFileName();
+        this.name = upDateDTO.getName();
+        this.email = upDateDTO.getEmail();
+
+        if (upDateDTO.getUseProfileFileName() != null
+                && !upDateDTO.getUseProfileFileName().trim().isEmpty()) {
+            this.profileImage = upDateDTO.getUseProfileFileName();
         }
     }
 
@@ -80,6 +81,13 @@ public class User extends BaseTimeEntity {
 
     public void clearProfileImage() {
         this.profileImage = null;
+    }
+
+    public String getProfileImageUrl() {
+        if (profileImage == null || profileImage.isEmpty()) {
+            return "/images/default-profile.png";
+        }
+        return "/uploads/" + profileImage;
     }
 
     public void addRole(Role role) {

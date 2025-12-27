@@ -9,6 +9,7 @@ import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception409;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,31 +19,36 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthRepository authRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
-    public void signup(AuthRequest.@Valid SignupRequest requestDTO) {
+    public User signup(AuthRequest.@Valid SignupRequestDTO request) {
 
-        if (authRepository.existsByLoginId(requestDTO.loginId())) {
+        if (authRepository.existsByLoginId(request.getLoginId())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_ID);
         }
 
-        if (authRepository.existsByEmail(requestDTO.email())) {
+        if (authRepository.existsByEmail(request.getEmail())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_EMAIL);
         }
 
-        if (authRepository.existsByPhone(requestDTO.phone())) {
+        if (authRepository.existsByPhone(request.getPhone())) {
             throw new Exception409(ErrorCode.USER_CONFLICT_PHONE_NUMBER);
         }
 
-        User user = requestDTO.toEntity();
-         authRepository.save(user);
+        String hashPwd = passwordEncoder.encode(request.getPassword());
+
+        User user = request.toEntity();
+        user.setPassword(hashPwd);
+
+        return authRepository.save(user);
     }
 
     @Override
-    public User login(AuthRequest.@Valid LoginRequest requestDTO) {
+    public User login(AuthRequest.@Valid LoginRequestDTO request) {
 
-        User userEntity = authRepository.findByLoginIdAndPassword(requestDTO.loginId(), requestDTO.password())
+        User userEntity = authRepository.findByLoginIdAndPassword(request.getLoginId(), request.getPassword())
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         if (userEntity.getStatus() == Status.WITHDRAWN) {

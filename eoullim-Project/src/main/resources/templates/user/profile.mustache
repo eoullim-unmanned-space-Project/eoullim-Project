@@ -6,8 +6,8 @@
     <!-- 왼쪽 영역 -->
     <aside class="mypage-sidebar">
         <h2>마이페이지</h2>
-        <p class="welcome"><span>홍길동</span>님, 안녕하세요</p>
-        <hr />
+        <p class="welcome"><span>{{user.name}}</span>님, 안녕하세요</p>
+        <hr/>
 
         <section class="menu-section">
             <h3>예약정보</h3>
@@ -15,7 +15,7 @@
                 <li><span>예약내역</span></li>
             </ul>
         </section>
-        <hr />
+        <hr/>
         <section class="menu-section">
             <h3>활동정보</h3>
             <ul>
@@ -23,60 +23,70 @@
                 <li><span>Q&A</span></li>
             </ul>
         </section>
-        <hr />
+        <hr/>
     </aside>
+
     <!-- 오른쪽 메인 영역 -->
     <main class="mypage-main">
         <div class="profile-box">
             <h2>회원정보 관리</h2>
-            <form action="/mypage/update" method="post">
-                <div class="profile-image">
-                    <label for="profileUpload" class="profile-label">
-                        <img id="profilePreview" src="/images/default-profile.png">
-                        <span class="edit-overlay">변경</span>
-                    </label>
-                    <input
+
+            <!--            <form action="/user/profile" method="post" enctype="multipart/form-data">-->
+            <!-- 프로필 이미지 -->
+            <div class="profile-image">
+                <label for="profileUpload" class="profile-label">
+                    <img id="profilePreview" src="{{user.profileImageUrl}}">
+                    <span class="edit-overlay">변경</span>
+                </label>
+                <input
                         type="file"
                         id="profileUpload"
                         name="profileImage"
                         accept="image/*"
                         hidden
-                    />
-                </div>
-                <p class="username"><span>홍길동</span>님</p>
-                <div class="info-row">
-                    <label class="label">휴대전화</label>
-                    <input
+                />
+            </div>
+
+            <p class="username"><span>{{user.name}}</span>님</p>
+
+            <div class="info-row">
+                <label class="label">휴대전화</label>
+                <input
                         type="tel"
                         name="phone"
                         class="value-input"
-                        value="010-1234-5678"
-                    />
-                </div>
-                <div class="info-row">
-                    <label class="label">이메일(ID)</label>
-                    <input
+                        value="{{user.phone}}"
+                />
+            </div>
+
+            <div class="info-row">
+                <label class="label">이메일(ID)</label>
+                <input
                         type="email"
                         name="email"
                         class="value-input"
-                        value="hong@example.com"
+                        value="{{user.email}}"
                         readonly
-                    />
-                </div>
-                <div class="info-row">
-                    <label class="label">가입일</label>
-                    <input
+                />
+            </div>
+
+            <div class="info-row">
+                <label class="label">가입일</label>
+                <input
                         type="email"
                         name="email"
                         class="value-input"
-                        value="2025-12-22"
+                        value="{{user.createdAt}}"
                         readonly
-                    />
-                </div>
+                />
+            </div>
+
+            <form action="/user/profile/edit" method="get">
                 <button type="submit" class="edit-btn">
                     회원정보 수정
                 </button>
             </form>
+            <!--            </form>-->
         </div>
     </main>
 </div>

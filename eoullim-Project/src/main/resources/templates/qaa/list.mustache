@@ -1,11 +1,21 @@
+<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
 <div>
+    <div>
+        <a href="/qaas/new">Q&A 작성</a>
+    </div>
+
     {{#qaaPage.content}}
         <div>
             <div>
                 <h4>{{title}}</h4>
-                <p>작성자 : {{name}} | 작성일 : {{createdAt}}</p>
-                <a href="/qaa/{{id}}">상세보기</a>
+                <p>
+                    작성자 : {{name}}
+                    | 작성일 : {{createdAt}}
+                    | 조회수 : {{viewCount}}
+                </p>
+                <a href="/qaas/{{id}}">상세보기</a>
             </div>
         </div>
     {{/qaaPage.content}}
@@ -13,7 +23,7 @@
     <ul>
         {{#qaaPage.previousPageNumber}}
             <li>
-                <a href="/qaas/page={{qaaPage.previousPageNumber}}">Previous
+                <a href="/qaas?page={{qaaPage.previousPageNumber}}">Previous
             </li>
         {{/qaaPage.previousPageNumber}}
         {{^qaaPage.previousPageNumber}}
@@ -24,13 +34,13 @@
 
         {{#qaaPage.pageLinks}}
             <li>
-                <a href="/qaas/page={{displayNumber}}&size={{qaaPage.size}}">{{displayNumber}}
+                <a href="/qaas?page={{displayNumber}}&size={{qaaPage.size}}">{{displayNumber}}
             </li>
         {{/qaaPage.pageLinks}}
 
         {{#qaaPage.nextPageNumber}}
             <li>
-                <a href="/qaas/page={{boardPage.nextPageNumber}}">Next
+                <a href="/qaas?page={{qaaPage.nextPageNumber}}">Next
             </li>
         {{/qaaPage.nextPageNumber}}
         {{^qaaPage.nextPageNumber}}
@@ -42,10 +52,10 @@
 
     <div>
         <div>
-            <form action="/qaa" method="get" class="row g-3">
-                <div class="col-md-8">
+            <form action="/qaas" method="get">
+                <div>
                     <label>
-                        <input type="text" class="form-control" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
+                        <input type="text" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
                     </label>
                 </div>
                 <div class="col-md-2">
@@ -53,8 +63,8 @@
                     <input type="hidden" name="size" value="{{qaaPage.size}}">
                     <button type="submit">검색</button>
                 </div>
-                <div class="col-md-2">
-                    <a href="/qaa">초기화</a>
+                <div>
+                    <a href="/qaas">초기화</a>
                 </div>
             </form>
         </div>

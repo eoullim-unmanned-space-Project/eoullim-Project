@@ -1,14 +1,14 @@
 package org.example.eoullimback.user_auth.auth;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.User;
+import org.example.eoullimback.user_auth.user.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,49 +16,64 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     // http://localhost:8080/auth/signup
     @GetMapping("/signup")
     public String signupForm() {
-        return "/user/signup";
+        return "user/signup";
     }
 
     /**
      * 회원가입기능
-     * @param requestDTO
+     * @param request
      * @return
      */
     @PostMapping("/signup")
-    public String signup(@ModelAttribute @Valid AuthRequest.SignupRequest requestDTO) {
-        authService.signup(requestDTO);
+    public String signup(@ModelAttribute @Valid AuthRequest.SignupRequestDTO request,
+                         HttpSession session
+    ) {
+        User newUser = authService.signup(request);
 
-        return  "redirect:/auth/login";
+        session.setAttribute("sessionUser", newUser);
+
+        return  "redirect:/user/profile";
+    }
+
+    @GetMapping("/signup-check-login-id")
+    @ResponseBody
+    public ResponseEntity<Boolean> checkLoginId(@RequestParam String loginId) {
+        boolean exists = userService.existsByLoginId(loginId);
+        return ResponseEntity.ok(exists);
     }
 
     // http://localhost:8080/auth/login
     @GetMapping("/login")
     public String loginForm() {
-        return "/user/login";
+        return "user/login";
     }
 
     /**
      * 로그인 기능
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute @Valid AuthRequest.LoginRequest requestDTO) {
-        System.out.println("111111111111111111111111111111111111111");
-        User user = authService.login(requestDTO);
+    public String login(@ModelAttribute @Valid AuthRequest.LoginRequestDTO request,
+                        HttpSession session
+    ) {
+        User sessionUser = authService.login(request);
+
+        session.setAttribute("sessionUser", sessionUser);
 
         return "redirect:/main/main";
     }
 
     /**
-     * 추후 구현
+     * 로그아웃
      */
-//    @PostMapping("logout")
-//    public String logout(@RequestParam("userId") Long userId) {
-//        authService.logout(userId);
-//
-//        return "redirect:/auth/login";
-//    }
+    @PostMapping("logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+
+        return "redirect:/auth/login";
+    }
 }

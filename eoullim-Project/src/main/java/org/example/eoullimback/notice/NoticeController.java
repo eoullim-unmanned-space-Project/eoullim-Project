@@ -22,7 +22,7 @@ public class NoticeController {
     // http://localhost:8080/notices/new
     @GetMapping("/notices/new")
     public String createNoticeForm() {
-        return "notice/new";
+        return "notice/create-form";
     }
 
     // 공지사항 작성 요청 기능
@@ -35,7 +35,7 @@ public class NoticeController {
         User sessionUser = (User) session.getAttribute("sessionSUser");
         noticeService.save(request, sessionUser);
 
-        return "redirect:/notices";
+        return "redirect:/";
     }
 
     // 공지사항 목록 화면 요청

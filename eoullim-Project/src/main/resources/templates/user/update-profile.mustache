@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="/css/user/profile.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
+{{> layout/header}}
+<body>
+<div class="mypage-container">
+    <!-- 왼쪽 영역 -->
+    <aside class="mypage-sidebar">
+        <h2>마이페이지</h2>
+        <p class="welcome"><span>{{sessionUser.name}}</span>님, 안녕하세요</p>
+        <hr />
+
+        <section class="menu-section">
+            <h3>예약정보</h3>
+            <ul>
+                <li><span>예약내역</span></li>
+            </ul>
+        </section>
+        <hr />
+        <section class="menu-section">
+            <h3>활동정보</h3>
+            <ul>
+                <li><span>리뷰</span></li>
+                <li><span>Q&A</span></li>
+            </ul>
+        </section>
+        <hr />
+    </aside>
+
+    <!-- 오른쪽 메인 영역 -->
+    <main class="mypage-main">
+        <div class="profile-box">
+            <h2>회원정보 수정</h2>
+            <form action="/user/profile" method="post" enctype="multipart/form-data">
+                <div class="profile-image">
+                    <label for="profileUpload" class="profile-label">
+                        <img id="profilePreview" src="{{sessionUser.profileImageUrl}}">
+                        <span class="edit-overlay">변경</span>
+                    </label>
+                    <input
+                            type="file"
+                            id="profileUpload"
+                            name="profileImage"
+                            accept="image/*"
+                            hidden
+                    />
+                </div>
+
+                <p class="username"><span>{{sessionUser.name}}</span>님</p>
+
+                <div class="info-row">
+                    <label class="label">휴대전화</label>
+                    <input
+                            type="tel"
+                            name="phone"
+                            class="value-input"
+                            value="{{sessionUser.phone}}"
+                    />
+                </div>
+
+                <div class="info-row">
+                    <label class="label">이메일(ID)</label>
+                    <input
+                            type="email"
+                            name="email"
+                            class="value-input"
+                            value="{{sessionUser.email}}"
+                            readonly
+                    />
+                </div>
+
+                <div class="info-row">
+                    <label class="label">가입일</label>
+                    <input
+                            type="text"
+                            class="value-input"
+                            value="{{sessionUser.registeredAt}}"
+                            readonly
+                    />
+                </div>
+
+                <button type="submit" class="edit-btn">
+                    정보 수정 완료
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+</body>
+{{> layout/footer}}
