@@ -1,0 +1,19 @@
+{{> layout/header}}
+<body>
+<section class="section">
+    <div class="map-container">
+        <span>내 주변 무인 대여공간</span>
+        <span class="second">내 주변에 가까운 무인공간을 찾아보세요.</span>
+        <div id="map"></div>
+        {{#placePage.content}}
+            <div class="space-card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">{{name}}</h4>
+                    <p class="text-muted">주소 : {{address}} | 카테고리 : {{category}}</p>
+                    <a href="/place/detail" class="btn btn-primary">상세보기</a>
+                </div>
+            </div>
+        {{/placePage.content}}
+    </div>
+</body>
+{{> layout/footer}}

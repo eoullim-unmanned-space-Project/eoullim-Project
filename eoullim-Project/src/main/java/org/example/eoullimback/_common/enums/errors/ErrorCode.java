@@ -55,7 +55,8 @@ public enum ErrorCode {
     // ====
     // 500 Internal Server Error
     // ====
-    INTERNAL_ERROR("서버 내부 오류가 발했습니다.");
+    INTERNAL_ERROR("서버 내부 오류가 발했습니다."),
+    FILE_SAVE_FAILED("파일 저장에 실패했습니다.");
 
 
     private final String message;

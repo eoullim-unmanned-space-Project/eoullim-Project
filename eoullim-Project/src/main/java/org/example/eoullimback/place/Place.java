@@ -47,4 +47,22 @@ public class Place extends BaseTimeEntity {
         this.category = category;
         this.profileImage = profileImage;
     }
+
+    public void update(PlaceRequest.UpdateDTO request) {
+        this.name = request.getName();
+        this.category = request.getCategory();
+        this.profileImage = request.getProfileImageFileName();
+    }
+
+    public String getProfilePath() {
+        if (this.profileImage == null) {
+            return null;
+        }
+        if (this.profileImage.startsWith("http")) {
+            return this.profileImage;
+        }
+
+        return "/images/" + this.profileImage;
+    }
+
 }

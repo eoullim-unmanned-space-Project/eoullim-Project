@@ -10,4 +10,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     List<Room> findByStatus(RoomStatus roomStatus);
 
     boolean existsByRoomAndYearMonth(List<Room> roomsEntity, YearMonth nextMonth);
+    void deleteByPlaceId(Long placeId);
 }
