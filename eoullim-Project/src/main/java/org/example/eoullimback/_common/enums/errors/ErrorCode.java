@@ -40,6 +40,7 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND("댓글을 찾을 수 없습니다."),
     NOTICE_NOT_FOUND("존재하지 않는 공지사항 입니다."),
     REVIEW_NOT_FOUND("리뷰가 존재하지 않습니다."),
+    ROOM_STATE_NOT_FOUND("OPEN상태인 방이 존재하지 않습니다."),
 
     // ====
     // 409 Conflict
