@@ -9,10 +9,30 @@ import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback.room.Room;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 @Entity
-@Table(name = "time_slots")
+@Table(name = "time_slots",
+        uniqueConstraints = {
+            @UniqueConstraint(name = "uk_time_slots_room_start", columnNames = {"room_id", "year_month", "start_time"})
+        },
+        indexes = {
+            @Index(
+                    name = "idx_time_slots_year_month",
+                    columnList = "year_month"
+            ),
+            @Index(
+                    name = "idx_time_slots_start_time",
+                    columnList = "start_time"
+            ),
+            @Index(
+                    name = "idx_time_slots_end_time",
+                    columnList = "end_time"
+            )
+        }
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TimeSlot extends BaseTimeEntity {
@@ -24,6 +44,9 @@ public class TimeSlot extends BaseTimeEntity {
     @JoinColumn(name = "room_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_time_slots_room"))
     private Room room;
+
+    @Column(nullable = false, length = 7)
+    private String yearMonth;
 
     @Column(nullable = false)
     private LocalDateTime startTime;
@@ -39,9 +62,10 @@ public class TimeSlot extends BaseTimeEntity {
     private RoomStatus status;
 
     @Builder
-    public TimeSlot(Long id, Room room, LocalDateTime startTime, LocalDateTime endTime, int capacity, RoomStatus status) {
+    public TimeSlot(Long id, Room room, String yearMonth,  LocalDateTime startTime, LocalDateTime endTime, int capacity, RoomStatus status) {
         this.id = id;
         this.room = room;
+        this.yearMonth = yearMonth;
         this.startTime = startTime;
         this.endTime = endTime;
         this.capacity = capacity;
