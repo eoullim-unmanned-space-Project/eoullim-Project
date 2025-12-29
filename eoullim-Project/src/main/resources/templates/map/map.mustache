@@ -10,6 +10,8 @@
         {{#placePage.content}}
             <div class="space-card">
                 <div class="card-body">
+                    <img src="{{profilePath}}" alt="프로필사진" class="rounded-circle border"
+                         style="width: 200px;height: 200px; object-fit: cover">
                     <h4 class="card-title mb-3">{{name}}</h4>
                     <p class="text-muted">주소 : {{address}} | 카테고리 : {{category}}</p>
                     <a href="/place/{{id}}" class="btn btn-primary">상세보기</a>
@@ -20,7 +22,6 @@
                             <button class="btn btn-danger">삭제</button>
                         </form>
                     </div>
-
                 </div>
             </div>
         {{/placePage.content}}

@@ -51,20 +51,6 @@ public class PlaceController {
         return "/map/map";
     }
 
-
-    // 단건 조회
-    @GetMapping("/place/{placeId}")
-    public String DetailForm(Model model,
-                             @PathVariable Long placeId
-    ) {
-        PlaceResponse.DetailDTO place = placeService.placeDetail(placeId);
-
-        List<RoomResponse.ListDTO> rooms = roomService.roomList(placeId);
-        model.addAttribute("rooms", rooms);
-
-        return "place/detail";
-    }
-
     // 수정
     @GetMapping("/place/{placeId}/update")
     public String UpdateForm(Model model,

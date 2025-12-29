@@ -117,7 +117,7 @@ CREATE TABLE places (
   latitude DECIMAL(10,8) NOT NULL COMMENT '위도',
   longitude DECIMAL(11,8) NOT NULL COMMENT '경도',
   category VARCHAR(100) NOT NULL COMMENT '방 종류',
-  profile_image VARCHAR(500) NOT NULL COMMENT '장소 사진'
+  profile_image VARCHAR(500) COMMENT '장소 사진',
 
   CHECK (category IN('PARTY','STUDY','PRACTICE')),
   
@@ -173,6 +173,7 @@ CREATE TABLE time_slots (
   
   start_time DATETIME(6) NOT NULL COMMENT '시작시간',
   end_time DATETIME(6) NOT NULL COMMENT '종료시간',
+  `year_month` VARCHAR(7) NOT NULL COMMENT '연-월',
   capacity INT NOT NULL COMMENT '인원 수 지정',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
   
@@ -186,7 +187,9 @@ CREATE TABLE time_slots (
   UNIQUE KEY `uk_time_slots_start_time` (start_time),
   
   INDEX `idx_time_slots_start_time` (start_time),
-  INDEX `idx_time_slots_end_timee` (end_time)
+  INDEX `idx_time_slots_end_time` (end_time),
+  INDEX `idx_time_slots_year_month` (`year_month`)
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
 
 CREATE TABLE items (
@@ -367,8 +370,6 @@ CREATE TABLE notices (
 -- --------------------------
 USE eoullim_db;
 
-USE eoullim_db;
-
 INSERT INTO places (name, address, latitude, longitude, category, profile_image, created_at, updated_at)
 VALUES
 ('해운대 파티룸', '부산광역시 해운대구 우동 123-45', 35.1631, 129.1631, 'PARTY', null, NOW(), NOW()),
@@ -376,4 +377,12 @@ VALUES
 ('부산 연습실', '부산광역시 부산진구 부전동 88-9', 35.1650, 129.0605, 'PRACTICE', null, NOW(), NOW()),
 ('서면 파티앤펀', '부산광역시 부산진구 부전동 42-1', 35.1595, 129.0606, 'PARTY', null, NOW(), NOW()),
 ('조용한 공부방 부산', '부산광역시 남구 대연동 21-7', 35.1363, 129.0883, 'STUDY', null, NOW(), NOW());
+SELECT * FROM places;
+
+INSERT INTO rooms (place_id, name, content, default_price, status) VALUES
+(1, '스터디룸 A', '조용한 소규모 스터디룸', 20000, 'OPEN'),
+(1, '스터디룸 B', '화이트보드가 있는 스터디룸', 25000, 'OPEN'),
+(2, '회의실 1', '프로젝터가 있는 회의실', 50000, 'CLOSED'),
+(2, '회의실 2', '대형 테이블 회의실', 60000, 'CLOSED'),
+(3, '촬영 스튜디오', '조명과 배경지가 있는 스튜디오', 80000, 'OPEN');
 SELECT * FROM places;
