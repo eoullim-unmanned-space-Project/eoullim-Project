@@ -173,6 +173,7 @@ CREATE TABLE time_slots (
   
   start_time DATETIME(6) NOT NULL COMMENT '시작시간',
   end_time DATETIME(6) NOT NULL COMMENT '종료시간',
+  `year_month` VARCHAR(7) NOT NULL COMMENT '연-월',
   capacity INT NOT NULL COMMENT '인원 수 지정',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
   
@@ -186,7 +187,9 @@ CREATE TABLE time_slots (
   UNIQUE KEY `uk_time_slots_start_time` (start_time),
   
   INDEX `idx_time_slots_start_time` (start_time),
-  INDEX `idx_time_slots_end_timee` (end_time)
+  INDEX `idx_time_slots_end_time` (end_time),
+  INDEX `idx_time_slots_year_month` (`year_month`)
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
 
 CREATE TABLE items (
