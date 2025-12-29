@@ -23,7 +23,7 @@
     <ul>
         {{#qaaPage.previousPageNumber}}
             <li>
-                <a href="/qaas?page={{qaaPage.previousPageNumber}}">Previous
+                <a href="/qaas?page={{qaaPage.previousPageNumber}}" >Previous </a>
             </li>
         {{/qaaPage.previousPageNumber}}
         {{^qaaPage.previousPageNumber}}
@@ -34,13 +34,13 @@
 
         {{#qaaPage.pageLinks}}
             <li>
-                <a href="/qaas?page={{displayNumber}}&size={{qaaPage.size}}">{{displayNumber}}
+                <a href="/qaas?page={{displayNumber}}&size={{qaaPage.size}}" >{{displayNumber}} </a>
             </li>
         {{/qaaPage.pageLinks}}
 
         {{#qaaPage.nextPageNumber}}
             <li>
-                <a href="/qaas?page={{qaaPage.nextPageNumber}}">Next
+                <a href="/qaas?page={{qaaPage.nextPageNumber}}" >Next </a>
             </li>
         {{/qaaPage.nextPageNumber}}
         {{^qaaPage.nextPageNumber}}
@@ -58,7 +58,7 @@
                         <input type="text" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
                     </label>
                 </div>
-                <div class="col-md-2">
+                <div>
                     <input type="hidden" name="page" value="1">
                     <input type="hidden" name="size" value="{{qaaPage.size}}">
                     <button type="submit">검색</button>
@@ -70,4 +70,11 @@
         </div>
     </div>
 </div>
+<script>
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+</script>
 {{> layout/footer}}
