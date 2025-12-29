@@ -1,9 +1,13 @@
 package org.example.eoullimback.user_auth.user;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +18,20 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping("/kakao")
+    public String kakaoCallback(@RequestParam(name = "code") String code, HttpSession session) {
+
+        try {
+            User user = userService.kakaoSocialLogin(code);
+            session.setAttribute("sessionUser", user);
+        } catch (Exception e) {
+            System.out.println("소셜 로그인 실패: " + e.getMessage());
+            throw new Exception401(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return "redirect:/";
+    }
 
     // // http://localhost:8080/users/profile/1
     // 유저 컨트롤러 , @PathVariable Long id,

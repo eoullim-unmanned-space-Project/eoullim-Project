@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.RoleType;
+import org.example.eoullimback._common.enums.user.OAuthProvider;
 import org.example.eoullimback._common.enums.user.Status;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -50,9 +52,15 @@ public class User extends BaseTimeEntity {
 
     private LocalDateTime withdrawnAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @ColumnDefault("'LOCAL'")
+    private OAuthProvider provider;
+
     @Builder
     public User(Long id, String loginId, String password, String name,
-                String phone, String  email, Status status, String profileImage
+                String phone, String  email, Status status, String profileImage,
+                OAuthProvider provider
     ) {
         this.id = id;
         this.loginId = loginId;
@@ -62,6 +70,14 @@ public class User extends BaseTimeEntity {
         this.email = email;
         this.profileImage = profileImage;
         this.status = status != null ? status : Status.ACTIVE;
+        this.provider = provider;
+
+        // 방어적 코드 작성 : 만약 null 값이면 기본 LOCAL로 저장
+        if (provider == null) {
+            this.provider = OAuthProvider.LOCAL;
+        } else {
+            this.provider = provider;
+        }
     }
 
     public void update(UserRequest.UpDateDTO upDateDTO) {

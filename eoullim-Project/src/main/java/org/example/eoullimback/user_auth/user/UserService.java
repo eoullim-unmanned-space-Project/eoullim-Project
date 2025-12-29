@@ -9,4 +9,6 @@ public interface UserService {
     void leaveUser(Long id);
     void deleteProfileImage(Long id);
     boolean existsByLoginId(String loginId);
+
+    User kakaoSocialLogin(String code);
 }
