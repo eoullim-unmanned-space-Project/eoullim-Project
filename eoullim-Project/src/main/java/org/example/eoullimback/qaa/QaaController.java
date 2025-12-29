@@ -38,9 +38,11 @@ public class QaaController {
             HttpSession session,
             @Valid QaaRequest.CreateDTO request
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+        User sessionUser = getLoginUserId(session);
         qaaService.createQaa(request, sessionUser);
-        return "redirect:/";
+        return "redirect:/qaas";
     }
 
     // Q&A 목록 화면 요청
@@ -71,7 +73,8 @@ public class QaaController {
 
         QaaResponse.DetailDTO qaa = qaaService.qaaDetailResponse(qaaId);
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+        User sessionUser = getLoginUserId(session);
 
         boolean isOwner = sessionUser != null
                 && qaa.getUserId() != null
@@ -94,7 +97,8 @@ public class QaaController {
                            Model model,
                            HttpSession session
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+        User sessionUser = getLoginUserId(session);
 
         QaaResponse.UpdateFormDTO qaa = qaaService.findUpdateForm(id, sessionUser.getId());
         model.addAttribute("qaa", qaa);
@@ -108,9 +112,10 @@ public class QaaController {
                             @Valid QaaRequest.UpdateDTO updateRequest,
                             HttpSession session
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+        User sessionUser = getLoginUserId(session);
         qaaService.update(id, updateRequest, sessionUser);
-        return "redirect:/qaas/{id}";
+        return "redirect:/qaas";
     }
 
     // Q&A 삭제 요청 기능
@@ -119,8 +124,22 @@ public class QaaController {
     public String deleteQaa(@PathVariable Long id,
                             HttpSession session
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+        User sessionUser = getLoginUserId(session);
         qaaService.delete(id, sessionUser);
-        return "redirect:/";
+        return "redirect:/qaas";
+    }
+
+    // TODO : 유저 더미 (삭제 예정)
+    private User getLoginUserId(HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            User dummyUser = new User();
+            dummyUser.setId(1L);
+            session.setAttribute("sessionUser", dummyUser);
+            return dummyUser;
+        }
+        return sessionUser;
     }
 }

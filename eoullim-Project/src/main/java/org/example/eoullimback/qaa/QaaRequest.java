@@ -18,9 +18,6 @@ public class QaaRequest {
         @NotBlank(message = "내용은 필수입니다.")
         private String content;
 
-        @NotNull(message = "사용자 ID는 필수입니다.")
-        private Long userId;
-
         public Qaa toEntity(User user) {
             return new Qaa(
                     title,
