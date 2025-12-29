@@ -3,6 +3,7 @@ package org.example.eoullimback.timeslot;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.example.eoullimback._common.enums.room.RoomStatus;
+import org.example.eoullimback.room.Room;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +11,9 @@ public class TimeSlotRequest {
 
     @Data
     public static class CreateDTO {
+        @NotBlank(message = "생성하는 날짜는 필수입니다.")
+        String yearMonth;
+
         @NotBlank(message = "개시 시간은 필수입니다.")
         LocalDateTime startTime;
 
@@ -22,8 +26,10 @@ public class TimeSlotRequest {
         @NotBlank(message = "상태는 필수입니다.")
         RoomStatus status;
 
-        public TimeSlot toEntity() {
+        public TimeSlot toEntity(Room room) {
             return TimeSlot.builder()
+                    .room(room)
+                    .yearMonth(yearMonth)
                     .startTime(startTime)
                     .endTime(endTime)
                     .capacity(capacity)
