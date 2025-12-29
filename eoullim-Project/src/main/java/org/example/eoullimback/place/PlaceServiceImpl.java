@@ -68,15 +68,6 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public PlaceResponse.DetailDTO placeDetail(Long placeId) {
-
-        Place place = placeRepository.findById(placeId)
-                .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
-
-        return new PlaceResponse.DetailDTO(place);
-    }
-
-    @Override
     public Place placeUpdateForm(Long placeId) {
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));

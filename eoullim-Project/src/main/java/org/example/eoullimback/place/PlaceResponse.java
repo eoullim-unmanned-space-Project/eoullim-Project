@@ -21,7 +21,7 @@ public class PlaceResponse {
             this.name = place.getName();
             this.address = place.getAddress();
             this.category = place.getCategory();
-            this.profilePath = place.getProfileImage();
+            this.profilePath = "/images/" + place.getProfileImage();
         }
     }
 
