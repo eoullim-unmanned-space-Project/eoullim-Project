@@ -4,14 +4,14 @@
 <div>
     <div>
         <div>
-            <button>Q&A 수정</button>
+            <div>Q&A 수정</div>
             <div>
-                <form>
+                <form action="/qaas/{{qaa.id}}/update" method="post">
                     <div>
                         <input type="text"
                         placeholder="Enter name"
                         name="name"
-                        value="{{qaa.name}}">
+                        value="{{qaa.name}}" disabled>
                     </div>
                     <div>
                         <input type="text"
