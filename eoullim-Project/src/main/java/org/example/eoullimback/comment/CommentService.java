@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    Comment createComment(CommentRequest.CreateDTO saveRequest, Long sessionUserId);
+    Comment createComment(CommentRequest.createDTO saveRequest, Long sessionUserId);
 
     List<CommentResponse.ListDTO> listComment(Long qaaId, Long sessionUserId);
 

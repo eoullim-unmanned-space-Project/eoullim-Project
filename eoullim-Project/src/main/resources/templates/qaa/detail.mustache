@@ -25,10 +25,10 @@
             </div>
 
         <div>
-            <form action="comments/new" method="post">
+            <form action="/qaa/{qaaId}/comments/new" method="post">
                 <input type="hidden" name="qaaId" value="{{qaa.id}}">
                 <label>
-                    <textarea rows="2" name="comment" placeholder="댓글을 입력하세요."></textarea>
+                    <textarea rows="2" name="content" placeholder="댓글을 입력하세요."></textarea>
                 </label>
                 <div>
                     <button type="submit">댓글 등록</button>
