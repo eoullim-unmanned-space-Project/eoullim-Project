@@ -27,6 +27,8 @@ public class PlaceController {
     public String createForm() {
 
         return "place/create";
+//        place-create
+//        room-create
     }
 
     @PostMapping("/place/create")

@@ -72,6 +72,16 @@ public class RoomController {
         return "redirect:/place/";
     }
 
+    /**
+     * 전체 조회 화면 - VIEW
+     * 1. 룸 정보
+     * 2. 룸 파일 이미지
+     */
+    @GetMapping("/place/{placeId}/room")
+    public String ListRoom(@PathVariable Long placeId) {
+
+        return "room/list";
+    }
 
     /**
      * 단건 조회 - VIEW
