@@ -6,9 +6,9 @@ public interface CommentService {
 
     Comment createComment(CommentRequest.createDTO saveRequest, Long sessionUserId);
 
-    List<CommentResponse.ListDTO> listComment(Long qaaId, Long sessionUserId);
+    List<CommentResponse.ListDTO> listComment(Long qaaId, Long sessionUserId, Long commentId);
 
-    CommentResponse.UpdateFormDTO updateCommentForm(Long commentId, Long sessionUserId);
+    Long getQaaIdByCommentId(Long commentId);
 
     CommentResponse.UpdateFormDTO updateComment(CommentRequest.UpdateDTO request, Long commentId, Long sessionUserId);
 

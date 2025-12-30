@@ -44,28 +44,24 @@ public class CommentServiceImpl implements CommentService{
      * 댓글 리스트
      */
     @Override
-    public List<CommentResponse.ListDTO> listComment(Long qaaId, Long sessionUserId) {
+    public List<CommentResponse.ListDTO> listComment(Long qaaId, Long sessionUserId, Long commentId) {
 
         List<Comment> commentList = commentRepository.findByQaaIdWithUser(qaaId);
         return commentList.stream()
-                .map(comment -> new CommentResponse.ListDTO(comment, sessionUserId))
+                .map(comment -> new CommentResponse.ListDTO(comment, sessionUserId, commentId))
                 .collect(Collectors.toList());
     }
 
     /**
-     * 댓글 수정 화면
+     * 댓글에서 qaaId
      */
-    @Transactional
     @Override
-    public CommentResponse.UpdateFormDTO updateCommentForm(Long commentId, Long sessionUserId) {
-        Comment comment = commentRepository.findById(commentId)
+    public Long getQaaIdByCommentId(Long commentId) {
+
+        Comment comment = commentRepository.findByWithUser(commentId)
                 .orElseThrow(() -> new Exception404(ErrorCode.COMMENT_NOT_FOUND));
 
-        if(!comment.isOwner(sessionUserId)){
-            throw new Exception403(ErrorCode.ACCESS_DENIED);
-        }
-
-        return new CommentResponse.UpdateFormDTO(comment);
+        return comment.getQaa().getId();
     }
 
     /**
