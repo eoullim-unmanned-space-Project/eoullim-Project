@@ -16,5 +16,5 @@ public interface RoomImageRepository extends JpaRepository<RoomImage, Long> {
 
     Optional<List<RoomImage>> findByRoomIdOrderByDisplayOrderAsc(Long roomId);
 
-    Optional<RoomImage> findRoomImageByFirstDisplay(Long roomIds);
+//    Optional<RoomImage> findRoomImageByFirstDisplay(Long roomIds);
 }

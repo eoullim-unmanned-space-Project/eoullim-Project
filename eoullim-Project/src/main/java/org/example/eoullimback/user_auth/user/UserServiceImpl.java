@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService{
     private String clientSecret;
 
     @Override
+    @Transactional
     public User kakaoSocialLogin(String code) {
         UserResponse.OAuthToken oAuthToken = getKakaoAccessToken(code);
 
@@ -116,27 +117,56 @@ public class UserServiceImpl implements UserService{
     }
 
     // 카카오사용자생성또는조회
-    private User getOrCreateKakaoUser(UserResponse.KakaoProfile kakaoProfile) {
+    @Transactional
+    public User getOrCreateKakaoUser(UserResponse.KakaoProfile kakaoProfile) {
 
-        String name = kakaoProfile.getProperties().getNickname() + "_" + kakaoProfile.getId();
+//        String name = kakaoProfile.getProperties().getNickname() + "_" + kakaoProfile.getId();
+//
+//        User userOrigin = getUsername(name);
+//
+//        if (userOrigin == null) {
+//            // 최초 카카오 소셜 로그인 사용자)
+//            User newUser = User.builder()
+//                    .name(name)
+//                    .password(passwordEncoder.encode(tencoKey))// 소셜 로그인은 임시 비밀번호를 설정
+//                    .email(name + "@kakao.com") // 선택사항(카카오 이메일 비즈니스 앱 신청)
+//                    .provider(OAuthProvider.KAKAO)
+//                    .build();
+//
+//            String profileImages = kakaoProfile.getProperties().getProfileImage();
+//            if (profileImages != null && !profileImages.isEmpty()) {
+//                newUser.setProfileImage(profileImages); // 카카오에서 넘겨받은 URL 그대로 저장
+//            }
+//            signupSocialUser(newUser);
+//            userOrigin = newUser; // 필수
+//        }
 
-        User userOrigin = getUsername(name);
+        String kakaoId = kakaoProfile.getId().toString();
+        String loginId = "KAKAO_" + kakaoId;
+        String nickname = kakaoProfile.getProperties().getNickname();
+        String email = loginId + "@kakao.com";
+        String password = passwordEncoder.encode(tencoKey);
+
+        User userOrigin = userRepository.findByLoginId(loginId).orElse(null);
 
         if (userOrigin == null) {
-            // 최초 카카오 소셜 로그인 사용자)
+
             User newUser = User.builder()
-                    .name(name)
-                    .password(passwordEncoder.encode(tencoKey))// 소셜 로그인은 임시 비밀번호를 설정
-                    .email(name + "@kakao.com") // 선택사항(카카오 이메일 비즈니스 앱 신청)
+                    .loginId("KAKAO_" + kakaoId)
+                    .name(nickname)
+                    .email(email)
+                    .password(password)
                     .provider(OAuthProvider.KAKAO)
+                    .status(Status.ACTIVE)
                     .build();
 
-            String profileImages = kakaoProfile.getProperties().getProfileImage();
-            if (profileImages != null && !profileImages.isEmpty()) {
-                newUser.setProfileImage(profileImages); // 카카오에서 넘겨받은 URL 그대로 저장
+            String profileImage = kakaoProfile.getProperties().getProfileImage();
+            if (profileImage != null && !profileImage.isEmpty()) {
+                newUser.setProfileImage(profileImage);
             }
+
             signupSocialUser(newUser);
-            userOrigin = newUser; // 필수
+            userOrigin = newUser;
         }
 
         return userOrigin;
