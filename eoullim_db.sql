@@ -199,10 +199,10 @@ CREATE TABLE items (
 CREATE TABLE bookings (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
-  user_id BIGINT NOT NULL COMMENT '사용자',
-  time_slot_id BIGINT NOT NULL COMMENT '타임슬롯',
-  item_id BIGINT NOT NULL COMMENT '아이템',
-
+  user_id BIGINT NOT NULL COMMENT '사용자 ID',
+  room_id BIGINT NOT NULL COMMENT '방 ID',
+  time_slot_id BIGINT NOT NULL COMMENT '타임슬롯 ID',
+ 
   item_snapshot_price BIGINT NOT NULL comment '아이템 가격 저장본',
   
   qty INT NOT NULL COMMENT '인원체크',
@@ -214,11 +214,11 @@ CREATE TABLE bookings (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
-  UNIQUE KEY `uk_user_time_slot_item` (user_id, time_slot_id, item_id),
+  UNIQUE KEY `uk_user_time_slot_item` (user_id, time_slot_id),
   
   CONSTRAINT `fk_bookings_user` FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT `fk_bookings_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
   CONSTRAINT `fk_bookings_time_slot` FOREIGN KEY (time_slot_id) REFERENCES time_slots(id),
-  CONSTRAINT `fk_bookings_item` FOREIGN KEY (item_id) REFERENCES items(id),
   
   CHECK (qty > 0),
   CHECK (status IN('PENDING','CONFIRMED','CANCELED','REFUNDED')),
