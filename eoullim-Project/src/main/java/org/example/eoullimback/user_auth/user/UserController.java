@@ -41,6 +41,7 @@ public class UserController {
         User user = userService.getMyProfile(sessionUser.getId());
 
         model.addAttribute("user", user);
+        model.addAttribute("phone", user.getPhone() != null ? user.getPhone() : "");
 
         return "user/profile";
     }
