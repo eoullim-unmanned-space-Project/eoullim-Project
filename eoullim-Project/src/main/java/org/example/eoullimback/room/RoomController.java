@@ -3,12 +3,14 @@ package org.example.eoullimback.room;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -70,16 +72,6 @@ public class RoomController {
         return "redirect:/place/";
     }
 
-    /**
-     * 전체 조회 화면 - VIEW
-     * 1. 룸 정보
-     * 2. 룸 파일 이미지
-     */
-    @GetMapping("/place/{placeId}/room")
-    public String ListRoom(@PathVariable Long placeId) {
-
-        return "place/detail";
-    }
 
     /**
      * 단건 조회 - VIEW
@@ -88,7 +80,11 @@ public class RoomController {
      * 3. 타임슬롯 + 아이템
      */
     @GetMapping("/room/{roomId}/detail")
-    public String DetailRoom(@PathVariable Long roomId) {
+    public String DetailRoom(@PathVariable Long roomId, Model model) {
+
+        RoomResponse.DetailDTO room = roomService.DetailRoom(roomId);
+
+        model.addAttribute("room", room);
 
         return "room/detail";
     }

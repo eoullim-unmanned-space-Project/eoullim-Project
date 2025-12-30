@@ -71,17 +71,5 @@ public class RoomRequest {
                 throw new IllegalArgumentException("내용은 공백일 수 없습니다.");
             }
         }
-
-        public Room toEntity (Place place) {
-            return Room.builder()
-                    .place(place)
-                    .name(name)
-                    .content(content)
-                    .defaultPrice(defaultPrice)
-                    .status(status)
-                    .build();
-        }
     }
-
-
 }
