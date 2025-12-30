@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService{
      */
     @Transactional
     @Override
-    public Comment createComment(CommentRequest.CreateDTO request, Long sessionUserId) {
+    public Comment createComment(CommentRequest.createDTO request, Long sessionUserId) {
 
         User userEntity = userRepository.findById(sessionUserId)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));

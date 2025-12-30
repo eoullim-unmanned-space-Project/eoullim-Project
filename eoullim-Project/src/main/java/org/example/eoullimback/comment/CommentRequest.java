@@ -9,7 +9,7 @@ import org.example.eoullimback.user_auth.user.User;
 public class CommentRequest {
 
     @Data
-    public static class CreateDTO {
+    public static class createDTO {
 
         @NotBlank(message = "댓글 내용은 필수입니다.")
         private String content;
