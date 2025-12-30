@@ -29,19 +29,16 @@ public class CommentController {
         return "redirect:/qaas/" + saveRequest.getQaaId();
     }
 
-    //수정 화면 요청
+    //수정 화면
     @GetMapping("/comments/{id}/update")
     public String updateForm(@PathVariable Long id,
-                             Model model,
                              HttpSession session
     ) {
 //        User sessionUser = (User) session.getAttribute("sessionUser");
         User sessionUser = getLoginUserId(session);
-        Long qaaId = commentService.deleteComment(id, sessionUser.getId());
+        Long qaaId = commentService.getQaaIdByCommentId(id);
 
-        CommentResponse.UpdateFormDTO comment = commentService.updateCommentForm(id, sessionUser.getId());
-
-        model.addAttribute("comment", comment);
+        session.setAttribute("commentId", id);
 
         return "redirect:/qaas/" + qaaId;
     }
@@ -54,9 +51,11 @@ public class CommentController {
     ) {
 //        User sessionUser =  (User)session.getAttribute("sessionUser");
         User sessionUser = getLoginUserId(session);
-        Long qaaId = commentService.deleteComment(id, sessionUser.getId());
+        Long qaaId = commentService.getQaaIdByCommentId(id);
 
         commentService.updateComment(request, id, sessionUser.getId());
+
+        session.removeAttribute("commentId");
 
         return "redirect:/qaas/" + qaaId;
     }

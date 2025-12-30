@@ -13,13 +13,16 @@ public class CommentResponse {
         private String content;
         private String name;
         private LocalDateTime createdAt;
+        private boolean isEditing;
         private boolean isOwner;
 
-        public ListDTO(Comment comment, Long sessionUserId) {
+        public ListDTO(Comment comment, Long sessionUserId, Long editingCommentId) {
             this.id = comment.getId();
             this.content = comment.getContent();
             this.name = comment.getUser().getName();
             this.createdAt = comment.getCreatedAt();
+            this.isEditing = editingCommentId != null
+                    && comment.getId().equals(editingCommentId);
             this.isOwner = comment.isOwner(sessionUserId);
         }
     }
