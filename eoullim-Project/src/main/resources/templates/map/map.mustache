@@ -1,4 +1,3 @@
-
 {{> layout/header}}
 <body>
 <section class="section">
@@ -8,18 +7,17 @@
         <div id="map"></div>
         <a href="/place/create" class="btn btn-secondary">장소 생성</a>
         {{#placePage.content}}
-            <div class="space-card">
-                <div class="card-body">
-                    <img src="{{profilePath}}" alt="프로필사진" class="rounded-circle border"
-                         style="width: 200px;height: 200px; object-fit: cover">
-                    <h4 class="card-title mb-3">{{name}}</h4>
-                    <p class="text-muted">주소 : {{address}} | 카테고리 : {{category}}</p>
-                    <a href="/place/{{id}}" class="btn btn-primary">상세보기</a>
+            <div class="place-card">
+                <div class="place-body">
+                    <img src="{{profilePath}}" alt="프로필사진" class="place-profile" >
+                    <h4 class="place-title ">{{name}}</h4>
+                    <p class="place-address">주소 : {{address}} | 카테고리 : {{category}}</p>
+                    <a href="/place/{{id}}/list" class="btn btn-place">상세보기</a>
 
                     <div class="d-flex justify-content-end mb-2">
-                        <a href="/place/{{id}}/update" class="btn btn-warning me-2">수정</a>
+                        <a href="/place/{{id}}/update" class="btn btn-update">수정</a>
                         <form action="/place/{{id}}/delete" method="post">
-                            <button class="btn btn-danger">삭제</button>
+                            <button class="btn btn-delete">삭제</button>
                         </form>
                     </div>
                 </div>

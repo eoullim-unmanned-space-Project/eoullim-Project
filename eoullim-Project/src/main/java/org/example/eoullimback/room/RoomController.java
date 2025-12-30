@@ -78,7 +78,7 @@ public class RoomController {
     @GetMapping("/place/{placeId}/room")
     public String ListRoom(@PathVariable Long placeId) {
 
-        return "place/detail";
+        return "room/list";
     }
 
     /**
