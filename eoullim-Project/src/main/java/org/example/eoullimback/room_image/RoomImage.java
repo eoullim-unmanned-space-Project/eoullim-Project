@@ -31,7 +31,7 @@ public class RoomImage {
 
     private int displayOrder;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "room_id", foreignKey = @ForeignKey(name = "fk_room_images_room"))
     private Room room;
 
