@@ -1,14 +1,11 @@
 package org.example.eoullimback.room;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.example.eoullimback._common.enums.room.RoomStatus;
-import org.example.eoullimback.file.RoomFile;
 import org.example.eoullimback.place.Place;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -71,17 +68,5 @@ public class RoomRequest {
                 throw new IllegalArgumentException("내용은 공백일 수 없습니다.");
             }
         }
-
-        public Room toEntity (Place place) {
-            return Room.builder()
-                    .place(place)
-                    .name(name)
-                    .content(content)
-                    .defaultPrice(defaultPrice)
-                    .status(status)
-                    .build();
-        }
     }
-
-
 }

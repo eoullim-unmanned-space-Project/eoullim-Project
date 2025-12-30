@@ -6,10 +6,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RoomImageRepository extends JpaRepository<RoomImage, Long> {
     List<RoomImage> findAllByRoom(Room roomEntity);
 
     @Query("SELECT IFNULL(MAX(ri.displayOrder), 0) FROM RoomImage ri JOIN ri.room r WHERE r.id = :roomId")
     int findMaxDisplayOrder(@Param("roomId") Long roomId);
+
+    Optional<List<RoomImage>> findByRoomIdOrderByDisplayOrderAsc(Long roomId);
+
+//    Optional<RoomImage> findRoomImageByFirstDisplay(Long roomIds);
 }

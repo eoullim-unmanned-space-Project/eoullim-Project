@@ -36,6 +36,8 @@ CREATE TABLE users (
   email VARCHAR(255) NOT NULL COMMENT 'Email 주소',
   profile_image VARCHAR(255) NULL COMMENT '사용자 프로필',
   status VARCHAR(20) NOT NULL COMMENT '사용자 상태',
+  
+  provider VARCHAR(20) NOT NULL DEFAULT 'LOCAL',
 
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 계정 생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '사용자 계정(프로필) 수정일',
@@ -132,6 +134,7 @@ CREATE TABLE rooms (
   
   name VARCHAR(150) NOT NULL COMMENT '방 이름',
   content VARCHAR(255) NOT NULL COMMENT '방 내용',
+  max_capacity INT NOT NULL COMMENT '최대 인원 수 지정',
   default_price int NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '상태(OPEN, CLOSED)',
  
@@ -139,18 +142,6 @@ CREATE TABLE rooms (
   
   CONSTRAINT `fk_rooms_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
-
-CREATE TABLE room_files (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  
-  room_id BIGINT NOT NULL COMMENT '방',
-  file_id BIGINT NOT NULL COMMENT '파일',
-  
-  display_order INT DEFAULT 0 COMMENT '파일순서',
-  
-  CONSTRAINT `fk_room_files_place` FOREIGN KEY(room_id) REFERENCES rooms(id) ON DELETE CASCADE,
-  CONSTRAINT `fk_room_files_file_info` FOREIGN KEY(file_id) REFERENCES file_infos(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방 파일 테이블';
 
 CREATE TABLE room_images (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,

@@ -12,6 +12,7 @@ import org.example.eoullimback.place.Place;
 import org.example.eoullimback.place.PlaceRepository;
 import org.example.eoullimback.room_image.RoomImage;
 import org.example.eoullimback.room_image.RoomImageRepository;
+import org.example.eoullimback.room_image.RoomImageResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +33,8 @@ public class RoomServiceImpl implements RoomService{
     private final RoomRepository roomRepository;
     private final RoomImageRepository roomImageRepository;
 
+    private static final int MAX_IMAGE_SIZE = 5;
+
     /**
      * 룸 생성 로직 + 이미지 추가
      */
@@ -46,8 +49,6 @@ public class RoomServiceImpl implements RoomService{
         if (createDTO.roomImage == null || createDTO.roomImage.isEmpty()) {
             throw new Exception404(ErrorCode.MISSING_PARAMETER);
         }
-
-        final int MAX_IMAGE_SIZE = 5;
 
         if (createDTO.roomImage.size() != MAX_IMAGE_SIZE) {
             throw new Exception400(ErrorCode.MAX_FILE_IMG);
@@ -170,4 +171,25 @@ public class RoomServiceImpl implements RoomService{
 
         return roomEntity;
     }
+
+    /**
+     * 룸 단건조회
+     */
+    @Override
+    public RoomResponse.DetailDTO DetailRoom(Long roomId) {
+
+        Room roomEntity =  roomRepository.findByWithPlace(roomId)
+                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
+
+        List<RoomImage> roomImagesEntities = roomImageRepository.findByRoomIdOrderByDisplayOrderAsc(roomId)
+                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_IMG_NOT_FOUND));
+
+        List<RoomImageResponse.DetailDTO> imageDTOs =
+                roomImagesEntities.stream()
+                        .map(RoomImageResponse.DetailDTO::new)
+                        .toList();
+
+        return new RoomResponse.DetailDTO(roomEntity, imageDTOs);
+    }
+
 }
