@@ -1,94 +1,97 @@
-<link rel="stylesheet" href="/css/main/main.css"/>
-<link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
 
-<body>
-<div class="banner-wrap">
-    <button class="banner-btn prev">&lt;</button>
-    <div class="banner">
-        <div class="banner-track">
-            <div class="banner-slide">
-                <img src="/img/main/space.png" alt="">
-            </div>
-            <div class="banner-slide">
-                <img src="/img/main/chrismas.png" alt="">
-            </div>
-        </div>
-    </div>
-    <button class="banner-btn next">&gt;</button>
-</div>
-<section class="section">
-    <div class="section-title">새로운 공간</div>
-    <div class="space-list">
-        <div class="space-card">
-            <div class="space-img"></div>
-            <div class="space-name">
-                <p>이름</p>
-                <p>생성일</p>
-                <p>카테고리</p>
+<link rel="stylesheet" href="/css/main/main.css"/>
+
+<main>
+    <div class="banner-wrap">
+        <button class="banner-btn prev">&lt;</button>
+        <div class="banner">
+            <div class="banner-track">
+                <div class="banner-slide">
+                    <img src="/img/main/space.png" alt="배너 1">
+                </div>
+                <div class="banner-slide">
+                    <img src="/img/main/chrismas.png" alt="배너 2">
+                </div>
             </div>
         </div>
-        <div class="space-card">
-            <div class="space-img"></div>
-            <div class="space-name">공간 이름 2</div>
-        </div>
-        <div class="space-card">
-            <div class="space-img"></div>
-            <div class="space-name">공간 이름 3</div>
-        </div>
-        <div class="space-card">
-            <div class="space-img"></div>
-            <div class="space-name">공간 이름 4</div>
-        </div>
+        <button class="banner-btn next">&gt;</button>
     </div>
-</section>
-<!-- 진행중인 이벤트 -->
-<section class="section">
-    <div class="section-title">진행중인 이벤트</div>
-    <div class="event-list">
-        <div class="event-card left-img">
-            <p>연말 모임, 선택은 간단하게!<br>어울림 파티룸과 함께하세요.</p>
+
+    <section class="section">
+        <div class="section-title">새로운 공간</div>
+        <div class="space-list">
+            <div class="space-card">
+                <div class="space-img"></div>
+                <div class="space-name">
+                    <p>이름</p>
+                    <p>생성일</p>
+                    <p>카테고리</p>
+                </div>
+            </div>
+            <div class="space-card">
+                <div class="space-img"></div>
+                <div class="space-name">공간 이름 2</div>
+            </div>
+            <div class="space-card">
+                <div class="space-img"></div>
+                <div class="space-name">공간 이름 3</div>
+            </div>
+            <div class="space-card">
+                <div class="space-img"></div>
+                <div class="space-name">공간 이름 4</div>
+            </div>
         </div>
-        <div class="event-card right-img">
-            <p>연습, 모임, 공연 준비까지<br>어울림 연습실에서 한 번에 해결하세요.</p>
+    </section>
+
+    <section class="section">
+        <div class="section-title">진행중인 이벤트</div>
+        <div class="event-list">
+            <div class="event-card left-img">
+                <p>연말 모임, 선택은 간단하게!<br>어울림 파티룸과 함께하세요.</p>
+            </div>
+            <div class="event-card right-img">
+                <p>연습, 모임, 공연 준비까지<br>어울림 연습실에서 한 번에 해결하세요.</p>
+            </div>
         </div>
-    </div>
-</section>
-<!-- 방금 올라온 후기 -->
-<section class="section">
-    <div class="section-title">방금 올라온 후기</div>
-    <div class="review-list">
-        <div class="review-card">
+    </section>
+
+    <section class="section">
+        <div class="section-title">방금 올라온 후기</div>
+        <div class="review-list">
+            <div class="review-card">후기 1</div>
+            <div class="review-card">후기 2</div>
+            <div class="review-card">후기 3</div>
         </div>
-        <div class="review-card">후기 2</div>
-        <div class="review-card">후기 3</div>
-    </div>
-    <div class="review-list" style="margin-top: 20px;">
-        <div class="review-card">후기 1</div>
-        <div class="review-card">후기 2</div>
-        <div class="review-card">후기 3</div>
-    </div>
-</section>
+        <div class="review-list" style="margin-top: 20px;">
+            <div class="review-card">후기 4</div>
+            <div class="review-card">후기 5</div>
+            <div class="review-card">후기 6</div>
+        </div>
+    </section>
+</main>
+
 <script>
+    // 배너 슬라이드 스크립트
     const track = document.querySelector('.banner-track');
-    let currentIndex = 0;
     const slides = document.querySelectorAll('.banner-slide');
+    let currentIndex = 0;
 
-    function moveSlide(index) {
-        track.style.transform = `translateX(-${index * 100}%)`;
+    if (track && slides.length > 0) {
+        function moveSlide(index) {
+            track.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        document.querySelector('.banner-btn.next').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            moveSlide(currentIndex);
+        });
+
+        document.querySelector('.banner-btn.prev').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            moveSlide(currentIndex);
+        });
     }
-
-    // 다음 버튼
-    document.querySelector('.banner-btn.next').addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % slides.length;
-        moveSlide(currentIndex);
-    });
-
-    // 이전 버튼
-    document.querySelector('.banner-btn.prev').addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-        moveSlide(currentIndex);
-    });
 </script>
-</body>
+
 {{> layout/footer}}
