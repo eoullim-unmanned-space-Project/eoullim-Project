@@ -6,10 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.room.RoomStatus;
-import org.example.eoullimback.file.RoomFile;
 import org.example.eoullimback.place.Place;
-
-import java.util.List;
 
 @Entity
 @Table(name = "rooms")

@@ -1,0 +1,93 @@
+.place-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #fff;
+    transition: transform 0.2s;
+    width: 350px;
+    height: 350px;
+    display: flex;
+}
+
+.place-card:hover {
+    transform: translateY(-5px);
+}
+
+.place-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.place-profile {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.place-title {
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.place-address {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.btn-place {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    background-color: #007bff;
+    color: white;
+    transition: background 0.2s;
+    margin-bottom: 10px;
+}
+
+.btn-place:hover {
+    background-color: #0056b3;
+}
+
+.btn-update {
+    display: inline-block;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    background-color: #ffc107;
+    color: #212529;
+    transition: background 0.2s;
+    margin-right: 5px;
+}
+
+.btn-update:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    transition: background 0.2s;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.d-flex.justify-content-end {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
