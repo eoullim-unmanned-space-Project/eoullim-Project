@@ -1,9 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: white;
+    font-family: 'Pretendard', sans-serif;
+    overflow: hidden;
+}
+
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 64px);
 }
+
 .inner-wrapper {
     display: flex;
     width: 1440px;
