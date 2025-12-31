@@ -29,6 +29,9 @@ public class Room {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private Integer maxCapacity;
+
     @Column(nullable = false, name = "default_price")
     private int defaultPrice;
 
@@ -37,10 +40,11 @@ public class Room {
     private RoomStatus status;
 
     @Builder
-    public Room(Long id, Place place, String name, String content, int defaultPrice, RoomStatus status) {
+    public Room(Long id, Place place, String name, String content,Integer maxCapacity, int defaultPrice, RoomStatus status) {
         this.id = id;
         this.place = place;
         this.name = name;
+        this.maxCapacity = maxCapacity;
         this.defaultPrice = defaultPrice;
         this.content = content;
         this.status = status;
@@ -52,6 +56,7 @@ public class Room {
 
         this.name = updateDTO.name;
         this.content = updateDTO.content;
+        this.maxCapacity = updateDTO.maxCapacity;
         this.status = updateDTO.status;
         this.defaultPrice = updateDTO.defaultPrice;
     }

@@ -1,0 +1,38 @@
+{{> layout/header}}
+<div class="container p-5">
+
+    <div class="card">
+        <div class="card-header"><b>새로운 방 만들기</b></div>
+        <div class="card-body">
+            <form action="/place/{{placeId}}/room/create" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="name" name="name">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="content" name="content">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="maxCapacity" name="maxCapacity">
+                </div>
+                <div class="mb-3">
+                    <input type="text" class="form-control" placeholder="defaultPrice" name="defaultPrice">
+                </div>
+                <div class="mb-3">
+                    <select class="form-control" placeholder="status" name="status">
+                        <option VALUE="">선택하세요</option>
+                        <option VALUE="OPEN">OPEN</option>
+                        <option VALUE="CLOSED">CLOSED</option>
+                        <option VALUE="CANCELED">CANCELED</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="roomImage" class="form-label"> 방 사진(선택사항)</label>
+                    <input type="file" class="form-control" id="roomImage" name="roomImage" accept="image/*" multiple>
+                    <small class="form-text text-muted mt-1">이미지 파일 5장만 업로드 가능합니다(JPG, PNG, GIF)</small>
+                </div>
+                <button type="submit" class="btn btn-primary form-control">방 생성</button>
+            </form>
+        </div>
+    </div>
+</div>
+{{> layout/footer}}

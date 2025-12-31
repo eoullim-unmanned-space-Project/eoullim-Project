@@ -14,7 +14,6 @@ DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS time_slots;
-DROP TABLE IF EXISTS room_files;
 DROP TABLE IF EXISTS room_images;
 DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS places;
@@ -373,7 +372,8 @@ SELECT * FROM places;
 INSERT INTO rooms (place_id, name, content, default_price, status) VALUES
 (1, '스터디룸 A', '조용한 소규모 스터디룸', 20000, 'OPEN'),
 (1, '스터디룸 B', '화이트보드가 있는 스터디룸', 25000, 'OPEN'),
-(2, '회의실 1', '프로젝터가 있는 회의실', 50000, 'CLOSED'),
+(1, '회의실 1', '프로젝터가 있는 회의실', 50000, 'CLOSED'),
 (2, '회의실 2', '대형 테이블 회의실', 60000, 'CLOSED'),
 (3, '촬영 스튜디오', '조명과 배경지가 있는 스튜디오', 80000, 'OPEN');
-SELECT * FROM places;
+SELECT * FROM rooms;
+SELECT * FROM room_images;

@@ -31,11 +31,46 @@ public class RoomController {
      * 기능: 관리자가 생성하는 룸 생성 - 완료
      */
     @PostMapping("/place/{placeId}/room/create")
-    public String createRoom(@PathVariable Long placeId, @ModelAttribute @Valid RoomRequest.CreateDTO createDTO) throws IOException {
+    public String createRoom(Model model,
+                             @PathVariable Long placeId,
+                             @ModelAttribute @Valid RoomRequest.CreateDTO createDTO
+    ) throws IOException {
 
         Room room = roomService.createRoom(placeId, createDTO);
+        model.addAttribute("room", room);
 
-        return "redirect:/place/detail" + room.getId();
+        return "redirect:/place/" + placeId + "/room";
+    }
+
+    /**
+     * 전체 조회 화면 - VIEW
+     * 1. 룸 정보
+     * 2. 룸 파일 이미지
+     */
+    @GetMapping("/place/{placeId}/room")
+    public String ListRoom(Model model,
+                           @PathVariable Long placeId
+    ) {
+        List<RoomResponse.ListDTO> roomList = roomService.roomList(placeId);
+        model.addAttribute("roomList", roomList);
+
+        return "room/list";
+    }
+
+    /**
+     * 단건 조회 - VIEW
+     * 1. 룸 정보
+     * 2. 룸 파일 이미지
+     * 3. 타임슬롯 + 아이템
+     */
+    @GetMapping("/room/{roomId}/detail")
+    public String DetailRoom(@PathVariable Long roomId, Model model) {
+
+        RoomResponse.DetailDTO room = roomService.DetailRoom(roomId);
+
+        model.addAttribute("room", room);
+
+        return "room/detail";
     }
 
     /**
@@ -58,7 +93,7 @@ public class RoomController {
 
         Room room = roomService.updateRoom(roomId, updateDTO);
 
-        return "redirect:/room/" + room.getId();
+        return "redirect:/room/" + roomId;
     }
 
     /**
@@ -70,32 +105,5 @@ public class RoomController {
         roomService.deleteRoom(roomId);
 
         return "redirect:/place/";
-    }
-
-    /**
-     * 전체 조회 화면 - VIEW
-     * 1. 룸 정보
-     * 2. 룸 파일 이미지
-     */
-    @GetMapping("/place/{placeId}/room")
-    public String ListRoom(@PathVariable Long placeId) {
-
-        return "room/list";
-    }
-
-    /**
-     * 단건 조회 - VIEW
-     * 1. 룸 정보
-     * 2. 룸 파일 이미지
-     * 3. 타임슬롯 + 아이템
-     */
-    @GetMapping("/room/{roomId}/detail")
-    public String DetailRoom(@PathVariable Long roomId, Model model) {
-
-        RoomResponse.DetailDTO room = roomService.DetailRoom(roomId);
-
-        model.addAttribute("room", room);
-
-        return "room/detail";
     }
 }

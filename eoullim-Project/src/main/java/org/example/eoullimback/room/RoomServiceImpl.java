@@ -24,10 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RoomServiceImpl implements RoomService{
-    @Override
-    public List<RoomResponse.ListDTO> roomList(Long placeId) {
-        return List.of();
-    }
 
     private final PlaceRepository placeRepository;
     private final RoomRepository roomRepository;
@@ -50,7 +46,7 @@ public class RoomServiceImpl implements RoomService{
             throw new Exception404(ErrorCode.MISSING_PARAMETER);
         }
 
-        if (createDTO.roomImage.size() != MAX_IMAGE_SIZE) {
+        if (createDTO.roomImage.size() > MAX_IMAGE_SIZE) {
             throw new Exception400(ErrorCode.MAX_FILE_IMG);
         }
 
@@ -81,30 +77,32 @@ public class RoomServiceImpl implements RoomService{
         return room;
     }
 
+    @Override
+    public List<RoomResponse.ListDTO> roomList(Long placeId) {
+
+        List<Room> room = roomRepository.findAll(placeId);
+
+        return null;
+    }
+
     /**
-     * 룸 삭제 + 이미지 같이 삭제
+     * 룸 단건조회
      */
     @Override
-    @Transactional
-    public void deleteRoom(Long roomId) throws IOException {
+    public RoomResponse.DetailDTO DetailRoom(Long roomId) {
 
-        // 1. 방 확인
-        Room roomEntity = roomRepository.findById(roomId)
+        Room roomEntity =  roomRepository.findByWithPlace(roomId)
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
 
-        // 2. 방에있는 roomImage 전부 가져오기
-        List<RoomImage> roomImageEntity = roomImageRepository.findAllByRoom(roomEntity);
+        List<RoomImage> roomImagesEntities = roomImageRepository.findByRoomIdOrderByDisplayOrderAsc(roomId)
+                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_IMG_NOT_FOUND));
 
-        // 3. for문을 돌려서 실제 디렉토리에 있는 값 삭제
-        for (RoomImage images : roomImageEntity) {
-            FileUtil.deleteFile(images.getFilePath());
-        }
+        List<RoomImageResponse.DetailDTO> imageDTOs =
+                roomImagesEntities.stream()
+                        .map(RoomImageResponse.DetailDTO::new)
+                        .toList();
 
-        // 4. image전부 삭제
-        roomImageRepository.deleteAll(roomImageEntity);
-
-        // 5. room도 삭제
-        roomRepository.delete(roomEntity);
+        return new RoomResponse.DetailDTO(roomEntity, imageDTOs);
     }
 
     /**
@@ -173,23 +171,28 @@ public class RoomServiceImpl implements RoomService{
     }
 
     /**
-     * 룸 단건조회
+     * 룸 삭제 + 이미지 같이 삭제
      */
     @Override
-    public RoomResponse.DetailDTO DetailRoom(Long roomId) {
+    @Transactional
+    public void deleteRoom(Long roomId) throws IOException {
 
-        Room roomEntity =  roomRepository.findByWithPlace(roomId)
+        // 1. 방 확인
+        Room roomEntity = roomRepository.findById(roomId)
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
 
-        List<RoomImage> roomImagesEntities = roomImageRepository.findByRoomIdOrderByDisplayOrderAsc(roomId)
-                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_IMG_NOT_FOUND));
+        // 2. 방에있는 roomImage 전부 가져오기
+        List<RoomImage> roomImageEntity = roomImageRepository.findAllByRoom(roomEntity);
 
-        List<RoomImageResponse.DetailDTO> imageDTOs =
-                roomImagesEntities.stream()
-                        .map(RoomImageResponse.DetailDTO::new)
-                        .toList();
+        // 3. for문을 돌려서 실제 디렉토리에 있는 값 삭제
+        for (RoomImage images : roomImageEntity) {
+            FileUtil.deleteFile(images.getFilePath());
+        }
 
-        return new RoomResponse.DetailDTO(roomEntity, imageDTOs);
+        // 4. image전부 삭제
+        roomImageRepository.deleteAll(roomImageEntity);
+
+        // 5. room도 삭제
+        roomRepository.delete(roomEntity);
     }
-
 }

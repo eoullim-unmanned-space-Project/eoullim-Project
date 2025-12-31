@@ -18,6 +18,5 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     """)
     Optional<Room> findByWithPlace(@Param("roomId") Long roomId);
 
-//    boolean existsByRoomAndYearMonth(List<Room> roomsEntity, YearMonth nextMonth);
-//    void deleteByPlaceId(Long placeId);
+    void deleteByPlaceId(Long placeId);
 }

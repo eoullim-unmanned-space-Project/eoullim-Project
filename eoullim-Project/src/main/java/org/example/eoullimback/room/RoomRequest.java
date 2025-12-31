@@ -1,5 +1,6 @@
 package org.example.eoullimback.room;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -21,13 +22,14 @@ public class RoomRequest {
         @NotBlank(message = "내용은 필수입니다.")
         String content;
 
-        @Size(min = 100, message = "값은 100원 부터입니다.")
+        Integer maxCapacity;
+
+        @Min(value = 100, message = "값은 100원 부터입니다.")
         int defaultPrice;
 
         @NotNull(message = "상태값은 필수 입니다.")
         RoomStatus status;
 
-        @NotNull(message = "이미지는 필수 입니다.")
         List<MultipartFile> roomImage;
 
         public Room toEntity (Place place) {
@@ -35,6 +37,7 @@ public class RoomRequest {
                     .place(place)
                     .name(name)
                     .content(content)
+                    .maxCapacity(maxCapacity)
                     .defaultPrice(defaultPrice)
                     .status(status)
                     .build();
@@ -49,7 +52,9 @@ public class RoomRequest {
 
         String content;
 
-        @Size(min = 100, message = "값은 100원 부터입니다.")
+        Integer maxCapacity;
+
+        @Min(value = 100, message = "값은 100원 부터입니다.")
         int defaultPrice;
 
         RoomStatus status;

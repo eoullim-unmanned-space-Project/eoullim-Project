@@ -7,9 +7,11 @@ import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.FileUtil;
+import org.example.eoullimback.room.Room;
 import org.example.eoullimback.room.RoomRepository;
 import org.example.eoullimback.room.RoomRequest;
 import org.example.eoullimback.room.RoomService;
+import org.example.eoullimback.room_image.RoomImageRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +26,8 @@ import java.io.IOException;
 @Transactional(readOnly = true)
 public class PlaceServiceImpl implements PlaceService{
     private final PlaceRepository placeRepository;
-    private final RoomService roomService;
     private final RoomRepository roomRepository;
+    private final RoomImageRepository roomImageRepository;
 
     @Override
     @Transactional
