@@ -9,8 +9,15 @@ import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.user_auth.user.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class BookingRequest {
+
+    @Data
+    public static class CalculateAmountDTO {
+        Long roomId;
+        List<Long> timeSlotIds;
+    }
 
     @Data
     public static class createDTO {
@@ -42,5 +49,4 @@ public class BookingRequest {
                     .build();
         }
     }
-
 }
