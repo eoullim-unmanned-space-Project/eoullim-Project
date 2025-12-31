@@ -19,7 +19,7 @@
     <ul>
         {{#noticePage.previousPageNumber}}
             <li>
-                <a href="/notices?page={{noticePage.previousPageNumber}}">Previous
+                <a href="/notices?page={{noticePage.previousPageNumber}}">Previous </a>
             </li>
         {{/noticePage.previousPageNumber}}
         {{^noticePage.previousPageNumber}}
@@ -30,13 +30,13 @@
 
         {{#noticePage.pageLinks}}
             <li>
-                <a href="/notices?page={{displayNumber}}&size={{noticePage.size}}">{{displayNumber}}
+                <a href="/notices?page={{displayNumber}}&size={{noticePage.size}}">{{displayNumber}} </a>
             </li>
         {{/noticePage.pageLinks}}
 
         {{#noticePage.nextPageNumber}}
             <li>
-                <a href="/notices?page={{noticePage.nextPageNumber}}">Next
+                <a href="/notices?page={{noticePage.nextPageNumber}}">Next </a>
             </li>
         {{/noticePage.nextPageNumber}}
         {{^noticePage.nextPageNumber}}

@@ -4,15 +4,9 @@
 <div>
     <div>
         <div>
-            <button>공지사항 수정</button>
+            <div>공지사항 수정</div>
             <div>
-                <form>
-                    <div>
-                        <input type="text"
-                               placeholder="Enter name"
-                               name="name"
-                               value="{{notice.name}}">
-                    </div>
+                <form action="/notices/{{notice.id}}/update" method="post">
                     <div>
                         <input type="text"
                                placeholder="Enter title"

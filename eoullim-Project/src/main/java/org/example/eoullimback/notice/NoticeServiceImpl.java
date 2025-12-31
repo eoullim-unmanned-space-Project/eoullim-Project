@@ -79,8 +79,7 @@ public class NoticeServiceImpl implements NoticeService {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
 
-        notice.update(request.getTitle(), request.getContent());
-
+        request.updateEntity(notice);
         return new NoticeResponse.UpdateFormDTO(notice);
     }
 
@@ -88,7 +87,7 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public void delete(Long noticeId, User sessionUser) {
         Notice notice = noticeRepository.findById(noticeId)
-                .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
+                .orElseThrow(() -> new Exception404(ErrorCode.NOTICE_NOT_FOUND));
 
         if (!notice.getUser().getId().equals(sessionUser.getId())) {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
