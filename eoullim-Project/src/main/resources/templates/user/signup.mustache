@@ -34,23 +34,22 @@
                         <label>이메일</label>
                         <div class="input-group">
                             <input type="email" id="email" name="email" placeholder="이메일 주소를 입력해주세요 '@' 포함">
-                            <button type="button" class="btn btn-outline-secondary" onclick="callSendApi()" >인증번호전송</button>
+                            <button type="button" id="sendEmail" onclick="callSendApi()" style="display: block">인증번호전송</button>
                             <span class="input-check"></span>
                         </div>
-                    </div>
 
                     <div class="mb-3" id="code-box" style="display: none">
-                        <label for="">인증번호</label>
                         <div class="input-group">
                             <input type="text" id="code" class="form-control" placeholder="인증번호 6자리" maxlength="6">
-                            <button type="button" class="btn btn-outline-secondary" onclick="callVerifyApi()" >확인</button>
+                            <button type="button" id="code-btn" class="btn btn-outline-secondary" onclick="callVerifyApi()" >확인</button>
                         </div>
                         <!--   인증 결과 메세지 표시 영역 -->
                         <div id="msg" class="form-text"></div>
                     </div>
 
                     <!--    인증 완료 여부 저장 (hidden 필드)    -->
-                    <input type="hidden" id="isEmailVerified" value="false">
+                    <input type="hidden" id="isEmailVerified" name="isEmailVerified" value="false">
+                    </div>
 
                     <div class="label-item">
                         <label>휴대폰 번호</label>
@@ -215,6 +214,7 @@
             if (response.ok) {
                 alert("인증번호가 메일로 전송 되었습니다. 메일을 확인해주세요.");
                 document.querySelector("#code-box").style.display = "block";
+                document.querySelector("#sendEmail").style.display = "none";
             } else {
                 let error = response.json();
                 alert("이메일 전송 실패")
@@ -228,7 +228,7 @@
     async function callVerifyApi() {
 
         let email = document.querySelector("#email").value;
-        let code = document.querySelector("#code").value;
+        let code = document.querySelector("#code").value.trim();
 
         if (!code) {
             alert("인증번호를 입력해주세요.");
@@ -248,12 +248,13 @@
             let msgBox = document.querySelector("#msg");
 
             if (response.ok) {
-
                 msgBox.innerHTML = "<span style='color: green'>인증되었습니다.</span>"
                 document.querySelector("#email").readOnly = true;
+                document.querySelector("#isEmailVerified").value = true;
             } else {
                 msgBox.innerHTML = "<span style='color: red'>인증번호가 틀렸습니다.</span>"
                 document.querySelector("#isEmailVerified").value = false;
+                document.querySelector("#sendNumber").style.display = "block";
             }
         } catch (e) {
             console.log(e);
