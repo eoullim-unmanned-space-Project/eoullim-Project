@@ -10,6 +10,8 @@ public enum ErrorCode {
     // ====
     INVALID_INPUT("잘못된 입력값입니다."),
     MISSING_PARAMETER("비워 둘수 없는 항목입니다."),
+    INVALID_EMAIL_FORMAT("올바른 이메일 형식이 아닙니다."),
+    MISSING_EMAIL("이메일을 입력해주세요."),
     ONLY_FILE_IMG("이미지 파일만 업로드 가능합니다."),
     MAX_FILE_IMG("파일 이미지는 5장 이어야 합니다."),
 
