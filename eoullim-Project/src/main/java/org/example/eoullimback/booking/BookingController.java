@@ -33,13 +33,13 @@ public class BookingController {
         return "/bookig/bookings" + booking.getId();
     }
 
-    /**
-     * 화면 - 예약 화면
-     */ 
-    @GetMapping()
-    public String detailBooking() {
-
-        return "/booking/";
-    }
+//    /**
+//     * 화면 - 예약 화면
+//     */
+//    @GetMapping()
+//    public String detailBooking() {
+//
+//        return "/booking/";
+//    }
 
 }

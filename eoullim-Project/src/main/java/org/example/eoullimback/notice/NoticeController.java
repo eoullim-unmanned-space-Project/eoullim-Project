@@ -18,7 +18,7 @@ public class NoticeController {
 
     private final NoticeServiceImpl noticeService;
 
-    // 공지사항 화면 요청
+    // 공지사항 작성 화면 요청
     // http://localhost:8080/notices/new
     @GetMapping("/notices/new")
     public String createNoticeForm() {
@@ -26,16 +26,17 @@ public class NoticeController {
     }
 
     // 공지사항 작성 요청 기능
-    // http://localhost:8080/notices
-    @PostMapping("/notices")
+    // http://localhost:8080/notices/new
+    @PostMapping("/notices/new")
     public String createNotice(
             HttpSession session,
             @Valid NoticeRequest.CreateDTO request
     ) {
-        User sessionUser = (User) session.getAttribute("sessionSUser");
+//        User sessionUser = (User) session.getAttribute("sessionSUser");
+        User sessionUser = getLoginUserId(session);
         noticeService.save(request, sessionUser);
 
-        return "redirect:/";
+        return "redirect:/notices";
     }
 
     // 공지사항 목록 화면 요청
@@ -59,8 +60,9 @@ public class NoticeController {
     // 공지사항 상세 보기 화면 요청
     // http://localhost:8080/notices/{id}
     @GetMapping("/notices/{id}")
-    public String detailNotice(@PathVariable Long id,
-                                   Model model
+    public String detailNotice(
+            @PathVariable Long id,
+            Model model
     ) {
         model.addAttribute("notice", noticeService.findById(id));
         return "notice/detail";
@@ -68,8 +70,8 @@ public class NoticeController {
 
     // 공지사항 수정 화면 요청
     // http://localhost:8080/notices
-    @PostMapping("/notices/{id}/edit")
-    public String editNoticeForm(@PathVariable Long id,
+    @GetMapping("/notices/{id}/update")
+    public String updateNoticeForm(@PathVariable Long id,
                                  Model model
     ) {
         model.addAttribute("notice", noticeService.findUpdateForm(id));
@@ -78,13 +80,13 @@ public class NoticeController {
 
     // 공지사항 수정 요청 기능
     // http://localhost:8080/notices/{id}
-    @PostMapping("/notices/{id}")
+    @PostMapping("/notices/{id}/update")
     public String updateNotice(@PathVariable Long id,
                                NoticeRequest.UpdateDTO request,
                                HttpSession session
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+        User sessionUser = getLoginUserId(session);
         noticeService.update(id, request, sessionUser);
         return "redirect:/notices/{id}";
     }
@@ -95,8 +97,22 @@ public class NoticeController {
     public String deleteNotice(@PathVariable Long id,
                                HttpSession session
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+        User sessionUser = getLoginUserId(session);
         noticeService.delete(id, sessionUser);
         return "redirect:/notices";
+    }
+
+    // TODO : 유저 더미 (삭제 예정)
+    private User getLoginUserId(HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            User dummyUser = new User();
+            dummyUser.setId(1L);
+            session.setAttribute("sessionUser", dummyUser);
+            return dummyUser;
+        }
+        return sessionUser;
     }
 }
