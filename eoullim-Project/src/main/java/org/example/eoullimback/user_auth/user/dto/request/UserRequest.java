@@ -1,6 +1,8 @@
 package org.example.eoullimback.user_auth.user.dto.request;
 
 import lombok.Data;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception400;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UserRequest {
@@ -19,6 +21,21 @@ public class UserRequest {
                 newDTO.setUserProfile(dto.getUserProfile());
                 newDTO.setUseProfileFileName(fileName);
                 return newDTO;
+        }
+    }
+
+    @Data
+    public static class EmailCheckDTO {
+        private String email;
+        private String code;
+
+        public void validate() {
+            if (email == null || email.trim().isEmpty()) {
+                throw new Exception400(ErrorCode.MISSING_EMAIL);
+            }
+            if (!email.contains("@")) {
+                throw new Exception400(ErrorCode.INVALID_EMAIL_FORMAT);
+            }
         }
     }
 }
