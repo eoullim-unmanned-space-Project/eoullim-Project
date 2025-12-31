@@ -14,7 +14,8 @@ public class TimeSlotScheduler {
 
     private final TimeSlotSchedulerService timeSlotSchedulerService;
 
-    @Scheduled(cron = "0 0 0 1 * *")
+//    @Scheduled(cron = "0 0 0 1 * *")
+    @Scheduled(fixedRate = 50000)
     public void createNextMonthTimeSlot() {
         YearMonth nextMonth = YearMonth.now().plusMonths(1);
 

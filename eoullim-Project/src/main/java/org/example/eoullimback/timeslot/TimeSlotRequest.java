@@ -12,7 +12,7 @@ public class TimeSlotRequest {
     @Data
     public static class CreateDTO {
         @NotBlank(message = "생성하는 날짜는 필수입니다.")
-        String yearMonth;
+        String slotMonth;
 
         @NotBlank(message = "개시 시간은 필수입니다.")
         LocalDateTime startTime;
@@ -29,7 +29,7 @@ public class TimeSlotRequest {
         public TimeSlot toEntity(Room room) {
             return TimeSlot.builder()
                     .room(room)
-                    .yearMonth(yearMonth)
+                    .slotMonth(slotMonth)
                     .startTime(startTime)
                     .endTime(endTime)
                     .capacity(capacity)

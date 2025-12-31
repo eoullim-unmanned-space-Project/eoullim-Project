@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings",
     uniqueConstraints = {
-        @UniqueConstraint(name = "uk_user_roomt_time_slot", columnNames = {"user_id", "room_id", "time_slot_id"})
+        @UniqueConstraint(name = "uk_room_time_slot", columnNames = {"room_id", "time_slot_id"})
     },
     indexes = {
             @Index(
@@ -38,15 +38,15 @@ public class Booking extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_bookings_user"))
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "room_id", nullable = false, foreignKey = @ForeignKey(name = "fk_bookings_room"))
     private Room room;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "time_slot_id", nullable = false)
+    @JoinColumn(name = "time_slot_id", nullable = false, foreignKey = @ForeignKey(name = "fk_bookings_time_slot"))
     private TimeSlot timeSlot;
 
     @Column(nullable = false)

@@ -77,7 +77,7 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
 
                     TimeSlot timeSlot = TimeSlot.builder()
                             .room(room)
-                            .yearMonth(nextMonth.toString())
+                            .slotMonth(nextMonth.toString())
                             .startTime(start)
                             .endTime(end)
                             .capacity(DEFAULT_CAPACITY)

@@ -9,11 +9,7 @@ import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback.timeslot.TimeSlot;
 
 @Entity
-@Table(name = "items",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_items_title", columnNames = "title")
-
-        })
+@Table(name = "items")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item extends BaseTimeEntity {

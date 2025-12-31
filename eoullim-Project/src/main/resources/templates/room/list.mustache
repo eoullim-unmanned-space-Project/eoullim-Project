@@ -59,15 +59,36 @@
                 <input type="text" id="peopleCount" value="1" min="1" readonly>
                 <button type="button" id="plusBtn">+</button>
             </div>
-            <div class="timeslot-container" id="timeslot">
-                <div class="timeslot">11:00~12:00</div>
-                <div class="timeslot">12:00~13:00</div>
-                <div class="timeslot">13:00~14:00</div>
-                <div class="timeslot">14:00~15:00</div>
-                <div class="timeslot">15:00~16:00</div>
-                <div class="timeslot">16:00~17:00</div>
-                <div class="timeslot">17:00~18:00</div>
+            <div class="amount-box">
+                <strong id="amount">0</strong>원
             </div>
+            <div class="timeslot-container" id="timeslot">
+                <div class="timeslot" data-id="1">00:00 ~ 01:00</div>
+                <div class="timeslot" data-id="2">01:00 ~ 02:00</div>
+                <div class="timeslot" data-id="3">02:00 ~ 03:00</div>
+                <div class="timeslot" data-id="4">03:00 ~ 04:00</div>
+                <div class="timeslot" data-id="5">04:00 ~ 05:00</div>
+                <div class="timeslot" data-id="6">05:00 ~ 06:00</div>
+                <div class="timeslot" data-id="7">06:00 ~ 07:00</div>
+                <div class="timeslot" data-id="8">07:00 ~ 08:00</div>
+                <div class="timeslot" data-id="9">08:00 ~ 09:00</div>
+                <div class="timeslot" data-id="10">09:00 ~ 10:00</div>
+                <div class="timeslot" data-id="11">10:00 ~ 11:00</div>
+                <div class="timeslot" data-id="12">11:00 ~ 12:00</div>
+                <div class="timeslot" data-id="13">12:00 ~ 13:00</div>
+                <div class="timeslot" data-id="14">13:00 ~ 14:00</div>
+                <div class="timeslot" data-id="15">14:00 ~ 15:00</div>
+                <div class="timeslot" data-id="16">15:00 ~ 16:00</div>
+                <div class="timeslot" data-id="17">16:00 ~ 17:00</div>
+                <div class="timeslot" data-id="18">17:00 ~ 18:00</div>
+                <div class="timeslot" data-id="19">18:00 ~ 19:00</div>
+                <div class="timeslot" data-id="20">19:00 ~ 20:00</div>
+                <div class="timeslot" data-id="21">20:00 ~ 21:00</div>
+                <div class="timeslot" data-id="22">21:00 ~ 22:00</div>
+                <div class="timeslot" data-id="23">22:00 ~ 23:00</div>
+                <div class="timeslot" data-id="24">23:00 ~ 24:00</div>
+            </div>
+            <input type="hidden" id="roomId" value="1">
             <div class="booking-box">
                 <button id="bookingBtn">예약하기</button>
             </div>
@@ -143,10 +164,7 @@
       } else {
         alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
       }
-
-
     });
-
 
     const slider = document.querySelector('.timeslot-container');
     const slots = slider.querySelectorAll('.timeslot');
@@ -181,12 +199,61 @@
       isDown = false;
     });
 
+    async function calculatePrice(timeSlotIds) {
+        const roomId = document.getElementById('roomId').value;
+
+        try {
+            const response = await fetch("/api/calculate-amount", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    roomId: roomId,
+                    timeSlotIds: timeSlotIds
+                })
+            });
+
+            const result = await response.json();
+            updateBookingButton(result.amount.amount);
+        } catch (error) {
+            console.log("금액 계산에 실패했습니다.", error.message);
+
+            const selectSlots = document.querySelectorAll('.timeslot.selected');
+            selectSlots.forEach(slot => {
+                slot.classList.remove('selected');
+            })
+
+            alert("금액을 불러오는 중 오류가 발생하여 선택이 초기화되었습니다.");
+        }
+    }
+
     slots.forEach(slot => {
       slot.addEventListener('click', () => {
+
         slot.classList.toggle('selected');
+
+        const selectedSlots = document.querySelectorAll('.timeslot.selected');
+
+        const timeSlotIds = Array.from(selectedSlots).map(timeslot => parseInt(timeslot.dataset.timeslotId));
+
+          if (timeSlotIds.length > 0) {
+              calculatePrice(timeSlotIds);
+          } else {
+              updateBookingButton(0);
+          }
       });
     });
 
+    function updateBookingButton(amount) {
+        const totalAmount = document.getElementById('amount');
+
+        if (amount > 0) {
+            totalAmount.innerText = `${amount.toLocaleString()}`;
+        } else {
+            totalAmount.innerText = "0";
+        }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       const maxPeople = 6;

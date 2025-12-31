@@ -4,6 +4,10 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
+SELECT * FROM time_slots;
+SELECT * FROM items;
+SELECT * FROM rooms;
+
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
 DROP TABLE IF EXISTS reviews;
@@ -162,9 +166,9 @@ CREATE TABLE time_slots (
   
   room_id BIGINT NOT NULL COMMENT '방 번호',
   
+  slot_month CHAR(7) NOT NULL COMMENT '생성된 월',
   start_time DATETIME(6) NOT NULL COMMENT '시작시간',
   end_time DATETIME(6) NOT NULL COMMENT '종료시간',
-  `year_month` VARCHAR(7) NOT NULL COMMENT '연-월',
   capacity INT NOT NULL COMMENT '인원 수 지정',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
   
@@ -174,13 +178,11 @@ CREATE TABLE time_slots (
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
   CHECK (status IN('OPEN','CLOSED','CANCELED')),
   
-  UNIQUE KEY `uk_time_slots_room_id` (room_id),
-  UNIQUE KEY `uk_time_slots_start_time` (start_time),
+  UNIQUE KEY `uk_room_slot_month_start_time` (room_id, slot_month, start_time),
   
+  INDEX `idx_time_slots_slot_month` (slot_month),
   INDEX `idx_time_slots_start_time` (start_time),
-  INDEX `idx_time_slots_end_time` (end_time),
-  INDEX `idx_time_slots_year_month` (`year_month`)
-  
+  INDEX `idx_time_slots_end_time` (end_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
 
 CREATE TABLE items (
@@ -200,10 +202,10 @@ CREATE TABLE bookings (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
   user_id BIGINT NOT NULL COMMENT '사용자 ID',
-  room_id BIGINT NOT NULL COMMENT '방 ID',
   time_slot_id BIGINT NOT NULL COMMENT '타임슬롯 ID',
- 
-  item_snapshot_price BIGINT NOT NULL comment '아이템 가격 저장본',
+  room_id BIGINT NOT NULL COMMENT '룸 ID',
+
+  item_snapshot_price BIGINT NOT NULL COMMENT '아이템 가격 저장본',
   
   qty INT NOT NULL COMMENT '인원체크',
   amount BIGINT NOT NULL COMMENT '가격',
@@ -214,11 +216,11 @@ CREATE TABLE bookings (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
-  UNIQUE KEY `uk_user_time_slot_item` (user_id, time_slot_id),
+  UNIQUE KEY `uk_room_time_slot` (room_id, time_slot_id),
   
   CONSTRAINT `fk_bookings_user` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_bookings_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
   CONSTRAINT `fk_bookings_time_slot` FOREIGN KEY (time_slot_id) REFERENCES time_slots(id),
+   CONSTRAINT `fk_bookings_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
   
   CHECK (qty > 0),
   CHECK (status IN('PENDING','CONFIRMED','CANCELED','REFUNDED')),
@@ -260,6 +262,7 @@ CREATE TABLE payments (
   CONSTRAINT `fk_payments_user` FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT `fk_payments_booking` FOREIGN KEY (booking_id) REFERENCES bookings(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='결제 테이블';
+
 CREATE TABLE payment_refunds (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
