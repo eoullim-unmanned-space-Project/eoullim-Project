@@ -35,4 +35,24 @@ public class BookingApiController {
 
         return ResponseEntity.ok().body(Map.of("amount", amount));
     }
+
+    /**
+     * 기능 - 부킹 생성
+     */
+    @PostMapping("/api/bookings")
+    public ResponseEntity<?> saveBooking(
+            HttpSession session,
+            @RequestBody BookingRequest.createDTO createDTO
+    ) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            throw new Exception401(ErrorCode.ACCESS_DENIED);
+        }
+
+        String bookingCode = bookingService.saveBooking(sessionUser.getId(), createDTO);
+
+        return ResponseEntity.ok().body(Map.of("bookingCode", bookingCode));
+    }
 }

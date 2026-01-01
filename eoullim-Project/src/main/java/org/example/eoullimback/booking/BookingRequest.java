@@ -15,37 +15,31 @@ public class BookingRequest {
 
     @Data
     public static class CalculateAmountDTO {
-        Long roomId;
-        List<Long> timeSlotIds;
+        private Long roomId;
+        private List<Long> timeSlotIds;
     }
 
     @Data
     public static class createDTO {
-        @NotNull(message = "스냅샷 가격은 공백일 수 없습니다.")
-        Long itemSnapshotPrice;
+        private Long roomId;
+
+        private List<Long> timeSlotIds;
 
         @Min(value = 1, message = "인원은 최소 1명 이상입니다.")
-        int qty;
+        private int qty;
 
         @Min(value = 100, message = "가격은 최소 100원 이상입니다.")
-        private Long amount;
+        private Long totalAmount;
 
-        @NotNull(message = "예약한 달은 필수입니다.")
-        private LocalDate bookingDate;
-
-        @NotNull(message = "상태값은 필수입니다.")
-        private BookingStatus status;
-
-        public Booking toEntity(User user, Room room, TimeSlot timeSlot) {
+        public Booking toEntity(User user, Room room, TimeSlot timeSlot, String bookingCode, Long perSlotAmount) {
             return Booking.builder()
                     .user(user)
                     .room(room)
                     .timeSlot(timeSlot)
-                    .itemSnapshotPrice(itemSnapshotPrice)
+                    .bookingCode(bookingCode)
+                    .itemSnapshotPrice(totalAmount)
                     .qty(qty)
-                    .amount(amount)
-                    .bookingDate(bookingDate)
-                    .status(status)
+                    .amount(perSlotAmount)
                     .build();
         }
     }

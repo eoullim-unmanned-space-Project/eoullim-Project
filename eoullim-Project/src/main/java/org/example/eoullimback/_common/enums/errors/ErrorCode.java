@@ -14,6 +14,7 @@ public enum ErrorCode {
     MISSING_EMAIL("이메일을 입력해주세요."),
     ONLY_FILE_IMG("이미지 파일만 업로드 가능합니다."),
     MAX_FILE_IMG("파일 이미지는 5장 이어야 합니다."),
+    ALREADY_BOOKED_TIME_SLOT("이미 예약된 타임슬롯입니다."),
 
     // ====
     // 401 Unauthorized
@@ -43,6 +44,7 @@ public enum ErrorCode {
     NOTICE_NOT_FOUND("존재하지 않는 공지사항 입니다."),
     REVIEW_NOT_FOUND("리뷰가 존재하지 않습니다."),
     ROOM_STATE_NOT_FOUND("OPEN상태인 방이 존재하지 않습니다."),
+    BOOKING_NOT_FOUND("부킹 내역이 존재하지 않습니다."),
 
     // ====
     // 409 Conflict
