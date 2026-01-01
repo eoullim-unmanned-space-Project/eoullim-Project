@@ -215,7 +215,11 @@
             });
 
             const result = await response.json();
-            updateBookingButton(result.amount.amount);
+            const amount = result.amount.amount;
+
+            updateBookingButton(amount);
+
+            return amount;
         } catch (error) {
             console.log("금액 계산에 실패했습니다.", error.message);
 
@@ -286,6 +290,55 @@
 
       minusBtn.addEventListener('click', updateButtons);
       plusBtn.addEventListener('click', updateButtons);
+    });
+
+
+     document.getElementById('bookingBtn').addEventListener('click', async () => {
+
+        const roomId = Number(document.getElementById('roomId').value);
+        const qty = Number(document.getElementById('peopleCount').value);
+        const selectedSlots = document.querySelectorAll('.timeslot.selected');
+        const timeSlotIds = Array.from(selectedSlots)
+                            .map(timeslot => parseInt(timeslot.dataset.id));
+
+        alert(peopleCount);
+
+        try {
+
+        if(timeSlotIds.length === 0) {
+            alert("타임슬롯을 선택해주세요.");
+            return;
+        }
+
+        const totalAmount = await calculatePrice(timeSlotIds);
+
+        const response = await fetch("/api/bookings", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify(
+             {
+                roomId: roomId,
+                qty: qty,
+                timeSlotIds: timeSlotIds,
+                totalAmount: totalAmount
+            })
+        });
+
+        if(!response.ok) {
+           const error = await response.json();
+           throw new Error(error.message || "예약 실패");
+        }
+
+        const data = await response.json();
+
+        alert("예약이 완료되었습니다. 결제페이지로 넘어갑니다.");
+        location.href = `/booking/detail?code=${data.bookingCode}`;
+
+        } catch (error) {
+            alert(error.message);
+        }
     });
 
 </script>

@@ -7,6 +7,7 @@ USE eoullim_db;
 SELECT * FROM time_slots;
 SELECT * FROM items;
 SELECT * FROM rooms;
+SELECT * FROM users;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
@@ -373,10 +374,10 @@ VALUES
 ('조용한 공부방 부산', '부산광역시 남구 대연동 21-7', 35.1363, 129.0883, 'STUDY', null, NOW(), NOW());
 SELECT * FROM places;
 
-INSERT INTO rooms (place_id, name, content, default_price, status) VALUES
-(1, '스터디룸 A', '조용한 소규모 스터디룸', 20000, 'OPEN'),
-(1, '스터디룸 B', '화이트보드가 있는 스터디룸', 25000, 'OPEN'),
-(2, '회의실 1', '프로젝터가 있는 회의실', 50000, 'CLOSED'),
-(2, '회의실 2', '대형 테이블 회의실', 60000, 'CLOSED'),
-(3, '촬영 스튜디오', '조명과 배경지가 있는 스튜디오', 80000, 'OPEN');
-SELECT * FROM places;
+-- places 테이블에 ID 1, 2인 장소가 먼저 존재해야 실행 가능합니다.
+INSERT INTO rooms (place_id, name, content, max_capacity, default_price, status) VALUES 
+(1, 'A 스터디룸', '4인 기준 집중하기 좋은 조용한 공간입니다.', 4, 15000, 'OPEN'),
+(1, 'B 세미나실', '최대 10인 수용 가능한 화이트보드 완비 공간.', 10, 30000, 'OPEN'),
+(2, 'VIP 비즈니스룸', '프라이빗한 미팅을 위한 최고급 소파와 방음 시설.', 6, 50000, 'OPEN'),
+(2, '오픈 코워킹 스페이스', '자유로운 분위기에서 협업할 수 있는 넓은 공간.', 20, 10000, 'OPEN'),
+(1, 'C 유튜브 스튜디오', '영상 촬영 및 편집이 가능한 조명 시설 완비.', 3, 25000, 'CLOSED');

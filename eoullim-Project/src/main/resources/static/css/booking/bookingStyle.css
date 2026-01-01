@@ -1,0 +1,143 @@
+:root {
+  --primary: #4f46e5;
+  --text-main: #111827;
+  --text-sub: #64748b;
+  --bg-gray: #f8fafc;
+  --white: #ffffff;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 8px rgba(0, 0, 0, 0.02);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg-gray);
+  font-family: 'Pretendard', sans-serif;
+  color: var(--text-main);
+  padding: 60px 20px;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* 상단 메인 비주얼 카드 */
+.hero-card {
+  background: var(--white);
+  border-radius: 32px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 30px;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.hero-img {
+  width: 100%;
+  height: 350px;
+  background-color: #eee;
+  background-image: url('https://plus.unsplash.com/premium_photo-1711132340351-6c3be16d08d8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzd8fCVFQSVCMSVCNCVFQiVBQyVCQ3xlbnwwfHwwfHx8MA%3D%3D');
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-body {
+  padding: 32px 40px;
+  position: relative;
+}
+
+.status-badge {
+  position: absolute;
+  top: -20px; right: 40px;
+  background: var(--primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.hero-body h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
+.hero-body p { font-size: 18px; color: var(--text-sub); }
+
+/* 그리드 레이아웃 */
+.grid-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 30px;
+}
+
+.card-section {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 30px;
+}
+
+.section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 24px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* 룸 정보 (이미지 가로 배치) */
+.room-container {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.room-thumb {
+  width: 140px;
+  height: 140px;
+  border-radius: 16px;
+  object-fit: cover;
+  background: #f1f5f9;
+  flex-shrink: 0;
+}
+
+.room-info h3 { font-size: 20px; margin-bottom: 8px; font-weight: 700; }
+.room-info p { font-size: 15px; color: var(--text-sub); line-height: 1.6; }
+
+/* 타임슬롯 */
+.slot-list { display: flex; flex-direction: column; gap: 10px; }
+.slot-item {
+  padding: 16px 20px;
+  background: var(--bg-gray);
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex; justify-content: space-between;
+}
+
+/* 요약 정보 사이드바 */
+.summary-item { display: flex; justify-content: space-between; margin-bottom: 18px; font-size: 15px; }
+.summary-item .label { color: var(--text-sub); }
+.summary-item .val { font-weight: 600; }
+
+.total-row {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.total-row .total-val { font-size: 26px; font-weight: 900; color: var(--primary); }
+
+/* 버튼 그룹 */
+.btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 30px; }
+.btn {
+  padding: 18px; border-radius: 16px; border: none; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-secondary { background: #f1f5f9; color: var(--text-sub); }
+.btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
