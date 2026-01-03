@@ -1,73 +1,57 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/qaa/qaa.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div>
-    <div>
-        <a href="/qaas/new">Q&A 작성</a>
+<div class="qaa-content">
+    <div class="qaa-btn-group" style="justify-content: flex-end">
+        <a href="/qaas/new" class="qaa-btn qaa-btn-primary">Q&A 작성</a>
     </div>
 
     {{#qaaPage.content}}
-        <div>
-            <div>
-                <h4>{{title}}</h4>
-                <p>
-                    작성자 : {{name}}
-                    | 작성일 : {{createdAt}}
-                    | 조회수 : {{viewCount}}
-                </p>
-                <a href="/qaas/{{id}}">상세보기</a>
-            </div>
+        <div class="qaa-list-item">
+            <h4>{{title}}</h4>
+            <p>
+                작성자 : {{name}}
+                | 작성일 : {{createdAt}}
+                | 조회수 : {{viewCount}}
+            </p>
+            <a href="/qaas/{{id}}">상세보기</a>
         </div>
     {{/qaaPage.content}}
 
-    <ul>
+    <div class="pagination">
         {{#qaaPage.previousPageNumber}}
-            <li>
-                <a href="/qaas?page={{qaaPage.previousPageNumber}}" >Previous </a>
-            </li>
+            <a href="/qaas?page={{qaaPage.previousPageNumber}}" >Previous </a>
         {{/qaaPage.previousPageNumber}}
         {{^qaaPage.previousPageNumber}}
-            <li>
-                <a href="#">Previous</a>
-            </li>
+            <a href="#">Previous</a>
         {{/qaaPage.previousPageNumber}}
 
         {{#qaaPage.pageLinks}}
-            <li>
-                <a href="/qaas?page={{displayNumber}}&size={{qaaPage.size}}" >{{displayNumber}} </a>
-            </li>
+            <a href="/qaas?page={{displayNumber}}&size={{qaaPage.size}}" >{{displayNumber}} </a>
         {{/qaaPage.pageLinks}}
 
         {{#qaaPage.nextPageNumber}}
-            <li>
-                <a href="/qaas?page={{qaaPage.nextPageNumber}}" >Next </a>
-            </li>
+            <a href="/qaas?page={{qaaPage.nextPageNumber}}" >Next </a>
         {{/qaaPage.nextPageNumber}}
         {{^qaaPage.nextPageNumber}}
-            <li>
-                <a href="#">Next</a>
-            </li>
+            <a href="#">Next</a>
         {{/qaaPage.nextPageNumber}}
-    </ul>
+    </div>
 
-    <div>
-        <div>
-            <form action="/qaas" method="get">
-                <div>
-                    <label>
-                        <input type="text" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
-                    </label>
+    <div class="qaa-card">
+        <form class="qaa-form" action="/qaas" method="get">
+            <label>
+                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
+            </label>
+            <div>
+                <input type="hidden" name="page" value="1">
+                <input type="hidden" name="size" value="{{qaaPage.size}}">
+                <div class="qaa-btn-group">
+                    <button class="qaa-btn qaa-btn-primary" type="submit">검색</button>
+                    <a href="/qaas" class="qaa-btn qaa-btn-secondary">초기화</a>
                 </div>
-                <div>
-                    <input type="hidden" name="page" value="1">
-                    <input type="hidden" name="size" value="{{qaaPage.size}}">
-                    <button type="submit">검색</button>
-                </div>
-                <div>
-                    <a href="/qaas">초기화</a>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 <script>
