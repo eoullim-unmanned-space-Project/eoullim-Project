@@ -1,79 +1,84 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/qaa/qaa.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-    <div>
-        <div>
+<div class="qaa-container">
+    <div class="qaa-card">
+        <div class="qaa-meta">
             <b>작성자</b> : {{qaa.name}}
             <b>조회수</b> : {{qaa.viewCount}}
         </div>
 
-        <div>
+        <div class="qaa-title">
             <h2><b>{{qaa.title}}</b></h2>
-            <hr />
-            <div>
-                {{qaa.content}}
-            </div>
         </div>
 
-            <div>
-                <form action="/qaas/{{qaa.id}}/update" method="get">
-                    <button>수정</button>
-                </form>
-                <form action="/qaas/{{qaa.id}}/delete" method="post">
-                    <button>삭제</button>
-                </form>
-            </div>
+        <div class="qaa-btn-group">
+            <form action="/qaas/{{qaa.id}}/update" method="get">
+                <button class="qaa-btn qaa-btn-secondary">수정</button>
+            </form>
+            <form action="/qaas/{{qaa.id}}/delete" method="post">
+                <button class="qaa-btn qaa-btn-danger">삭제</button>
+            </form>
+        </div>
 
-        <div>
+        <div class="qaa-content">
+            {{qaa.content}}
+        </div>
+
+        <div class="qaa-card">
             <form action="/qaa/{qaaId}/comments/new" method="post">
                 <input type="hidden" name="qaaId" value="{{qaa.id}}">
                 <label>
                     <textarea rows="2" name="content" placeholder="댓글을 입력하세요."></textarea>
                 </label>
                 <div>
-                    <button type="submit">댓글 등록</button>
+                    <button class="qaa-btn qaa-btn-primary" type="submit">댓글 등록</button>
                 </div>
             </form>
         </div>
 
         {{#commentList}}
-            <div>
-                <div>
-                    <div>{{name}}</div>
-                    <small>{{createdAt}}</small>
+            <div class="comment-box">
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div>{{name}}</div>
+                        <small>{{createdAt}}</small>
 
-                    {{#isEditing}}
-                        {{#isOwner}}
-                            <form action="/comments/{{id}}/update" method="post">
-                                <textarea name="content">{{content}}</textarea>
-                                <button type="submit">수정 완료</button>
-                            </form>
-                        {{/isOwner}}
-                    {{/isEditing}}
+                        {{#isEditing}}
+                            {{#isOwner}}
+                                <form class="qaa-form" action="/comments/{{id}}/update" method="post">
+                                    <textarea name="content">{{content}}</textarea>
+                                    <button class="qaa-btn qaa-btn-primary" type="submit">수정 완료</button>
+                                </form>
+                            {{/isOwner}}
+                        {{/isEditing}}
 
-                    {{^isEditing}}
-                    <div>
-                        <div>
-                            {{content}}
-                        </div>
-                        {{#isOwner}}
-                            <form action="/comments/{{id}}/update" method="get">
-                                <button type="submit">수정</button>
-                            </form>
-                            <form action="/comments/{{id}}/delete" method="post">
-                                <button type="submit">삭제</button>
-                            </form>
-                        {{/isOwner}}
+                        {{^isEditing}}
+                            <div class="comment-content">
+                                {{content}}
+                            </div>
+
+                            {{#isOwner}}
+                                <div class="qaa-btn-group">
+                                    <form action="/comments/{{id}}/update" method="get">
+                                        <button class="qaa-btn qaa-btn-secondary" type="submit">수정</button>
+                                    </form>
+                                    <form action="/comments/{{id}}/delete" method="post">
+                                        <button class="qaa-btn qaa-btn-danger" type="submit">삭제</button>
+                                    </form>
+                                </div>
+                            {{/isOwner}}
+                        {{/isEditing}}
                     </div>
-                    {{/isEditing}}
                 </div>
             </div>
         {{/commentList}}
 
         {{^commentList}}
-            <div>
+            <div class="qaa-card">
                 작성된 댓글이 없습니다.
             </div>
         {{/commentList}}
     </div>
+</div>
 {{> layout/footer}}

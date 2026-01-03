@@ -1,0 +1,234 @@
+/* =========================
+   BASE
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f1f5f9;
+    font-family: 'Pretendard', sans-serif;
+    color: var(--text-main);
+}
+
+/* =========================
+   Q&A COMMON STYLE
+========================= */
+
+.qaa-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 카드 */
+.qaa-card {
+    background: #f8fafc;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 30px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* 타이틀 */
+.qaa-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+}
+
+/* 메타 정보 */
+.qaa-meta {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    color: var(--text-sub);
+    margin-bottom: 16px;
+}
+
+/* 본문 */
+.qaa-content {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-main);
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.qaa-form input[type="text"],
+.qaa-form textarea {
+    width: 100%;
+    padding: 16px 18px;
+    border-radius: 14px;
+    border: 1px solid #d1d5db;
+    font-size: 15px;
+    margin-bottom: 16px;
+    background: var(--white);
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+.qaa-form input:focus,
+.qaa-form textarea:focus {
+    outline: none;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.qaa-form textarea {
+    resize: vertical;
+    min-height: 180px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.qaa-btn {
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.qaa-btn-primary {
+    background: #4f46e5;
+    color: white;
+}
+
+.qaa-btn-secondary {
+    background: #e5e7eb;
+    color: var(--text-sub);
+}
+
+.qaa-btn-danger {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.qaa-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+/* 버튼 그룹 */
+.qaa-btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+/* =========================
+   Q&A LIST
+========================= */
+
+.qaa-list-item {
+    padding: 24px;
+    border-radius: 20px;
+    background: #f8fafc;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 20px;
+}
+
+.qaa-list-item h4 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.qaa-list-item p {
+    font-size: 14px;
+    color: var(--text-sub);
+}
+
+.qaa-list-item a {
+    display: inline-block;
+    margin-top: 10px;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* =========================
+   COMMENT
+========================= */
+
+.comment-box {
+    background: #e2e8f0;
+    padding: 20px;
+    border-radius: 18px;
+    margin-top: 20px;
+}
+
+.comment-item {
+    padding: 16px;
+    border-radius: 14px;
+    background: #f8fafc;
+    margin-bottom: 12px;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-sub);
+    margin-bottom: 6px;
+}
+
+.comment-content {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-main);
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+}
+
+.pagination a {
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #f8fafc;
+    box-shadow: var(--card-shadow);
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.pagination a:hover {
+    background: var(--primary);
+    color: white;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
