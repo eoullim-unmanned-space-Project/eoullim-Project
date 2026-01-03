@@ -1,69 +1,53 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/notice/notice.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div>
-    <div>
-        <a href="/notices/new">공지사항 작성</a>
+<div class="notice-content">
+    <div class="notice-btn-group" style="justify-content: flex-end">
+        <a href="/notices/new" class="notice-btn notice-btn-primary">공지사항 작성</a>
     </div>
 
     {{#noticePage.content}}
-        <div>
-            <div>
-                <h4>{{title}}</h4>
-                <p>작성자 : {{name}} | 작성일 : {{createdAt}}</p>
-                <a href="/notices/{{id}}">상세보기</a>
-            </div>
+        <div class="notice-list-item">
+            <h4>{{title}}</h4>
+            <p>작성자 : {{name}} | 작성일 : {{createdAt}}</p>
+            <a href="/notices/{{id}}">상세보기</a>
         </div>
     {{/noticePage.content}}
 
-    <ul>
+    <div class="pagination">
         {{#noticePage.previousPageNumber}}
-            <li>
-                <a href="/notices?page={{noticePage.previousPageNumber}}">Previous </a>
-            </li>
+            <a href="/notices?page={{noticePage.previousPageNumber}}">Previous </a>
         {{/noticePage.previousPageNumber}}
         {{^noticePage.previousPageNumber}}
-            <li>
-                <a href="#">Previous</a>
-            </li>
+            <a href="#">Previous</a>
         {{/noticePage.previousPageNumber}}
 
         {{#noticePage.pageLinks}}
-            <li>
-                <a href="/notices?page={{displayNumber}}&size={{noticePage.size}}">{{displayNumber}} </a>
-            </li>
+            <a href="/notices?page={{displayNumber}}&size={{noticePage.size}}">{{displayNumber}} </a>
         {{/noticePage.pageLinks}}
 
         {{#noticePage.nextPageNumber}}
-            <li>
-                <a href="/notices?page={{noticePage.nextPageNumber}}">Next </a>
-            </li>
+            <a href="/notices?page={{noticePage.nextPageNumber}}">Next </a>
         {{/noticePage.nextPageNumber}}
         {{^noticePage.nextPageNumber}}
-            <li>
-                <a href="#">Next</a>
-            </li>
+            <a href="#">Next</a>
         {{/noticePage.nextPageNumber}}
-    </ul>
+    </div>
 
-    <div>
-        <div>
-            <form action="/notices" method="get">
-                <div>
-                    <label>
-                        <input type="text" name="keyword" value="{{#keyword}}{{keyword}}{{/keyword}}">
-                    </label>
+    <div class="notice-card">
+        <form class="notice-form" action="/notices" method="get">
+            <label>
+                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
+            </label>
+            <div>
+                <input type="hidden" name="page" value="1">
+                <input type="hidden" name="size" value="{{noticePage.size}}">
+                <div class="notice-btn-group">
+                    <button class="notice-btn notice-btn-primary" type="submit">검색</button>
+                    <a href="/notices" class="notice-btn notice-btn-secondary">초기화</a>
                 </div>
-                <div class="col-md-2">
-                    <input type="hidden" name="page" value="1">
-                    <input type="hidden" name="size" value="{{noticePage.size}}">
-                    <button type="submit">검색</button>
-                </div>
-                <div>
-                    <a href="/notices">초기화</a>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
 {{> layout/footer}}
