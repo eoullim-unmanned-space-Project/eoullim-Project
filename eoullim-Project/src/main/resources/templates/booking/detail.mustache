@@ -63,17 +63,114 @@
                         <span style="font-weight: 700; font-size: 15px;">총 결제 금액</span>
                         <span>{{amount}}원</span>
                     </div>
-
                     <div class="btn-group">
-                        <button class="btn btn-primary">결제하기</button>
+                        <button class="btn btn-primary" id="paymentBtn">결제하기</button>
                         <button class="btn btn-secondary">취소하기</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div id="payment-root"
+             data-booking-code="{{bookingCode}}"
+             data-room-name="{{roomName}}"
+        >
+        </div>
+        </div>
     {{/booking}}
+
+<div id="user-root"
+     data-user-name="{{user.name}}"
+     data-user-email="{{user.email}}"
+>
+
 </div>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+         // 1. 초기 설정 및 데이터 추출
+         const channelKey = 'channel-key-20a2905a-5dbf-4f2d-a466-013da8c5e67c';
+
+         // 데이터가 없을 경우를 대비해 안전하게 요소 확인
+         const paymentRoot = document.getElementById('payment-root');
+         const userRoot = document.getElementById('user-root');
+
+         if (!paymentRoot || !userRoot) {
+             console.error("필요한 데이터 태그(payment-root 또는 user-root)를 찾을 수 없습니다.");
+             return;
+         }
+
+         const bookingCode = paymentRoot.dataset.bookingCode;
+         const roomName = paymentRoot.dataset.roomName;
+         const email = userRoot.dataset.email;
+         const phone = userRoot.dataset.phone;
+         const name = userRoot.dataset.name;
+
+         const paymentBtn = document.getElementById('paymentBtn');
+
+         paymentBtn.addEventListener('click', async () => {
+             if (!confirm("결제를 원하시면 확인 버튼을 눌러주세요")) {
+                 return;
+             }
+
+             try {
+                 // 3. 서버에 결제 준비 요청 (사전 검증용)
+                 const paymentKeyResponse = await fetch("/api/payment/prepare", {
+                     method: "POST",
+                     headers: {
+                         "Content-Type": "application/json"
+                     },
+                     body: JSON.stringify({ bookingCode: bookingCode })
+                 });
+
+                 if (!paymentKeyResponse.ok) {
+                     throw new Error("결제 준비 서버 통신 실패");
+                 }
+
+                 const data = await paymentKeyResponse.json();
+                 console.log("서버 응답 데이터:", data);
+
+                 // 4. 포트원 결제 실행
+                 const { IMP } = window;
+                 IMP.init('imp42133684');
+
+                 IMP.request_pay({
+                     channelKey: channelKey,
+                     pay_method: "card",
+                     merchant_uid: data.paymentId,
+                     name: roomName,
+                     amount: data.totalAmount,
+                     buyer_email: email,
+                     buyer_name: name,
+                     buyer_tel: phone,
+                     m_redirect_url: window.location.href
+                 }, async (response) => {
+
+                     if (response.error_code != null) {
+                        return alert(`결제에 실패했습니다. 에러 내용:" ${response.error.msg}`);
+                     }
+
+                     const notified = await fetch("/api/payment/complete", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            imp_uid: response.imp_uid,
+                            merchant_uid: response.merchant_uid
+                        })
+                     });
+
+                 });
+
+             } catch (error) {
+                 console.error("결제 오류:", error);
+                 alert("결제 진행 중 오류가 발생했습니다.");
+             }
+         }); // paymentBtn 이벤트 끝
+
+     }); // DOMContentLoaded 끝
+</script>
 
 </body>
-
 {{> layout/footer}}
