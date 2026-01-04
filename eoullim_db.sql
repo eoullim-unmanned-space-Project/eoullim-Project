@@ -8,6 +8,12 @@ SELECT * FROM time_slots;
 SELECT * FROM items;
 SELECT * FROM rooms;
 SELECT * FROM users;
+SELECT * FROM bookings;
+SELECT * FROM payments;
+
+
+DELETE FROM payments WHERE id =1;
+DELETE FROM bookings WHERE id = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
@@ -207,9 +213,10 @@ CREATE TABLE bookings (
   room_id BIGINT NOT NULL COMMENT '룸 ID',
 
   item_snapshot_price BIGINT NOT NULL COMMENT '아이템 가격 저장본',
-  
+	
   qty INT NOT NULL COMMENT '인원체크',
   amount BIGINT NOT NULL COMMENT '가격',
+  booking_code VARCHAR(100) NOT NULL COMMENT'예약 코드',
   booking_date DATE NOT NULL COMMENT '예약 날짜',
   cancelled_at DATETIME(6) NULL COMMENT '취소일', 
   status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '상태',
@@ -238,10 +245,10 @@ CREATE TABLE payments (
   
   order_id VARCHAR(100) NOT NULL COMMENT '주문 코드 ID',
   payment_key VARCHAR(100) NOT NULL COMMENT '결제 키 (PG 또는 모의 PG 트랜잭션 키)',
+  imp_uid VARCHAR(100) NULL COMMENT '포트원 발급 키',
   amount BIGINT NOT NULL COMMENT '결제 금액(포인트)',
   method VARCHAR(30) NOT NULL COMMENT '결제 수단 (KAKAO_PAY, TOSS_PAY등)',
   status VARCHAR(30) NOT NULL COMMENT '결제 상태',
-  product_code VARCHAR(50) NOT NULL COMMENT '상품 코드',
   product_name VARCHAR(100) NOT NULL COMMENT '상품 이름',
   failure_code VARCHAR(50) NULL COMMENT '결제 실패 코드',
   failure_message VARCHAR(255) NULL COMMENT '결제 실패 사유',
@@ -254,7 +261,6 @@ CREATE TABLE payments (
   
   CHECK (status IN('READY','SUCCESS','FAILED','CANCELLED','REFUNDED')),
   
-  UNIQUE KEY `uk_payments_booking_id` (booking_id),
   UNIQUE KEY `uk_payments_payment_key` (payment_key),
   
   INDEX `idx_payments_user_id` (user_id),

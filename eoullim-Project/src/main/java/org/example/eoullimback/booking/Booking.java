@@ -97,13 +97,18 @@ public class Booking extends BaseTimeEntity {
         this.status = (status != null) ? status : BookingStatus.PENDING;
     }
 
-    public void markCanceled() {
+    public void changeSuccess() {
+        this.status = BookingStatus.CONFIRMED;
+    }
+
+    public void changeCanceled() {
         if (this.status != BookingStatus.CANCELED && this.status != BookingStatus.REFUNDED ) {
             this.cancelledAt = LocalDateTime.now();
             this.status = BookingStatus.CANCELED;
         }
     }
-    public void markRefund() {
+
+    public void changeRefund() {
         if (this.status != BookingStatus.CANCELED && this.status != BookingStatus.REFUNDED) {
             this.cancelledAt = LocalDateTime.now();
             this.status = BookingStatus.REFUNDED;

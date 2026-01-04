@@ -22,8 +22,6 @@ public class BookingController {
     @GetMapping("/booking/detail")
     public String detailBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
 
-        System.out.println(bookingCode);
-
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         if (sessionUser == null) {
@@ -32,8 +30,7 @@ public class BookingController {
 
         BookingResponse.DetailDTO booking = bookingService.detailBooking(sessionUser.getId(), bookingCode);
 
-        System.out.println(booking);
-
+        model.addAttribute("user", sessionUser);
         model.addAttribute("booking", booking);
 
         return "booking/detail";

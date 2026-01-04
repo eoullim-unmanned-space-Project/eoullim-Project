@@ -23,4 +23,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             AND u.id = :userId
             """)
     Optional<List<Booking>> findDetailByBookingCodeAndUser(@Param("userId") Long id, @Param("bookingCode") String bookingCode);
+
+    Optional<List<Booking>> findAllByBookingCode(String bookingCode);
 }

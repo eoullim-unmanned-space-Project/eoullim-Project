@@ -1,13 +1,9 @@
 package org.example.eoullimback.booking;
 
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Min;
 import lombok.Data;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
-import org.example.eoullimback.room.Room;
-import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
-import org.example.eoullimback.user_auth.user.User;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
