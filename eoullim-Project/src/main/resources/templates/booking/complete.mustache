@@ -1,47 +1,63 @@
 {{> layout/header}}
 
 <link rel="stylesheet" href="/css/booking/bookingSuccess.css">
+<body>
+    {{#booking}}
+    <div class="container">
+        <div class="success-container">
+            <span class="success-icon">🎉</span>
+            <h2 style="font-weight: 800; margin-bottom: 10px;">결제 완료!</h2>
+            <p style="color: #666; line-height: 1.6;">
+                예약이 성공적으로 확정되었습니다.<br>
+                어울림 대여공간을 이용해주셔서 감사합니다.
+            </p>
 
-<div class="container">
-    <div class="success-container">
-        <span class="success-icon">🎉</span>
-        <h2 style="font-weight: 800; margin-bottom: 10px;">결제 완료!</h2>
-        <p style="color: #666; line-height: 1.6;">
-            예약이 성공적으로 확정되었습니다.<br>
-            어울림 대여공간을 이용해주셔서 감사합니다.
-        </p>
+            <div class="info-box">
+                <div class="info-row">
+                    <span class="info-label">예약코드</span>
+                    <span class="info-value">{{bookingCode}}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">결제금액</span>
+                    <span class="info-value" id="price">{{amount}}원</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">인원</span>
+                    <span class="info-value">{{qty}}명</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">장소</span>
+                    <span class="info-value">장소 : [{{placeName}}] - 공간 : [{{roomName}}]</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">예약시간</span>
+                    <span class="info-value"></span>
+                </div>
+                <div class="email-alert">
+                    📧 입장용 <strong>QR코드</strong>를 이메일로 발송했습니다.
+                </div>
+            </div>
 
-        <div class="info-box">
-            <div class="info-row">
-                <span class="info-label">예약코드</span>
-                <span class="info-value"></span>
+            <div class="button-group">
+                <a href="/user/bookings" class="custom-btn btn-fill">내 예약 확인하기</a>
+                <a href="/main/main" class="custom-btn btn-outline">홈으로 돌아가기</a>
             </div>
-            <div class="info-row">
-                <span class="info-label">결제금액</span>
-                <span class="info-value"></span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">인원</span>
-                <span class="info-value"></span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">인원</span>
-                <span class="info-value">장소 - 공간</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">대여시간</span>
-                <span class="info-value">장소 - 공간</span>
-            </div>
-            <div class="email-alert">
-                📧 입장용 <strong>QR코드</strong>를 {{user.email}}로 발송했습니다.
-            </div>
-        </div>
-
-        <div class="button-group">
-            <a href="/user/bookings" class="custom-btn btn-fill">내 예약 확인하기</a>
-            <a href="/" class="custom-btn btn-outline">홈으로 돌아가기</a>
         </div>
     </div>
-</div>
+    {{/booking}}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const priceEl = document.querySelector('#price');
+
+            if(priceEl) {
+                const price = parseInt(priceEl.innerText);
+                priceEl.innerText = price.toLocaleString() + '원';
+            }
+        });
+    </script>
+</body>
 
 {{> layout/footer}}
+
+

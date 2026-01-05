@@ -76,14 +76,20 @@
              data-room-name="{{roomName}}"
         >
         </div>
+        <div id="room-root"
+             data-room-id="{{roomId}}"
+        >
         </div>
     {{/booking}}
+
+
+
+</div>
 
 <div id="user-root"
      data-user-name="{{user.name}}"
      data-user-email="{{user.email}}"
 >
-
 </div>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script>
@@ -94,6 +100,7 @@
          // 데이터가 없을 경우를 대비해 안전하게 요소 확인
          const paymentRoot = document.getElementById('payment-root');
          const userRoot = document.getElementById('user-root');
+         const roomRoot = document.getElementById('room-root');
 
          if (!paymentRoot || !userRoot) {
              console.error("필요한 데이터 태그(payment-root 또는 user-root)를 찾을 수 없습니다.");
@@ -105,6 +112,7 @@
          const email = userRoot.dataset.email;
          const phone = userRoot.dataset.phone;
          const name = userRoot.dataset.name;
+         const roomId = roomRoot.dataset.roomId;
 
          const paymentBtn = document.getElementById('paymentBtn');
 
@@ -146,8 +154,9 @@
                      m_redirect_url: window.location.href
                  }, async (response) => {
 
-                     if (response.error_code != null) {
-                        return alert(`결제에 실패했습니다. 에러 내용:" ${response.error.msg}`);
+                     if (!response.ok) {
+                          alert("결제를 취소 하였습니다.");
+                         location.href  = `/place/${roomId}/room`
                      }
 
                      const notified = await fetch("/api/payment/complete", {
@@ -161,14 +170,15 @@
                         })
                      });
 
-                     if (notified.ok) {
-                         alert(bookingCode);
-                         alert(`결제가 완료되었습니다.\n결제된 금액:${data.totalAmount}`)
-                         location.href  = `/booking/complete?code=${bookingCode}`;
-                     } else {
-                         alert("결제 실패");
-                     }
+                     const resData = await notified.json();
 
+                     if (notified.ok) {
+                         alert(`${resData.message}\n결제완료 페이지로 이동합니다.`);
+                         location.href  = `/booking/complete?code=${resData.bookingCode}`;
+                     } else {
+                         alert("결제 실패 다시시도해주세요.");
+                         location.href  = `/place/${roomId}/room`
+                     }
                  });
 
              } catch (error) {

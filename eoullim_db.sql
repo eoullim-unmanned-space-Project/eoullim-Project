@@ -13,7 +13,7 @@ SELECT * FROM bookings;
 SELECT * FROM payments;
 
 DELETE FROM payments WHERE id =1;
-DELETE FROM bookings WHERE id = 4;
+DELETE FROM bookings WHERE id = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
@@ -179,7 +179,8 @@ CREATE TABLE time_slots (
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
 
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
-  CHECK (status IN('OPEN','CLOSED','CANCELED')),
+  
+  CHECK (status IN('OPEN','CLOSED')),
   
   UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_Month, start_time),
   

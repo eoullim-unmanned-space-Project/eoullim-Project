@@ -21,12 +21,11 @@ public enum ErrorCode {
     PAYMENT_FAILED("포트원 인증실패: 관리자에게 문의하세요"),
     PAYMENT_AMOUNT_MISMATCH("금액이 다릅니다."),
     PAYMENT_ALREADY_PROCESSED("이미 결제된 주문입니다."),
-    
+
     // ====
     // 401 Unauthorized
     // ====
     LOGIN_UNAUTHORIZED("로그인 인증이 필요합니다."),
-
 
     // ====
     // 403 Forbidden

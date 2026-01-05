@@ -48,7 +48,6 @@ public class BookingController {
             throw new Exception401(ErrorCode.ACCESS_DENIED);
         }
 
-
         BookingResponse.DetailDTO booking = bookingService.detailBooking(sessionUser.getId(), bookingCode);
 
         model.addAttribute("user", sessionUser);

@@ -31,35 +31,34 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public String saveBooking(Long id, BookingRequest.createDTO createDTO) {
 
-        // 1. 사용자 있는지
+        // 사용자 있는지
         User userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
-        // 2. 룸이 있는지
+        // 룸이 있는지
         Room roomEntity = roomRepository.findById(createDTO.getRoomId())
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
 
-        // 3. 타임슬롯이 있는지 for문 돌려야할것
+        // 타임슬롯이 있는지 for문 돌려야할것
         List<TimeSlot> timeslotEntities = timeSlotRepository.findAllById(createDTO.getTimeSlotIds());
-
-        boolean isAlreadyBooked = bookingRepository.existsByRoomAndBookingDateAndTimeSlotIn(roomEntity, LocalDate.now(), timeslotEntities);
-
-        if (isAlreadyBooked) {
-            throw new Exception400(ErrorCode.ALREADY_BOOKED_TIME_SLOT);
-        }
 
         // 엔티티즈의 사이즈랑 받아온 사이즈가 다르다면 NOT FOUND
         if (timeslotEntities.size() != createDTO.getTimeSlotIds().size()) {
             throw new Exception404(ErrorCode.TIMESLOT_NOT_FOUND);
         }
 
-        // 4. 예약 코드를 생성
+        // 예약된 타임슬롯이 있다면 예외처리
+        for (TimeSlot timeSlot : timeslotEntities) {
+            timeSlot.close();
+        }
+
+        // 예약 코드를 생성
         String bookingCode = "bk_" + userEntity.getId() + "_" + UUID.randomUUID().toString().substring(0, 8);
 
-        // 5. 토탈 프라이스 쪼개서 넣기
+        // 토탈 프라이스 쪼개서 넣기
         Long perSlotAmount = createDTO.getTotalAmount() / timeslotEntities.size();
 
-        // 6. 부킹 생성
+        // 부킹 생성
         List<Booking> bookings = timeslotEntities.stream()
                 .map(timeSlot -> createDTO.toEntity(userEntity, roomEntity, timeSlot, bookingCode, perSlotAmount))
                 .toList();
@@ -87,7 +86,6 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponse.DetailDTO detailBooking(Long id, String bookingCode) {
 
-        // 1. 패치 조인
         // user의 값을 담아서 같이 검증해준다
         List<Booking> bookingEntities = bookingRepository.findDetailByBookingCodeAndUser(id, bookingCode)
                 .orElseThrow(() -> new Exception404(ErrorCode.BOOKING_NOT_FOUND));

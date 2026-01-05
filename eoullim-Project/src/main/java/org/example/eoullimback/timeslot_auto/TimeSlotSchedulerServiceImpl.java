@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.room.RoomStatus;
+import org.example.eoullimback._common.enums.time_slot.SlotStatus;
 import org.example.eoullimback.item.Item;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.room.RoomRepository;
@@ -32,9 +33,8 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
     private static final int DEFAULT_CAPACITY = 6;
 
     // 배치 사이즈
-    private static final int BATCH_SIZE = 500;
-    
-    
+    private static final int CHUCK_SIZE = 500;
+
     @PersistenceContext
     private EntityManager em;
 
@@ -81,14 +81,14 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
                             .startTime(start)
                             .endTime(end)
                             .capacity(DEFAULT_CAPACITY)
-                            .status(RoomStatus.OPEN)
+                            .status(SlotStatus.OPEN)
                             .build();
 
                     // 배치용 임시 List -> 서류 묶음
                     // size를 통해서 배치를 계산한다
                     timeSlotList.add(timeSlot);
 
-                    if (timeSlotList.size() >= BATCH_SIZE) {
+                    if (timeSlotList.size() >= CHUCK_SIZE) {
                         persistTimeSlotsWithItems(timeSlotList);
                     }
                 }

@@ -32,6 +32,8 @@ public class BookingResponse {
         private BigDecimal latitude;
         // 장소 경도
         private BigDecimal longitude;
+       // 룸 아이디
+        private Long roomId;
         // 룸 이름
         private String roomName;
         // 룸 설명 
@@ -57,6 +59,7 @@ public class BookingResponse {
             this.address = grouping.getRoom().getPlace().getAddress();
             this.latitude = grouping.getRoom().getPlace().getLatitude();
             this.longitude = grouping.getRoom().getPlace().getLongitude();
+            this.roomId = grouping.getRoom().getId();
             this.roomName = grouping.getRoom().getName();
             this.content = grouping.getRoom().getContent();
             this.amount = grouping.getItemSnapshotPrice();
