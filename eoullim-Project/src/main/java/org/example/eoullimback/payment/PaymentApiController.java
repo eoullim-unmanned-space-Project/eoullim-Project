@@ -37,12 +37,18 @@ public class PaymentApiController {
     @PostMapping("/api/payment/complete")
     public ResponseEntity<?> complete(@RequestBody PaymentRequest.CompleteDTO requestDTO, HttpSession session) {
 
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다"));
+        }
+
         log.info("결제 완료 요청 수신: impUid={}, merchantUid={}",
                 requestDTO.getImpUid(), requestDTO.getMerchantUid());
 
-            paymentService.complete(requestDTO.getImpUid(), requestDTO.getMerchantUid());
+        paymentService.complete(sessionUser.getId(), requestDTO.getImpUid(), requestDTO.getMerchantUid());
 
-            return ResponseEntity.ok().body(Map.of("message", "결제를 완료했습니다. 이메일로 QR코드를 확인해주세요"));
+        return ResponseEntity.ok().body(Map.of("message", "결제를 완료했습니다. 이메일로 QR코드를 확인해주세요"));
     }
 
 }

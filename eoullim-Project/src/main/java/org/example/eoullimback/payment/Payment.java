@@ -107,6 +107,7 @@ public class Payment extends BaseTimeEntity {
         public void markFailed(String failureCode, String failureMessage) {
                 this.status = PaymentStatus.FAILED;
                 this.failureCode = failureCode;
+                this.cancelledAt = LocalDateTime.now();
                 this.failureMessage = failureMessage;
         }
 

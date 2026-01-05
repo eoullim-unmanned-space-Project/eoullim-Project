@@ -6,9 +6,7 @@ import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.payment.PaymentMethod;
 import org.example.eoullimback._common.enums.payment.PaymentStatus;
-import org.example.eoullimback._common.error.exception.Exception400;
-import org.example.eoullimback._common.error.exception.Exception403;
-import org.example.eoullimback._common.error.exception.Exception404;
+import org.example.eoullimback._common.error.exception.*;
 import org.example.eoullimback.booking.Booking;
 import org.example.eoullimback.booking.BookingRepository;
 import org.example.eoullimback.user_auth.user.User;
@@ -37,7 +35,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${portone.imp-key}")
     private String impKey;
 
-    @Value("${portone.imp-secret-key}")
+    @Value("${portone.imp-secret}")
     private String impSecret;
 
     @Override
@@ -95,10 +93,18 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public void complete(String impUid, String merchantUid) {
+    public void complete(Long userId, String impUid, String merchantUid) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         Payment paymentEntity = paymentRepository.findByPaymentKey(merchantUid)
                 .orElseThrow(() -> new Exception404(ErrorCode.PAYMENT_NOT_FOUND));
+
+        // 중복 방지
+        if (paymentRepository.findByImpUid(impUid).isPresent()) {
+            throw new Exception400(ErrorCode.PAYMENT_COMPLETED);
+        }
 
         String accessToken = getPortOneToken();
 
@@ -109,100 +115,128 @@ public class PaymentServiceImpl implements PaymentService {
         String failedMessage = body.getFailReason();
 
         if (!paymentEntity.getAmount().equals(amount)) {
-            throw new RuntimeException("결제 금액 불일치 ! : 위변조 주의");
+            log.error("[결제 금액 불일치 위변조 감지] 주문번호: {}, 저장된 금액: {}, 들어온 금액: {}", paymentEntity.getId(), paymentEntity.getAmount(), amount);
+            throw new Exception400(ErrorCode.PAYMENT_AMOUNT_MISMATCH);
         }
 
         List<Booking> bookingEntities = bookingRepository.findAllByBookingCode(paymentEntity.getOrderId())
                 .orElseThrow(() -> new Exception404(ErrorCode.BOOKING_CODE_NOT_FOUND));
 
-       switch (status) {
+        switch (status) {
             // 추후 qrcode 전송 로직
-           case "paid" :
-               paymentEntity.markSuccess(impUid);
+            case "paid" :
+                paymentEntity.markSuccess(impUid);
 
                 for (Booking booking : bookingEntities) {
                     booking.changeSuccess();
+                    log.info("부킹 예약 완료 상태 변경되었습니다. 부킹코드: {}, 부킹상태: {}", booking.getBookingCode(), booking.getStatus());
                 }
+                log.info("결제 및 예약 확정 완료 되었습니다. 유저 ID: {}, 주문번호: {}, 결제금액: {}", user.getId(), paymentEntity.getId(), paymentEntity.getAmount());
+                break;
 
-               log.info("결제 및 예약 확정 완료 : {}", merchantUid);
-               break;
+            case "failed" :
+                paymentEntity.markFailed(
+                        "PORTONE_PAYMENT_FAILED",
+                        failedMessage
+                );
 
-           case "failed" :
-               paymentEntity.markFailed(
-                    "PORTONE_PAYMENT_FAILED",
-                       failedMessage
-               );
-               break;
+                for (Booking booking : bookingEntities) {
+                    if (booking.getStatus() == BookingStatus.PENDING) {
+                        booking.changeCanceled();
+                        log.info("예약 취소 처리되었습니다. 예약번호: {}, 사유: {}", booking.getBookingCode(), paymentEntity.getFailureMessage());
+                    } else {
+                        log.warn("예약 상태가 PENDING이 아니어서 취소 생략: 예약번호: {}, 현재상태: {}", booking.getBookingCode(), booking.getStatus());
+                    }
+                }
+                break;
 
-           case "cancelled" :
-               paymentEntity.markFailed(
-                       "USER_CANCEL",
-                       "사용자가 결제를 취소했습니다."
-               );
-               paymentEntity.getBooking().changeCanceled();
-               break;
+            case "cancelled" :
+                paymentEntity.markFailed(
+                        "USER_CANCEL",
+                        "사용자가 결제를 취소했습니다."
+                );
 
-           default:
-               throw new RuntimeException("처리되지 않은 결제 상태 [" + status + "] 입니다. 고객센터에 문의하세요.");
-       }
+                for (Booking booking : bookingEntities) {
+                    if (booking.getStatus() == BookingStatus.PENDING) {
+                        booking.changeCanceled();
+                        log.info("예약 취소 처리되었습니다. 예약번호: {}, 사유: {}", booking.getBookingCode(), paymentEntity.getFailureMessage());
+                    } else {
+                        log.warn("예약 상태가 PENDING이 아니어서 취소 생략: 예약번호: {}, 현재상태: {}", booking.getBookingCode(), booking.getStatus());
+                    }
+
+                }
+                break;
+
+            default:
+                throw new Exception500(ErrorCode.INTERNAL_ERROR);
+        }
     }
 
     private String getPortOneToken() {
-        RestTemplate restTemplate = new RestTemplate();
+        try {
+            RestTemplate restTemplate = new RestTemplate();
 
-        String url = "https://api.iamport.kr/users/getToken";
+            String url = "https://api.iamport.kr/users/getToken";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Map<String, String> body = new HashMap<>();
+            Map<String, String> body = new HashMap<>();
 
-        body.put("imp_key", impKey);
-        body.put("imp_secret", impSecret);
+            body.put("imp_key", impKey);
+            body.put("imp_secret", impSecret);
 
-        HttpEntity<Map<String, String>> httpEntity = new HttpEntity<>(body, headers);
+            HttpEntity<Map<String, String>> httpEntity = new HttpEntity<>(body, headers);
 
-        ResponseEntity<PaymentResponse.PortOneDTO> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                httpEntity,
-                PaymentResponse.PortOneDTO.class
-        );
+            ResponseEntity<PaymentResponse.PortOneDTO> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    httpEntity,
+                    PaymentResponse.PortOneDTO.class
+            );
 
-        log.info("response = response={}", response);
+            if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+                throw new IllegalArgumentException("PortOne 토큰 발급에 실패했습니다. 실패: response.body가 비어있습니다.");
+            }
 
-        if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
-            throw new IllegalArgumentException("PortOne 토큰 발급에 실패했습니다. 실패: response.body가 비어있습니다.");
+            return response.getBody().getResponse().getAccessToken();
+
+        } catch (Exception e) {
+            log.error("포트원 토큰 발급 중 오류 발생: ", e);
+            throw new Exception400(ErrorCode.PAYMENT_FAILED);
         }
-
-        return response.getBody().getResponse().getAccessToken();
     }
 
     private PaymentResponse.PaymentData getPaymentData(String impUid, String accessToken ) {
-        RestTemplate restTemplate = new RestTemplate();
+        try {
+            RestTemplate restTemplate = new RestTemplate();
 
-        String url = "https://api.iamport.kr/payments/" + impUid;
+            String url = "https://api.iamport.kr/payments/" + impUid;
 
-        HttpHeaders headers = new HttpHeaders();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBearerAuth(accessToken);
 
-        headers.set("Authorization", "Bearer " + accessToken);
-        HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
+            HttpEntity<Void> httpEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<PaymentResponse.PortOnePaymentDetailDTO> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, PaymentResponse.PortOnePaymentDetailDTO.class);
+            ResponseEntity<PaymentResponse.PortOnePaymentDetailDTO> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, PaymentResponse.PortOnePaymentDetailDTO.class);
 
-        if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
-            throw new IllegalArgumentException("상세보기를 조회하지 못했습니다.");
+            if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+                throw new IllegalArgumentException("상세보기를 조회하지 못했습니다.");
+            }
+
+            PaymentResponse.PortOnePaymentDetailDTO body = response.getBody();
+
+            if (body == null) {
+                throw new Exception404(ErrorCode.PAYMENT_DATA_NOT_FOUND);
+            }
+
+            return body.getResponse();
+
+        } catch (Exception e) {
+            log.error("포트원 결제조회 중 오류 발생: ", e);
+            throw new Exception400(ErrorCode.PAYMENT_FAILED);
         }
-
-        PaymentResponse.PortOnePaymentDetailDTO body = response.getBody();
-
-        if (body == null) {
-            throw new Exception404(ErrorCode.PAYMENT_DAYA_NOT_FOUND);
-        }
-
-        return body.getResponse();
     }
-
 
     private String generatePaymentKey(Long id) {
         return "payment-" + id + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8);
