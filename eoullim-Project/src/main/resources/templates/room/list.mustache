@@ -6,15 +6,41 @@
 <div class="container">
     <section class="section"></section>
     <section class="sub-section">
+        <div class="map-container">
+            <a href="/place/{{placeId}}/room/create" class="btn btn-secondary">방 생성</a>
+            {{#roomList}}
+                <div class="place-card">
+                    <div class="place-body">
+                        <img src="{{roomImagePath}}" alt="프로필사진" class="place-profile">
+                        <h4 class="place-title ">{{name}}</h4>
+                        <p class="place-address">내용 : {{content}} | 최대인원 : {{maxCapacity}} | 가격 : {{defaultPrice}} </p>
+                        <p></p>
+                        <a href="/place/{{roomId}}/room" class="btn btn-place">상세보기</a>
+
+                        <div class="d-flex justify-content-end mb-2">
+                            <a href="/room/{{roomId}}/update" class="btn btn-update">수정</a>
+                            <form action="/place/{{roomId}}/delete" method="post">
+                                <button class="btn btn-delete">삭제</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {{/roomList}}
+        </div>
+
+
         <div class="left">
             <div class="main-content">
                 <p>어울림 스터디카페</p>
                 <span><img src="/img/room/주소.png" alt=""> 부산광역시 부산진구 신천대로 62번길</span>
                 <p>룸 선택</p>
                 <div class="room-list">
-                    <div class="room-card"><img src="img/room1.jpg" alt="스터디룸 A"><p>스터디룸 A</p></div>
-                    <div class="room-card"><img src="img/room2.jpg" alt="스터디룸 B"><p>스터디룸 B</p></div>
-                    <div class="room-card"><img src="img/room3.jpg" alt="스터디룸 C"><p>스터디룸 C</p></div>
+                    <div class="room-card"><img src="img/room1.jpg" alt="스터디룸 A">
+                        <p>스터디룸 A</p></div>
+                    <div class="room-card"><img src="img/room2.jpg" alt="스터디룸 B">
+                        <p>스터디룸 B</p></div>
+                    <div class="room-card"><img src="img/room3.jpg" alt="스터디룸 C">
+                        <p>스터디룸 C</p></div>
                 </div>
                 <p>위치</p>
                 <div id="map"></div>
@@ -38,7 +64,8 @@
                 <h3 class="room-title">스터디룸 A</h3>
                 <div class="room-img"></div>
                 <p class="room-desc">
-                    · 조용한 스터디와 회의에 적합한 공간입니다.sdh[plf,hsfpl,hpfl,hplfs,hplf,plh,plg;ld,gpl[d,glpdfgplfpg,fdlhpklfd,hplfg,dhlpgd,plhgdl,h]]
+                    · 조용한 스터디와 회의에 적합한
+                    공간입니다.sdh[plf,hsfpl,hpfl,hplfs,hplf,plh,plg;ld,gpl[d,glpdfgplfpg,fdlhpklfd,hplfg,dhlpgd,plhgdl,h]]
                 </p>
                 <hr>
                 <p class="room-info">
@@ -98,7 +125,7 @@
 
 <!-- 리뷰 섹션 -->
 <section class="review-section">
-    <hr />
+    <hr/>
     <div class="container">
         <h2 class="review-title">리뷰</h2>
         <div class="review-grid">
@@ -148,6 +175,22 @@
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17"></script>
 <script>
+    kakao.maps.load(function () {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var lat = position.coords.latitude;
+                var lng = position.coords.longitude;
+                var mapContainer = document.getElementById('map');
+                var mapOption = {center: new kakao.maps.LatLng(lat, lng), level: 6};
+                var map = new kakao.maps.Map(mapContainer, mapOption);
+                var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(lat, lng)});
+                marker.setMap(map);
+            }, function (error) {
+                console.error("위치 정보를 가져올 수 없습니다.", error);
+            });
+        } else {
+            alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+        }
     kakao.maps.load(function() {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {

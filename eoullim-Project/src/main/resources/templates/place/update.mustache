@@ -23,10 +23,9 @@
         </div>
 
 
-        <!-- 필수! form 태그에 enctype 타입을 반드시 multipart/form-data 로 변경 해야 한다.       -->
         <form action="/place/{{place.id}}/update" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <input type="text" class="form-control" placeholder="name" name="name", value="{{place.name}}">
+                <input type="text" class="form-control" placeholder="name" name="name" value="{{place.name}}">
             </div>
             <div class="mb-3">
                 <select class="form-control" placeholder="category" name="category" required>
