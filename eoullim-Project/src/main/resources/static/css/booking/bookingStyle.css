@@ -10,7 +10,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: var(--bg-gray);
+  background: white;
   font-family: 'Pretendard', sans-serif;
   color: var(--text-main);
   padding: 60px 20px;

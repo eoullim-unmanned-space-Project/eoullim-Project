@@ -327,9 +327,11 @@
             const timeSlotIds = Array.from(selectedSlots)
                     .map(timeslot => parseInt(timeslot.dataset.id));
 
+        try {
             alert(peopleCount);
 
             try {
+
 
                 if (timeSlotIds.length === 0) {
                     alert("타임슬롯을 선택해주세요.");
