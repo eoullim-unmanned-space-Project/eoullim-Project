@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.RoleType;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,8 +18,8 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleType name;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<UserRole> userRoles;
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    private Set<UserRole> userRoles =  new HashSet<>();
 
     public Role(RoleType name) {
         this.name = name;

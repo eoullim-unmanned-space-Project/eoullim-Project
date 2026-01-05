@@ -10,6 +10,7 @@ import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,7 @@ public class User extends BaseTimeEntity {
     private Status status;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRole> userRoles;
+    private Set<UserRole> userRoles = new HashSet<>();
 
     private LocalDateTime withdrawnAt;
 
