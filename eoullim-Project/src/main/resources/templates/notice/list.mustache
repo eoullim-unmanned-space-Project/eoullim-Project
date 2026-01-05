@@ -7,12 +7,29 @@
     </div>
 
     {{#noticePage.content}}
-        <div class="notice-list-item">
-            <h4>{{title}}</h4>
+        <div class="notice-list-item" style="justify-content: flex-end">
+            <h4>
+                <a href="/notices/{{id}}">{{title}}</a>
+            </h4>
             <p>작성자 : {{name}} | 작성일 : {{createdAt}}</p>
-            <a href="/notices/{{id}}">상세보기</a>
         </div>
     {{/noticePage.content}}
+
+    <div class="notice-card" style="background-color: #f1f5f9">
+        <form class="notice-form" action="/notices" method="get">
+            <label>
+                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
+            </label>
+            <div>
+                <input type="hidden" name="page" value="1">
+                <input type="hidden" name="size" value="{{noticePage.size}}">
+                <div class="notice-btn-group" style="justify-content: flex-end">
+                    <button class="notice-btn notice-btn-primary" type="submit">검색</button>
+                    <a href="/notices" class="notice-btn notice-btn-secondary">초기화</a>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <div class="pagination">
         {{#noticePage.previousPageNumber}}
@@ -34,20 +51,5 @@
         {{/noticePage.nextPageNumber}}
     </div>
 
-    <div class="notice-card">
-        <form class="notice-form" action="/notices" method="get">
-            <label>
-                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
-            </label>
-            <div>
-                <input type="hidden" name="page" value="1">
-                <input type="hidden" name="size" value="{{noticePage.size}}">
-                <div class="notice-btn-group">
-                    <button class="notice-btn notice-btn-primary" type="submit">검색</button>
-                    <a href="/notices" class="notice-btn notice-btn-secondary">초기화</a>
-                </div>
-            </div>
-        </form>
-    </div>
 </div>
 {{> layout/footer}}
