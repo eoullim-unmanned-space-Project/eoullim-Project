@@ -39,6 +39,7 @@
                 <a href="/auth/signup">회원가입</a>
             {{/sessionUser}}
             {{#sessionUser}}
+                <span class="name">{{name}} 님</span>
                 <a href="/user/profile">회원정보</a>
                 <span class="divider">|</span>
                 <a href="/auth/logout">로그아웃</a>

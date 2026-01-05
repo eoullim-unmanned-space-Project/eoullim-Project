@@ -83,6 +83,18 @@
     font-size: 12px;
 }
 
+/*.header-auth .role {*/
+/*    color: #111827;*/
+/*    font-size: 12px;*/
+/*}*/
+
+.header-auth .name {
+    text-decoration: none;
+    font-size: 14px;
+    color: #111827;
+    font-weight: 500;
+}
+
 .mode-toggle {
     display: flex;
     background: #f3f4f6;

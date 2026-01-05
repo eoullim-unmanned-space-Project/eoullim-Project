@@ -10,9 +10,15 @@ public enum ErrorCode {
     // ====
     INVALID_INPUT("잘못된 입력값입니다."),
     MISSING_PARAMETER("비워 둘수 없는 항목입니다."),
+    LOGIN_ID_REQUIRED("아이디는 필수입니다"),
+    LOGIN_ID_LENGTH("아이디는 6자이상 20자 이하여야 합니다."),
+    PASSWORD_REQUIRED("비밀번호는 필수입니다"),
+    PASSWORD_POLITY("비밀번호는 8자이상 20자 이하여야 합니다."),
+    NAME_REQUIRED("이름은 필수입니다."),
     INVALID_EMAIL_FORMAT("올바른 이메일 형식이 아닙니다."),
     MISSING_EMAIL("이메일을 입력해주세요."),
     ONLY_FILE_IMG("이미지 파일만 업로드 가능합니다."),
+    PHONE_REQUIRED("전화번호는 필수입니다."),
     MAX_FILE_IMG("파일 이미지는 5장 이어야 합니다."),
     ALREADY_BOOKED_TIME_SLOT("이미 예약된 타임슬롯입니다."),
     INVALID_BOOKING_STATUS("결제 가능한 상태가 아닙니다."),
@@ -35,11 +41,13 @@ public enum ErrorCode {
     MY_ONLY("본인만 접근할 수 있습니다."),
     ADMIN_OLLY("관리자만 접근 할 수 있습니다."),
     LOGIN_ONLY("로그인이 필요합니다."),
+    SOCIAL_USER_CANNOT_UPDATE("소셜 로그인 계정은 회원정보를 수정할 수 없습니다."),
 
     // ====
     // 404 Not Found
     // ====
     USER_NOT_FOUND("사용자를 찾을 수 없습니다."),
+    ROLE_NOT_FOUND("요청한 권한(Role)을 찾을 수 없습니다."),
     PLACE_NOT_FOUND("장소를 찾을 수 없습니다."),
     ROOM_NOT_FOUND("방을 찾을 수 없습니다."),
     ROOM_IMG_NOT_FOUND("이미지를 찾을 수 없습니다."),

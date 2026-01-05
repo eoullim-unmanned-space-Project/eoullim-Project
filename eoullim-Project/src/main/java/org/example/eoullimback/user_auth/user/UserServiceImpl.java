@@ -188,10 +188,16 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     @Transactional
-    public User updateProfile(Long id, UserRequest.@Valid UpDateDTO update) {
+    public User updateProfile(Long id, UserRequest.UpDateDTO update) {
+
+        update.validate();
 
         User userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+
+        if (!userEntity.canUpdateProfile()) {
+            throw new Exception403(ErrorCode.SOCIAL_USER_CANNOT_UPDATE);
+        }
 
         UserRequest.UpDateDTO finalDTO = update;
 
