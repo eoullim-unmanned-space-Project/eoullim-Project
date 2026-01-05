@@ -8,15 +8,32 @@
 
     {{#qaaPage.content}}
         <div class="qaa-list-item">
-            <h4>{{title}}</h4>
+            <h4>
+                <a href="/qaas/{{id}}">{{title}}</a>
+            </h4>
             <p>
                 작성자 : {{name}}
                 | 작성일 : {{createdAt}}
                 | 조회수 : {{viewCount}}
             </p>
-            <a href="/qaas/{{id}}">상세보기</a>
         </div>
     {{/qaaPage.content}}
+
+    <div class="qaa-card" style="background-color: #f1f5f9">
+        <form class="qaa-form" action="/qaas" method="get">
+            <label>
+                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
+            </label>
+            <div>
+                <input type="hidden" name="page" value="1">
+                <input type="hidden" name="size" value="{{qaaPage.size}}">
+                <div class="qaa-btn-group" style="justify-content: flex-end">
+                    <button class="qaa-btn qaa-btn-primary" type="submit">검색</button>
+                    <a href="/qaas" class="qaa-btn qaa-btn-secondary">초기화</a>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <div class="pagination">
         {{#qaaPage.previousPageNumber}}
@@ -38,21 +55,6 @@
         {{/qaaPage.nextPageNumber}}
     </div>
 
-    <div class="qaa-card">
-        <form class="qaa-form" action="/qaas" method="get">
-            <label>
-                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
-            </label>
-            <div>
-                <input type="hidden" name="page" value="1">
-                <input type="hidden" name="size" value="{{qaaPage.size}}">
-                <div class="qaa-btn-group">
-                    <button class="qaa-btn qaa-btn-primary" type="submit">검색</button>
-                    <a href="/qaas" class="qaa-btn qaa-btn-secondary">초기화</a>
-                </div>
-            </div>
-        </form>
-    </div>
 </div>
 <script>
     window.addEventListener('pageshow', function (event) {
