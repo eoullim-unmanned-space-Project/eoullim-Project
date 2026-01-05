@@ -3,7 +3,6 @@ package org.example.eoullimback.place;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
-import org.example.eoullimback.room.RoomRequest;
 import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
 import org.springframework.stereotype.Controller;
@@ -35,15 +34,15 @@ public class PlaceController {
     public String createProc(@Valid PlaceRequest.CreateDTO request) {
         Place place = placeService.placeCreate(request);
 
-        return "redirect:/";
+        return "redirect:/main/main";
     }
 
     // 전체 조회
-    @GetMapping("/")
-    public String ListForm(Model model,
-                           @RequestParam(defaultValue = "1") int page,
-                           @RequestParam(defaultValue = "5") int size,
-                           @RequestParam(required = false) String keyword
+    @GetMapping("/map")
+    public String ListPlace(Model model,
+                            @RequestParam(defaultValue = "1") int page,
+                            @RequestParam(defaultValue = "5") int size,
+                            @RequestParam(required = false) String keyword
     ) {
         int pageIndex = Math.max(0, page - 1);
         PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placePage = placeService.placeList(pageIndex, size, keyword);
@@ -51,6 +50,29 @@ public class PlaceController {
         model.addAttribute("placeKeyword", keyword != null ? keyword : "");
 
         return "/map/map";
+    }
+
+    // 새로운 장소 4개만 조회
+    @GetMapping("/")
+    public String newPlace(Model model
+    ) {
+        List<PlaceResponse.ListDTO> place = placeService.newPlace();
+        model.addAttribute("place", place);
+
+        return "/main/main";
+    }
+
+    @GetMapping("/place/{placeId}/room")
+
+    public String ListRoom(Model model,
+                           @PathVariable Long placeId
+    ) {
+        List<RoomResponse.ListDTO> roomList = roomService.roomList(placeId);
+        Place place = placeService.placeUpdateForm(placeId);
+        model.addAttribute("roomList", roomList);
+        model.addAttribute("place", place);
+
+        return "room/list";
     }
 
     // 수정
@@ -67,7 +89,7 @@ public class PlaceController {
 
     @PostMapping("/place/{placeId}/update")
     public String UpdateProc(@PathVariable Long placeId,
-                             PlaceRequest.UpdateDTO request
+                             @Valid PlaceRequest.UpdateDTO request
     ) {
         Place place = placeService.placeUpdate(placeId, request);
 

@@ -10,14 +10,14 @@ public class PlaceResponse {
 
     @Data
     public static class ListDTO {
-        private Long id;
+        private Long Id;
         private String name;
         private String address;
         private Category category;
         private String profilePath;
 
         public ListDTO(Place place) {
-            this.id = place.getId();
+            this.Id = place.getId();
             this.name = place.getName();
             this.address = place.getAddress();
             this.category = place.getCategory();
@@ -27,22 +27,22 @@ public class PlaceResponse {
 
     @Data
     public static class DetailDTO {
-        private Long id;
         private String name;
         private String address;
         private BigDecimal latitude;
         private BigDecimal longitude;
         private Category category;
         private String createAt;
+        private String profilePath;
 
         public DetailDTO(Place place) {
-            this.id = place.getId();
             this.name = place.getName();
             this.address = place.getAddress();
             this.latitude = place.getLatitude();
             this.longitude = place.getLongitude();
             this.category = place.getCategory();
             this.createAt = DateTimeUtil.toKstString(place.getCreatedAt());
+            this.profilePath = "/images/" + place.getProfileImage();
         }
     }
 }

@@ -81,11 +81,13 @@
                 />
             </div>
 
+            {{#sessionUSer.canUpdateProfile}}
             <form action="/user/profile/edit" method="get">
                 <button type="submit" class="edit-btn">
                     회원정보 수정
                 </button>
             </form>
+            {{/sessionUSer.canUpdateProfile}}
             <!--            </form>-->
         </div>
     </main>

@@ -7,9 +7,8 @@ import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.FileUtil;
-import org.example.eoullimback.room.RoomRepository;
-import org.example.eoullimback.room.RoomRequest;
-import org.example.eoullimback.room.RoomService;
+import org.example.eoullimback.room.*;
+import org.example.eoullimback.room_image.RoomImageRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,14 +17,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PlaceServiceImpl implements PlaceService{
     private final PlaceRepository placeRepository;
-    private final RoomService roomService;
     private final RoomRepository roomRepository;
+    private final RoomImageRepository roomImageRepository;
 
     @Override
     @Transactional
@@ -65,6 +65,15 @@ public class PlaceServiceImpl implements PlaceService{
         }
 
         return new PageResponse.PageDTO<>(placePage, PlaceResponse.ListDTO::new);
+    }
+
+    @Override
+    public List<PlaceResponse.ListDTO> newPlace() {
+        List<PlaceResponse.ListDTO> newPlace = placeRepository.findLatest4Places().stream()
+                .map(PlaceResponse.ListDTO::new)
+                .toList();
+
+        return newPlace;
     }
 
     @Override
@@ -112,6 +121,8 @@ public class PlaceServiceImpl implements PlaceService{
     public void placeDelete(Long placeId) {
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
+
+        roomRepository.deleteById(placeId);
 
         placeRepository.deleteById(placeId);
     }

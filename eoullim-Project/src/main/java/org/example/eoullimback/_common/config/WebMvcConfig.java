@@ -1,6 +1,7 @@
 package org.example.eoullimback._common.config;
 
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.interceptor.AdminInterceptor;
 import org.example.eoullimback._common.interceptor.LoginInterceptor;
 import org.example.eoullimback._common.interceptor.SessionInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final LoginInterceptor loginInterceptor;
     private final SessionInterceptor sessionInterceptor;
+    private final AdminInterceptor adminInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -43,6 +45,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/img/**",
                         "/favicon.ico"
                 );
+
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/admin/**");
     }
 
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

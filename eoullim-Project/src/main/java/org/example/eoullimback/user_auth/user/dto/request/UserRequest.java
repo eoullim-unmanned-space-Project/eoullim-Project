@@ -22,6 +22,18 @@ public class UserRequest {
                 newDTO.setUseProfileFileName(fileName);
                 return newDTO;
         }
+
+        public void validate() {
+                if (name == null || name.isEmpty()) {
+                    throw new Exception400(ErrorCode.MISSING_PARAMETER);
+                }
+                if (email == null || email.isEmpty()) {
+                    throw new Exception400(ErrorCode.MISSING_EMAIL);
+                }
+                if (!email.contains("@")) {
+                    throw new Exception400(ErrorCode.INVALID_EMAIL_FORMAT);
+                }
+        }
     }
 
     @Data

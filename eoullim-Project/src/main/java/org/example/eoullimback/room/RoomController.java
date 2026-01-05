@@ -17,7 +17,7 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
-    
+
     /**
      * 관리자가 생성하는 화면
      */
@@ -31,19 +31,41 @@ public class RoomController {
      * 기능: 관리자가 생성하는 룸 생성 - 완료
      */
     @PostMapping("/place/{placeId}/room/create")
-    public String createRoom(@PathVariable Long placeId, @ModelAttribute @Valid RoomRequest.CreateDTO createDTO) throws IOException {
+    public String createRoom(Model model,
+                             @PathVariable Long placeId,
+                             @Valid RoomRequest.CreateDTO createDTO
+    ) {
 
         Room room = roomService.createRoom(placeId, createDTO);
+        model.addAttribute("room", room);
 
-        return "redirect:/place/detail" + room.getId();
+        return "redirect:/map/place";
+    }
+
+    /**
+     * 단건 조회 - VIEW
+     * 1. 룸 정보
+     * 2. 룸 파일 이미지
+     * 3. 타임슬롯 + 아이템
+     */
+    @GetMapping("/room/{roomId}")
+    public String DetailRoom(@PathVariable Long roomId, Model model) {
+
+        RoomResponse.DetailDTO room = roomService.DetailRoom(roomId);
+
+        model.addAttribute("room", room);
+
+        return "room/detail";
     }
 
     /**
      * 화면: 수정
      */
     @GetMapping("/room/{roomId}/update")
-    public String updateView(@PathVariable Long roomId) {
+    public String updateView(Model model, @PathVariable Long roomId) {
 
+        Room room = roomService.roomUpdateForm(roomId);
+        model.addAttribute("room", room);
 
         return "room/update";
     }
@@ -54,48 +76,21 @@ public class RoomController {
      * - 타임슬롯 변경은 x 안됨
      */
     @PostMapping("/room/{roomId}/update")
-    public String updateRoom(@PathVariable Long roomId, @ModelAttribute @Valid RoomRequest.UpdateDTO updateDTO) throws IOException {
+    public String updateRoom(@PathVariable Long roomId, @Valid RoomRequest.UpdateDTO updateDTO){
 
         Room room = roomService.updateRoom(roomId, updateDTO);
 
-        return "redirect:/room/" + room.getId();
+        return "redirect:/";
     }
 
     /**
      * 기능: 삭제 - 완료
      */
     @PostMapping("/room/{roomId}/delete")
-    public String deleteRoom(@PathVariable Long roomId) throws IOException {
+    public String deleteRoom(@PathVariable Long roomId) {
 
         roomService.deleteRoom(roomId);
 
-        return "redirect:/place/";
-    }
-
-    /**
-     * 전체 조회 화면 - VIEW
-     * 1. 룸 정보
-     * 2. 룸 파일 이미지
-     */
-    @GetMapping("/place/{placeId}/room")
-    public String ListRoom(@PathVariable Long placeId) {
-
-        return "room/list";
-    }
-
-    /**
-     * 단건 조회 - VIEW
-     * 1. 룸 정보
-     * 2. 룸 파일 이미지
-     * 3. 타임슬롯 + 아이템
-     */
-    @GetMapping("/room/{roomId}/detail")
-    public String DetailRoom(@PathVariable Long roomId, Model model) {
-
-        RoomResponse.DetailDTO room = roomService.DetailRoom(roomId);
-
-        model.addAttribute("room", room);
-
-        return "room/detail";
+        return "redirect:/map/place";
     }
 }

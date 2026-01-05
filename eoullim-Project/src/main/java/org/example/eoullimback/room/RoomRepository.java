@@ -2,6 +2,7 @@ package org.example.eoullimback.room;
 
 import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback.place.Place;
+import org.example.eoullimback.room_image.RoomImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +19,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     """)
     Optional<Room> findByWithPlace(@Param("roomId") Long roomId);
 
-//    boolean existsByRoomAndYearMonth(List<Room> roomsEntity, YearMonth nextMonth);
-//    void deleteByPlaceId(Long placeId);
+    void deleteByPlaceId(Long placeId);
+
+    List<Room> findByPlaceId(Long placeId);
 }

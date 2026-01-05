@@ -4,18 +4,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
-import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
+import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.FileUtil;
-import org.example.eoullimback.file.FileInfo;
 import org.example.eoullimback.place.Place;
 import org.example.eoullimback.place.PlaceRepository;
 import org.example.eoullimback.room_image.RoomImage;
 import org.example.eoullimback.room_image.RoomImageRepository;
 import org.example.eoullimback.room_image.RoomImageResponse;
+import org.example.eoullimback.timeslot.TimeSlotRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,161 +23,53 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RoomServiceImpl implements RoomService{
-    @Override
-    public List<RoomResponse.ListDTO> roomList(Long placeId) {
-        return List.of();
-    }
 
     private final PlaceRepository placeRepository;
     private final RoomRepository roomRepository;
     private final RoomImageRepository roomImageRepository;
+    private final TimeSlotRepository timeSlotRepository;
 
-    private static final int MAX_IMAGE_SIZE = 5;
-
-    /**
-     * 룸 생성 로직 + 이미지 추가
-     */
     @Override
     @Transactional
-    public Room createRoom(Long placeId, RoomRequest.@Valid CreateDTO createDTO) throws IOException {
+    public Room createRoom(Long placeId, RoomRequest.CreateDTO request) {
 
-        // 장소 조회
-        Place placeEntity = placeRepository.findById(placeId)
+        String roomImageFileName = null;
+
+        Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
 
-        if (createDTO.roomImage == null || createDTO.roomImage.isEmpty()) {
-            throw new Exception404(ErrorCode.MISSING_PARAMETER);
-        }
-
-        if (createDTO.roomImage.size() != MAX_IMAGE_SIZE) {
-            throw new Exception400(ErrorCode.MAX_FILE_IMG);
-        }
-
-        // 방 생성
-        Room room = createDTO.toEntity(placeEntity);
-
-        roomRepository.save(room);
-
-        int displayOrder = 1;
-        for (MultipartFile file : createDTO.getRoomImage()) {
-            if (file != null && !file.isEmpty()) {
-                FileInfo fileInfo = FileUtil.saveRoomFile(file);
-
-                RoomImage roomImage = RoomImage.builder()
-                        .contentType(fileInfo.getContentType())
-                        .displayOrder(displayOrder++)
-                        .filePath(fileInfo.getFilePath().toString())
-                        .fileSize(fileInfo.getFileSize())
-                        .originalName(fileInfo.getOriginalName())
-                        .storedName(fileInfo.getStoredName())
-                        .room(room)
-                        .build();
-
-                roomImageRepository.save(roomImage);
-            }
-        }
-
-        return room;
-    }
-
-    /**
-     * 룸 삭제 + 이미지 같이 삭제
-     */
-    @Override
-    @Transactional
-    public void deleteRoom(Long roomId) throws IOException {
-
-        // 1. 방 확인
-        Room roomEntity = roomRepository.findById(roomId)
-                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
-
-        // 2. 방에있는 roomImage 전부 가져오기
-        List<RoomImage> roomImageEntity = roomImageRepository.findAllByRoom(roomEntity);
-
-        // 3. for문을 돌려서 실제 디렉토리에 있는 값 삭제
-        for (RoomImage images : roomImageEntity) {
-            FileUtil.deleteFile(images.getFilePath());
-        }
-
-        // 4. image전부 삭제
-        roomImageRepository.deleteAll(roomImageEntity);
-
-        // 5. room도 삭제
-        roomRepository.delete(roomEntity);
-    }
-
-    /**
-     * 룸 수정
-     * 제목, 내용, 상태, 초기 값, 상태만 가능
-     */
-    @Override
-    @Transactional
-    public Room updateRoom(Long roomId, RoomRequest.@Valid UpdateDTO updateDTO) throws IOException {
-
-        // 1. 방 조회
-        Room roomEntity = roomRepository.findById(roomId)
-                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
-
-        // 2. 파일 이미지 삭제
-        List<Long> imageIds = updateDTO.getRoomImageIds();
-        if (imageIds != null && !imageIds.isEmpty()) {
-            for (Long imageId : imageIds) {
-
-                RoomImage roomImageEntity = roomImageRepository.findById(imageId)
-                        .orElseThrow(() -> new Exception404(ErrorCode.ROOM_IMG_NOT_FOUND));
-
-                // 룸의 소유인지 확인
-                if (!roomImageEntity.checkOwner(roomId)) {
-                    throw new Exception403(ErrorCode.ACCESS_DENIED);
+        if (request.getRoomImage() != null && !request.getRoomImage().isEmpty()) {
+            try {
+                if (!FileUtil.isImageFile(request.getRoomImage())) {
+                    throw new Exception400(ErrorCode.ONLY_FILE_IMG);
                 }
 
-                // 디렉토리에 있는 파일을 삭제
-                FileUtil.deleteFile(roomImageEntity.getFilePath());
-
-                // DB에서 삭제
-                roomImageRepository.deleteById(imageId);
+                roomImageFileName = FileUtil.saveRoomFile(request.getRoomImage());
+            } catch (Exception e) {
+                throw new RuntimeException();
             }
         }
 
-        List<MultipartFile> roomImages = updateDTO.roomImages;
+        Room room = request.toEntity(place, roomImageFileName);
 
-        // displayOrder max 값을 들고와준다.
-        int maxDisplayOrder = roomImageRepository.findMaxDisplayOrder(roomEntity.getId()) + 1;
+        return roomRepository.save(room);
 
-        if (roomImages != null && !roomImages.isEmpty()) {
-
-            for (MultipartFile file : roomImages) {
-                if (file != null && !file.isEmpty()) {
-
-                    FileInfo fileInfo = FileUtil.saveRoomFile(file);
-
-                    RoomImage roomImage = RoomImage.builder()
-                            .originalName(fileInfo.getOriginalName())
-                            .storedName(fileInfo.getStoredName())
-                            .contentType(fileInfo.getContentType())
-                            .fileSize(fileInfo.getFileSize())
-                            .filePath(fileInfo.getFilePath().toString())
-                            .displayOrder(maxDisplayOrder++)
-                            .room(roomEntity)
-                            .build();
-
-                    roomImageRepository.save(roomImage);
-                }
-            }
-        }
-
-        roomEntity.update(updateDTO);
-
-        return roomEntity;
     }
 
-    /**
-     * 룸 단건조회
-     */
+    @Override
+    public List<RoomResponse.ListDTO> roomList(Long placeId) {
+
+        List<RoomResponse.ListDTO> roomList = roomRepository.findByPlaceId(placeId).stream()
+                .map(RoomResponse.ListDTO::new)
+                .toList();
+
+        return  roomList;
+
+    }
+
     @Override
     public RoomResponse.DetailDTO DetailRoom(Long roomId) {
-
-        Room roomEntity =  roomRepository.findByWithPlace(roomId)
+        Room room =  roomRepository.findByWithPlace(roomId)
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
 
         List<RoomImage> roomImagesEntities = roomImageRepository.findByRoomIdOrderByDisplayOrderAsc(roomId)
@@ -189,7 +80,57 @@ public class RoomServiceImpl implements RoomService{
                         .map(RoomImageResponse.DetailDTO::new)
                         .toList();
 
-        return new RoomResponse.DetailDTO(roomEntity, imageDTOs);
+        return new RoomResponse.DetailDTO(room);
     }
 
+    @Override
+    public Room roomUpdateForm(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
+
+        return room;
+    }
+
+    @Override
+    @Transactional
+    public Room updateRoom(Long roomId, RoomRequest.UpdateDTO request) {
+
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
+
+        String oldRoomImage = room.getRoomImage();
+        if (request.getRoomImage() != null && !request.getRoomImage().isEmpty()) {
+            if (!FileUtil.isImageFile(request.getRoomImage())) {
+                throw new Exception400(ErrorCode.ONLY_FILE_IMG);
+            }
+
+            try {
+                String newRoomImageFileName = FileUtil.saveFile(request.getRoomImage());
+                request.setRoomImageFileName(newRoomImageFileName);
+
+                if (oldRoomImage != null && !oldRoomImage.isEmpty()) {
+                    FileUtil.deleteFile(oldRoomImage);
+                }
+            } catch (IOException e) {
+                throw new Exception500(ErrorCode.FILE_SAVE_FAILED);
+            }
+        } else {
+            request.setRoomImageFileName(oldRoomImage);
+        }
+
+        room.update(request);
+
+        return room;
+    }
+
+    @Override
+    @Transactional
+    public void deleteRoom(Long roomId) {
+        Room room =  roomRepository.findByWithPlace(roomId)
+                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
+
+        timeSlotRepository.deleteAllByRoom(room);
+
+        roomRepository.deleteById(roomId);
+    }
 }
