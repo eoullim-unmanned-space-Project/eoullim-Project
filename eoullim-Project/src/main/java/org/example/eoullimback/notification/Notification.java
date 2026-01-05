@@ -2,7 +2,6 @@ package org.example.eoullimback.notification;
 
 import jakarta.persistence.*;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.notification.NotificationStatus;
