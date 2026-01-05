@@ -2,42 +2,26 @@
 <body>
 <section class="section">
     <div class="map-container">
-        <span>내 주변 무인 대여공간</span>
-        <span class="second">내 주변에 가까운 무인공간을 찾아보세요.</span>
-        <div id="map"></div>
-        <form action="/map/place" method="post" enctype="multipart/form-data">
-        <a href="/place/create" class="btn btn-secondary">장소 생성</a>
-        {{#placePage.content}}
-            <div class="place-card">
-                <div class="place-body">
-                    <img src="{{profilePath}}" alt="프로필사진" class="place-profile" >
-                    <h4 class="place-title ">{{name}}</h4>
-                    <p class="place-address">주소 : {{address}} | 카테고리 : {{category}}</p>
-                    <a href="/place/{{id}}/room" class="btn btn-place">상세보기</a>
-
-                    <div class="d-flex justify-content-end mb-2">
-                        <a href="/place/{{id}}/update" class="btn btn-update">수정</a>
-                        <form action="/place/{{id}}/delete" method="post">
-                            <button class="btn btn-delete">삭제</button>
-                        </form>
+        <div class="section-title">새로운 공간</div>
+        <div class="space-list">
+            {{#placePage.content}}
+                <a href="/place/{{id}}/room" class="space-card">
+                    <div class="space-img">
+                        <img src="{{profilePath}}" alt="프로필사진" class="space-img">
                     </div>
-                </div>
-            </div>
-        {{/placePage.content}}
-        </form>
-        <div class="space-card">
-            <div class="card">1</div>
-            <div class="card">2</div>
-            <div class="card">3</div>
-            <div class="card">4</div>
-            <div class="card">5</div>
-            <div class="card">6</div>
-            <div class="card">7</div>
-            <div class="card">8</div>
-            <div class="card">5</div>
-            <div class="card">6</div>
-            <div class="card">7</div>
-            <div class="card">8</div>
+                    <div class="space-name">
+                        <h4>{{name}}</h4>
+                        <p>주소 : {{address}}</p>
+                        <p>카테고리 : {{category}}</p>
+                    </div>
+                </a>
+                <!--                <div class="d-flex justify-content-end mb-2">-->
+                <!--                    <a href="/place/{{id}}/update" class="btn btn-update">수정</a>-->
+                <!--                    <form action="/place/{{id}}/delete" method="post">-->
+                <!--                        <button class="btn btn-delete">삭제</button>-->
+                <!--                    </form>-->
+                <!--                </div>-->
+            {{/placePage.content}}
         </div>
         <div class="img-wrapper">
             <img src="./img/맵이벤트.png" alt="">
@@ -53,49 +37,15 @@
 </section>
 <div class="section">
 </div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=751c729462a97efdaec886e824711651&autoload=false"></script>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=751c729462a97efdaec886e824711651&autoload=false"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    const mockPlaces = [
-        {
-            id: 1,
-            name: "어울림 스터디룸 서면점",
-            address: "부산 부산진구 중앙대로 691",
-            latitude: 35.157774,
-            longitude: 129.059175,
-            category: "STUDY"
-        },
-        {
-            id: 2,
-            name: "어울림 회의실 서면역점",
-            address: "부산 부산진구 중앙대로 708",
-            latitude: 35.156917,
-            longitude: 129.059484,
-            category: "MEETING"
-        },
-        {
-            id: 3,
-            name: "어울림 연습실 전포점",
-            address: "부산 부산진구 전포대로 199",
-            latitude: 35.154673,
-            longitude: 129.063286,
-            category: "PRACTICE"
-        },
-        {
-            id: 4,
-            name: "어울림 스터디카페 부전점",
-            address: "부산 부산진구 부전로 57",
-            latitude: 35.159012,
-            longitude: 129.057842,
-            category: "STUDY"
-        }
-    ];
-
 
     let map = null;
-    kakao.maps.load(function() {
+    kakao.maps.load(function () {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
+            navigator.geolocation.getCurrentPosition(function (position) {
                 // 위도
                 const lat = position.coords.latitude;
                 // 경도
@@ -111,7 +61,7 @@
                 map = new kakao.maps.Map(mapContainer, mapOption);
 
                 displayMarker();
-            }, function(error) {
+            }, function (error) {
                 console.error("위치 정보를 가져올 수 없습니다.", error);
             });
         } else {
@@ -128,34 +78,34 @@
             // 장소를 forEach 반복문을 돌린다
             places.forEach((place) => {
                 // 객체에 담겨있는 장소의 위도, 경도를 maps.LatLng를 통해 position생성
-             const position = new kakao.maps.LatLng(place.latitude, place.longitude);
+                const position = new kakao.maps.LatLng(place.latitude, place.longitude);
 
-             var imageSrc = "/css/map/맵마커.png",
-                 imageSize = new kakao.maps.Size(32, 32),
-                 imageOption = {offset: new kakao.maps.Point(16, 32)};
+                var imageSrc = "/css/map/맵마커.png",
+                        imageSize = new kakao.maps.Size(32, 32),
+                        imageOption = {offset: new kakao.maps.Point(16, 32)};
 
-             var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+                var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
 
-             // 새로운 마커 생성
-               var marker = new kakao.maps.Marker({
-                   // map : 지도
-                   map: map,
-                   // position: 위도, 경도
-                   position: position,
-                   // marker 이미지
-                   image: markerImage,
-                   // title: 제목
-                   title: place.name
-               });
+                // 새로운 마커 생성
+                var marker = new kakao.maps.Marker({
+                    // map : 지도
+                    map: map,
+                    // position: 위도, 경도
+                    position: position,
+                    // marker 이미지
+                    image: markerImage,
+                    // title: 제목
+                    title: place.name
+                });
 
-               // click했을 때 보여줄 정보
-               const infowindow = new kakao.maps.InfoWindow({
-                   content: `<div style="padding:5px; color:black;">${place.name}</div>`
-               });
+                // click했을 때 보여줄 정보
+                const infowindow = new kakao.maps.InfoWindow({
+                    content: `<div style="padding:5px; color:black;">${place.name}</div>`
+                });
 
-               kakao.maps.event.addListener(marker, 'click', function() {
-                   infowindow.open(map, marker);
-               });
+                kakao.maps.event.addListener(marker, 'click', function () {
+                    infowindow.open(map, marker);
+                });
 
             });
 

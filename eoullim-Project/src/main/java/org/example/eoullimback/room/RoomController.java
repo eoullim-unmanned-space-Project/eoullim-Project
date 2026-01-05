@@ -17,7 +17,7 @@ import java.util.List;
 public class RoomController {
 
     private final RoomService roomService;
-    
+
     /**
      * 관리자가 생성하는 화면
      */
@@ -48,7 +48,7 @@ public class RoomController {
      * 2. 룸 파일 이미지
      * 3. 타임슬롯 + 아이템
      */
-    @GetMapping("/room/{roomId}/detail")
+    @GetMapping("/room/{roomId}")
     public String DetailRoom(@PathVariable Long roomId, Model model) {
 
         RoomResponse.DetailDTO room = roomService.DetailRoom(roomId);
@@ -80,7 +80,7 @@ public class RoomController {
 
         Room room = roomService.updateRoom(roomId, updateDTO);
 
-        return "redirect:/room/" + roomId;
+        return "redirect:/";
     }
 
     /**

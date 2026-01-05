@@ -1,7 +1,5 @@
 {{> layout/header}}
 
-<link rel="stylesheet" href="/css/main/main.css"/>
-
 <main>
     <div class="banner-wrap">
         <button class="banner-btn prev">&lt;</button>
@@ -21,26 +19,24 @@
     <section class="section">
         <div class="section-title">새로운 공간</div>
         <div class="space-list">
-            <div class="space-card">
-                <div class="space-img"></div>
-                <div class="space-name">
-                    <p>이름</p>
-                    <p>생성일</p>
-                    <p>카테고리</p>
-                </div>
-            </div>
-            <div class="space-card">
-                <div class="space-img"></div>
-                <div class="space-name">공간 이름 2</div>
-            </div>
-            <div class="space-card">
-                <div class="space-img"></div>
-                <div class="space-name">공간 이름 3</div>
-            </div>
-            <div class="space-card">
-                <div class="space-img"></div>
-                <div class="space-name">공간 이름 4</div>
-            </div>
+            {{#place}}
+                <a href="/place/{{id}}/room" class="space-card">
+                    <div class="space-img">
+                        <img src="{{profilePath}}" alt="프로필사진" class="space-img">
+                    </div>
+                    <div class="space-name">
+                        <h4>{{name}}</h4>
+                        <p>주소 : {{address}}</p>
+                        <p>카테고리 : {{category}}</p>
+                    </div>
+                </a>
+                <!--                <div class="d-flex justify-content-end mb-2">-->
+                <!--                    <a href="/place/{{id}}/update" class="btn btn-update">수정</a>-->
+                <!--                    <form action="/place/{{id}}/delete" method="post">-->
+                <!--                        <button class="btn btn-delete">삭제</button>-->
+                <!--                    </form>-->
+                <!--                </div>-->
+            {{/place}}
         </div>
     </section>
 
