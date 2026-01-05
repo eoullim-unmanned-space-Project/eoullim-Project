@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback.place.Place;
+import org.example.eoullimback.timeslot.TimeSlot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "rooms")
@@ -40,6 +44,9 @@ public class Room {
     private RoomStatus status;
 
     private String roomImage;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TimeSlot> timeSlots = new ArrayList<>();
 
     @Builder
     public Room(Long id, Place place, String name, String content,int maxCapacity, int defaultPrice, RoomStatus status,String roomImage) {

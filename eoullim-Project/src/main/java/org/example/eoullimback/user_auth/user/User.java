@@ -39,7 +39,7 @@ public class User extends BaseTimeEntity {
     @Column(length = 30)
     private String phone;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255, unique = true)
     private String email;
 
     private String profileImage;

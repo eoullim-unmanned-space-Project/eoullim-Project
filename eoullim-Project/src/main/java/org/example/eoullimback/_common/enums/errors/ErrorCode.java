@@ -10,9 +10,18 @@ public enum ErrorCode {
     // ====
     INVALID_INPUT("잘못된 입력값입니다."),
     MISSING_PARAMETER("비워 둘수 없는 항목입니다."),
+    INVALID_EMAIL_FORMAT("올바른 이메일 형식이 아닙니다."),
+    MISSING_EMAIL("이메일을 입력해주세요."),
     ONLY_FILE_IMG("이미지 파일만 업로드 가능합니다."),
     MAX_FILE_IMG("파일 이미지는 5장 이어야 합니다."),
-
+    ALREADY_BOOKED_TIME_SLOT("이미 예약된 타임슬롯입니다."),
+    INVALID_BOOKING_STATUS("결제 가능한 상태가 아닙니다."),
+    PAYMENT_ALREADY_EXISTS("이미 생성된 결제입니다."),
+    PAYMENT_COMPLETED("이미 처리된 결제입니다."),
+    PAYMENT_FAILED("포트원 인증실패: 관리자에게 문의하세요"),
+    PAYMENT_AMOUNT_MISMATCH("금액이 다릅니다."),
+    PAYMENT_ALREADY_PROCESSED("이미 결제된 주문입니다."),
+    
     // ====
     // 401 Unauthorized
     // ====
@@ -41,6 +50,11 @@ public enum ErrorCode {
     NOTICE_NOT_FOUND("존재하지 않는 공지사항 입니다."),
     REVIEW_NOT_FOUND("리뷰가 존재하지 않습니다."),
     ROOM_STATE_NOT_FOUND("OPEN상태인 방이 존재하지 않습니다."),
+    BOOKING_NOT_FOUND("부킹 내역이 존재하지 않습니다."),
+    BOOKING_CODE_NOT_FOUND("부킹 코드의 내역이 존재하지 않습니다."),
+    PAYMENT_NOT_FOUND("결제 내역이 존재하지 않습니다"),
+    PAYMENT_DATA_NOT_FOUND("결제 데이터가 존재하지 않습니다."),
+
 
     // ====
     // 409 Conflict

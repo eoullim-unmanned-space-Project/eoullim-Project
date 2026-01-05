@@ -1,12 +1,12 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/qaa/qaa.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div>
-    <div>
+<div class="qaa-container">
+    <div class="qaa-card">
         <div>
-            <div>Q&A 수정</div>
+            <div class="qaa-title">Q&A 수정</div>
             <div>
-                <form action="/qaas/{{qaa.id}}/update" method="post">
+                <form class="qaa-form" action="/qaas/{{qaa.id}}/update" method="post">
                     <div>
                         <input type="text"
                         placeholder="Enter name"
@@ -19,10 +19,12 @@
                                name="title"
                                value="{{qaa.title}}">
                     </div>
-                    <div>
+                    <div class="qaa-content">
                         <textarea rows="10" name="content"></textarea>
                     </div>
-                    <button>Q&A 수정 완료</button>
+                    <div class="qaa-btn-group">
+                        <button class="qaa-btn qaa-btn-primary">Q&A 수정 완료</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -1,28 +1,24 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/notice/notice.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div>
-    <div>
+<div class="notice-container">
+    <div class="notice-card">
         <div>
-            <button>공지사항 수정</button>
+            <div class="notice-title">공지사항 수정</div>
             <div>
-                <form>
-                    <div>
-                        <input type="text"
-                               placeholder="Enter name"
-                               name="name"
-                               value="{{notice.name}}">
-                    </div>
+                <form class="notice-form" action="/notices/{{notice.id}}/update" method="post">
                     <div>
                         <input type="text"
                                placeholder="Enter title"
                                name="title"
                                value="{{notice.title}}">
                     </div>
-                    <div>
+                    <div class="notice-content">
                         <textarea rows="10" name="content"></textarea>
                     </div>
-                    <button>공지사항 수정 완료</button>
+                    <div class="notice-btn-group">
+                        <button class="notice-btn notice-btn-primary">공지사항 수정 완료</button>
+                    </div>
                 </form>
             </div>
         </div>

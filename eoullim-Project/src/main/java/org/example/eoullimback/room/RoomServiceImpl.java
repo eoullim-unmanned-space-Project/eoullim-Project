@@ -12,6 +12,7 @@ import org.example.eoullimback.place.PlaceRepository;
 import org.example.eoullimback.room_image.RoomImage;
 import org.example.eoullimback.room_image.RoomImageRepository;
 import org.example.eoullimback.room_image.RoomImageResponse;
+import org.example.eoullimback.timeslot.TimeSlotRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class RoomServiceImpl implements RoomService{
     private final PlaceRepository placeRepository;
     private final RoomRepository roomRepository;
     private final RoomImageRepository roomImageRepository;
+    private final TimeSlotRepository timeSlotRepository;
 
     @Override
     @Transactional
@@ -42,7 +44,7 @@ public class RoomServiceImpl implements RoomService{
                     throw new Exception400(ErrorCode.ONLY_FILE_IMG);
                 }
 
-                roomImageFileName = FileUtil.saveFile(request.getRoomImage());
+                roomImageFileName = FileUtil.saveRoomFile(request.getRoomImage());
             } catch (Exception e) {
                 throw new RuntimeException();
             }
@@ -78,7 +80,15 @@ public class RoomServiceImpl implements RoomService{
                         .map(RoomImageResponse.DetailDTO::new)
                         .toList();
 
-        return new RoomResponse.DetailDTO(room, imageDTOs);
+        return new RoomResponse.DetailDTO(room);
+    }
+
+    @Override
+    public Room roomUpdateForm(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
+
+        return room;
     }
 
     @Override
@@ -118,6 +128,8 @@ public class RoomServiceImpl implements RoomService{
     public void deleteRoom(Long roomId) {
         Room room =  roomRepository.findByWithPlace(roomId)
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
+
+        timeSlotRepository.deleteAllByRoom(room);
 
         roomRepository.deleteById(roomId);
     }

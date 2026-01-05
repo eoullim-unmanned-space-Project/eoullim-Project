@@ -1,26 +1,30 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/notice/notice.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div>
-    <div>
-        <b>작성자</b> : {{notice.name}}
-    </div>
-
-    <div>
-        <h2><b>{{notice.title}}</b></h2>
-        <hr />
-        <div>
-            {{notice.content}}
+<div class="notice-container">
+    <div class="notice-card">
+        <div class="notice-meta">
+            <b>작성자</b> : {{notice.name}}
         </div>
+<!--    </div>-->
+
+    <div class="notice-title">
+        <h2><b>{{notice.title}}</b></h2>
     </div>
 
-    <div>
-        <form action="/notices/{{notice.id}}/update" method="post">
-            <button>수정</button>
+    <div class="notice-btn-group">
+        <form action="/notices/{{notice.id}}/update" method="get">
+            <button class="notice-btn notice-btn-secondary">수정</button>
         </form>
         <form action="/notices/{{notice.id}}/delete" method="post">
-            <button>삭제</button>
+            <button class="notice-btn notice-btn-secondary">삭제</button>
         </form>
     </div>
+
+    <div class="notice-content">
+        {{notice.content}}
+    </div>
+
+
 </div>
 {{> layout/footer}}

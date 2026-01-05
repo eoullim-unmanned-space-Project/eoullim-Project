@@ -225,3 +225,7 @@ body {
 #map {
   pointer-events: none;
 }
+
+.amount-box {
+  margin-bottom: 5px;
+}

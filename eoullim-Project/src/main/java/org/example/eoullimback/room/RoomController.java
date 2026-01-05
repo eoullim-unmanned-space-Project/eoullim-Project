@@ -62,8 +62,10 @@ public class RoomController {
      * 화면: 수정
      */
     @GetMapping("/room/{roomId}/update")
-    public String updateView(@PathVariable Long roomId) {
+    public String updateView(Model model, @PathVariable Long roomId) {
 
+        Room room = roomService.roomUpdateForm(roomId);
+        model.addAttribute("room", room);
 
         return "room/update";
     }
@@ -89,6 +91,6 @@ public class RoomController {
 
         roomService.deleteRoom(roomId);
 
-        return "redirect:/place/";
+        return "redirect:/map/place";
     }
 }

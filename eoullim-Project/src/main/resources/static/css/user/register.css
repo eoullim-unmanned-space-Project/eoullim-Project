@@ -134,3 +134,93 @@ body {
     border-color: rgba(79, 70, 229, 0.45);
     background: rgba(255, 255, 255, 1);
 }
+
+.input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+}
+
+#email {
+    padding: 10px 16px;
+    border-radius: 12px 12px 0 0;
+}
+
+#code {
+    padding: 6px 16px;
+    border-radius: 0 0 0 12px;
+}
+#code-btn {
+    padding: 6px 0;
+    border-radius: 0 0 12px 0;
+}
+
+.input-group > .form-control,
+.input-group > .btn {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+}
+
+#sendEmail {
+    width: 100%;
+    padding: 6px 0;
+    border: none;
+    border-radius: 0 0 12px 12px ;
+    cursor: pointer;
+    background: rgba(79, 70, 229, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    transition: 0.25s ease;
+}
+
+#sendEmail:hover {
+    background: rgba(67, 56, 202, 0.95);
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    background-color: transparent;
+    transition: color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.input-group input {
+    border-radius: 12px;
+}
+
+.input-group button {
+    border-radius: 12px;
+}

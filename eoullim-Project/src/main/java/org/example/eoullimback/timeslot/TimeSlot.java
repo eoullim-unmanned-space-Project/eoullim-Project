@@ -16,12 +16,12 @@ import java.time.YearMonth;
 @Entity
 @Table(name = "time_slots",
         uniqueConstraints = {
-            @UniqueConstraint(name = "uk_time_slots_room_start", columnNames = {"room_id", "year_month", "start_time"})
+            @UniqueConstraint(name = "uk_room_slot_month_start_time", columnNames = {"room_id", "slot_month", "start_time"})
         },
         indexes = {
             @Index(
-                    name = "idx_time_slots_year_month",
-                    columnList = "year_month"
+                    name = "idx_time_slots_slot_month",
+                    columnList = "slot_month"
             ),
             @Index(
                     name = "idx_time_slots_start_time",
@@ -35,7 +35,7 @@ import java.time.YearMonth;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TimeSlot extends BaseTimeEntity {
+public class TimeSlot {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,8 +45,8 @@ public class TimeSlot extends BaseTimeEntity {
             foreignKey = @ForeignKey(name = "fk_time_slots_room"))
     private Room room;
 
-    @Column(nullable = false, length = 7)
-    private String yearMonth;
+    @Column(nullable = false, columnDefinition = "CHAR(7)")
+    private String slotMonth;
 
     @Column(nullable = false)
     private LocalDateTime startTime;
@@ -62,10 +62,10 @@ public class TimeSlot extends BaseTimeEntity {
     private RoomStatus status;
 
     @Builder
-    public TimeSlot(Long id, Room room, String yearMonth,  LocalDateTime startTime, LocalDateTime endTime, int capacity, RoomStatus status) {
+    public TimeSlot(Long id, Room room, String slotMonth,  LocalDateTime startTime, LocalDateTime endTime, int capacity, RoomStatus status) {
         this.id = id;
         this.room = room;
-        this.yearMonth = yearMonth;
+        this.slotMonth = slotMonth;
         this.startTime = startTime;
         this.endTime = endTime;
         this.capacity = capacity;

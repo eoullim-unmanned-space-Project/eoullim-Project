@@ -4,6 +4,17 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
+SELECT * FROM time_slots;
+SELECT * FROM items;
+SELECT * FROM places;
+SELECT * FROM rooms;
+SELECT * FROM users;
+SELECT * FROM bookings;
+SELECT * FROM payments;
+
+DELETE FROM payments WHERE id =1;
+DELETE FROM bookings WHERE id = 4;
+
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
 DROP TABLE IF EXISTS reviews;
@@ -137,7 +148,7 @@ CREATE TABLE rooms (
   default_price int NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '상태(OPEN, CLOSED)',
   room_image VARCHAR(500) COMMENT '방 사진',
- 
+
   CHECK (status IN('OPEN', 'CLOSED')),
   
   CONSTRAINT `fk_rooms_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE
@@ -156,31 +167,25 @@ CREATE TABLE room_images (
     CONSTRAINT fk_room_images_room FOREIGN KEY (room_id) REFERENCES rooms (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE time_slots (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   
   room_id BIGINT NOT NULL COMMENT '방 번호',
   
+  slot_month CHAR(7) NOT NULL COMMENT '생성된 월',
   start_time DATETIME(6) NOT NULL COMMENT '시작시간',
   end_time DATETIME(6) NOT NULL COMMENT '종료시간',
-  `year_month` VARCHAR(7) NOT NULL COMMENT '연-월',
   capacity INT NOT NULL COMMENT '인원 수 지정',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
-  
-  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
-  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
 
-  CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
+  CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
   CHECK (status IN('OPEN','CLOSED','CANCELED')),
   
-  UNIQUE KEY `uk_time_slots_room_id` (room_id),
-  UNIQUE KEY `uk_time_slots_start_time` (start_time),
+  UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_Month, start_time),
   
+  INDEX `idx_time_slots_slot_Month` (slot_Month),
   INDEX `idx_time_slots_start_time` (start_time),
-  INDEX `idx_time_slots_end_time` (end_time),
-  INDEX `idx_time_slots_year_month` (`year_month`)
-  
+  INDEX `idx_time_slots_end_time` (end_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
 
 CREATE TABLE items (
@@ -200,31 +205,30 @@ CREATE TABLE bookings (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
   user_id BIGINT NOT NULL COMMENT '사용자 ID',
-  room_id BIGINT NOT NULL COMMENT '방 ID',
   time_slot_id BIGINT NOT NULL COMMENT '타임슬롯 ID',
- 
-  item_snapshot_price BIGINT NOT NULL comment '아이템 가격 저장본',
-  
+  room_id BIGINT NOT NULL COMMENT '룸 ID',
+
+  item_snapshot_price BIGINT NOT NULL COMMENT '아이템 가격 저장본',
+  booking_code VARCHAR(255) NOT NULL COMMENT '예약 코드',
+  booking_date DATE NOT NULL COMMENT '이용 예정 날짜',
+  booking_time DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '예약시간',
   qty INT NOT NULL COMMENT '인원체크',
   amount BIGINT NOT NULL COMMENT '가격',
-  booking_date DATE NOT NULL COMMENT '예약 날짜',
   cancelled_at DATETIME(6) NULL COMMENT '취소일', 
   status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '상태',
   
-  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
-  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
-  
-  UNIQUE KEY `uk_user_time_slot_item` (user_id, time_slot_id),
+  UNIQUE KEY `uk_room_date_slot` (room_id, booking_date, time_slot_id),
   
   CONSTRAINT `fk_bookings_user` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_bookings_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
   CONSTRAINT `fk_bookings_time_slot` FOREIGN KEY (time_slot_id) REFERENCES time_slots(id),
-  
+  CONSTRAINT `fk_bookings_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
+
   CHECK (qty > 0),
   CHECK (status IN('PENDING','CONFIRMED','CANCELED','REFUNDED')),
   
   INDEX `idx_bookings_user` (user_id, status),
-  INDEX `idx_bookings_time_slot` (time_slot_id)
+  INDEX `idx_bookings_time_slot` (time_slot_id),
+  INDEX `idx_bookings_code` (booking_code )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='예약 테이블';
 
 CREATE TABLE payments (
@@ -235,10 +239,10 @@ CREATE TABLE payments (
   
   order_id VARCHAR(100) NOT NULL COMMENT '주문 코드 ID',
   payment_key VARCHAR(100) NOT NULL COMMENT '결제 키 (PG 또는 모의 PG 트랜잭션 키)',
+  imp_uid VARCHAR(100) NULL COMMENT '포트원 발급 키',
   amount BIGINT NOT NULL COMMENT '결제 금액(포인트)',
   method VARCHAR(30) NOT NULL COMMENT '결제 수단 (KAKAO_PAY, TOSS_PAY등)',
   status VARCHAR(30) NOT NULL COMMENT '결제 상태',
-  product_code VARCHAR(50) NOT NULL COMMENT '상품 코드',
   product_name VARCHAR(100) NOT NULL COMMENT '상품 이름',
   failure_code VARCHAR(50) NULL COMMENT '결제 실패 코드',
   failure_message VARCHAR(255) NULL COMMENT '결제 실패 사유',
@@ -250,8 +254,7 @@ CREATE TABLE payments (
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
   CHECK (status IN('READY','SUCCESS','FAILED','CANCELLED','REFUNDED')),
-  
-  UNIQUE KEY `uk_payments_booking_id` (booking_id),
+
   UNIQUE KEY `uk_payments_payment_key` (payment_key),
   
   INDEX `idx_payments_user_id` (user_id),
@@ -260,6 +263,7 @@ CREATE TABLE payments (
   CONSTRAINT `fk_payments_user` FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT `fk_payments_booking` FOREIGN KEY (booking_id) REFERENCES bookings(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='결제 테이블';
+
 CREATE TABLE payment_refunds (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   

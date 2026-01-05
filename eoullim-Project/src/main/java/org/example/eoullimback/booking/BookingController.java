@@ -1,14 +1,14 @@
 package org.example.eoullimback.booking;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,29 +17,44 @@ public class BookingController {
     private final BookingService bookingService;
 
     /**
-     * 기능 - 부킹 생성
+     * 화면 - 예약 화면
      */
-    @PostMapping("/room/{roomId}/timeSlot/{timeSlotId}/bookings")
-    public String saveBooking(@PathVariable Long roomId,
-                              @PathVariable Long timeSlotId,
-                              HttpSession session,
-                              @ModelAttribute @Valid BookingRequest.createDTO createDTO
-    ) {
+    @GetMapping("/booking/detail")
+    public String detailBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        Booking booking = bookingService.saveBooking(sessionUser.getId(), roomId, timeSlotId, createDTO);
+        if (sessionUser == null) {
+            throw new Exception401(ErrorCode.ACCESS_DENIED);
+        }
 
-        return "/bookig/bookings" + booking.getId();
+        BookingResponse.DetailDTO booking = bookingService.detailBooking(sessionUser.getId(), bookingCode);
+
+        model.addAttribute("user", sessionUser);
+        model.addAttribute("booking", booking);
+
+        return "booking/detail";
     }
 
-    /**
-     * 화면 - 예약 화면
-     */ 
-    @GetMapping()
-    public String detailBooking() {
 
-        return "/booking/";
+    @GetMapping("/booking/complete")
+    public String completeBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
+
+        System.out.println(bookingCode);
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            throw new Exception401(ErrorCode.ACCESS_DENIED);
+        }
+
+
+        BookingResponse.DetailDTO booking = bookingService.detailBooking(sessionUser.getId(), bookingCode);
+
+        model.addAttribute("user", sessionUser);
+        model.addAttribute("booking", booking);
+
+        return "booking/complete";
     }
 
 }

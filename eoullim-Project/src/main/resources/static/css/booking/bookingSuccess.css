@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.success-container {
+    max-width: 500px;
+    margin: 100px auto;
+    text-align: center;
+    padding: 50px 30px;
+    background: #ffffff;
+    border-radius: 24px;
+    /* 그림자로 입체감 부여 */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+.success-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+    display: block;
+}
+.info-box {
+    background: #fdfdfd;
+    border: 1px solid #f0f0f0;
+    border-radius: 16px;
+    padding: 24px;
+    margin: 32px 0;
+    text-align: left;
+}
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.info-label { color: #888; font-size: 14px; }
+.info-value { color: #333; font-weight: 600; }
+
+/* 버튼 스타일 직접 정의 */
+.button-group {
+    display: flex;
+    gap: 12px;
+    flex-direction: column; /* 모바일 대응을 위해 세로 배치 후 PC에서 가로로 */
+}
+@media (min-width: 480px) {
+    .button-group { flex-direction: row; }
+}
+
+.custom-btn {
+    flex: 1;
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+}
+.btn-fill {
+    background-color: #007bff;
+    color: white !important;
+    border: none;
+}
+.btn-fill:hover { background-color: #0056b3; transform: translateY(-2px); }
+
+.btn-outline {
+    background-color: #fff;
+    color: #555 !important;
+    border: 1px solid #ddd;
+}
+.btn-outline:hover { background-color: #f8f9fa; border-color: #ccc; }
+
+.email-alert {
+    font-size: 13px;
+    color: #2e7d32;
+    background: #e8f5e9;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 15px;
+}

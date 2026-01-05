@@ -1,18 +1,18 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
+<link rel="stylesheet" href="/css/notice/notice.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div>
-    <div>
-        <div><b>공지사항 작성</b></div>
+<div class="notice-container">
+    <div class="notice-card">
+        <div class="notice-title"><b>공지사항 작성</b></div>
         <div>
-            <form action="/notices/new" method="post">
+            <form class="notice-form" action="/notices/new" method="post">
                 <div>
-                    <input type="text" placeholder="title" name="title">
+                    <input type="text" placeholder="제목을 입력하세요" name="title">
                 </div>
                 <div>
-                    <textarea rows="10" name="content"></textarea>
+                    <textarea rows="10" placeholder="내용을 입력하세요" name="content"></textarea>
                 </div>
-                <button>공지사항 작성</button>
+                <button class="notice-btn notice-btn-primary">공지사항 작성</button>
             </form>
         </div>
     </div>

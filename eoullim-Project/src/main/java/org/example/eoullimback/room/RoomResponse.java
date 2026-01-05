@@ -26,7 +26,7 @@ public class RoomResponse {
             this.maxCapacity = room.getMaxCapacity();
             this.defaultPrice = room.getDefaultPrice();
             this.status = room.getStatus();
-            this.roomImagePath = "/images/" + room.getRoomImage();
+            this.roomImagePath = "/images/roomImages" + room.getRoomImage();
         }
     }
 
@@ -38,12 +38,12 @@ public class RoomResponse {
         private RoomStatus status;
         private String roomImagePath;
 
-        public DetailDTO(Room room, List<RoomImageResponse.DetailDTO> imageDTOs) {
+        public DetailDTO(Room room) {
             this.name = room.getName();
             this.content = room.getContent();
             this.defaultPrice = room.getDefaultPrice();
             this.status = room.getStatus();
-            this.roomImagePath = "/images/" + room.getRoomImage();
+            this.roomImagePath = "/images/roomImages" + room.getRoomImage();
         }
     }
 }
