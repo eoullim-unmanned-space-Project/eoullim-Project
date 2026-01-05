@@ -1,7 +1,6 @@
 package org.example.eoullimback.user_auth.auth;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.User;
@@ -30,9 +29,11 @@ public class AuthController {
      * @return
      */
     @PostMapping("/signup")
-    public String signup(@ModelAttribute @Valid AuthRequest.SignupRequestDTO request,
+    public String signup(@ModelAttribute AuthRequest.SignupRequestDTO request,
                          HttpSession session
     ) {
+        request.validate();
+
         User newUser = authService.signup(request);
 
         session.setAttribute("sessionUser", newUser);
@@ -57,9 +58,11 @@ public class AuthController {
      * 로그인 기능
      */
     @PostMapping("/login")
-    public String login(@ModelAttribute @Valid AuthRequest.LoginRequestDTO request,
+    public String login(@ModelAttribute AuthRequest.LoginRequestDTO request,
                         HttpSession session
     ) {
+        request.validate();
+
         User sessionUser = authService.login(request);
 
         session.setAttribute("sessionUser", sessionUser);

@@ -2,6 +2,7 @@ package org.example.eoullimback.user_auth.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,7 @@ public class UserRole {
             foreignKey = @ForeignKey(name = "fk_user_roles_role_name"))
     private Role role;
 
+    @Builder
     public UserRole(User user, Role role) {
         this.user = user;
         this.role = role;

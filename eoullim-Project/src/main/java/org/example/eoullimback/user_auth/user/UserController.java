@@ -1,13 +1,10 @@
 package org.example.eoullimback.user_auth.user;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -63,8 +60,10 @@ public class UserController {
     // // http://localhost:8080/users/profile/1
     @PostMapping("/profile")
     public String updateProfile(HttpSession session,
-                                @ModelAttribute @Valid UserRequest.UpDateDTO update
+                                @ModelAttribute UserRequest.UpDateDTO update
     ) {
+        update.validate();
+
         User sessionUser = (User) session.getAttribute("sessionUser");
         User updateUser = userService.updateProfile(sessionUser.getId(), update);
 
