@@ -25,7 +25,6 @@ DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS time_slots;
-DROP TABLE IF EXISTS room_files;
 DROP TABLE IF EXISTS room_images;
 DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS places;
@@ -148,11 +147,12 @@ CREATE TABLE rooms (
   max_capacity INT NOT NULL COMMENT '최대 인원 수 지정',
   default_price int NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '상태(OPEN, CLOSED)',
- 
+  room_image VARCHAR(500) COMMENT '방 사진',
+
   CHECK (status IN('OPEN', 'CLOSED')),
   
   CONSTRAINT `fk_rooms_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방 테이블';
 
 CREATE TABLE room_images (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -178,7 +178,7 @@ CREATE TABLE time_slots (
   capacity INT NOT NULL COMMENT '인원 수 지정',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
 
-  CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
+  CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
   CHECK (status IN('OPEN','CLOSED','CANCELED')),
   
   UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_Month, start_time),
@@ -210,7 +210,7 @@ CREATE TABLE bookings (
 
   item_snapshot_price BIGINT NOT NULL COMMENT '아이템 가격 저장본',
   booking_code VARCHAR(255) NOT NULL COMMENT '예약 코드',
-  booking_date DATE NOT NULL COMMENT '이용 예정 날짜',	  
+  booking_date DATE NOT NULL COMMENT '이용 예정 날짜',
   booking_time DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '예약시간',
   qty INT NOT NULL COMMENT '인원체크',
   amount BIGINT NOT NULL COMMENT '가격',
@@ -222,7 +222,7 @@ CREATE TABLE bookings (
   CONSTRAINT `fk_bookings_user` FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT `fk_bookings_time_slot` FOREIGN KEY (time_slot_id) REFERENCES time_slots(id),
   CONSTRAINT `fk_bookings_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
-  
+
   CHECK (qty > 0),
   CHECK (status IN('PENDING','CONFIRMED','CANCELED','REFUNDED')),
   
@@ -254,7 +254,7 @@ CREATE TABLE payments (
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
   CHECK (status IN('READY','SUCCESS','FAILED','CANCELLED','REFUNDED')),
-  
+
   UNIQUE KEY `uk_payments_payment_key` (payment_key),
   
   INDEX `idx_payments_user_id` (user_id),
@@ -374,10 +374,11 @@ VALUES
 ('조용한 공부방 부산', '부산광역시 남구 대연동 21-7', 35.1363, 129.0883, 'STUDY', null, NOW(), NOW());
 SELECT * FROM places;
 
--- places 테이블에 ID 1, 2인 장소가 먼저 존재해야 실행 가능합니다.
-INSERT INTO rooms (place_id, name, content, max_capacity, default_price, status) VALUES 
-(1, 'A 스터디룸', '4인 기준 집중하기 좋은 조용한 공간입니다.', 4, 15000, 'OPEN'),
-(1, 'B 세미나실', '최대 10인 수용 가능한 화이트보드 완비 공간.', 10, 30000, 'OPEN'),
-(2, 'VIP 비즈니스룸', '프라이빗한 미팅을 위한 최고급 소파와 방음 시설.', 6, 50000, 'OPEN'),
-(2, '오픈 코워킹 스페이스', '자유로운 분위기에서 협업할 수 있는 넓은 공간.', 20, 10000, 'OPEN'),
-(1, 'C 유튜브 스튜디오', '영상 촬영 및 편집이 가능한 조명 시설 완비.', 3, 25000, 'CLOSED');
+INSERT INTO rooms (place_id, name, content, max_capacity, default_price, status, room_image) VALUES
+(1, '스탠다드룸', '기본적인 편의시설을 갖춘 방', 2, 50000, 'OPEN', NULL),
+(1, '디럭스룸', '넓고 쾌적한 방', 3, 80000, 'OPEN', NULL),
+(1, '스위트룸', '럭셔리 스위트룸, 침대 2개', 4, 150000, 'CLOSED', NULL),
+(2, '커넥팅룸', '2개의 방이 연결된 구조', 6, 120000, 'OPEN', NULL),
+(3, '패밀리룸', '가족 단위 숙박에 적합', 5, 100000, 'OPEN', NULL);
+SELECT * FROM rooms;
+SELECT * FROM room_images;

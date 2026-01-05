@@ -5,6 +5,7 @@
         <span>내 주변 무인 대여공간</span>
         <span class="second">내 주변에 가까운 무인공간을 찾아보세요.</span>
         <div id="map"></div>
+        <form action="/map/place" method="post" enctype="multipart/form-data">
         <a href="/place/create" class="btn btn-secondary">장소 생성</a>
         {{#placePage.content}}
             <div class="place-card">
@@ -12,7 +13,7 @@
                     <img src="{{profilePath}}" alt="프로필사진" class="place-profile" >
                     <h4 class="place-title ">{{name}}</h4>
                     <p class="place-address">주소 : {{address}} | 카테고리 : {{category}}</p>
-                    <a href="/place/{{id}}/list" class="btn btn-place">상세보기</a>
+                    <a href="/place/{{id}}/room" class="btn btn-place">상세보기</a>
 
                     <div class="d-flex justify-content-end mb-2">
                         <a href="/place/{{id}}/update" class="btn btn-update">수정</a>
@@ -23,6 +24,7 @@
                 </div>
             </div>
         {{/placePage.content}}
+        </form>
         <div class="space-card">
             <div class="card">1</div>
             <div class="card">2</div>

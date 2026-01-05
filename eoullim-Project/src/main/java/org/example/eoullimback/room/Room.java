@@ -7,6 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback.place.Place;
+import org.example.eoullimback.timeslot.TimeSlot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "rooms")
@@ -29,6 +33,9 @@ public class Room {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private int maxCapacity;
+
     @Column(nullable = false, name = "default_price")
     private int defaultPrice;
 
@@ -36,23 +43,40 @@ public class Room {
     @Column(nullable = false)
     private RoomStatus status;
 
+    private String roomImage;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TimeSlot> timeSlots = new ArrayList<>();
+
     @Builder
-    public Room(Long id, Place place, String name, String content, int defaultPrice, RoomStatus status) {
+    public Room(Long id, Place place, String name, String content,int maxCapacity, int defaultPrice, RoomStatus status,String roomImage) {
         this.id = id;
         this.place = place;
         this.name = name;
+        this.maxCapacity = maxCapacity;
         this.defaultPrice = defaultPrice;
         this.content = content;
         this.status = status;
+        this.roomImage = roomImage;
     }
 
     public void update(RoomRequest.UpdateDTO updateDTO) {
 
-        updateDTO.validate();
-
         this.name = updateDTO.name;
         this.content = updateDTO.content;
+        this.maxCapacity = updateDTO.maxCapacity;
         this.status = updateDTO.status;
         this.defaultPrice = updateDTO.defaultPrice;
+        this.roomImage = updateDTO.getRoomImageFileName();
+    }
+
+    public String getRoomFilePath() {
+        if (this.roomImage == null) {
+            return null;
+        }
+        if (this.roomImage.startsWith("http")) {
+            return this.roomImage;
+        }
+        return "/images/" + this.roomImage;
     }
 }

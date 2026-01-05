@@ -21,11 +21,11 @@ public class FileUtil {
         return saveFile(file, IMAGES_DIR);
     }
 
-    public static FileInfo saveRoomFile(MultipartFile file) throws IOException {
+    public static String saveRoomFile(MultipartFile file) throws IOException {
         return saveRoomFile(file, ROOM_FILE_DIR);
     }
 
-    public static FileInfo saveRoomFile(MultipartFile file, String roomDir) throws IOException {
+    public static String saveRoomFile(MultipartFile file, String roomDir) throws IOException {
 
         if (file == null || file.isEmpty()) {
             return null;
@@ -43,19 +43,13 @@ public class FileUtil {
         }
 
         String uuid = UUID.randomUUID().toString();
-        String saveFileName = uuid + "_" + originalFilename;
+        String savedFileName = uuid + "_" + originalFilename;
 
-        Path filePath = uploadPath.resolve(saveFileName);
+        Path filePath = uploadPath.resolve(savedFileName);
 
         Files.copy(file.getInputStream(), filePath);
 
-        return FileInfo.builder()
-                .originalName(originalFilename)
-                .storedName(saveFileName)
-                .contentType(file.getContentType())
-                .fileSize(file.getSize())
-                .filePath(filePath)
-                .build();
+        return savedFileName;
     }
 
     public static String saveFile(MultipartFile file, String uploadDir) throws IOException {

@@ -1,0 +1,56 @@
+{{> layout/header}}
+<div class="container p-5">
+
+    <!-- 요청을 하면 localhost:8080/join POST로 요청됨
+    username=사용자입력값&password=사용자값&email=사용자입력값 -->
+
+    <div class="card">
+        <div class="card-header"><b>장소 수정을 해주세요</b></div>
+        <div class="card-body">
+        <div class="text-center mb-4">
+            {{#room.roomImage}}
+                <img src="{{room.roomImagePath}}" alt="방사진" class="rounded-circle border"
+                     style="width: 200px;height: 200px; object-fit: cover">
+            {{/room.roomImage}}
+            {{^room.roomImage}}
+                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center border"
+                     style="width: 200px; height: 200px;">
+                    <span class="text-white fs-5">방 사진 없음</span>
+                </div>
+            </div>
+            {{/room.roomImage}}
+        </div>
+
+        <form action="/room/{{roomId}}/update" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="name" name="name" value="{{room.name}}">
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="content" name="content" value="{{room.content}}">
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="maxCapacity" name="maxCapacity" value="{{room.maxCapacity}}">
+            </div>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="defaultPrice" name="defaultPrice" value="{{room.defaultPrice}}">
+            </div>
+            <div class="mb-3">
+                <select class="form-control" placeholder="status" name="status">
+                    <option VALUE="">선택하세요</option>
+                    <option VALUE="OPEN">OPEN</option>
+                    <option VALUE="CLOSED">CLOSED</option>
+                    <option VALUE="CANCELED">CANCELED</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="roomImage" class="form-label"> 방 사진(선택사항)</label>
+                <input type="file" class="form-control" id="roomImage" name="roomImage" accept="image/*">
+                <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
+            </div>
+            <button type="submit" class="btn btn-primary form-control">방 생성</button>
+        </form>
+    </div>
+</div>
+</div>
+
+{{> layout/footer}}
