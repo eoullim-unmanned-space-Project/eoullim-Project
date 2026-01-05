@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="/css/room/listStyle.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
+
 {{> layout/header}}
 <body>
 <div class="container">
@@ -8,15 +11,15 @@
             {{#roomList}}
                 <div class="place-card">
                     <div class="place-body">
-                        <img src="" alt="프로필사진" class="place-profile">
+                        <img src="{{roomImagePath}}" alt="프로필사진" class="place-profile">
                         <h4 class="place-title ">{{name}}</h4>
                         <p class="place-address">내용 : {{content}} | 최대인원 : {{maxCapacity}} | 가격 : {{defaultPrice}} </p>
                         <p></p>
-                        <a href="/place/{{id}}/room" class="btn btn-place">상세보기</a>
+                        <a href="/place/{{roomId}}/room" class="btn btn-place">상세보기</a>
 
                         <div class="d-flex justify-content-end mb-2">
-                            <a href="/place/{{id}}/update" class="btn btn-update">수정</a>
-                            <form action="/place/{{id}}/delete" method="post">
+                            <a href="/room/{{roomId}}/update" class="btn btn-update">수정</a>
+                            <form action="/place/{{roomId}}/delete" method="post">
                                 <button class="btn btn-delete">삭제</button>
                             </form>
                         </div>
@@ -29,7 +32,7 @@
         <div class="left">
             <div class="main-content">
                 <p>어울림 스터디카페</p>
-                <span><img src="./img/주소.png" alt=""> 부산광역시 부산진구 신천대로 62번길</span>
+                <span><img src="/img/room/주소.png" alt=""> 부산광역시 부산진구 신천대로 62번길</span>
                 <p>룸 선택</p>
                 <div class="room-list">
                     <div class="room-card"><img src="img/room1.jpg" alt="스터디룸 A">
@@ -77,7 +80,7 @@
                     · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
                 </p>
             </div>
-            <p><img src="./img/user.png" alt=""> 인원 수</p>
+            <p><img src="/img/room/user.png" alt=""> 인원 수</p>
             <div class="people-box">
                 <button type="button" id="minusBtn">−</button>
                 <input type="text" id="peopleCount" value="1" min="1" readonly>
@@ -167,7 +170,26 @@
         } else {
             alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
         }
+    kakao.maps.load(function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          var mapContainer = document.getElementById('map');
+          var mapOption = { center: new kakao.maps.LatLng(lat, lng), level: 6 };
+          var map = new kakao.maps.Map(mapContainer, mapOption);
+          var marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(lat, lng) });
+          marker.setMap(map);
+        }, function(error) {
+          console.error("위치 정보를 가져올 수 없습니다.", error);
+        });
+      } else {
+        alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+      }
+
+
     });
+
 
     const slider = document.querySelector('.timeslot-container');
     const slots = slider.querySelectorAll('.timeslot');
@@ -178,69 +200,69 @@
     let moved = false;
 
     slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        moved = false;
+      isDown = true;
+      moved = false;
 
-        startX = e.clientX;
-        startScrollLeft = slider.scrollLeft;
+      startX = e.clientX;
+      startScrollLeft = slider.scrollLeft;
     });
 
     window.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
+      if (!isDown) return;
 
-        const dx = e.clientX - startX;
+      const dx = e.clientX - startX;
 
-        if (Math.abs(dx) > 3) moved = true;
+      if (Math.abs(dx) > 3) moved = true;
 
-        if (moved) {
-            e.preventDefault();
-            slider.scrollLeft = startScrollLeft - dx;
-        }
+      if (moved) {
+        e.preventDefault();
+        slider.scrollLeft = startScrollLeft - dx;
+      }
     });
 
     window.addEventListener('mouseup', () => {
-        isDown = false;
+      isDown = false;
     });
 
     slots.forEach(slot => {
-        slot.addEventListener('click', () => {
-            slot.classList.toggle('selected');
-        });
+      slot.addEventListener('click', () => {
+        slot.classList.toggle('selected');
+      });
     });
+
 
     document.addEventListener('DOMContentLoaded', () => {
-        const maxPeople = 6;
+      const maxPeople = 6;
 
-        const minusBtn = document.getElementById('minusBtn');
-        const plusBtn = document.getElementById('plusBtn');
-        const input = document.getElementById('peopleCount');
+      const minusBtn = document.getElementById('minusBtn');
+      const plusBtn = document.getElementById('plusBtn');
+      const input = document.getElementById('peopleCount');
 
-        minusBtn.addEventListener('click', () => {
-            let value = Number(input.value);
-            if (value > 1) {
-                input.value = value - 1;
-            }
-        });
+      minusBtn.addEventListener('click', () => {
+        let value = Number(input.value);
+        if (value > 1) {
+          input.value = value - 1;
+        }
+      });
 
-        plusBtn.addEventListener('click', () => {
-            let value = Number(input.value);
-            if (value < maxPeople) {
-                input.value = value + 1;
-            }
-        });
+      plusBtn.addEventListener('click', () => {
+        let value = Number(input.value);
+        if (value < maxPeople) {
+          input.value = value + 1;
+        }
+      });
 
-        // 초기 상태 버튼 제어
-        const updateButtons = () => {
-            minusBtn.disabled = Number(input.value) <= 1;
-            plusBtn.disabled = Number(input.value) >= maxPeople;
-        };
+      // 초기 상태 버튼 제어
+      const updateButtons = () => {
+        minusBtn.disabled = Number(input.value) <= 1;
+        plusBtn.disabled = Number(input.value) >= maxPeople;
+      };
 
-        updateButtons();
+      updateButtons();
 
-        minusBtn.addEventListener('click', updateButtons);
-        plusBtn.addEventListener('click', updateButtons);
+      minusBtn.addEventListener('click', updateButtons);
+      plusBtn.addEventListener('click', updateButtons);
     });
+
 </script>
 </body>
-
-{{> layout/footer}}

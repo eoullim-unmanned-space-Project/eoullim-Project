@@ -25,10 +25,10 @@
             </div>
 
         <div>
-            <form action="comments/new" method="post">
+            <form action="/qaa/{qaaId}/comments/new" method="post">
                 <input type="hidden" name="qaaId" value="{{qaa.id}}">
                 <label>
-                    <textarea rows="2" name="comment" placeholder="댓글을 입력하세요."></textarea>
+                    <textarea rows="2" name="content" placeholder="댓글을 입력하세요."></textarea>
                 </label>
                 <div>
                     <button type="submit">댓글 등록</button>
@@ -41,16 +41,31 @@
                 <div>
                     <div>{{name}}</div>
                     <small>{{createdAt}}</small>
-                    <div>
-                        {{content}}
-                        <form action="/comments/{{id}}/update" method="get">
-                            <button type="submit">수정</button>
-                        </form>
-                        <form action="/comments/{{id}}/delete" method="post">
-                            <button type="submit">삭제</button>
-                        </form>
-                    </div>
 
+                    {{#isEditing}}
+                        {{#isOwner}}
+                            <form action="/comments/{{id}}/update" method="post">
+                                <textarea name="content">{{content}}</textarea>
+                                <button type="submit">수정 완료</button>
+                            </form>
+                        {{/isOwner}}
+                    {{/isEditing}}
+
+                    {{^isEditing}}
+                    <div>
+                        <div>
+                            {{content}}
+                        </div>
+                        {{#isOwner}}
+                            <form action="/comments/{{id}}/update" method="get">
+                                <button type="submit">수정</button>
+                            </form>
+                            <form action="/comments/{{id}}/delete" method="post">
+                                <button type="submit">삭제</button>
+                            </form>
+                        {{/isOwner}}
+                    </div>
+                    {{/isEditing}}
                 </div>
             </div>
         {{/commentList}}

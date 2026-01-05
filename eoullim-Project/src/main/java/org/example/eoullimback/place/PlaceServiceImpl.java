@@ -115,6 +115,8 @@ public class PlaceServiceImpl implements PlaceService{
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
 
+        roomRepository.deleteById(placeId);
+
         placeRepository.deleteById(placeId);
     }
 }

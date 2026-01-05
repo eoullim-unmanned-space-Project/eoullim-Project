@@ -30,7 +30,7 @@ public class Room {
     private String content;
 
     @Column(nullable = false)
-    private Integer maxCapacity;
+    private int maxCapacity;
 
     @Column(nullable = false, name = "default_price")
     private int defaultPrice;
@@ -39,8 +39,10 @@ public class Room {
     @Column(nullable = false)
     private RoomStatus status;
 
+    private String roomImage;
+
     @Builder
-    public Room(Long id, Place place, String name, String content,Integer maxCapacity, int defaultPrice, RoomStatus status) {
+    public Room(Long id, Place place, String name, String content,int maxCapacity, int defaultPrice, RoomStatus status,String roomImage) {
         this.id = id;
         this.place = place;
         this.name = name;
@@ -48,16 +50,26 @@ public class Room {
         this.defaultPrice = defaultPrice;
         this.content = content;
         this.status = status;
+        this.roomImage = roomImage;
     }
 
     public void update(RoomRequest.UpdateDTO updateDTO) {
-
-        updateDTO.validate();
 
         this.name = updateDTO.name;
         this.content = updateDTO.content;
         this.maxCapacity = updateDTO.maxCapacity;
         this.status = updateDTO.status;
         this.defaultPrice = updateDTO.defaultPrice;
+        this.roomImage = updateDTO.getRoomImageFileName();
+    }
+
+    public String getRoomFilePath() {
+        if (this.roomImage == null) {
+            return null;
+        }
+        if (this.roomImage.startsWith("http")) {
+            return this.roomImage;
+        }
+        return "/images/" + this.roomImage;
     }
 }

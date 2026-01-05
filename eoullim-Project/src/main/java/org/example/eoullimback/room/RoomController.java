@@ -33,28 +33,13 @@ public class RoomController {
     @PostMapping("/place/{placeId}/room/create")
     public String createRoom(Model model,
                              @PathVariable Long placeId,
-                             @ModelAttribute @Valid RoomRequest.CreateDTO createDTO
-    ) throws IOException {
+                             @Valid RoomRequest.CreateDTO createDTO
+    ) {
 
         Room room = roomService.createRoom(placeId, createDTO);
         model.addAttribute("room", room);
 
-        return "redirect:/place/" + placeId + "/room";
-    }
-
-    /**
-     * 전체 조회 화면 - VIEW
-     * 1. 룸 정보
-     * 2. 룸 파일 이미지
-     */
-    @GetMapping("/place/{placeId}/room")
-    public String ListRoom(Model model,
-                           @PathVariable Long placeId
-    ) {
-        List<RoomResponse.ListDTO> roomList = roomService.roomList(placeId);
-        model.addAttribute("roomList", roomList);
-
-        return "room/list";
+        return "redirect:/map/place";
     }
 
     /**
@@ -89,7 +74,7 @@ public class RoomController {
      * - 타임슬롯 변경은 x 안됨
      */
     @PostMapping("/room/{roomId}/update")
-    public String updateRoom(@PathVariable Long roomId, @ModelAttribute @Valid RoomRequest.UpdateDTO updateDTO) throws IOException {
+    public String updateRoom(@PathVariable Long roomId, @Valid RoomRequest.UpdateDTO updateDTO){
 
         Room room = roomService.updateRoom(roomId, updateDTO);
 
@@ -100,7 +85,7 @@ public class RoomController {
      * 기능: 삭제 - 완료
      */
     @PostMapping("/room/{roomId}/delete")
-    public String deleteRoom(@PathVariable Long roomId) throws IOException {
+    public String deleteRoom(@PathVariable Long roomId) {
 
         roomService.deleteRoom(roomId);
 

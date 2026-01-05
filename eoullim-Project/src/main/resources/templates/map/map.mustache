@@ -5,6 +5,7 @@
         <span>내 주변 무인 대여공간</span>
         <span class="second">내 주변에 가까운 무인공간을 찾아보세요.</span>
         <div id="map"></div>
+        <form action="/map/place" method="post" enctype="multipart/form-data">
         <a href="/place/create" class="btn btn-secondary">장소 생성</a>
         {{#placePage.content}}
             <div class="place-card">
@@ -23,6 +24,7 @@
                 </div>
             </div>
         {{/placePage.content}}
+        </form>
         <div class="space-card">
             <div class="card">1</div>
             <div class="card">2</div>

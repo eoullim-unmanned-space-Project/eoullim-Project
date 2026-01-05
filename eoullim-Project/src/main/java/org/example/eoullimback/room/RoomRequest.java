@@ -22,7 +22,8 @@ public class RoomRequest {
         @NotBlank(message = "내용은 필수입니다.")
         String content;
 
-        Integer maxCapacity;
+        @Min(value = 1, message = "최대 1명 이상이어야 합니다.")
+        int maxCapacity;
 
         @Min(value = 100, message = "값은 100원 부터입니다.")
         int defaultPrice;
@@ -30,9 +31,9 @@ public class RoomRequest {
         @NotNull(message = "상태값은 필수 입니다.")
         RoomStatus status;
 
-        List<MultipartFile> roomImage;
+        MultipartFile roomImage;
 
-        public Room toEntity (Place place) {
+        public Room toEntity (Place place, String roomImageFileName) {
             return Room.builder()
                     .place(place)
                     .name(name)
@@ -40,6 +41,7 @@ public class RoomRequest {
                     .maxCapacity(maxCapacity)
                     .defaultPrice(defaultPrice)
                     .status(status)
+                    .roomImage(roomImageFileName)
                     .build();
         }
     }
@@ -50,28 +52,19 @@ public class RoomRequest {
         @Size(max = 150, message = "최대 150자 까지 입력 가능합니다.")
         String name;
 
+        @NotBlank(message = "내용은 필수입니다.")
         String content;
 
+        @Min(value = 1, message = "최대 1명 이상이어야 합니다.")
         Integer maxCapacity;
 
         @Min(value = 100, message = "값은 100원 부터입니다.")
         int defaultPrice;
 
+        @NotNull(message = "상태값은 필수 입니다.")
         RoomStatus status;
 
-        List<MultipartFile> roomImages;
-
-        List<Long> roomImageIds;
-
-        public void validate() {
-
-            if (name != null && name.trim().isEmpty()) {
-                throw new IllegalArgumentException("제목은 공백일 수 없습니다.");
-            }
-
-            if (content != null && content.trim().isEmpty()) {
-                throw new IllegalArgumentException("내용은 공백일 수 없습니다.");
-            }
-        }
+        private MultipartFile roomImage;
+        private String roomImageFileName;
     }
 }

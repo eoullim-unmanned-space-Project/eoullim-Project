@@ -3,6 +3,7 @@ package org.example.eoullimback.place;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
+import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,7 +38,7 @@ public class PlaceController {
     }
 
     // 전체 조회
-    @GetMapping("/")
+    @GetMapping("/map/place")
     public String ListPlace(Model model,
                             @RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "5") int size,
@@ -47,6 +50,17 @@ public class PlaceController {
         model.addAttribute("placeKeyword", keyword != null ? keyword : "");
 
         return "/map/map";
+    }
+
+    @GetMapping("/place/{placeId}/room")
+    public String ListRoom(Model model,
+                           @PathVariable Long placeId
+    ) {
+        List<RoomResponse.ListDTO> roomList = roomService.roomList(placeId);
+        model.addAttribute("roomList", roomList);
+        model.addAttribute("placeId", placeId);
+
+        return "room/list";
     }
 
     // 수정

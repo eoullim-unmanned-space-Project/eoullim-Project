@@ -81,7 +81,10 @@ public class QaaController {
                 && qaa.getUserId().equals(sessionUser.getId());
 
         Long sessionUserId = sessionUser != null ? sessionUser.getId() : null;
-        List<CommentResponse.ListDTO> commentList = commentService.listComment(qaaId, sessionUserId);
+
+        Long commentId = (Long) session.getAttribute("commentId");
+
+        List<CommentResponse.ListDTO> commentList = commentService.listComment(qaaId, sessionUserId, commentId);
 
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("qaa", qaa);
