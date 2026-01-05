@@ -29,7 +29,6 @@ public class PaymentResponse {
         private String accessToken;
     }
 
-
     @Data
     public static class PortOnePaymentDetailDTO {
         private int code;

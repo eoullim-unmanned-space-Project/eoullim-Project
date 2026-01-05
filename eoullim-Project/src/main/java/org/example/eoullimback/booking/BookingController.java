@@ -36,4 +36,25 @@ public class BookingController {
         return "booking/detail";
     }
 
+
+    @GetMapping("/booking/complete")
+    public String completeBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
+
+        System.out.println(bookingCode);
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            throw new Exception401(ErrorCode.ACCESS_DENIED);
+        }
+
+
+        BookingResponse.DetailDTO booking = bookingService.detailBooking(sessionUser.getId(), bookingCode);
+
+        model.addAttribute("user", sessionUser);
+        model.addAttribute("booking", booking);
+
+        return "booking/complete";
+    }
+
 }

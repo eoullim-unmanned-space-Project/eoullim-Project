@@ -35,7 +35,7 @@ import java.time.YearMonth;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TimeSlot extends BaseTimeEntity {
+public class TimeSlot {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,7 +45,7 @@ public class TimeSlot extends BaseTimeEntity {
             foreignKey = @ForeignKey(name = "fk_time_slots_room"))
     private Room room;
 
-    @Column(nullable = false, length = 7)
+    @Column(nullable = false, columnDefinition = "CHAR(7)")
     private String slotMonth;
 
     @Column(nullable = false)

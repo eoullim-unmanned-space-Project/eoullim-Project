@@ -8,7 +8,7 @@
         <div class="hero-card">
             <div class="hero-img"></div>
             <div class="hero-body">
-                <div class="status-badge">예약 {{status}}</div>
+                <div class="status-badge">예약상태: {{status}}</div>
                 <h1>{{placeName}}</h1>
                 <p><img src="/img/room/주소.png" alt="주소이미지">  {{address}}</p>
             </div>
@@ -160,6 +160,14 @@
                             merchant_uid: response.merchant_uid
                         })
                      });
+
+                     if (notified.ok) {
+                         alert(bookingCode);
+                         alert(`결제가 완료되었습니다.\n결제된 금액:${data.totalAmount}`)
+                         location.href  = `/booking/complete?code=${bookingCode}`;
+                     } else {
+                         alert("결제 실패");
+                     }
 
                  });
 

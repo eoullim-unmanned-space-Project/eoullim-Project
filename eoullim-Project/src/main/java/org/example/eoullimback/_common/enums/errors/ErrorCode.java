@@ -17,7 +17,11 @@ public enum ErrorCode {
     ALREADY_BOOKED_TIME_SLOT("이미 예약된 타임슬롯입니다."),
     INVALID_BOOKING_STATUS("결제 가능한 상태가 아닙니다."),
     PAYMENT_ALREADY_EXISTS("이미 생성된 결제입니다."),
-
+    PAYMENT_COMPLETED("이미 처리된 결제입니다."),
+    PAYMENT_FAILED("포트원 인증실패: 관리자에게 문의하세요"),
+    PAYMENT_AMOUNT_MISMATCH("금액이 다릅니다."),
+    PAYMENT_ALREADY_PROCESSED("이미 결제된 주문입니다."),
+    
     // ====
     // 401 Unauthorized
     // ====
@@ -49,7 +53,7 @@ public enum ErrorCode {
     BOOKING_NOT_FOUND("부킹 내역이 존재하지 않습니다."),
     BOOKING_CODE_NOT_FOUND("부킹 코드의 내역이 존재하지 않습니다."),
     PAYMENT_NOT_FOUND("결제 내역이 존재하지 않습니다"),
-    PAYMENT_DAYA_NOT_FOUND("결제 데이터가 존재하지 않습니다."),
+    PAYMENT_DATA_NOT_FOUND("결제 데이터가 존재하지 않습니다."),
 
 
     // ====
