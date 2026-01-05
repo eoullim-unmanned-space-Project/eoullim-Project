@@ -9,28 +9,22 @@ import java.time.LocalDateTime;
 public class NotificationResponse {
 
     @Data
-    public static class ListDTO {
+    public static class NotificationResponseDTO {
 
         private Long id;
         private NotificationType type;
         private NotificationStatus status;
         private String message;
         private String qrCode;
-        private Long userId;
-        private Long paymentId;
         private LocalDateTime createdAt;
-        private LocalDateTime sentAt;
 
-        public ListDTO(Notification notification) {
+        public NotificationResponseDTO(Notification notification) {
             this.id = notification.getId();
             this.type = notification.getType();
             this.status = notification.getStatus();
             this.message = notification.getMessage();
             this.qrCode = notification.getQrCode();
-            this.userId = notification.getUser().getId();
-            this.paymentId = notification.getPayment().getId();
             this.createdAt = notification.getCreatedAt();
-            this.sentAt = notification.getSentAt();
         }
     }
 }

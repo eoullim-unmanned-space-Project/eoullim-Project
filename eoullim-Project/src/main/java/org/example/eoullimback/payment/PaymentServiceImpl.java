@@ -9,6 +9,7 @@ import org.example.eoullimback._common.enums.payment.PaymentStatus;
 import org.example.eoullimback._common.error.exception.*;
 import org.example.eoullimback.booking.Booking;
 import org.example.eoullimback.booking.BookingRepository;
+import org.example.eoullimback.notification.NotificationService;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
     private final BookingRepository bookingRepository;
+    private final NotificationService notificationService;
 
     @Value("${portone.imp-key}")
     private String impKey;
@@ -132,15 +134,18 @@ public class PaymentServiceImpl implements PaymentService {
                     log.info("부킹 예약 완료 상태 변경되었습니다. 부킹코드: {}, 부킹상태: {}", booking.getBookingCode(), booking.getStatus());
                 }
 
+                notificationService.notifyPaymentSuccess(paymentEntity);
                 log.info("결제 및 예약 확정 완료 되었습니다. 유저 ID: {}, 주문번호: {}, 결제금액: {}", user.getId(), paymentEntity.getId(), paymentEntity.getAmount());
                 break;
 
             case "failed" :
                 handlePaymentFailure(paymentEntity, bookingEntities, "PORTONE_PAYMENT_FAILED", failedMessage);
+                notificationService.notifyPaymentFailed(paymentEntity, failedMessage);
                 break;
 
             case "cancelled" :
                 handlePaymentFailure(paymentEntity, bookingEntities, "PORTONE_PAYMENT_CANCELLED", "사용자가 결제를 취소하였습니다.");
+                notificationService.notifyPaymentCancelled(paymentEntity);
                 break;
 
             default:
