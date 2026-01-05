@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface PlaceRepository extends JpaRepository<Place, Long> {
 
     @Query(
@@ -19,5 +21,11 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
                          " OR LOWER(p.address) LIKE LOWER(CONCAT('%', :keyword, '%'))" +
                          " OR LOWER(p.category) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Place> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
+
+    @Query(
+            value = "SELECT * FROM places ORDER BY created_at DESC LIMIT 4",
+            nativeQuery = true
+    )
+    List<Place> findLatest4Places();
 
 }

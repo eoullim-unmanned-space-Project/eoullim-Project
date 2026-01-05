@@ -9,7 +9,7 @@
         <div class="card-body">
         <div class="text-center mb-4">
             {{#room.roomImage}}
-                <img src="{{room.roomImagePath}}" alt="방사진" class="rounded-circle border"
+                <img src="" alt="방사진" class="rounded-circle border"
                      style="width: 200px;height: 200px; object-fit: cover">
             {{/room.roomImage}}
             {{^room.roomImage}}
@@ -35,7 +35,7 @@
                 <input type="text" class="form-control" placeholder="defaultPrice" name="defaultPrice" value="{{room.defaultPrice}}">
             </div>
             <div class="mb-3">
-                <select class="form-control" placeholder="status" name="status">
+                <select class="form-control" placeholder="status" name="status" required>
                     <option VALUE="">선택하세요</option>
                     <option VALUE="OPEN">OPEN</option>
                     <option VALUE="CLOSED">CLOSED</option>

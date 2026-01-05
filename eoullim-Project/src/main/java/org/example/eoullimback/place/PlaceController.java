@@ -34,11 +34,11 @@ public class PlaceController {
     public String createProc(@Valid PlaceRequest.CreateDTO request) {
         Place place = placeService.placeCreate(request);
 
-        return "redirect:/";
+        return "redirect:/main/main";
     }
 
     // 전체 조회
-    @GetMapping("/map/place")
+    @GetMapping("/map")
     public String ListPlace(Model model,
                             @RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "5") int size,
@@ -52,13 +52,25 @@ public class PlaceController {
         return "/map/map";
     }
 
+    // 새로운 장소 4개만 조회
+    @GetMapping("/")
+    public String newPlace(Model model
+    ) {
+        List<PlaceResponse.ListDTO> place = placeService.newPlace();
+        model.addAttribute("place", place);
+
+        return "/main/main";
+    }
+
     @GetMapping("/place/{placeId}/room")
+
     public String ListRoom(Model model,
                            @PathVariable Long placeId
     ) {
         List<RoomResponse.ListDTO> roomList = roomService.roomList(placeId);
+        Place place = placeService.placeUpdateForm(placeId);
         model.addAttribute("roomList", roomList);
-        model.addAttribute("placeId", placeId);
+        model.addAttribute("place", place);
 
         return "room/list";
     }
