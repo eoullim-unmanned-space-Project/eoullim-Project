@@ -41,11 +41,13 @@ public enum ErrorCode {
     MY_ONLY("본인만 접근할 수 있습니다."),
     ADMIN_OLLY("관리자만 접근 할 수 있습니다."),
     LOGIN_ONLY("로그인이 필요합니다."),
+    SOCIAL_USER_CANNOT_UPDATE("소셜 로그인 계정은 회원정보를 수정할 수 없습니다."),
 
     // ====
     // 404 Not Found
     // ====
     USER_NOT_FOUND("사용자를 찾을 수 없습니다."),
+    ROLE_NOT_FOUND("요청한 권한(Role)을 찾을 수 없습니다."),
     PLACE_NOT_FOUND("장소를 찾을 수 없습니다."),
     ROOM_NOT_FOUND("방을 찾을 수 없습니다."),
     ROOM_IMG_NOT_FOUND("이미지를 찾을 수 없습니다."),

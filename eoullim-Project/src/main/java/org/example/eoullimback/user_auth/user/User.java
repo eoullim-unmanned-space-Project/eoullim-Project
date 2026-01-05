@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 
 @Table(name = "users",
         uniqueConstraints = {
-            @UniqueConstraint(name = "uk_users_login_id", columnNames = "login_id"),
-            @UniqueConstraint(name = "uk_users_email", columnNames = "email")
+                @UniqueConstraint(name = "uk_users_login_id", columnNames = "login_id"),
+                @UniqueConstraint(name = "uk_users_email", columnNames = "email")
         })
 @NoArgsConstructor
 @Entity
@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class User extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "login_id", nullable = false, length = 50)
@@ -60,7 +61,7 @@ public class User extends BaseTimeEntity {
 
     @Builder
     public User(Long id, String loginId, String password, String name,
-                String phone, String  email, Status status, String profileImage,
+                String phone, String email, Status status, String profileImage,
                 OAuthProvider provider
     ) {
         this.id = id;
@@ -107,12 +108,15 @@ public class User extends BaseTimeEntity {
         return "/uploads/" + profileImage;
     }
 
-    public void addRole(Role role) {
-        boolean exists = userRoles.stream().anyMatch(u -> u.getRole().equals(role));
+    public boolean isOwner(Long userId) {
+        return this.id.equals(userId);
+    }
 
-        if (!exists) {
-            userRoles.add(new UserRole(this, role));
-        }
+
+    public void addRole(Role role) {
+        UserRole userRole = new UserRole(this, role);
+        userRoles.add(userRole);
+        role.getUserRoles().add(userRole);
     }
 
     public Set<RoleType> getRoleTypes() {
@@ -121,7 +125,35 @@ public class User extends BaseTimeEntity {
                 .collect(Collectors.toUnmodifiableSet());
     }
 
+    public boolean hasRole(RoleType roleType) {
+        return userRoles.stream()
+                .anyMatch(u -> u.getRole().getName() == roleType);
+    }
+
+    public boolean isAdmin() {
+        return hasRole(RoleType.ADMIN);
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin();
+    }
+
+    public String getRoleDisplay() {
+        return isAdmin() ? "ADMIN" : "USER";
+    }
+
     public void deleteRole(Role role) {
-        userRoles.removeIf(u -> u.getRole().equals(role));
+        userRoles.removeIf(u -> u.getRole().getName() == role.getName());
+    }
+
+    public boolean isLocalUser() {
+        return this.provider == OAuthProvider.LOCAL;
+    }
+    public boolean isSocialUser() {
+        return this.provider != OAuthProvider.LOCAL;
+    }
+
+    public boolean canUpdateProfile() {
+        return isLocalUser();
     }
 }

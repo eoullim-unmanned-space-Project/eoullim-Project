@@ -30,13 +30,13 @@ public class AuthRequest {
            if (loginId == null || loginId.trim().isEmpty()) {
                throw new Exception400(ErrorCode.LOGIN_ID_REQUIRED);
            }
-           if (loginId.length() <= 6 || loginId.length() >= 20) {
+           if (loginId.length() < 6 || loginId.length() > 20) {
                throw new Exception400(ErrorCode.LOGIN_ID_LENGTH);
            }
            if (password == null || password.trim().isEmpty()) {
                throw new Exception400(ErrorCode.PASSWORD_REQUIRED);
            }
-           if (password.length() <= 8 ||  password.length() >= 20) {
+           if (password.length() < 8 ||  password.length() > 20) {
                throw new Exception400(ErrorCode.PASSWORD_POLITY);
            }
            if (name == null || name.trim().isEmpty()) {
