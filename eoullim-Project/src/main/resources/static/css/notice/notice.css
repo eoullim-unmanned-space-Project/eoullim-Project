@@ -84,8 +84,9 @@ body {
 }
 
 .notice-form textarea {
+    display: flex;
     resize: vertical;
-    min-height: 180px;
+    min-height: 60px;
 }
 
 /* =========================
@@ -93,7 +94,7 @@ body {
 ========================= */
 
 .notice-btn {
-    padding: 14px 20px;
+    padding: 10px 15px;
     border-radius: 14px;
     font-size: 14px;
     font-weight: 700;
@@ -126,7 +127,8 @@ body {
 .notice-btn-group {
     display: flex;
     gap: 10px;
-    margin-top: 24px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 /* =========================
@@ -161,38 +163,6 @@ body {
 }
 
 /* =========================
-   COMMENT
-========================= */
-
-.comment-box {
-    background: #e2e8f0;
-    padding: 20px;
-    border-radius: 18px;
-    margin-top: 20px;
-}
-
-.comment-item {
-    padding: 16px;
-    border-radius: 14px;
-    background: #f8fafc;
-    margin-bottom: 12px;
-}
-
-.comment-header {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: var(--text-sub);
-    margin-bottom: 6px;
-}
-
-.comment-content {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--text-main);
-}
-
-/* =========================
    PAGINATION
 ========================= */
 
@@ -201,12 +171,12 @@ body {
     justify-content: center;
     gap: 8px;
     margin-top: 30px;
+    margin-bottom: 10px;
 }
 
 .pagination a {
     padding: 10px 14px;
     border-radius: 12px;
-    background: #f8fafc;
     box-shadow: var(--card-shadow);
     text-decoration: none;
     font-weight: 600;
@@ -215,7 +185,6 @@ body {
 
 .pagination a:hover {
     background: var(--primary);
-    color: white;
 }
 
 /* =========================
