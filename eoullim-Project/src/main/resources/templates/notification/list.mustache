@@ -1,0 +1,56 @@
+<link rel="stylesheet" href="/css/notification/notification.css"/>
+<link rel="stylesheet" href="/css/layout/header.css"/>
+{{> layout/header}}
+<div class="notification-content">
+
+    <h2>{{sessionUser.name}}님의 알림</h2>
+
+    {{#notifications}}
+        <div>
+            <div>
+                <strong>[{{type}}]</strong>
+                <span>({{status}})</span>
+            </div>
+
+            <div>
+                {{message}}
+            </div>
+
+            {{#qrCode}}
+                <div>
+                    QR 코드:
+                    <div class="qrcode" data-qr="{{qrCode}}"></div>
+                </div>
+            {{/qrCode}}
+
+            <div>
+                {{createdAt}}
+            </div>
+        </div>
+    {{/notifications}}
+
+    {{^notifications}}
+        <p>알림이 없습니다.</p>
+    {{/notifications}}
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+
+        const qrElements = document.querySelectorAll('.qrCode');
+
+        qrElements.forEach(el => {
+            const qrValue = el.dataset.qr;
+
+            if (!qrValue) return;
+
+            new QRCode(el, {
+                text: qrValue,
+                width: 120,
+                height: 120
+            });
+        });
+    });
+</script>
+{{> layout/footer}}

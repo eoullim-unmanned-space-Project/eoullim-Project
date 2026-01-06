@@ -24,7 +24,7 @@ public class AdminInterceptor implements HandlerInterceptor {
              throw new Exception401(ErrorCode.LOGIN_ONLY);
          }
 
-         if (sessionUser.isAdmin()) {
+         if (!sessionUser.isAdmin()) {
              throw new Exception403(ErrorCode.ADMIN_OLLY);
          }
         return true;

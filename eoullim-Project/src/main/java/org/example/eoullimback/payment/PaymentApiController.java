@@ -46,9 +46,13 @@ public class PaymentApiController {
         log.info("결제 완료 요청 수신: impUid={}, merchantUid={}",
                 requestDTO.getImpUid(), requestDTO.getMerchantUid());
 
-        paymentService.complete(sessionUser.getId(), requestDTO.getImpUid(), requestDTO.getMerchantUid());
+        String bookingCode = paymentService.complete(sessionUser.getId(), requestDTO.getImpUid(), requestDTO.getMerchantUid());
 
-        return ResponseEntity.ok().body(Map.of("message", "결제를 완료했습니다. 이메일로 QR코드를 확인해주세요"));
+        if (bookingCode != null) {
+            return ResponseEntity.ok().body(Map.of("message", "결제를 완료했습니다. 이메일로 QR코드를 확인해주세요", "bookingCode", bookingCode, "success", true));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("message", "결제가 취소되었습니다."));
+        }
     }
 
 }

@@ -13,7 +13,7 @@ SELECT * FROM bookings;
 SELECT * FROM payments;
 
 DELETE FROM payments WHERE id =1;
-DELETE FROM bookings WHERE id = 4;
+DELETE FROM bookings WHERE id = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
@@ -178,9 +178,9 @@ CREATE TABLE time_slots (
   capacity INT NOT NULL COMMENT '인원 수 지정',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
 
+  CHECK (status IN('OPEN','CLOSED')),
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
-  CHECK (status IN('OPEN','CLOSED','CANCELED')),
-  
+
   UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_Month, start_time),
   
   INDEX `idx_time_slots_slot_Month` (slot_Month),
@@ -316,12 +316,15 @@ CREATE TABLE notifications (
   type VARCHAR(20) NOT NULL COMMENT '알림(PAYMENT, REFUND, CANCEL, BOOKING)',
   status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '전송 상태(PENDING, SENT, FAILED)',
   message VARCHAR(255) NOT NULL COMMENT '전송 메시지',
-  qr_code VARCHAR(40) NOT NULL COMMENT 'QR 코드 토큰',
+  qr_code VARCHAR(40) NULL COMMENT 'QR 코드 토큰',
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   sent_at DATETIME(6) NULL COMMENT '전송 시각',
   
   CHECK (type IN('PAYMENT','REFUND','CANCEL','BOOKING')),
   CHECK (status IN('PENDING','SENT','FAILED')),
+  
+  INDEX `idx_notifications_user_id` (user_id),
+  INDEX `idx_notifications_payment_id` (payment_id),
   
   CONSTRAINT `fk_notifications_user` FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT `fk_notifications_payment` FOREIGN KEY (payment_id) REFERENCES payments(id)

@@ -9,6 +9,7 @@ import org.example.eoullimback._common.enums.payment.PaymentStatus;
 import org.example.eoullimback._common.error.exception.*;
 import org.example.eoullimback.booking.Booking;
 import org.example.eoullimback.booking.BookingRepository;
+import org.example.eoullimback.notification.NotificationService;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final UserRepository userRepository;
     private final PaymentRepository paymentRepository;
     private final BookingRepository bookingRepository;
+    private final NotificationService notificationService;
 
     @Value("${portone.imp-key}")
     private String impKey;
@@ -93,7 +95,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public void complete(Long userId, String impUid, String merchantUid) {
+    public String complete(Long userId, String impUid, String merchantUid) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
@@ -131,45 +133,26 @@ public class PaymentServiceImpl implements PaymentService {
                     booking.changeSuccess();
                     log.info("부킹 예약 완료 상태 변경되었습니다. 부킹코드: {}, 부킹상태: {}", booking.getBookingCode(), booking.getStatus());
                 }
+
+                notificationService.notifyPaymentSuccess(paymentEntity);
                 log.info("결제 및 예약 확정 완료 되었습니다. 유저 ID: {}, 주문번호: {}, 결제금액: {}", user.getId(), paymentEntity.getId(), paymentEntity.getAmount());
                 break;
 
             case "failed" :
-                paymentEntity.markFailed(
-                        "PORTONE_PAYMENT_FAILED",
-                        failedMessage
-                );
-
-                for (Booking booking : bookingEntities) {
-                    if (booking.getStatus() == BookingStatus.PENDING) {
-                        booking.changeCanceled();
-                        log.info("예약 취소 처리되었습니다. 예약번호: {}, 사유: {}", booking.getBookingCode(), paymentEntity.getFailureMessage());
-                    } else {
-                        log.warn("예약 상태가 PENDING이 아니어서 취소 생략: 예약번호: {}, 현재상태: {}", booking.getBookingCode(), booking.getStatus());
-                    }
-                }
+                handlePaymentFailure(paymentEntity, bookingEntities, "PORTONE_PAYMENT_FAILED", failedMessage);
+                notificationService.notifyPaymentFailed(paymentEntity, failedMessage);
                 break;
 
             case "cancelled" :
-                paymentEntity.markFailed(
-                        "USER_CANCEL",
-                        "사용자가 결제를 취소했습니다."
-                );
-
-                for (Booking booking : bookingEntities) {
-                    if (booking.getStatus() == BookingStatus.PENDING) {
-                        booking.changeCanceled();
-                        log.info("예약 취소 처리되었습니다. 예약번호: {}, 사유: {}", booking.getBookingCode(), paymentEntity.getFailureMessage());
-                    } else {
-                        log.warn("예약 상태가 PENDING이 아니어서 취소 생략: 예약번호: {}, 현재상태: {}", booking.getBookingCode(), booking.getStatus());
-                    }
-
-                }
+                handlePaymentFailure(paymentEntity, bookingEntities, "PORTONE_PAYMENT_CANCELLED", "사용자가 결제를 취소하였습니다.");
+                notificationService.notifyPaymentCancelled(paymentEntity);
                 break;
 
             default:
                 throw new Exception500(ErrorCode.INTERNAL_ERROR);
         }
+
+        return paymentEntity.getOrderId();
     }
 
     private String getPortOneToken() {
@@ -235,6 +218,25 @@ public class PaymentServiceImpl implements PaymentService {
         } catch (Exception e) {
             log.error("포트원 결제조회 중 오류 발생: ", e);
             throw new Exception400(ErrorCode.PAYMENT_FAILED);
+        }
+    }
+
+    private void handlePaymentFailure(Payment payment, List<Booking> bookings, String code, String failMessage) {
+        payment.markFailed(code, failMessage);
+
+        for (Booking booking : bookings) {
+            if (booking.getStatus() != BookingStatus.PENDING) {
+                throw new Exception400(ErrorCode.INVALID_BOOKING_STATUS);
+            }
+
+            booking.changeCanceled();
+            booking.getTimeSlot().open();
+
+            log.info("예약 취소 및 타임슬롯 복구 완료: 예약코드: {}, 예약상태: {}, 타임슬롯ID: {}, 타임슬롯 상태: {}",
+                    booking.getBookingCode(),
+                    booking.getStatus(),
+                    booking.getTimeSlot().getId(),
+                    booking.getTimeSlot().getStatus());
         }
     }
 

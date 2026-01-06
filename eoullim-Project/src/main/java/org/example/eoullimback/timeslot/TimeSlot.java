@@ -6,7 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.room.RoomStatus;
+import org.example.eoullimback._common.enums.time_slot.SlotStatus;
+import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback.room.Room;
 
 import java.time.LocalDate;
@@ -59,10 +62,10 @@ public class TimeSlot {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private RoomStatus status;
+    private SlotStatus status;
 
     @Builder
-    public TimeSlot(Long id, Room room, String slotMonth,  LocalDateTime startTime, LocalDateTime endTime, int capacity, RoomStatus status) {
+    public TimeSlot(Long id, Room room, String slotMonth,  LocalDateTime startTime, LocalDateTime endTime, int capacity, SlotStatus status) {
         this.id = id;
         this.room = room;
         this.slotMonth = slotMonth;
@@ -70,5 +73,17 @@ public class TimeSlot {
         this.endTime = endTime;
         this.capacity = capacity;
         this.status = status;
+    }
+
+    public void close() {
+        if (this.status == SlotStatus.CLOSED) {
+            throw new Exception400(ErrorCode.ALREADY_BOOKED_TIME_SLOT);
+        }
+
+        this.status = SlotStatus.CLOSED;
+    }
+
+    public void open() {
+        this.status = SlotStatus.OPEN;
     }
 }

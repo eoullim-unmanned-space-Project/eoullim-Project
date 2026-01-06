@@ -3,6 +3,7 @@ package org.example.eoullimback.user_auth.user;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.enums.user.OAuthProvider;
 import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,7 @@ public class UserController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User user = userService.getMyProfile(sessionUser.getId());
 
-//        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("user", user);
 
         return "user/update-profile";
@@ -97,6 +98,23 @@ public class UserController {
         userService.leaveUser(sessionUser.getId());
 
         session.invalidate();
+
         return "redirect:/auth/login";
     }
+
+
+    /**
+     * 화면 : 사용자 비밀번호 체크
+     */
+    @GetMapping("/verify-password")
+    public String verifyPassword(HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser.getProvider() == OAuthProvider.KAKAO) {
+            return "redirect:/user/profile";
+        }
+
+        return "/user/verify-password";
+    }
+
 }
