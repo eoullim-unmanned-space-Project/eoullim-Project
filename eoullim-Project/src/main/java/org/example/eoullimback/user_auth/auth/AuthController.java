@@ -38,7 +38,7 @@ public class AuthController {
 
         session.setAttribute("sessionUser", newUser);
 
-        return  "redirect:/user/profile";
+        return  "redirect:/auth/login";
     }
 
     @GetMapping("/signup-check-login-id")
