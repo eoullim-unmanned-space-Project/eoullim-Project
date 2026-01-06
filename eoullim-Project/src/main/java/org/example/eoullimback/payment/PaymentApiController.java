@@ -30,7 +30,7 @@ public class PaymentApiController {
         PaymentResponse.PrepareDTO prepareDTO = paymentService.prepare(sessionUser.getId(), requestDTO.bookingCode);
 
         return ResponseEntity.ok().body(
-                Map.of("paymentId", prepareDTO.getPaymentId(),"totalAmount", prepareDTO.getTotalAmount()));
+                Map.of("paymentKey", prepareDTO.getPaymentKey(),"totalAmount", prepareDTO.getTotalAmount()));
     }
 
 
@@ -53,6 +53,22 @@ public class PaymentApiController {
         } else {
             return ResponseEntity.badRequest().body(Map.of("message", "결제가 취소되었습니다."));
         }
+    }
+
+    @PostMapping("/api/payment/cancel")
+    public ResponseEntity<?> cancel(@RequestBody PaymentRequest.CancelDTO cancelDTO, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+
+        if (sessionUser == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다"));
+        }
+
+        log.info("결제 취소 요청 수신: merchantUid={}", cancelDTO.merchantUid);
+
+        paymentService.cancel(cancelDTO.merchantUid);
+
+        return ResponseEntity.ok().body(Map.of("message", "결제를 취소했습니다."));
     }
 
 }

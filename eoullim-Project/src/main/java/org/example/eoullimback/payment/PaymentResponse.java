@@ -7,11 +7,11 @@ public class PaymentResponse {
 
     @Data
     public static class PrepareDTO{
-        private String paymentId;
+        private String paymentKey;
         private Long totalAmount;
 
-        public PrepareDTO(String paymentId, Long totalAmount) {
-            this.paymentId = paymentId;
+        public PrepareDTO(String paymentKey, Long totalAmount) {
+            this.paymentKey = paymentKey;
             this.totalAmount = totalAmount;
         }
     }
