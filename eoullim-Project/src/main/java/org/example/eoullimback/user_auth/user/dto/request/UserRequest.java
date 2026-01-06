@@ -50,4 +50,16 @@ public class UserRequest {
             }
         }
     }
+
+
+    @Data
+    public static class PasswordCheckDTO {
+        private String password;
+
+        public void validate() {
+            if (password == null || password.trim().isEmpty()) {
+                throw new Exception400(ErrorCode.PASSWORD_REQUIRED);
+            }
+        }
+    }
 }

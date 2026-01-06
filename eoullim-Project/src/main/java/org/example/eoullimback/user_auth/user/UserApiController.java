@@ -1,6 +1,10 @@
 package org.example.eoullimback.user_auth.user;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.enums.user.OAuthProvider;
+import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,8 +49,18 @@ public class UserApiController {
             return ResponseEntity.badRequest()
                     .body(Map.of("message", "인증번호가 일치하지 않습니다."));
         }
+    }
 
+    @PostMapping("/api/verify-password")
+    public ResponseEntity<?> verifyPassword (@RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
+        if (sessionUser == null) {
+            throw new Exception401(ErrorCode.LOGIN_UNAUTHORIZED);
+        }
 
+        passwordCheckDTO.validate();
+
+        return ResponseEntity.ok().body(Map.of("verified", true));
     }
 }
