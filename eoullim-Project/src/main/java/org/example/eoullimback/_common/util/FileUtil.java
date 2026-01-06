@@ -15,41 +15,9 @@ import java.util.UUID;
 public class FileUtil {
 
     public static String IMAGES_DIR = "images/";
-    public static String ROOM_FILE_DIR = IMAGES_DIR + "roomImages/";
 
     public static String saveFile(MultipartFile file) throws IOException {
         return saveFile(file, IMAGES_DIR);
-    }
-
-    public static String saveRoomFile(MultipartFile file) throws IOException {
-        return saveRoomFile(file, ROOM_FILE_DIR);
-    }
-
-    public static String saveRoomFile(MultipartFile file, String roomDir) throws IOException {
-
-        if (file == null || file.isEmpty()) {
-            return null;
-        }
-
-        Path uploadPath = Paths.get(roomDir);
-
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || originalFilename.isEmpty()) {
-            throw new IOException("파일명이 존재하지 않습니다.");
-        }
-
-        String uuid = UUID.randomUUID().toString();
-        String savedFileName = uuid + "_" + originalFilename;
-
-        Path filePath = uploadPath.resolve(savedFileName);
-
-        Files.copy(file.getInputStream(), filePath);
-
-        return savedFileName;
     }
 
     public static String saveFile(MultipartFile file, String uploadDir) throws IOException {
