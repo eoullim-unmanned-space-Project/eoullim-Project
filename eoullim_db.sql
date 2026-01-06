@@ -178,13 +178,9 @@ CREATE TABLE time_slots (
   capacity INT NOT NULL COMMENT '인원 수 지정',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
 
-
-  CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id),
-  
   CHECK (status IN('OPEN','CLOSED')),
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
-  CHECK (status IN('OPEN','CLOSED','CANCELED')),
-  
+
   UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_Month, start_time),
   
   INDEX `idx_time_slots_slot_Month` (slot_Month),
