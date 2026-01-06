@@ -50,4 +50,29 @@ public class MailServiceImpl implements MailService {
         }
         return false;
     }
+
+    @Override
+    public void paymentNotificationSender(String email, String message, String qrCode) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper =
+                    new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+            helper.setTo(email);
+            helper.setSubject("[Eoullim] 결제 알림");
+            helper.setText(
+                            "<h2>결제 알림</h2>" +
+                            "<p>" + message + "</p>" +
+                            "<hr />" +
+                            "<p><b>QR 코드</b></p>" +
+                            "<p>" + qrCode + "</p>" +
+                            "<p>현장에서 해당 QR 코드를 제시하여 주세요</p>", true);
+            javaMailSender.send(mimeMessage);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

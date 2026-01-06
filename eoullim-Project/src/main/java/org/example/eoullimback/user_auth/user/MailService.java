@@ -4,4 +4,6 @@ public interface MailService {
     void sendVerificationCode(String email);
 
     boolean verifyVerificationCode(String email, String code);
+
+    void paymentNotificationSender(String email, String message, String qrCode);
 }

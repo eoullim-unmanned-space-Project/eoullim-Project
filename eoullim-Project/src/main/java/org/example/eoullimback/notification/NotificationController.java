@@ -1,16 +1,20 @@
 package org.example.eoullimback.notification;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,6 +22,7 @@ public class NotificationController {
 
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     //http://localhost:8080/notifications
     @GetMapping("/notifications")
@@ -41,6 +46,16 @@ public class NotificationController {
         model.addAttribute("sessionUser", sessionUser);
 
         return "notification/list";
+    }
+
+    // 결제 알림 이메일 발송
+    // http://localhost:8080/notifications/email/send
+    @PostMapping("/notifications/email/send")
+    public ResponseEntity<?> notificationSendEmail(@Valid NotificationRequest.NotificationDTO req) {
+
+        notificationService.sendNotificationEmail(req.getNotificationId());
+
+        return ResponseEntity.ok().body(Map.of("message", "결제 알림을 발송하였습니다."));
     }
 
 //     TODO : 유저 더미 (삭제 예정)

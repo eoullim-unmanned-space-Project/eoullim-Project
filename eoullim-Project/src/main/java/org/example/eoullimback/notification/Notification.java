@@ -12,11 +12,7 @@ import org.example.eoullimback.user_auth.user.User;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notifications",
-        indexes = {
-        @Index(name = "idx_notifications_user_id", columnList = "user_id"),
-        @Index(name = "idx_notifications_payment_id", columnList = "payment_id")
-        })
+@Table(name = "notifications")
 @Getter
 @NoArgsConstructor
 public class Notification {
@@ -75,7 +71,4 @@ public class Notification {
         this.sentAt = LocalDateTime.now();
     }
 
-    public void markFailed() {
-        this.status = NotificationStatus.FAILED;
-    }
 }

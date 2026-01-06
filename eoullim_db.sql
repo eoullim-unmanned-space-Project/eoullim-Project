@@ -323,9 +323,6 @@ CREATE TABLE notifications (
   CHECK (type IN('PAYMENT','REFUND','CANCEL','BOOKING')),
   CHECK (status IN('PENDING','SENT','FAILED')),
   
-  INDEX `idx_notifications_user_id` (user_id),
-  INDEX `idx_notifications_payment_id` (payment_id),
-  
   CONSTRAINT `fk_notifications_user` FOREIGN KEY (user_id) REFERENCES users(id),
   CONSTRAINT `fk_notifications_payment` FOREIGN KEY (payment_id) REFERENCES payments(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 결제 알림 테이블';
