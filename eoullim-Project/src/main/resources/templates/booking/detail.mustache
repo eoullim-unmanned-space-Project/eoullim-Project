@@ -154,9 +154,10 @@
                      m_redirect_url: window.location.href
                  }, async (response) => {
 
-                     if (!response.ok) {
-                          alert("결제를 취소 하였습니다.");
-                         location.href  = `/place/${roomId}/room`
+                     if (!response.success) {
+                         alert(response.error.message || "결제가 취소되었습니다.");
+                         location.href = `place/${roomId}/room`;
+                         return;
                      }
 
                      const notified = await fetch("/api/payment/complete", {
