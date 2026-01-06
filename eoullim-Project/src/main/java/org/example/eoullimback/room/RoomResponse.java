@@ -26,7 +26,7 @@ public class RoomResponse {
             this.maxCapacity = room.getMaxCapacity();
             this.defaultPrice = room.getDefaultPrice();
             this.status = room.getStatus();
-            this.roomImagePath = "/images/roomImages" + room.getRoomImage();
+            this.roomImagePath = "/images/" + room.getRoomImage();
         }
     }
 
@@ -43,7 +43,7 @@ public class RoomResponse {
             this.content = room.getContent();
             this.defaultPrice = room.getDefaultPrice();
             this.status = room.getStatus();
-            this.roomImagePath = "/images/roomImages" + room.getRoomImage();
+            this.roomImagePath = "/images/" + room.getRoomImage();
         }
     }
 }
