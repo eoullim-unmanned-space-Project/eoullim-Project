@@ -1,9 +1,11 @@
 package org.example.eoullimback.user_auth.user;
 
+import org.example.eoullimback.payment.Payment;
+
 public interface MailService {
     void sendVerificationCode(String email);
 
     boolean verifyVerificationCode(String email, String code);
 
-    void paymentNotificationSender(String email, String message, String qrCode);
+    void sendPaymentSuccessMail(String email, Payment payment, byte[] qrImage);
 }

@@ -32,7 +32,7 @@ public class Notification {
     @Column(name = "message", nullable = false, length = 255)
     private String message;
 
-    @Column(name = "qr_code", length = 40)
+    @Column(name = "qr_code", length = 100)
     private String qrCode;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -4,6 +4,8 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.util.MailUtils;
+import org.example.eoullimback.payment.Payment;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -52,27 +54,51 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void paymentNotificationSender(String email, String message, String qrCode) {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+    public void sendPaymentSuccessMail(String email, Payment payment, byte[] qrImage) {
+
+        MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
-            MimeMessageHelper helper =
-                    new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(email);
-            helper.setSubject("[Eoullim] 결제 알림");
-            helper.setText(
-                            "<h2>결제 알림</h2>" +
-                            "<p>" + message + "</p>" +
-                            "<hr />" +
-                            "<p><b>QR 코드</b></p>" +
-                            "<p>" + qrCode + "</p>" +
-                            "<p>현장에서 해당 QR 코드를 제시하여 주세요</p>", true);
-            javaMailSender.send(mimeMessage);
+            helper.setSubject("[Eoullim] 결제 완료 - 무인 매장 입장권 안내");
 
+            String html = """
+                    <div>
+                        <h2>결제가 완료되었습니다.</h2>
+                    
+                        <p><strong>상품명:</strong> %s</p>
+                        <p><strong>결제 금액:</strong> %,d원</p>
+                        <p><strong>주문 번호:</strong> %s</p>
+                    
+                        <hr/>
+                    
+                        <h3>무인 매장 입장 QR 코드</h3>
+                        <p>아래 QR 코드를 매장 입구에서 스캔해 주세요.</p>
+                    
+                        <img src="cid:qrImage" width="250" height="250"/>
+                    
+                        <p style="margin-top:20px; color:#888;">
+                            ※ 본 QR 코드는 본인만 사용 가능하며 타인에게 공유할 수 없습니다.
+                        </p>
+                    </div>
+                    """.formatted(
+                            payment.getProductName(),
+                    payment.getAmount(),
+                    payment.getOrderId()
+            );
+
+            helper.setText(html, true);
+
+            helper.addInline(
+                    "qrImage",
+                    new ByteArrayResource(qrImage),
+                    "image/png"
+            );
+            javaMailSender.send(message);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("결제 완료 메일 발송 실패", e);
         }
-
     }
 }
