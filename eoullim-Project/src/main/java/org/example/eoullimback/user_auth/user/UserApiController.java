@@ -45,8 +45,5 @@ public class UserApiController {
             return ResponseEntity.badRequest()
                     .body(Map.of("message", "인증번호가 일치하지 않습니다."));
         }
-
-
-
     }
 }

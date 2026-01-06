@@ -48,7 +48,7 @@ public class UserController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User user = userService.getMyProfile(sessionUser.getId());
 
-//        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("user", user);
 
         return "user/update-profile";
@@ -97,6 +97,7 @@ public class UserController {
         userService.leaveUser(sessionUser.getId());
 
         session.invalidate();
+
         return "redirect:/auth/login";
     }
 }
