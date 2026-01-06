@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.OAuthProvider;
 import org.example.eoullimback._common.enums.user.Status;
-import org.example.eoullimback._common.error.exception.Exception400;
-import org.example.eoullimback._common.error.exception.Exception403;
-import org.example.eoullimback._common.error.exception.Exception404;
-import org.example.eoullimback._common.error.exception.Exception500;
+import org.example.eoullimback._common.error.exception.*;
 import org.example.eoullimback._common.util.FileUtil;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
@@ -266,4 +263,20 @@ public class UserServiceImpl implements UserService{
     public void signupSocialUser(User user) {
         userRepository.save(user);
     }
+
+
+    /**
+     * 비밀번호 검증
+     */
+    @Override
+    public void verifyPassword(Long id, String password) {
+
+        User userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new Exception400(ErrorCode.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(password, userEntity.getPassword())) {
+            throw new Exception401(ErrorCode.INVALID_PASSWORD);
+        }
+    }
+
 }

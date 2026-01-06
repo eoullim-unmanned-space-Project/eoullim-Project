@@ -32,6 +32,7 @@ public enum ErrorCode {
     // 401 Unauthorized
     // ====
     LOGIN_UNAUTHORIZED("로그인 인증이 필요합니다."),
+    INVALID_PASSWORD("비밀번호가 일치하지 않습니다."),
 
     // ====
     // 403 Forbidden
