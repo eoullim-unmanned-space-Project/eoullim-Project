@@ -5,6 +5,6 @@ import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.User;
 
 public interface AuthService {
-    User signup(AuthRequest.@Valid SignupRequestDTO request);
-    User login(AuthRequest.@Valid LoginRequestDTO request);
+    User signup(AuthRequest.SignupRequestDTO request);
+    User login(AuthRequest.LoginRequestDTO request);
 }
