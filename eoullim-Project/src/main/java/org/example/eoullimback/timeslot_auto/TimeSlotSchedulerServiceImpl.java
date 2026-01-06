@@ -27,13 +27,9 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
 
     // 주말에 더 받을 추가 금액
     private static final int WEEKEND_PRICE = 5000;
-    
-    // 인원 체크 -> 추후 room(방)에 옮길 예정
-    private static final int DEFAULT_CAPACITY = 6;
 
     // 배치 사이즈
     private static final int BATCH_SIZE = 500;
-    
     
     @PersistenceContext
     private EntityManager em;
@@ -80,7 +76,7 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
                             .slotMonth(nextMonth.toString())
                             .startTime(start)
                             .endTime(end)
-                            .capacity(DEFAULT_CAPACITY)
+                            .capacity(room.getMaxCapacity())
                             .status(RoomStatus.OPEN)
                             .build();
 

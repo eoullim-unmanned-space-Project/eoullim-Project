@@ -91,6 +91,6 @@ public class RoomController {
 
         roomService.deleteRoom(roomId);
 
-        return "redirect:/map/place";
+        return "redirect:/map";
     }
 }
