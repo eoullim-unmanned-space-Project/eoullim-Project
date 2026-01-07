@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class NoticeController {
 
-    private final NoticeServiceImpl noticeService;
+    private final NoticeService noticeService;
 
     // 공지사항 작성 화면 요청
     // http://localhost:8080/notices/new
