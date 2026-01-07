@@ -1,0 +1,82 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+}
+
+body {
+    margin: 0;
+    background: white;
+}
+
+/* 전체 레이아웃 */
+.mypage-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* 왼쪽 사이드바 */
+.mypage-sidebar {
+    width: 280px;
+    padding: 32px 24px;
+}
+
+.mypage-sidebar h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.welcome {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 32px;
+}
+
+.welcome span {
+    font-weight: bold;
+    color: #4f46e5;
+}
+
+.menu-section {
+    margin-bottom: 32px;
+    margin-top: 10px;
+}
+
+.menu-section a {
+    text-decoration: none;
+    color: #374151;
+}
+
+.menu-section a:hover {
+    color: #1f2937;
+}
+
+.menu-section h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.menu-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-section li {
+    padding: 8px 0;
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
+}
+
+.menu-section li:hover {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.menu-section span {
+    font-weight: bold;
+}
