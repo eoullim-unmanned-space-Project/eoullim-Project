@@ -37,7 +37,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${portone.imp-key}")
     private String impKey;
 
-    @Value("${portone.imp-secret}")
+    @Value("${portone.imp-secret-key}")
     private String impSecret;
 
     @Override

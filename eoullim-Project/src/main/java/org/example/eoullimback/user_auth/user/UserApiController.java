@@ -2,16 +2,17 @@ package org.example.eoullimback.user_auth.user;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
+import org.example.eoullimback.booking.BookingService;
 import org.example.eoullimback.user_auth.auth.AuthService;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
+import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class UserApiController {
     private final UserService userService;
     private final MailService mailService;
     private final AuthService authService;
+    private final BookingService bookingService;
 
     @PostMapping("/api/email/send")
     public ResponseEntity<?> sendVerificationCode(@RequestBody UserRequest.EmailCheckDTO reqDTO) {
@@ -126,5 +128,23 @@ public class UserApiController {
         session.removeAttribute("findIdEmail");
 
         return ResponseEntity.ok(user.getLoginId());
+    }
+
+    @GetMapping("/api/search")
+    public ResponseEntity<UserResponse.UserBookingDTO> searchBookings(
+            @RequestParam(value = "code") String bookingCode,
+            @RequestParam(value = "status") BookingStatus status,
+            HttpSession session
+    ) {
+
+        User user = (User) session.getAttribute("sessionUser");
+
+        if (user == null) {
+            throw new Exception401(ErrorCode.ACCESS_DENIED);
+        }
+
+        UserResponse.UserBookingDTO searchBookings = bookingService.searchBookings(user.getId(), bookingCode, status);
+
+        return ResponseEntity.ok().body(searchBookings);
     }
 }
