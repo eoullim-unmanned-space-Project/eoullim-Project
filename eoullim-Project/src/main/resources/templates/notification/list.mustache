@@ -1,12 +1,13 @@
 <link rel="stylesheet" href="/css/notification/notification.css"/>
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div class="notification-content">
+<div class="notification-container">
 
-    <h2>{{sessionUser.name}}님의 알림</h2>
+    <h2 style="display: flex; justify-content: center">{{sessionUser.name}}님의 알림</h2>
 
+    <div class="notification-card">
     {{#notifications}}
-        <div>
+        <div class="notification-list-item">
             <div>
                 <strong>[{{type}}]</strong>
                 <span>({{status}})</span>
@@ -14,12 +15,11 @@
 
             <div>
                 <p>{{message}}</p>
-
-                <ul>
-                    <li>주문번호 : {{orderId}}</li>
-                    <li>상품명 : {{productName}}</li>
-                    <li>결제 금액 : {{amount}}원</li>
-                </ul>
+                <span>주문번호 : {{orderId}}</span>
+                <br>
+                <span>상품명 : {{productName}}</span>
+                <br>
+                <span>결제 금액 : {{amount}}원</span>
             </div>
 
             <div>
@@ -28,9 +28,11 @@
         </div>
     {{/notifications}}
 
-    {{^notifications}}
-        <p>알림이 없습니다.</p>
-    {{/notifications}}
-
+        <div class="notification-list-item">
+            {{^notifications}}
+                <p>알림이 없습니다.</p>
+            {{/notifications}}
+        </div>
+    </div>
 </div>
 {{> layout/footer}}

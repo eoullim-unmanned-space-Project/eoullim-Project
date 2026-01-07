@@ -16,28 +16,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationController {
 
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
     private final UserRepository userRepository;
 
     // http://localhost:8080/notifications
     @GetMapping("/notifications")
     public String notificationList(HttpSession session, Model model) {
 
-//        Long sessionUserId = (Long) session.getAttribute("sessionUserId");
-//        if (sessionUserId == null) {
-//            throw new Exception404(ErrorCode.USER_NOT_FOUND);
-//        }
-//
-//        User sessionUser = userRepository.findById(sessionUserId).orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
-        User sessionUser = getLoginUserId(session);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+//        User sessionUser = getLoginUserId(session);
 
-        List<Notification> notifications = notificationRepository.findAllByUserIdOrderByCreatedAtDesc(sessionUser.getId());
+        List<NotificationResponse.NotificationResponseDTO> notifications = notificationService.notificationList(sessionUser.getId());
 
-        List<NotificationResponse.NotificationResponseDTO> res = notifications.stream()
-                .map(NotificationResponse.NotificationResponseDTO::new)
-                .toList();
-
-        model.addAttribute("notifications", res);
+        model.addAttribute("notifications", notifications);
         model.addAttribute("sessionUser", sessionUser);
 
         return "notification/list";
