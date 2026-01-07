@@ -68,17 +68,9 @@ public class RoomServiceImpl implements RoomService{
     }
 
     @Override
-    public RoomResponse.DetailDTO DetailRoom(Long roomId) {
-        Room room =  roomRepository.findByWithPlace(roomId)
+    public RoomResponse.DetailDTO detailRoom(Long roomId) {
+        Room room =  roomRepository.findById(roomId)
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
-
-        List<RoomImage> roomImagesEntities = roomImageRepository.findByRoomIdOrderByDisplayOrderAsc(roomId)
-                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_IMG_NOT_FOUND));
-
-        List<RoomImageResponse.DetailDTO> imageDTOs =
-                roomImagesEntities.stream()
-                        .map(RoomImageResponse.DetailDTO::new)
-                        .toList();
 
         return new RoomResponse.DetailDTO(room);
     }

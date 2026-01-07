@@ -31,7 +31,10 @@ public class PlaceController {
     }
 
     @PostMapping("/place/create")
-    public String createProc(@Valid PlaceRequest.CreateDTO request) {
+    public String createProc(PlaceRequest.CreateDTO request) {
+
+        request.validate();
+
         Place place = placeService.placeCreate(request);
 
         return "redirect:/main/main";
@@ -63,7 +66,6 @@ public class PlaceController {
     }
 
     @GetMapping("/place/{placeId}/room")
-
     public String ListRoom(Model model,
                            @PathVariable Long placeId
     ) {
@@ -89,8 +91,10 @@ public class PlaceController {
 
     @PostMapping("/place/{placeId}/update")
     public String UpdateProc(@PathVariable Long placeId,
-                             @Valid PlaceRequest.UpdateDTO request
+                             PlaceRequest.UpdateDTO request
     ) {
+        request.validate();
+
         Place place = placeService.placeUpdate(placeId, request);
 
         return "redirect:/place/" + placeId + "/update";
