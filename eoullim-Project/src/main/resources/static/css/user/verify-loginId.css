@@ -1,0 +1,21 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+.message.success {
+    color: green;
+}
+
+.message.error {
+    color: red;
+}
+
+.inline {
+    display: flex;
+    gap: 8px;
+}

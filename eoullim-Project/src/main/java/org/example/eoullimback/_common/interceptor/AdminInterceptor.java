@@ -17,7 +17,10 @@ public class AdminInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler
     ) throws Exception {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new Exception401(ErrorCode.LOGIN_ONLY);
+        }
          User sessionUser = (User)session.getAttribute("sessionUser");
 
          if (sessionUser == null) {

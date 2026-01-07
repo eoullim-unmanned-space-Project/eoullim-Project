@@ -20,42 +20,45 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final SessionInterceptor sessionInterceptor;
     private final AdminInterceptor adminInterceptor;
 
+    private static final String[] EXCLUDE_PATHS = {
+            "/auth/**",
+            "/",
+            "/user/kakao",
+            "/css/**",
+            "/js/**",
+            "/img/**",
+            "/favicon.ico"
+    };
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor)
-                .addPathPatterns("/user/**")
+                .order(1)
+                .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/auth/**",
-                        "/js/**",
-                        "/user/kakao",
-                        "/",
                         "/css/**",
+                        "/js/**",
                         "/img/**",
                         "/favicon.ico"
                 );
 
         registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/user/**")
-                .excludePathPatterns(
-                        "/auth/**",
-                        "/js/**",
-                        "/user/kakao",
-                        "/",
-                        "/css/**",
-                        "/img/**",
-                        "/favicon.ico"
-                );
+                .order(2)
+                .addPathPatterns("/user/**", "/admin/**")
+                .excludePathPatterns(EXCLUDE_PATHS);
 
         registry.addInterceptor(adminInterceptor)
+                .order(3)
                 .addPathPatterns("/admin/**");
     }
 
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:images/")
-                .addResourceLocations("file:images/roomImages/");
+                .addResourceLocations("file:images/", "file:images/roomImages/");
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

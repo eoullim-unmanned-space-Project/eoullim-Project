@@ -1,7 +1,5 @@
 package org.example.eoullimback.user_auth.user;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.OAuthProvider;
@@ -277,6 +275,25 @@ public class UserServiceImpl implements UserService{
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+    }
+
+    @Override
+    public String findLoginIdByNameAndEmail(String name, String email) {
+
+        User user = userRepository.findByNameAndEmail(name, email)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+
+        if (!user.isLocalUser()) {
+            throw new Exception400(ErrorCode.SOCIAL_USER_CANNOT_FIND_LOGIN_ID);
+        }
+
+        return user.getLoginId();
     }
 
 }
