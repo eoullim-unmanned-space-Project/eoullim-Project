@@ -13,15 +13,11 @@
                 <p>룸 선택</p>
                 <div class="room-list">
                     {{#roomList}}
-                        <div class="room-card"><img src="{{roomImagePath}}" alt="스터디룸 A">
+                        <div class="room-card" data-room-id="{{roomId}}"><img src="{{roomImagePath}}" alt="{{name}}">
                             <p>{{name}}</p>
                         </div>
-                        <div class="d-flex justify-content-end mb-2">
-                            <a href="/room/{{roomId}}/update" class="btn btn-update">수정</a>
-                            <form action="/room/{{roomId}}/delete" method="post">
-                                <button class="btn btn-delete">삭제</button>
-                            </form>
-                        </div>
+
+
                     {{/roomList}}
                 </div>
                 <p>위치</p>
@@ -42,66 +38,69 @@
             </div>
         </div>
 
+
         <div class="right">
-            <div class="room-box">
-                <h3 class="room-title">스터디룸 A</h3>
-                <div class="room-img"></div>
-                <p class="room-desc">
-                    · 조용한 스터디와 회의에 적합한
-                    공간입니다.
-                </p>
-                <hr>
-                <p class="room-info">
-                    · 최대 인원: <strong>6</strong>
-                </p>
-                <hr>
-                <p class="room-info">
-                    · 최소: 1시간부터 이용 가능
-                </p>
-                <hr>
-                <p class="room-warning">
-                    · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
-                </p>
-            </div>
-            <p><img src="/img/room/user.png" alt=""> 인원 수</p>
-            <div class="people-box">
-                <button type="button" id="minusBtn">−</button>
-                <input type="text" id="peopleCount" value="1" min="1" readonly>
-                <button type="button" id="plusBtn">+</button>
-            </div>
-            <div class="amount-box">
-                <strong id="amount">0</strong>원
-            </div>
-            <div class="timeslot-container" id="timeslot">
-                <div class="timeslot" data-id="1">00:00 ~ 01:00</div>
-                <div class="timeslot" data-id="2">01:00 ~ 02:00</div>
-                <div class="timeslot" data-id="3">02:00 ~ 03:00</div>
-                <div class="timeslot" data-id="4">03:00 ~ 04:00</div>
-                <div class="timeslot" data-id="5">04:00 ~ 05:00</div>
-                <div class="timeslot" data-id="6">05:00 ~ 06:00</div>
-                <div class="timeslot" data-id="7">06:00 ~ 07:00</div>
-                <div class="timeslot" data-id="8">07:00 ~ 08:00</div>
-                <div class="timeslot" data-id="9">08:00 ~ 09:00</div>
-                <div class="timeslot" data-id="10">09:00 ~ 10:00</div>
-                <div class="timeslot" data-id="11">10:00 ~ 11:00</div>
-                <div class="timeslot" data-id="12">11:00 ~ 12:00</div>
-                <div class="timeslot" data-id="13">12:00 ~ 13:00</div>
-                <div class="timeslot" data-id="14">13:00 ~ 14:00</div>
-                <div class="timeslot" data-id="15">14:00 ~ 15:00</div>
-                <div class="timeslot" data-id="16">15:00 ~ 16:00</div>
-                <div class="timeslot" data-id="17">16:00 ~ 17:00</div>
-                <div class="timeslot" data-id="18">17:00 ~ 18:00</div>
-                <div class="timeslot" data-id="19">18:00 ~ 19:00</div>
-                <div class="timeslot" data-id="20">19:00 ~ 20:00</div>
-                <div class="timeslot" data-id="21">20:00 ~ 21:00</div>
-                <div class="timeslot" data-id="22">21:00 ~ 22:00</div>
-                <div class="timeslot" data-id="23">22:00 ~ 23:00</div>
-                <div class="timeslot" data-id="24">23:00 ~ 24:00</div>
-            </div>
-            <input type="hidden" id="roomId" value="1">
-            <div class="booking-box">
-                <button id="bookingBtn">예약하기</button>
-            </div>
+            <form action="/room/1" method="post" enctype="multipart/form-data">
+                <div class="room-box">
+                    <h3 class="room-title">스터디룸 A</h3>
+                    <div class="room-img"></div>
+                    <p class="room-desc">
+                        · 조용한 스터디와 회의에 적합한
+                        공간입니다.
+                    </p>
+                    <hr>
+                    <p class="room-info">
+                        · 최대 인원: <strong>6</strong>
+                    </p>
+                    <hr>
+                    <p class="room-info">
+                        · 최소: 1시간부터 이용 가능
+                    </p>
+                    <hr>
+                    <p class="room-warning">
+                        · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
+                    </p>
+                </div>
+                <p><img src="/img/room/user.png" alt=""> 인원 수</p>
+                <div class="people-box">
+                    <button type="button" id="minusBtn">−</button>
+                    <input type="text" id="peopleCount" value="1" min="1" readonly>
+                    <button type="button" id="plusBtn">+</button>
+                </div>
+                <div class="amount-box">
+                    <strong id="amount">0</strong>원
+                </div>
+                <div class="timeslot-container" id="timeslot">
+                    <div class="timeslot" data-id="1">00:00 ~ 01:00</div>
+                    <div class="timeslot" data-id="2">01:00 ~ 02:00</div>
+                    <div class="timeslot" data-id="3">02:00 ~ 03:00</div>
+                    <div class="timeslot" data-id="4">03:00 ~ 04:00</div>
+                    <div class="timeslot" data-id="5">04:00 ~ 05:00</div>
+                    <div class="timeslot" data-id="6">05:00 ~ 06:00</div>
+                    <div class="timeslot" data-id="7">06:00 ~ 07:00</div>
+                    <div class="timeslot" data-id="8">07:00 ~ 08:00</div>
+                    <div class="timeslot" data-id="9">08:00 ~ 09:00</div>
+                    <div class="timeslot" data-id="10">09:00 ~ 10:00</div>
+                    <div class="timeslot" data-id="11">10:00 ~ 11:00</div>
+                    <div class="timeslot" data-id="12">11:00 ~ 12:00</div>
+                    <div class="timeslot" data-id="13">12:00 ~ 13:00</div>
+                    <div class="timeslot" data-id="14">13:00 ~ 14:00</div>
+                    <div class="timeslot" data-id="15">14:00 ~ 15:00</div>
+                    <div class="timeslot" data-id="16">15:00 ~ 16:00</div>
+                    <div class="timeslot" data-id="17">16:00 ~ 17:00</div>
+                    <div class="timeslot" data-id="18">17:00 ~ 18:00</div>
+                    <div class="timeslot" data-id="19">18:00 ~ 19:00</div>
+                    <div class="timeslot" data-id="20">19:00 ~ 20:00</div>
+                    <div class="timeslot" data-id="21">20:00 ~ 21:00</div>
+                    <div class="timeslot" data-id="22">21:00 ~ 22:00</div>
+                    <div class="timeslot" data-id="23">22:00 ~ 23:00</div>
+                    <div class="timeslot" data-id="24">23:00 ~ 24:00</div>
+                </div>
+                <input type="hidden" id="roomId" value="1">
+                <div class="booking-box">
+                    <button id="bookingBtn">예약하기</button>
+                </div>
+            </form>
         </div>
     </section>
 </div>
@@ -165,9 +164,9 @@
                 var lat = position.coords.latitude;
                 var lng = position.coords.longitude;
                 var mapContainer = document.getElementById('map');
-                var mapOption = { center: new kakao.maps.LatLng(lat, lng), level: 6 };
+                var mapOption = {center: new kakao.maps.LatLng(lat, lng), level: 6};
                 var map = new kakao.maps.Map(mapContainer, mapOption);
-                var marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(lat, lng) });
+                var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(lat, lng)});
                 marker.setMap(map);
             }, function (error) {
                 console.error("위치 정보를 가져올 수 없습니다.", error);
@@ -213,8 +212,8 @@
         try {
             const response = await fetch("/api/calculate-amount", {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ roomId: roomId, timeSlotIds: timeSlotIds })
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({roomId: roomId, timeSlotIds: timeSlotIds})
             });
 
             const result = await response.json();
@@ -224,7 +223,9 @@
         } catch (error) {
             console.log("금액 계산에 실패했습니다.", error.message);
             const selectSlots = document.querySelectorAll('.timeslot.selected');
-            selectSlots.forEach(slot => { slot.classList.remove('selected'); });
+            selectSlots.forEach(slot => {
+                slot.classList.remove('selected');
+            });
             alert("금액을 불러오는 중 오류가 발생하여 선택이 초기화되었습니다.");
         }
     }
@@ -304,7 +305,7 @@
 
             const response = await fetch("/api/bookings", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
                     roomId: roomId,
                     qty: qty,
@@ -326,5 +327,21 @@
             alert(error.message);
         }
     });
+        document.querySelectorAll('.room-card').forEach(card => {
+            card.addEventListener('click', async () => {
+                let roomRoot = card.dataset.roomId;
+                let roomId = Number(roomRoot);
+
+                alert(roomId);
+                const response = await fetch(`/api/room/${roomId}`, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        roomId: roomId
+                    })
+                });
+                alert(response.data);
+            });
+        });
 </script>
 </body>

@@ -12,20 +12,29 @@ public class TimeSlotRequest {
 
     @Data
     public static class CreateDTO {
-        @NotBlank(message = "생성하는 날짜는 필수입니다.")
         String slotMonth;
-
-        @NotBlank(message = "개시 시간은 필수입니다.")
         LocalDateTime startTime;
-
-        @NotBlank(message = "종료 시간은 필수입니다.")
         LocalDateTime endTime;
-
-        @NotBlank(message = "인원 수는 필수입니다.")
         int capacity;
-
-        @NotBlank(message = "상태는 필수입니다.")
         SlotStatus status;
+
+        public void validate() {
+            if (slotMonth == null || slotMonth.trim().isEmpty()) {
+                throw new IllegalArgumentException("생성하는 날짜는 필수입니다.");
+            }
+            if (startTime == null) {
+                throw new IllegalArgumentException("개시 시간은 필수입니다.");
+            }
+            if (endTime == null) {
+                throw new IllegalArgumentException("종료 시간은 필수입니다.");
+            }
+            if (capacity >= 1) {
+                throw new IllegalArgumentException("인원 수는 필수입니다.");
+            }
+            if (status == null) {
+                throw new IllegalArgumentException("상태는 필수입니다.");
+            }
+        }
 
         public TimeSlot toEntity(Room room) {
             return TimeSlot.builder()
