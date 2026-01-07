@@ -80,24 +80,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void findLoginIdByNameAndEmail(AuthRequest.FindLoginIdRequestDTO request) {
-
-        User user = userRepository.findByNameAndEmail(
-                request.getName(),
-                request.getEmail()
-        ).orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
-
-        if (!user.isLocalUser()) {
-            throw new Exception400(ErrorCode.SOCIAL_USER_CANNOT_FIND_LOGIN_ID);
-        }
-
-        mailService.sendLoginId(
-                user.getName(),
-                user.getEmail()
-        );
-    }
-
-    @Override
     @Transactional
     public void requestPasswordReset(AuthRequest.ResetPasswordRequestDTO request, HttpSession session) {
 

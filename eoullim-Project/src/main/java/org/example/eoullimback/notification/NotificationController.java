@@ -19,7 +19,7 @@ public class NotificationController {
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
 
-    //http://localhost:8080/notifications
+    // http://localhost:8080/notifications
     @GetMapping("/notifications")
     public String notificationList(HttpSession session, Model model) {
 

@@ -44,7 +44,7 @@ public class RoomServiceImpl implements RoomService{
                     throw new Exception400(ErrorCode.ONLY_FILE_IMG);
                 }
 
-                roomImageFileName = FileUtil.saveRoomFile(request.getRoomImage());
+                roomImageFileName = FileUtil.saveFile(request.getRoomImage());
             } catch (Exception e) {
                 throw new RuntimeException();
             }

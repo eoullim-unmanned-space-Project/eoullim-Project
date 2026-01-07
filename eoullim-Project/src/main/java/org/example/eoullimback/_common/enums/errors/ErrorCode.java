@@ -63,6 +63,7 @@ public enum ErrorCode {
     BOOKING_CODE_NOT_FOUND("부킹 코드의 내역이 존재하지 않습니다."),
     PAYMENT_NOT_FOUND("결제 내역이 존재하지 않습니다"),
     PAYMENT_DATA_NOT_FOUND("결제 데이터가 존재하지 않습니다."),
+    NOTIFICATION_NOT_FOUND("알림을 찾을 수 없습니다."),
 
 
     // ====

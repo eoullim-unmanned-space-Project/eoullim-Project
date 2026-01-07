@@ -221,8 +221,20 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
+    @Override
+    @Transactional
+    public void cancel(String paymentKey) {
+
+        Payment paymentEntity = paymentRepository.findByPaymentKey(paymentKey)
+                .orElseThrow(() -> new Exception400(ErrorCode.PAYMENT_NOT_FOUND));
+
+        List<Booking> bookingEntities = bookingRepository.findAllByBookingCode(paymentEntity.getOrderId())
+                .orElseThrow(() -> new Exception404(ErrorCode.BOOKING_CODE_NOT_FOUND));
+
+        handlePaymentFailure(paymentEntity, bookingEntities, "PORTONE_PAYMENT_CANCELLED", "사용자가 결제를 취소하였습니다.");
+    }
+
     private void handlePaymentFailure(Payment payment, List<Booking> bookings, String code, String failMessage) {
-        payment.markFailed(code, failMessage);
 
         for (Booking booking : bookings) {
             if (booking.getStatus() != BookingStatus.PENDING) {
@@ -238,6 +250,8 @@ public class PaymentServiceImpl implements PaymentService {
                     booking.getTimeSlot().getId(),
                     booking.getTimeSlot().getStatus());
         }
+
+        payment.markFailed(code, failMessage);
     }
 
     private String generatePaymentKey(Long id) {

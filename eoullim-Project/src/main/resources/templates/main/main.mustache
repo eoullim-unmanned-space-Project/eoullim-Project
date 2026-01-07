@@ -23,7 +23,7 @@
             {{#place}}
                 <a href="/place/{{id}}/room" class="space-card">
                     <div class="space-img">
-                        <img src="/images/{{profilePath}}" alt="장소사진" class="space-img">
+                        <img src="{{profilePath}}" alt="장소사진" class="space-img">
                     </div>
                     <div class="space-name">
                         <h4>{{name}}</h4>
@@ -31,12 +31,6 @@
                         <p>카테고리 : {{category}}</p>
                     </div>
                 </a>
-                <!--                <div class="d-flex justify-content-end mb-2">-->
-                <!--                    <a href="/place/{{id}}/update" class="btn btn-update">수정</a>-->
-                <!--                    <form action="/place/{{id}}/delete" method="post">-->
-                <!--                        <button class="btn btn-delete">삭제</button>-->
-                <!--                    </form>-->
-                <!--                </div>-->
             {{/place}}
         </div>
     </section>

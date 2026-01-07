@@ -2,6 +2,9 @@ package org.example.eoullimback.user_auth.auth;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception400;
+import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserService;
@@ -81,24 +84,38 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    @GetMapping("/find-LoginId")
+    @GetMapping("/find/Login-id")
     public String findLoginId() {
         return "user/find-loginId";
     }
 
-    @PostMapping("/find-LoginId")
-    public String findLoginId(AuthRequest.FindLoginIdRequestDTO request,
+    @PostMapping("/find/Login-id")
+    public String findLoginId(HttpSession session,
                               Model model) {
-        try {
-        request.validate();
-        authService.findLoginIdByNameAndEmail(request);
-            return "redirect:/auth/login";
-        } catch (Exception e) {
-            model.addAttribute("error", "일치하는 회원 정보가 없습니다.");
-        return "user/find-loginId";
+        Boolean verified =
+                (Boolean) session.getAttribute("findIdVerified");
+        String email =
+                (String) session.getAttribute("findIdEmail");
+
+        if (verified == null || !verified) {
+            throw new Exception401(ErrorCode.INVALID_EMAIL_FORMAT);
         }
 
-    }
+        User user = userService.findByEmail(email);
+
+        if (user.isSocialUser()) {
+            throw new Exception400(ErrorCode.SOCIAL_USER_CANNOT_FIND_LOGIN_ID);
+        }
+
+        session.removeAttribute("findIdVerified");
+        session.removeAttribute("findIdEmail");
+
+        model.addAttribute("loginId", user.getLoginId());
+
+        return "user/find-loginId-result";
+        }
+
+
 
     @GetMapping("/password/reset/request")
     public String requestPasswordResetForm() {

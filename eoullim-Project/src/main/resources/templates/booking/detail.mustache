@@ -65,7 +65,7 @@
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-primary" id="paymentBtn">결제하기</button>
-                        <button class="btn btn-secondary">취소하기</button>
+                        <button class="btn btn-secondary" id="cancelBtn">취소하기</button>
                     </div>
                 </div>
             </div>
@@ -81,9 +81,6 @@
         >
         </div>
     {{/booking}}
-
-
-
 </div>
 
 <div id="user-root"
@@ -115,6 +112,9 @@
          const roomId = roomRoot.dataset.roomId;
 
          const paymentBtn = document.getElementById('paymentBtn');
+         const cancelBtn = document.getElementById("cancelBtn");
+
+         let currentPaymentKey = null;
 
          paymentBtn.addEventListener('click', async () => {
              if (!confirm("결제를 원하시면 확인 버튼을 눌러주세요")) {
@@ -136,16 +136,18 @@
                  }
 
                  const data = await paymentKeyResponse.json();
-                 console.log("서버 응답 데이터:", data);
 
                  // 4. 포트원 결제 실행
                  const { IMP } = window;
                  IMP.init('imp42133684');
 
+                 alert(data.paymentKey);
+                 currentPaymentKey = data.paymentKey;
+
                  IMP.request_pay({
                      channelKey: channelKey,
                      pay_method: "card",
-                     merchant_uid: data.paymentId,
+                     merchant_uid: data.paymentKey,
                      name: roomName,
                      amount: data.totalAmount,
                      buyer_email: email,
@@ -153,32 +155,30 @@
                      buyer_tel: phone,
                      m_redirect_url: window.location.href
                  }, async (response) => {
+                     if (response.success) {
+                         const notified = await fetch("/api/payment/complete", {
+                             method: "POST",
+                             headers: {
+                                 "Content-Type": "application/json"
+                             },
+                             body: JSON.stringify({
+                                 imp_uid: response.imp_uid,
+                                 merchant_uid: response.merchant_uid
+                             })
+                         });
 
-                     if (!response.success) {
-                         alert(response.error.message || "결제가 취소되었습니다.");
-                         location.href = `place/${roomId}/room`;
-                         return;
-                     }
+                         const resData = await notified.json();
 
-                     const notified = await fetch("/api/payment/complete", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            imp_uid: response.imp_uid,
-                            merchant_uid: response.merchant_uid
-                        })
-                     });
-
-                     const resData = await notified.json();
-
-                     if (notified.ok) {
-                         alert(`${resData.message}\n결제완료 페이지로 이동합니다.`);
-                         location.href  = `/booking/complete?code=${resData.bookingCode}`;
+                         if (notified.ok) {
+                             alert(`${resData.message}\n결제완료 페이지로 이동합니다.`);
+                             location.href  = `/booking/complete?code=${resData.bookingCode}`;
+                         } else {
+                             alert("결제 실패 다시시도해주세요.");
+                             location.href  = `/place/${roomId}/room`
+                         }
                      } else {
-                         alert("결제 실패 다시시도해주세요.");
-                         location.href  = `/place/${roomId}/room`
+                         alert(response.error_msg || "[결제취소] 결제가 취소되었습니다.\n다시시도해 주세요.");
+                         await paymentCancel(data.paymentKey);
                      }
                  });
 
@@ -188,8 +188,33 @@
              }
          }); // paymentBtn 이벤트 끝
 
+        async function paymentCancel(paymentKey) {
+            alert(paymentKey);
+            try {
+                await fetch("/api/payment/cancel", {
+                   method: "POST",
+                   headers: {
+                       "Content-Type" : "application/json"
+                   },
+                   body: JSON.stringify({
+                       merchant_uid: paymentKey
+                   })
+                });
+
+            } catch (error) {
+                console.error("결제 취소 중 오류가 발생했습니다.", error);
+            }
+        }
+
+        cancelBtn.addEventListener('click', async () => {
+            if (!confirm("결제를 취소하시겠습니까? 취소 시 예약 페이지로 이동합니다.")) {
+                return;
+            }
+
+            location.href = `/place/${roomId}/room`;
+        });
+
      }); // DOMContentLoaded 끝
 </script>
-
 </body>
 {{> layout/footer}}

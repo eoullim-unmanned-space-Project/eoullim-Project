@@ -1,40 +1,145 @@
-<link rel="stylesheet" href="/css/user/verify-password.css">
+<link rel="stylesheet" href="/css/user/verify-loginId.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
 <body>
 
-    <form class="findIdForm">
+<form class="findIdForm" id="findIdForm">
 
-        <h2>아이디 찾기</h2>
+    <h2>아이디 찾기</h2>
 
-        <div class="field">
-            <label for="name">이름</label>
-            <input type="text" id="name" name="name" required>
+    <div class="field">
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name" required>
+    </div>
+
+    <div class="field">
+        <label for="email">이메일</label>
+        <div class="inline">
+            <input type="email" id="email" name="email" required>
+            <button type="button" id="sendEmailBtn">인증번호전송</button>
         </div>
+    </div>
 
-        <div class="field">
-            <label for="email">이메일</label>
-            <div class="inline">
-                <input type="email" id="email" name="email" required>
-                <button type="button" id="sendEmailBtn">인증번호전송</button>
-                <p class="hint">가입 시 사용한 이메일을 입력해주세요.</p>
-            </div>
+    <div class="field hidden" id="verify-box">
+        <label for="code">인증 번호</label>
+        <div class="inline">
+            <input type="text" id="code" maxlength="6">
+            <button type="button" id="verifyCodeBtn">확인</button>
         </div>
-            <div class="field-hidden" id="verify-box">
-                <label for="code">인증 번호</label>
-                <div class="inline">
-                    <input type="text" id="code" maxlength="6">
-                    <button type="button" id="verifyCodeBtn">확인</button>
-                    <p id="verifyMsg" class="message"></p>
-                </div>
+        <p id="verifyMsg" class="message"></p>
 
-                <button type="submit" id="submitBtn" disabled>아이디 찾기</button>
-
-            </div>
-    </form>
+        <button type="submit" id="submitBtn" disabled>아이디 찾기</button>
+        <p id="resultBox" class="result hidden"></p>
+    </div>
+</form>
 
 <script>
 
+    let emailSending = false;
+    let emailVerified = false;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("sendEmailBtn")
+                .addEventListener("click", sendEmail);
+
+        document.getElementById("verifyCodeBtn")
+                .addEventListener("click", verifyCode);
+
+        document.getElementById("findIdForm")
+                .addEventListener("submit", submitForm);
+    });
+
+    async function sendEmail() {
+        if (emailSending) return;
+
+        const email = document.getElementById("email").value.trim();
+        if (!email) {
+            alert("이메일을 입력해주세요.");
+            return;
+        }
+
+        emailSending = true;
+
+        try {
+            const res = await fetch("/api/find/email/send", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({email})
+            });
+
+            if (!res.ok) throw new Error();
+
+            document.getElementById("verify-box").classList.remove("hidden");
+            document.getElementById("email").readOnly = true;
+            document.getElementById("sendEmailBtn").disabled = true;
+        } catch {
+            alert("인증번호 전송에 실패했습니다.");
+        } finally {
+            emailSending = false;
+        }
+    }
+
+    async function verifyCode() {
+        const code = document.getElementById("code").value.trim();
+        if (code.length !== 6) {
+            showMsg("인증번호 6자리를 입력해주세요.", false);
+            return;
+        }
+
+        try {
+            const res = await fetch("/api/find/email/verify", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    email: document.getElementById("email").value,
+                    code
+                })
+            });
+
+            if (!res.ok) throw new Error();
+
+            emailVerified = true;
+            showMsg("이메일 인증이 완료되었습니다.", true);
+
+            document.getElementById("verifyCodeBtn").disabled = true;
+            document.getElementById("submitBtn").disabled = false;
+
+        } catch {
+            showMsg("인증번호가 올바르지 않습니다.", false);
+        }
+    }
+
+    function showMsg(text, success) {
+        const msg = document.getElementById("verifyMsg");
+        msg.textContent = text;
+        msg.className = success ? "message success" : "message error";
+    }
+
+    async function submitForm(e) {
+        e.preventDefault();
+
+        if (!emailVerified) {
+            alert("이메일 인증을 완료해주세요.");
+            return;
+        }
+        try {
+            const res = await fetch("/api/find/login-id", {
+                method: "POST"
+            });
+
+            if (!res.ok) throw new Error();
+
+            const loginId = await res.text();
+
+            const resultBox = document.getElementById("resultBox");
+            resultBox.textContent = `회원님의 아이디는 "${loginId}" 입니다.`;
+            resultBox.classList.remove("hidden");
+
+            document.getElementById("submitBtn").disabled = true;
+        } catch {
+            alert("아이디 찾기에 실패했습니다.");
+        }
+    }
 </script>
 
 </body>

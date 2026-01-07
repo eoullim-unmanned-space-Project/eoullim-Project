@@ -277,4 +277,23 @@ public class UserServiceImpl implements UserService{
         }
     }
 
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+    }
+
+    @Override
+    public String findLoginIdByNameAndEmail(String name, String email) {
+
+        User user = userRepository.findByNameAndEmail(name, email)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+
+        if (!user.isLocalUser()) {
+            throw new Exception400(ErrorCode.SOCIAL_USER_CANNOT_FIND_LOGIN_ID);
+        }
+
+        return user.getLoginId();
+    }
+
 }
