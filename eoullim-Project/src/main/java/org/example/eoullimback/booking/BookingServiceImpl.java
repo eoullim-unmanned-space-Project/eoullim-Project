@@ -1,6 +1,7 @@
 package org.example.eoullimback.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
@@ -10,9 +11,12 @@ import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotRepository;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
+import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,4 +95,18 @@ public class BookingServiceImpl implements BookingService {
 
         return new BookingResponse.DetailDTO(bookingEntities);
     }
+
+    @Override
+    public UserResponse.UserBookingDTO searchBookings(Long id, String bookingCode, BookingStatus status) {
+
+        List<Booking> bookingEntities =  bookingRepository.findAllByUserIdAndBookingCodeAndStatus(id, bookingCode, status);
+
+        if (bookingEntities.isEmpty()) {
+            return new ArrayList<UserResponse.UserBookingDTO>();
+            // 보시다시피 괄호() 안에 아무것도 없죠? DTO를 안 만드니까 인자값 걱정이 없습니다.
+        }
+
+        return new UserResponse.UserBookingDTO(bookingEntities);
+    }
+
 }

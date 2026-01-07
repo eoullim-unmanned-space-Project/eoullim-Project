@@ -1,5 +1,6 @@
 package org.example.eoullimback.timeslot;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import lombok.Data;
 
@@ -23,8 +24,10 @@ public class TimeSlotResponse {
 
     @Data
     public static class DetailDTO {
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         private LocalDateTime startTime;
 
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         private LocalDateTime endTime;
 
         public DetailDTO(TimeSlot timeSlot) {
