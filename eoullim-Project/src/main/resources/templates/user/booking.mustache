@@ -14,11 +14,12 @@
                 <button class="booking-search-btn">조회</button>
             </div>
         </div>
-
         <div class="booking-filter">
-            <button class="booking-filter-btn active">전체</button>
-            <button class="booking-filter-btn">예약완료</button>
-            <button class="booking-filter-btn">이용완료</button>
+            <button class="booking-filter-btn active" data-status="ALL">전체</button>
+            <button class="booking-filter-btn" data-status="PENDING">대기중</button>
+            <button class="booking-filter-btn" data-status="CONFIRMED">예약완료</button>
+            <button class="booking-filter-btn" data-status="CANCELED">예약완료</button>
+            <button class="booking-filter-btn" data-status="REFUNDED">환불완료</button>
             <button class="booking-filter-btn">취소</button>
         </div>
 
@@ -63,5 +64,36 @@
         </div>
     </section>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const filterRoot = document.querySelectorAll('.booking-filter');
+        filterRoot.forEach(filter => {
+
+            const filterBtn = filter.querySelectorAll('.booking-filter-btn');
+
+            filterBtn.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterBtn.forEach(b => b.classList.remove('active'));
+                    button.classList.add('active');
+
+                    let status = button.dataset.status;
+
+                    alert(status);
+
+
+                })
+            })
+
+        })
+
+
+
+    })
+
+
+</script>
+
 </body>
 {{> layout/footer}}
