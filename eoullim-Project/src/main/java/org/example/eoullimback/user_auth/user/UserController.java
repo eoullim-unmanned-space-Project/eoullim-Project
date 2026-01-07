@@ -117,4 +117,15 @@ public class UserController {
         return "/user/verify-password";
     }
 
+    @GetMapping("/bookings")
+    public String bookings(HttpSession session, Model model) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser != null) {
+            model.addAttribute("user", sessionUser);
+        }
+
+        return "/user/booking";
+    }
+
 }
