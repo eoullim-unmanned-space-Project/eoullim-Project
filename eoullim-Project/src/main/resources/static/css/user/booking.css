@@ -1,102 +1,207 @@
-   * { box-sizing: border-box; font-family: 'Pretendard', sans-serif; }
+/* ======================
+   메인 영역
+====================== */
+.mypage-main {
+    flex: 1;
+    padding: 40px;
+    background: white;
+}
 
-    body {
-      margin: 0;
-      background: white;
-    }
+/* ======================
+   BOOKING SEARCH
+====================== */
+.booking-search {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
 
-    /* 전체 레이아웃 */
-    .mypage-container {
-      display: flex;
-      max-width: 1200px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-    }
+.booking-search h2 {
+    font-size: 18px;
+    margin-bottom: 14px;
+}
 
-    /* 왼쪽 사이드바 */
-    .mypage-sidebar {
-      width: 280px;
-      padding: 32px 24px;
-    }
+.booking-search-row {
+    display: flex;
+    gap: 10px;
+}
 
-    .mypage-sidebar h2 {
-      margin: 0 0 8px;
-      font-size: 22px;
-    }
+.booking-input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+}
 
-    .welcome {
-      font-size: 14px;
-      color: #6b7280;
-      margin-bottom: 32px;
-    }
+.booking-search-btn {
+    padding: 0 18px;
+    border-radius: 14px;
+    border: none;
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+}
 
-    .welcome span { font-weight: bold; color: #4f46e5; }
+/* ======================
+   BOOKING FILTER
+====================== */
+.booking-filter {
+    display: flex;
+    gap: 10px;
+    margin: 24px 0;
+}
 
-    .menu-section { margin-bottom: 32px; }
+.booking-filter-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
 
-    .menu-section h3 { font-size: 16px; margin-bottom: 12px; }
+.booking-filter-btn:hover {
+    background-color: #f3f4f6;
+    transform: translateY(-1px);
+}
 
-    .menu-section ul { list-style: none; padding: 0; margin: 0; }
+.booking-filter-btn.active {
+    background: #eef2ff;
+    border-color: #6366f1;
+    color: #4338ca;
+    font-weight: 600;
+}
 
-    .menu-section li {
-      padding: 8px 0;
-      font-size: 14px;
-      color: #374151;
-      cursor: pointer;
-    }
+/* ======================
+   BOOKING LIST & CARD
+====================== */
+.booking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
 
-    .menu-section li:hover { font-weight: 600; color: #4f46e5; }
+.booking-card {
+    display: flex;
+    gap: 18px;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transition: transform 0.15s ease;
+}
 
-    .menu-section span { font-weight: bold; }
+.booking-card:hover {
+    transform: translateY(-3px);
+}
 
-    hr { border: 0.6px solid #e5e7eb; margin: 16px 0; }
+.booking-thumb {
+    width: 140px;
+    height: 120px;
+    border-radius: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f3f4f6;
+}
 
-    /* 오른쪽 메인 */
-    .mypage-main {
-      flex: 1;
-      padding: 48px;
-      background: #ffffff;
-      border-radius: 0 12px 12px 0;
-    }
+.booking-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-    /* 예약조회 폼 */
-    .reservation-box h2 {
-      margin-bottom: 24px;
-      font-size: 22px;
-    }
+.booking-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-    .info-row {
-      display: flex;
-      align-items: center;
-      margin-bottom: 16px;
-    }
+.booking-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    .info-row label {
-      width: 100px;
-      color: #6b7280;
-      font-size: 14px;
-    }
+.booking-place {
+    font-size: 17px;
+    font-weight: 700;
+}
 
-    .info-row input.booking-input {
-      flex: 1;
-      padding: 10px 12px;
-      font-size: 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-    }
+.booking-status {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
 
-    .edit-btn {
-      padding: 10px 20px;
-      margin-left: 8px;
-      border: none;
-      border-radius: 6px;
-      background: #4f46e5;
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s ease;
-    }
+.booking-status.confirmed {
+    background: #e0e7ff;
+    color: #3730a3;
+}
 
-    .edit-btn:hover { background: #4338ca; }
+.booking-status.used {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.booking-status.cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.booking-card-body {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+.booking-info-row {
+    display: flex;
+    gap: 10px;
+}
+
+.booking-info-row .label {
+    width: 70px;
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.booking-info-row.price span:last-child {
+    font-weight: 700;
+    color: #111827;
+}
+
+.booking-card-footer {
+    margin-top: 12px;
+    text-align: right;
+}
+
+.booking-detail-btn {
+    padding: 9px 18px;
+    border-radius: 8px;
+    background: tomato;
+    color: white;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(99, 102, 241, 0.25);
+    transition: all 0.2s ease;
+}
+
+.booking-detail-btn:hover {
+    transform: translateY(-1px);
+    background: #e5533d;
+}
+
+.booking-detail-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+}

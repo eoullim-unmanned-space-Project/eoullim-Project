@@ -19,4 +19,10 @@ public class PaymentRequest {
         String merchantUid;
     }
 
+    @Data
+    public static class CancelDTO {
+        @JsonProperty("merchant_uid")
+        String merchantUid;
+    }
+
 }

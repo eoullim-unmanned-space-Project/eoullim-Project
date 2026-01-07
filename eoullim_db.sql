@@ -6,7 +6,7 @@ USE eoullim_db;
 
 SELECT * FROM time_slots;
 SELECT * FROM items;
-SELECT * FROM places;
+SELECT * FROM places;	
 SELECT * FROM rooms;
 SELECT * FROM users;
 SELECT * FROM bookings;

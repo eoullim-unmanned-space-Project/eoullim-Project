@@ -12,11 +12,7 @@ import org.example.eoullimback.user_auth.user.User;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notifications",
-        indexes = {
-        @Index(name = "idx_notifications_user_id", columnList = "user_id"),
-        @Index(name = "idx_notifications_payment_id", columnList = "payment_id")
-        })
+@Table(name = "notifications")
 @Getter
 @NoArgsConstructor
 public class Notification {
@@ -36,7 +32,7 @@ public class Notification {
     @Column(name = "message", nullable = false, length = 255)
     private String message;
 
-    @Column(name = "qr_code", length = 40)
+    @Column(name = "qr_code", length = 100)
     private String qrCode;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -75,7 +71,4 @@ public class Notification {
         this.sentAt = LocalDateTime.now();
     }
 
-    public void markFailed() {
-        this.status = NotificationStatus.FAILED;
-    }
 }

@@ -1,45 +1,67 @@
 <link rel="stylesheet" href="/css/layout/header.css">
 <link rel="stylesheet" href="/css/user/booking.css">
 {{> layout/header}}
-<main>
-    <div class="mypage-container">
+<body>
+<div class="mypage-container">
+    {{> layout/sideBar}}
+    <!-- 메인 -->
+    <section class="mypage-main">
 
-        <!-- 왼쪽 사이드바 -->
-        <aside class="mypage-sidebar">
-            <h2>마이페이지</h2>
-            <p class="welcome"><span>홍길동</span>님, 안녕하세요</p>
-            <hr />
-
-            <section class="menu-section">
-                <h3>예약정보</h3>
-                <ul>
-                    <li><span>예약내역</span></li>
-                </ul>
-            </section>
-            <hr />
-
-            <section class="menu-section">
-                <h3>활동정보</h3>
-                <ul>
-                    <li><span>리뷰</span></li>
-                    <li><span>Q&A</span></li>
-                </ul>
-            </section>
-            <hr />
-        </aside>
-
-        <!-- 오른쪽 메인 -->
-        <main class="mypage-main">
-            <div class="reservation-box">
-                <h2>예약 조회</h2>
-                <form action="/mypage/reservation" method="post">
-                    <div class="info-row">
-                        <input class="booking-input" type="text" name="booking" placeholder="예약 코드를 입력하세요" />
-                        <button type="submit" class="edit-btn">조회</button>
-                    </div>
-                </form>
+        <div class="booking-search">
+            <h2>예약 조회</h2>
+            <div class="booking-search-row">
+                <input class="booking-input" type="text" placeholder="예약 코드를 입력해 주세요">
+                <button class="booking-search-btn">조회</button>
             </div>
-        </main>
-    </div>
-</main>
+        </div>
+
+        <div class="booking-filter">
+            <button class="booking-filter-btn active">전체</button>
+            <button class="booking-filter-btn">예약완료</button>
+            <button class="booking-filter-btn">이용완료</button>
+            <button class="booking-filter-btn">취소</button>
+        </div>
+
+        <div class="booking-list">
+            <div class="booking-card">
+
+                <!-- 이미지 영역 -->
+                <div class="booking-thumb">
+                    <img src="/images/room-sample.jpg" alt="스터디룸 이미지">
+                </div>
+
+                <!-- 콘텐츠 영역 -->
+                <div class="booking-content">
+                    <div class="booking-card-header">
+                        <span class="booking-place">🚩 스터디룸 A</span>
+                        <span class="booking-status confirmed">예약완료</span>
+                    </div>
+
+                    <div class="booking-card-body">
+                        <div class="booking-info-row">
+                            <span class="label">예약 코드</span>
+                            <strong>ABC12345</strong>
+                        </div>
+
+                        <div class="booking-info-row">
+                            <span class="label">이용 시간</span>
+                            <span>2026.01.08 · 14:00 ~ 16:00</span>
+                        </div>
+
+                        <div class="booking-info-row price">
+                            <span class="label">결제 금액</span>
+                            <span>30,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="booking-card-footer">
+                        <button class="booking-detail-btn">상세보기</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+</body>
 {{> layout/footer}}

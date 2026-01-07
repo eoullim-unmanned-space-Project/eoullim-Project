@@ -19,7 +19,7 @@ public class BookingScheduler {
     private final BookingSchedulerService bookingSchedulerService;
 
     // 5분 마다 예약 상태 검증
-    @Scheduled(fixedRate = 50000)
+    @Scheduled(fixedRate = 5 * 60 * 1000)
     public void releaseSlot() {
         try {
             log.info("만료된 펜딩 슬롯을 해체하는 스케줄러를 시작합니다. 시간: {}", LocalDateTime.now());

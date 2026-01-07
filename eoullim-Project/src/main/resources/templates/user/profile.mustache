@@ -3,28 +3,8 @@
 {{> layout/header}}
 <body>
 <div class="mypage-container">
-    <!-- 왼쪽 영역 -->
-    <aside class="mypage-sidebar">
-        <h2>마이페이지</h2>
-        <p class="welcome"><span>{{user.name}}</span>님, 안녕하세요</p>
-        <hr/>
 
-        <section class="menu-section">
-            <h3>예약정보</h3>
-            <ul>
-                <li><span><a href="">예약내역</a></span></li>
-            </ul>
-        </section>
-        <hr/>
-        <section class="menu-section">
-            <h3>활동정보</h3>
-            <ul>
-                <li><span>리뷰</span></li>
-                <li><span>Q&A</span></li>
-            </ul>
-        </section>
-        <hr/>
-    </aside>
+    {{> layout/sideBar}}
 
     <!-- 오른쪽 메인 영역 -->
     <main class="mypage-main">

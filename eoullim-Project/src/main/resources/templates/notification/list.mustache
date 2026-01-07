@@ -13,15 +13,14 @@
             </div>
 
             <div>
-                {{message}}
-            </div>
+                <p>{{message}}</p>
 
-            {{#qrCode}}
-                <div>
-                    QR 코드:
-                    <div class="qrcode" data-qr="{{qrCode}}"></div>
-                </div>
-            {{/qrCode}}
+                <ul>
+                    <li>주문번호 : {{orderId}}</li>
+                    <li>상품명 : {{productName}}</li>
+                    <li>결제 금액 : {{amount}}원</li>
+                </ul>
+            </div>
 
             <div>
                 {{createdAt}}
@@ -34,23 +33,4 @@
     {{/notifications}}
 
 </div>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function(){
-
-        const qrElements = document.querySelectorAll('.qrCode');
-
-        qrElements.forEach(el => {
-            const qrValue = el.dataset.qr;
-
-            if (!qrValue) return;
-
-            new QRCode(el, {
-                text: qrValue,
-                width: 120,
-                height: 120
-            });
-        });
-    });
-</script>
 {{> layout/footer}}
