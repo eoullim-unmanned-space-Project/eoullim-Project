@@ -1,22 +1,21 @@
 package org.example.eoullimback.user_auth.auth;
 
-import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.RoleType;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.Status;
 import org.example.eoullimback._common.error.exception.Exception400;
+import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
-import org.example.eoullimback._common.error.exception.Exception409;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
-import org.example.eoullimback.user_auth.user.Role;
-import org.example.eoullimback.user_auth.user.RoleRepository;
-import org.example.eoullimback.user_auth.user.User;
-import org.example.eoullimback.user_auth.user.UserRepository;
+import org.example.eoullimback.user_auth.user.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final MailService mailService;
 
     @Override
     @Transactional
@@ -51,13 +51,91 @@ public class AuthServiceImpl implements AuthService {
 
         request.validate();
 
-        User userEntity = authRepository.findByLoginIdAndPasswordWithRoles(request.getLoginId(), request.getPassword())
+        User userEntity = authRepository.findByLoginIdWithRoles(request.getLoginId())
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         if (userEntity.getStatus() == Status.WITHDRAWN) {
             throw new Exception400(ErrorCode.USER_STATUS_WITHDRAWN);
         }
 
+        if (!passwordEncoder.matches(request.getPassword(),
+                userEntity.getPassword()
+        )) {
+            throw new Exception401(ErrorCode.INVALID_PASSWORD);
+        }
+
         return userEntity;
+    }
+
+    @Override
+    public void verifyPassword(User sessionUser, String password) {
+
+        User user = userRepository.findById(sessionUser.getId())
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new Exception401(ErrorCode.INVALID_PASSWORD);
+        }
+
+    }
+
+    @Override
+    public void findLoginIdByNameAndEmail(AuthRequest.FindLoginIdRequestDTO request) {
+
+        User user = userRepository.findByNameAndEmail(
+                request.getName(),
+                request.getEmail()
+        ).orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+
+        if (!user.isLocalUser()) {
+            throw new Exception400(ErrorCode.SOCIAL_USER_CANNOT_FIND_LOGIN_ID);
+        }
+
+        mailService.sendLoginId(
+                user.getName(),
+                user.getEmail()
+        );
+    }
+
+    @Override
+    @Transactional
+    public void requestPasswordReset(AuthRequest.ResetPasswordRequestDTO request, HttpSession session) {
+
+        request.validate();
+
+        userRepository.findByLoginIdAndEmail(request.getLoginId(), request.getEmail())
+                .ifPresent(user -> {
+
+                    String token = UUID.randomUUID().toString();
+                    session.setAttribute("PWD_RESET_TOKEN" + token, user.getId());
+
+                    String resetLink =
+                            "http://localhost:8080/reset-password?token=" + token;
+
+                    mailService.sendPasswordResetLink(
+                            user.getEmail(),
+                            resetLink
+                    );
+                });
+    }
+
+    @Override
+    @Transactional
+    public void resetPassword(AuthRequest.ResetPasswordConfirmDTO request, HttpSession session) {
+
+        request.validate();
+
+        Long userId = (Long) session.getAttribute("PWD_RESET_TOKEN:" + request.getToken());
+
+        if (userId == null) {
+            throw new Exception400(ErrorCode.INVALID_INPUT);
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        session.removeAttribute("PWD_RESET_TOKEN:" + request.getToken());
     }
 }

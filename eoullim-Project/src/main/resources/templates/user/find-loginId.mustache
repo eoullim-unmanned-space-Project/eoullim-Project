@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/css/user/verify-password.css">
+<link rel="stylesheet" href="/css/layout/header.css"/>
+{{> layout/header}}
+<body>
+
+    <form class="findIdForm">
+
+        <h2>아이디 찾기</h2>
+
+        <div class="field">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="field">
+            <label for="email">이메일</label>
+            <div class="inline">
+                <input type="email" id="email" name="email" required>
+                <button type="button" id="sendEmailBtn">인증번호전송</button>
+                <p class="hint">가입 시 사용한 이메일을 입력해주세요.</p>
+            </div>
+        </div>
+            <div class="field-hidden" id="verify-box">
+                <label for="code">인증 번호</label>
+                <div class="inline">
+                    <input type="text" id="code" maxlength="6">
+                    <button type="button" id="verifyCodeBtn">확인</button>
+                    <p id="verifyMsg" class="message"></p>
+                </div>
+
+                <button type="submit" id="submitBtn" disabled>아이디 찾기</button>
+
+            </div>
+    </form>
+
+<script>
+
+</script>
+
+</body>
+{{> layout/footer}}

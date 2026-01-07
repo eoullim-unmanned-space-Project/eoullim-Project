@@ -1,7 +1,5 @@
 package org.example.eoullimback.user_auth.user;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.OAuthProvider;

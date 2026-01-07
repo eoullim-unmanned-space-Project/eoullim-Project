@@ -3,6 +3,7 @@ package org.example.eoullimback.user_auth.user.dto.request;
 import lombok.Data;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
+import org.example.eoullimback._common.error.exception.Exception404;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UserRequest {
@@ -50,7 +51,6 @@ public class UserRequest {
             }
         }
     }
-
 
     @Data
     public static class PasswordCheckDTO {

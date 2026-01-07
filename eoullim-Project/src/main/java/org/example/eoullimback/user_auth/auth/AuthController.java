@@ -7,6 +7,7 @@ import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -76,6 +77,46 @@ public class AuthController {
     @GetMapping("logout")
     public String logout(HttpSession session) {
         session.invalidate();
+
+        return "redirect:/auth/login";
+    }
+
+    @GetMapping("/find-LoginId")
+    public String findLoginId() {
+        return "user/find-loginId";
+    }
+
+    @PostMapping("/find-LoginId")
+    public String findLoginId(AuthRequest.FindLoginIdRequestDTO request,
+                              Model model) {
+        try {
+        request.validate();
+        authService.findLoginIdByNameAndEmail(request);
+            return "redirect:/auth/login";
+        } catch (Exception e) {
+            model.addAttribute("error", "일치하는 회원 정보가 없습니다.");
+        return "user/find-loginId";
+        }
+
+    }
+
+    @GetMapping("/password/reset/request")
+    public String requestPasswordResetForm() {
+        return "user/password-reset-request";
+    }
+
+    @PostMapping("/password/reset/request")
+    public String requestPasswordReset(AuthRequest.ResetPasswordRequestDTO request, HttpSession session) {
+
+        authService.requestPasswordReset(request, session);
+
+        return "user/password-reset";
+    }
+
+    @PostMapping("/password/reset/confirm")
+    public String resetPassword(AuthRequest.ResetPasswordConfirmDTO request, HttpSession session) {
+
+        authService.resetPassword(request, session);
 
         return "redirect:/auth/login";
     }

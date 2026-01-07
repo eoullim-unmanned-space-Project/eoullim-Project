@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.OAuthProvider;
 import org.example.eoullimback._common.error.exception.Exception401;
+import org.example.eoullimback.user_auth.auth.AuthService;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ public class UserApiController {
 
     private final UserService userService;
     private final MailService mailService;
+    private final AuthService authService;
 
     @PostMapping("/api/email/send")
     public ResponseEntity<?> sendVerificationCode(@RequestBody UserRequest.EmailCheckDTO reqDTO) {
@@ -60,6 +62,8 @@ public class UserApiController {
         }
 
         passwordCheckDTO.validate();
+
+        authService.verifyPassword(sessionUser, passwordCheckDTO.getPassword());
 
         return ResponseEntity.ok().body(Map.of("verified", true));
     }

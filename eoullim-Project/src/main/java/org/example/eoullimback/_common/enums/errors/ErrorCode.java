@@ -12,6 +12,7 @@ public enum ErrorCode {
     MISSING_PARAMETER("비워 둘수 없는 항목입니다."),
     LOGIN_ID_REQUIRED("아이디는 필수입니다"),
     LOGIN_ID_LENGTH("아이디는 6자이상 20자 이하여야 합니다."),
+    SOCIAL_USER_CANNOT_FIND_LOGIN_ID("소셜 유저는 아이디 찾기를 할 수 없습니다."),
     PASSWORD_REQUIRED("비밀번호는 필수입니다"),
     PASSWORD_POLITY("비밀번호는 8자이상 20자 이하여야 합니다."),
     NAME_REQUIRED("이름은 필수입니다."),
@@ -78,7 +79,8 @@ public enum ErrorCode {
     // 500 Internal Server Error
     // ====
     INTERNAL_ERROR("서버 내부 오류가 발했습니다."),
-    FILE_SAVE_FAILED("파일 저장에 실패했습니다.");
+    FILE_SAVE_FAILED("파일 저장에 실패했습니다."),
+    MAIL_SEND_FAIL("메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.");;
 
 
     private final String message;
