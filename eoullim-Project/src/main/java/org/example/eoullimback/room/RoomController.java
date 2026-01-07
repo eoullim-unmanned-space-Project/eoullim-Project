@@ -1,16 +1,15 @@
 package org.example.eoullimback.room;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,8 +32,9 @@ public class RoomController {
     @PostMapping("/place/{placeId}/room/create")
     public String createRoom(Model model,
                              @PathVariable Long placeId,
-                             @Valid RoomRequest.CreateDTO createDTO
+                             RoomRequest.CreateDTO createDTO
     ) {
+        createDTO.validate();
 
         Room room = roomService.createRoom(placeId, createDTO);
         model.addAttribute("room", room);
@@ -48,15 +48,7 @@ public class RoomController {
      * 2. 룸 파일 이미지
      * 3. 타임슬롯 + 아이템
      */
-    @GetMapping("/room/{roomId}")
-    public String DetailRoom(@PathVariable Long roomId, Model model) {
 
-        RoomResponse.DetailDTO room = roomService.DetailRoom(roomId);
-
-        model.addAttribute("room", room);
-
-        return "room/detail";
-    }
 
     /**
      * 화면: 수정
@@ -76,7 +68,9 @@ public class RoomController {
      * - 타임슬롯 변경은 x 안됨
      */
     @PostMapping("/room/{roomId}/update")
-    public String updateRoom(@PathVariable Long roomId, @Valid RoomRequest.UpdateDTO updateDTO){
+    public String updateRoom(@PathVariable Long roomId, RoomRequest.UpdateDTO updateDTO){
+
+        updateDTO.validate();
 
         Room room = roomService.updateRoom(roomId, updateDTO);
 
