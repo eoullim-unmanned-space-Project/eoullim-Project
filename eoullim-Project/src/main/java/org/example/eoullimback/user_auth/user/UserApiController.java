@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -136,7 +137,7 @@ public class UserApiController {
     }
 
     @GetMapping("/api/search")
-    public ResponseEntity<UserResponse.UserBookingDTO> searchBookings(
+    public ResponseEntity<List<UserResponse.UserBookingDTO>> searchBookings(
             @RequestParam(value = "code", required = false) String bookingCode,
             @RequestParam(value = "status", required = false) BookingStatus status,
             HttpSession session
@@ -147,9 +148,8 @@ public class UserApiController {
             throw new Exception401(ErrorCode.ACCESS_DENIED);
         }
 
-        UserResponse.UserBookingDTO searchBookings = bookingService.searchBookings(user.getId(), bookingCode, status);
+        List<UserResponse.UserBookingDTO> searchBookings = bookingService.searchBookings(user.getId(), bookingCode, status);
 
-        System.out.println(searchBookings);
 
         return ResponseEntity.ok().body(searchBookings);
     }

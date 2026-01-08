@@ -51,7 +51,6 @@ public class BookingResponse {
         private List<TimeSlotResponse.DetailDTO> timeSlots;
 
         public DetailDTO(List<Booking> bookings) {
-            // 부킹을 그룹핑 하기 위한 것 0번째의 요소를 가져온다
             Booking grouping = bookings.get(0);
 
             this.username = grouping.getUser().getName();
