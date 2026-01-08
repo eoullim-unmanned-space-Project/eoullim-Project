@@ -25,7 +25,6 @@
 
         <div class="booking-list">
             <div class="booking-card">
-
                 <!-- 이미지 영역 -->
                 <div class="booking-thumb">
                     <img src="/images/room-sample.jpg" alt="스터디룸 이미지">
@@ -59,7 +58,6 @@
                         <button class="booking-detail-btn">상세보기</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -94,8 +92,7 @@
 
                 const data = await response.json();
 
-                console.log(data);
-
+                displayBookings()
 
             } catch(error) {
                 console.error(error.message);
@@ -125,11 +122,27 @@
         });
 
         sendSearch()
+
+        function displayBookings(data) {
+            const bookingList = document.getElementById('booking-list');
+
+            bookingList.innerHTML === ''
+
+            bookingList.forEach(booking => {
+                const card = document.createEvent('div');
+                card.className = 'booking-card';
+
+                card.innerHTML = `
+
+
+                `;
+
+            })
+
+        }
     })
 
-    function displayBookings(data) {
 
-    }
 
 
 </script>
