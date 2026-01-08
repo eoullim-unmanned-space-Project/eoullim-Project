@@ -37,14 +37,14 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("""
             SELECT b FROM Booking b
-            JOIN FETCH b.user u
-            JOIN FETCH b.room r
-            JOIN FETCH b.timeSlot t
-            JOIN FETCH r.place p
+            LEFT JOIN FETCH b.user u
+            LEFT JOIN FETCH b.room r
+            LEFT JOIN FETCH b.timeSlot t
+            LEFT JOIN FETCH r.place p
             WHERE (:bookingCode IS NULL OR b.bookingCode = :bookingCode)
             AND (:status IS NULL OR b.status = :status)
             AND u.id = :userId
-            ORDER BY b.ID DESC
+            ORDER BY b.id DESC
             """)
    List<Booking> findAllByUserIdAndBookingCodeAndStatus(@Param("userId")Long id, @Param("bookingCode")String bookingCode, @Param("status")BookingStatus status);
 }
