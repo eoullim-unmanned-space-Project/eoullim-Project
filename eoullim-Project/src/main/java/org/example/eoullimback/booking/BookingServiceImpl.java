@@ -99,11 +99,15 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public UserResponse.UserBookingDTO searchBookings(Long id, String bookingCode, BookingStatus status) {
 
-        List<Booking> bookingEntities =  bookingRepository.findAllByUserIdAndBookingCodeAndStatus(id, bookingCode, status);
+        // bookingCode = null 값을 인식을 못해서 에러 발생
+        String code = (bookingCode == null || bookingCode.isEmpty()) ? null : bookingCode;
+
+        List<Booking> bookingEntities =  bookingRepository.findAllByUserIdAndBookingCodeAndStatus(id, code, status);
+
+        System.out.println(bookingEntities);
 
         if (bookingEntities.isEmpty()) {
-            return new ArrayList<UserResponse.UserBookingDTO>();
-            // 보시다시피 괄호() 안에 아무것도 없죠? DTO를 안 만드니까 인자값 걱정이 없습니다.
+            return UserResponse.UserBookingDTO.empty();
         }
 
         return new UserResponse.UserBookingDTO(bookingEntities);

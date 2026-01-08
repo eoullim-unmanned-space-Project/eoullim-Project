@@ -15,11 +15,11 @@
             </div>
         </div>
         <div class="booking-filter">
+            <button class="booking-filter-btn" >전체보기</button>
             <button class="booking-filter-btn" data-status="PENDING">대기중</button>
             <button class="booking-filter-btn" data-status="CONFIRMED">예약완료</button>
-            <button class="booking-filter-btn" data-status="CANCELED">예약완료</button>
+            <button class="booking-filter-btn" data-status="CANCELED">예약취소</button>
             <button class="booking-filter-btn" data-status="REFUNDED">환불완료</button>
-            <button class="booking-filter-reset" >전체보기</button>
             <button class="booking-filter-btn">취소</button>
         </div>
 
@@ -76,8 +76,7 @@
             let bookingCode = bookingInput.value.trim() || '';
 
             const activeBtn = document.querySelector('.booking-filter-btn.active');
-            let status = activeBtn?.dataset.status;
-
+            let status = (activeBtn && activeBtn.dataset.status) ? activeBtn.dataset.status : '';
             alert(bookingCode);
             alert(status);
 
@@ -89,18 +88,19 @@
                     }
                 });
 
-              if(!response.ok) {
-                throw new Error(`서버 응답 에러: ${response.status}`);
-              }
+                if(!response.ok) {
+                    throw new Error(`서버 응답 에러: ${response.status}`);
+                }
 
                 const data = await response.json();
 
-                alert(data);
+                console.log(data);
+
 
             } catch(error) {
                 console.error(error.message);
             }
-        };
+        }
 
           filterRoot.forEach(filter => {
 
@@ -112,11 +112,8 @@
                     button.classList.add('active');
                     status = button.dataset.status;
                     sendSearch();
-
-
                 })
             })
-
         })
 
         bookingBtn.addEventListener('click', sendSearch);
@@ -125,11 +122,14 @@
             if (event.key === 'Enter') {
                 sendSearch();
             }
-
         });
 
-
+        sendSearch()
     })
+
+    function displayBookings(data) {
+
+    }
 
 
 </script>

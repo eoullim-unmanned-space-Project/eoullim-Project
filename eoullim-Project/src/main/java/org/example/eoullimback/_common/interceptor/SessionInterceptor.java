@@ -15,16 +15,16 @@ public class SessionInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response,
                            Object handler, ModelAndView modelAndView
     ) throws Exception {
-        if (modelAndView == null) return;
-
-        HttpSession session = request.getSession(false);
-        if (session == null) return;
-
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) return;
-
-        if (!modelAndView.getModel().containsKey("sessionUser")) {
-            modelAndView.addObject("sessionUser", sessionUser);
-        }
+//        if (modelAndView == null) return;
+//
+//        HttpSession session = request.getSession(false);
+//        if (session == null) return;
+//
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+//        if (sessionUser == null) return;
+//
+//        if (!modelAndView.getModel().containsKey("sessionUser")) {
+//            modelAndView.addObject("sessionUser", sessionUser);
+//        }
     }
 }

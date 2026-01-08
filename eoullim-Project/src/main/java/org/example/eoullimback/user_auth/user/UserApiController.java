@@ -132,11 +132,10 @@ public class UserApiController {
 
     @GetMapping("/api/search")
     public ResponseEntity<UserResponse.UserBookingDTO> searchBookings(
-            @RequestParam(value = "code") String bookingCode,
-            @RequestParam(value = "status") BookingStatus status,
+            @RequestParam(value = "code", required = false) String bookingCode,
+            @RequestParam(value = "status", required = false) BookingStatus status,
             HttpSession session
     ) {
-
         User user = (User) session.getAttribute("sessionUser");
 
         if (user == null) {
@@ -144,6 +143,8 @@ public class UserApiController {
         }
 
         UserResponse.UserBookingDTO searchBookings = bookingService.searchBookings(user.getId(), bookingCode, status);
+
+        System.out.println(searchBookings);
 
         return ResponseEntity.ok().body(searchBookings);
     }
