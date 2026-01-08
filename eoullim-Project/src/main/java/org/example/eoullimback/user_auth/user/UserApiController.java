@@ -9,6 +9,7 @@ import org.example.eoullimback.user_auth.auth.AuthService;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

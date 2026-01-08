@@ -24,6 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
             "/auth/**",
             "/",
             "/user/kakao",
+            "/api/find/**",
             "/css/**",
             "/js/**",
             "/img/**",

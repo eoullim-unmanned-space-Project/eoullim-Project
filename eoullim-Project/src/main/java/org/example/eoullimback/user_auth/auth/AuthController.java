@@ -84,39 +84,6 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    @GetMapping("/find/Login-id")
-    public String findLoginId() {
-        return "user/find-loginId";
-    }
-
-    @PostMapping("/find/Login-id")
-    public String findLoginId(HttpSession session,
-                              Model model) {
-        Boolean verified =
-                (Boolean) session.getAttribute("findIdVerified");
-        String email =
-                (String) session.getAttribute("findIdEmail");
-
-        if (verified == null || !verified) {
-            throw new Exception401(ErrorCode.INVALID_EMAIL_FORMAT);
-        }
-
-        User user = userService.findByEmail(email);
-
-        if (user.isSocialUser()) {
-            throw new Exception400(ErrorCode.SOCIAL_USER_CANNOT_FIND_LOGIN_ID);
-        }
-
-        session.removeAttribute("findIdVerified");
-        session.removeAttribute("findIdEmail");
-
-        model.addAttribute("loginId", user.getLoginId());
-
-        return "user/find-loginId-result";
-        }
-
-
-
     @GetMapping("/password/reset/request")
     public String requestPasswordResetForm() {
         return "user/password-reset-request";
