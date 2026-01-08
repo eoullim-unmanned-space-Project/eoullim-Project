@@ -15,10 +15,10 @@
             </div>
         </div>
         <div class="booking-filter">
-            <button class="booking-filter-btn active" data-status="ALL">전체</button>
+            <button class="booking-filter-btn" >전체보기</button>
             <button class="booking-filter-btn" data-status="PENDING">대기중</button>
             <button class="booking-filter-btn" data-status="CONFIRMED">예약완료</button>
-            <button class="booking-filter-btn" data-status="CANCELED">예약완료</button>
+            <button class="booking-filter-btn" data-status="CANCELED">예약취소</button>
             <button class="booking-filter-btn" data-status="REFUNDED">환불완료</button>
             <button class="booking-filter-btn">취소</button>
         </div>
@@ -68,8 +68,41 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
+        const bookingBtn = document.querySelector('.booking-search-btn');
+        const bookingInput = document.querySelector('.booking-input');
         const filterRoot = document.querySelectorAll('.booking-filter');
-        filterRoot.forEach(filter => {
+
+        async function sendSearch() {
+            let bookingCode = bookingInput.value.trim() || '';
+
+            const activeBtn = document.querySelector('.booking-filter-btn.active');
+            let status = (activeBtn && activeBtn.dataset.status) ? activeBtn.dataset.status : '';
+            alert(bookingCode);
+            alert(status);
+
+            try {
+                 const response = await fetch(`/api/search?code=${bookingCode}&status=${status}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type" : "application/json"
+                    }
+                });
+
+                if(!response.ok) {
+                    throw new Error(`서버 응답 에러: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                console.log(data);
+
+
+            } catch(error) {
+                console.error(error.message);
+            }
+        }
+
+          filterRoot.forEach(filter => {
 
             const filterBtn = filter.querySelectorAll('.booking-filter-btn');
 
@@ -77,20 +110,26 @@
                 button.addEventListener('click', () => {
                     filterBtn.forEach(b => b.classList.remove('active'));
                     button.classList.add('active');
-
-                    let status = button.dataset.status;
-
-                    alert(status);
-
-
+                    status = button.dataset.status;
+                    sendSearch();
                 })
             })
-
         })
 
+        bookingBtn.addEventListener('click', sendSearch);
 
+        bookingInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                sendSearch();
+            }
+        });
 
+        sendSearch()
     })
+
+    function displayBookings(data) {
+
+    }
 
 
 </script>

@@ -9,6 +9,4 @@ public interface AuthService {
     User signup(AuthRequest.SignupRequestDTO request);
     User login(AuthRequest.LoginRequestDTO request);
     void verifyPassword(User sessionUser, String password);
-    void requestPasswordReset(AuthRequest.ResetPasswordRequestDTO request, HttpSession session);
-    void resetPassword(AuthRequest.ResetPasswordConfirmDTO request, HttpSession session);
 }

@@ -57,14 +57,14 @@ public class MailServiceImpl implements MailService {
         }
         return false;
     }
-
-    @Override
-    public void sendPasswordResetLink(String email, String resetLink) {
-
-        System.out.println("[Mail] to : " + email);
-        System.out.println("비밀번호 재설정 링크: " + resetLink);
-
-    }
+//
+//    @Override
+//    public void sendPasswordResetLink(String email, String resetLink) {
+//
+//        System.out.println("[Mail] to : " + email);
+//        System.out.println("비밀번호 재설정 링크: " + resetLink);
+//
+//    }
 
     @Override
     public void sendPaymentSuccessMail(String email, Payment payment, byte[] qrImage) {

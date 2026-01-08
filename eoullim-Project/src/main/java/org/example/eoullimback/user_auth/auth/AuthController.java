@@ -5,13 +5,18 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
+import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
+import org.example.eoullimback.user_auth.user.MailService;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final MailService mailService;
 
     // http://localhost:8080/auth/signup
     @GetMapping("/signup")
@@ -63,15 +69,21 @@ public class AuthController {
      */
     @PostMapping("/login")
     public String login(@ModelAttribute AuthRequest.LoginRequestDTO request,
-                        HttpSession session
+                        HttpSession session, Model model
     ) {
         request.validate();
 
-        User sessionUser = authService.login(request);
+        try {
+            User sessionUser = authService.login(request);
 
-        session.setAttribute("sessionUser", sessionUser);
+            session.setAttribute("sessionUser", sessionUser);
 
-        return "redirect:/main/main";
+            return "redirect:/main/main";
+
+        } catch (Exception400 | Exception401 | Exception404 e) {
+            model.addAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            return "user/login";
+        }
     }
 
     /**
@@ -84,24 +96,91 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    @GetMapping("/password/reset/request")
-    public String requestPasswordResetForm() {
-        return "user/password-reset-request";
+    @GetMapping("/find-password")
+    public String findPasswordForm() {
+        return "user/find-password";
     }
 
-    @PostMapping("/password/reset/request")
-    public String requestPasswordReset(AuthRequest.ResetPasswordRequestDTO request, HttpSession session) {
 
-        authService.requestPasswordReset(request, session);
+    @PostMapping("/find-password/send-code")
+    public ResponseEntity<?> sendVerifiedCode(@RequestParam String userId,
+                               @RequestParam String email
+    ) {
+        User user = userService.findByUserIdAndEmail(userId, email);
+        if (user == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "아이디와 이메일이 일치하지 않습니다."));
+        }
+        mailService.sendVerificationCode(email);
 
-        return "user/password-reset";
+        return ResponseEntity.ok(Map.of("message", "인증번호가 발송되었습니다."));
     }
 
-    @PostMapping("/password/reset/confirm")
-    public String resetPassword(AuthRequest.ResetPasswordConfirmDTO request, HttpSession session) {
+    @PostMapping("/verify-password-code")
+    @ResponseBody
+    public ResponseEntity<?> verifyPasswordCode(@RequestParam String email,
+                                     @RequestParam String code,
+                                     @RequestParam String userId,
+                                     HttpSession session
+    ) {
+        boolean verified = mailService.verifyVerificationCode(email, code);
 
-        authService.resetPassword(request, session);
+        if (!verified) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "인증번호가 일치하지 않습니다."));
+        }
+
+        session.setAttribute("passwordResetVerified", true);
+        session.setAttribute("passwordUserId", userId);
+
+        return ResponseEntity.ok(Map.of("message", "인증이 완료되었습니다."));
+    }
+
+    @GetMapping("/reset-password")
+    public String resetPasswordForm(HttpSession session) {
+
+        Boolean verified = (Boolean) session.getAttribute("passwordResetVerified");
+        if (verified == null || !verified) {
+            return "redirect:/auth/find-password";
+        }
+        return "user/reset-password";
+    }
+
+//    @GetMapping("/reset-password")
+//    public String resetPassword(HttpSession session) {
+//        Boolean verified = (Boolean) session.getAttribute("passwordResetVerified");
+//        if (verified == null || !verified) {
+//            return "redirect:/auth/find-password";
+//        }
+//        return "user/reset-password";
+//    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam String newPassword,
+                                HttpSession session,
+                                Model model
+    ) {
+        Boolean verified = (Boolean) session.getAttribute("passwordResetVerified");
+        String userId = (String) session.getAttribute("passwordUserId");
+
+        if (verified == null || !verified || userId == null) {
+            model.addAttribute("error", "잘못된 접근입니다.");
+            return "user/find-password";
+        }
+
+        userService.updatePassword(userId, newPassword);
+
+        session.removeAttribute("passwordResetVerified");
+        session.removeAttribute("passwordUserId");
+
+        model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
 
         return "redirect:/auth/login";
     }
+
+
+
+
+
+
 }

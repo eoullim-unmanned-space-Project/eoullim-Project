@@ -78,46 +78,4 @@ public class AuthServiceImpl implements AuthService {
         }
 
     }
-
-    @Override
-    @Transactional
-    public void requestPasswordReset(AuthRequest.ResetPasswordRequestDTO request, HttpSession session) {
-
-        request.validate();
-
-        userRepository.findByLoginIdAndEmail(request.getLoginId(), request.getEmail())
-                .ifPresent(user -> {
-
-                    String token = UUID.randomUUID().toString();
-                    session.setAttribute("PWD_RESET_TOKEN" + token, user.getId());
-
-                    String resetLink =
-                            "http://localhost:8080/reset-password?token=" + token;
-
-                    mailService.sendPasswordResetLink(
-                            user.getEmail(),
-                            resetLink
-                    );
-                });
-    }
-
-    @Override
-    @Transactional
-    public void resetPassword(AuthRequest.ResetPasswordConfirmDTO request, HttpSession session) {
-
-        request.validate();
-
-        Long userId = (Long) session.getAttribute("PWD_RESET_TOKEN:" + request.getToken());
-
-        if (userId == null) {
-            throw new Exception400(ErrorCode.INVALID_INPUT);
-        }
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
-
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
-
-        session.removeAttribute("PWD_RESET_TOKEN:" + request.getToken());
-    }
 }

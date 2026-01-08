@@ -134,7 +134,7 @@ public class PaymentServiceImpl implements PaymentService {
                     log.info("부킹 예약 완료 상태 변경되었습니다. 부킹코드: {}, 부킹상태: {}", booking.getBookingCode(), booking.getStatus());
                 }
 
-                notificationService.notifyPaymentSuccess(paymentEntity);
+//                notificationService.notifyPaymentSuccess(paymentEntity);
                 log.info("결제 및 예약 확정 완료 되었습니다. 유저 ID: {}, 주문번호: {}, 결제금액: {}", user.getId(), paymentEntity.getId(), paymentEntity.getAmount());
                 break;
 

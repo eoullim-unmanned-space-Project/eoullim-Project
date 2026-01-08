@@ -34,4 +34,17 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             AND b.bookingTime <= :limitTime
             """)
     List<Booking> findAllByStatusAndCreatedAtBefore(@Param("status")BookingStatus bookingStatus, @Param("limitTime")LocalDateTime limitTime);
+
+    @Query("""
+            SELECT b FROM Booking b
+            LEFT JOIN FETCH b.user u
+            LEFT JOIN FETCH b.room r
+            LEFT JOIN FETCH b.timeSlot t
+            LEFT JOIN FETCH r.place p
+            WHERE (:bookingCode IS NULL OR b.bookingCode = :bookingCode)
+            AND (:status IS NULL OR b.status = :status)
+            AND u.id = :userId
+            ORDER BY b.id DESC
+            """)
+   List<Booking> findAllByUserIdAndBookingCodeAndStatus(@Param("userId")Long id, @Param("bookingCode")String bookingCode, @Param("status")BookingStatus status);
 }
