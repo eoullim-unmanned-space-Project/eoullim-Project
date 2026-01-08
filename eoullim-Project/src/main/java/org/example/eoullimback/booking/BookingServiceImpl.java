@@ -1,6 +1,7 @@
 package org.example.eoullimback.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
@@ -10,9 +11,12 @@ import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotRepository;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
+import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,4 +95,22 @@ public class BookingServiceImpl implements BookingService {
 
         return new BookingResponse.DetailDTO(bookingEntities);
     }
+
+    @Override
+    public UserResponse.UserBookingDTO searchBookings(Long id, String bookingCode, BookingStatus status) {
+
+        // bookingCode = null 값을 인식을 못해서 에러 발생
+        String code = (bookingCode == null || bookingCode.isEmpty()) ? null : bookingCode;
+
+        List<Booking> bookingEntities =  bookingRepository.findAllByUserIdAndBookingCodeAndStatus(id, code, status);
+
+        System.out.println(bookingEntities);
+
+        if (bookingEntities.isEmpty()) {
+            return UserResponse.UserBookingDTO.empty();
+        }
+
+        return new UserResponse.UserBookingDTO(bookingEntities);
+    }
+
 }

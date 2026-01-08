@@ -69,4 +69,52 @@ public class AuthRequest {
             }
         }
     }
+
+    @Data
+    public static class FindLoginIdRequestDTO {
+        private String name;
+        private String email;
+
+        public void validate() {
+            if (name == null || name.isEmpty()) {
+                throw new Exception400(ErrorCode.NAME_REQUIRED);
+            }
+
+            if (email == null || email.isEmpty()) {
+                throw new Exception400(ErrorCode.MISSING_EMAIL);
+            }
+        }
+    }
+
+    @Data
+    public static class ResetPasswordRequestDTO {
+
+        private String loginId;
+        private String email;
+        public void validate() {
+            if (loginId == null || loginId.trim().isEmpty()) {
+                throw new Exception400(ErrorCode.LOGIN_ID_REQUIRED);
+            }
+
+            if (email == null || email.isEmpty()) {
+                throw new Exception400(ErrorCode.MISSING_EMAIL);
+            }
+        }
+    }
+
+    @Data
+    public static class ResetPasswordConfirmDTO {
+
+        private String token;
+        private String newPassword;
+
+        public void validate() {
+            if (token == null || token.trim().isBlank()) {
+                throw new Exception400(ErrorCode.INVALID_INPUT);
+            }
+            if (newPassword == null || newPassword.trim().isBlank()) {
+                throw new Exception400(ErrorCode.PASSWORD_REQUIRED);
+            }
+        }
+    }
 }

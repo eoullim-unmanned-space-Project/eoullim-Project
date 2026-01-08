@@ -3,9 +3,12 @@ package org.example.eoullimback.user_auth.user;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.MailUtils;
 import org.example.eoullimback.payment.Payment;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -29,15 +32,17 @@ public class MailServiceImpl implements MailService {
                     new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(email);
-            helper.setSubject("[Eoullim] 회원가입 이메일 전송");
+            helper.setSubject("[Eoullim] 인증번호 이메일 전송");
             helper.setText("<h3>인증번호는 [" + code +  "] 입니다.</h3>", true);
 
             javaMailSender.send(message);
 
             session.setAttribute("code_" + email, code);
 
+        } catch (MailException e) {
+            throw new Exception500(ErrorCode.MAIL_SEND_FAIL);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new Exception500(ErrorCode.MAIL_SEND_FAIL);
         }
     }
 
@@ -51,6 +56,14 @@ public class MailServiceImpl implements MailService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void sendPasswordResetLink(String email, String resetLink) {
+
+        System.out.println("[Mail] to : " + email);
+        System.out.println("비밀번호 재설정 링크: " + resetLink);
+
     }
 
     @Override

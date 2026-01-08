@@ -1,5 +1,6 @@
 package org.example.eoullimback.timeslot;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import lombok.Data;
 import org.example.eoullimback._common.enums.time_slot.SlotStatus;
@@ -26,8 +27,10 @@ public class TimeSlotResponse {
     public static class DetailDTO {
         private Long timeSlotId;
 
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         private LocalDateTime startTime;
 
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         private LocalDateTime endTime;
         private SlotStatus status;
 

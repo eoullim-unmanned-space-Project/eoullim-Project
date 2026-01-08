@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 @Component
 public class QrCodeGenerator {
 
-    public static byte[] generate(String text) {
+    public byte[] generate(String text) {
         try {
             BitMatrix matrix = new MultiFormatWriter().encode(
                     text,

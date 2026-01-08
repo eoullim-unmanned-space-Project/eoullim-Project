@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MailTestController {
 
     private final MailService mailService;
+    private final QrCodeGenerator qrCodeGenerator;
 
     @GetMapping("/dev/mail/test")
     public String sendTestMail() {
@@ -25,7 +26,7 @@ public class MailTestController {
                 .status(PaymentStatus.SUCCESS)
                 .build();
 
-        byte[] qrImage = QrCodeGenerator.generate(
+        byte[] qrImage = qrCodeGenerator.generate(
                 "http://localhost:8080/notifications"
         );
 

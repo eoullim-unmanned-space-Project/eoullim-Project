@@ -7,6 +7,8 @@ import org.example.eoullimback.user_auth.user.MailService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -15,6 +17,16 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final MailService mailService;
     private final QrCodeGenerator qrCodeGenerator;
+
+    @Override
+    public List<NotificationResponse.NotificationResponseDTO> notificationList(Long id) {
+
+        List<Notification> notifications = notificationRepository.findAllByUserIdOrderByCreatedAtDesc(id);
+
+        return notifications.stream()
+                .map(NotificationResponse.NotificationResponseDTO::new)
+                .toList();
+    }
 
     @Override
     public void notifyPaymentSuccess(Payment payment) {

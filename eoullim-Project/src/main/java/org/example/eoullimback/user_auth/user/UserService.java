@@ -15,4 +15,8 @@ public interface UserService {
     User kakaoSocialLogin(String code);
 
     void verifyPassword(Long id, String password);
+
+    User findByEmail(String email);
+
+    String findLoginIdByNameAndEmail(String name, String email);
 }
