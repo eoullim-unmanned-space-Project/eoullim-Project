@@ -7,6 +7,8 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.booking.BookingService;
+import org.example.eoullimback.payment.PaymentResponse;
+import org.example.eoullimback.payment.PaymentService;
 import org.example.eoullimback.user_auth.auth.AuthService;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
@@ -30,6 +32,7 @@ public class UserApiController {
     private final MailService mailService;
     private final AuthService authService;
     private final BookingService bookingService;
+    private final PaymentService paymentService;
 
     @PostMapping("/api/email/send")
     public ResponseEntity<?> sendVerificationCode(@RequestBody UserRequest.EmailCheckDTO reqDTO) {
@@ -136,7 +139,7 @@ public class UserApiController {
         return ResponseEntity.ok(user.getLoginId());
     }
 
-    @GetMapping("/api/search")
+    @GetMapping("/api/user/search")
     public ResponseEntity<List<UserResponse.UserBookingDTO>> searchBookings(
             @RequestParam(value = "code", required = false) String bookingCode,
             @RequestParam(value = "status", required = false) BookingStatus status,
@@ -150,7 +153,22 @@ public class UserApiController {
 
         List<UserResponse.UserBookingDTO> searchBookings = bookingService.searchBookings(user.getId(), bookingCode, status);
 
-
         return ResponseEntity.ok().body(searchBookings);
+    }
+
+    @GetMapping("/api/user/payment")
+    public ResponseEntity<UserResponse.UserPaymentDTO> paymentDetail(
+            @RequestParam(value = "code") String bookingCode,
+            HttpSession session
+    ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        if (sessionUser == null) {
+            throw new Exception401(ErrorCode.ACCESS_DENIED);
+        }
+
+        UserResponse.UserPaymentDTO userPaymentDTO = paymentService.paymentDetail(bookingCode, sessionUser.getId());
+
+        return ResponseEntity.ok().body(userPaymentDTO);
     }
 }

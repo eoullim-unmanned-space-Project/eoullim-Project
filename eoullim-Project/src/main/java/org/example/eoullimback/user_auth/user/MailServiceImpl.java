@@ -128,4 +128,14 @@ public class MailServiceImpl implements MailService {
             throw new Exception500(ErrorCode.MAIL_SEND_FAIL);
         }
     }
+
+    @Override
+    public void sendPasswordResetLink(String email, String resetLink) {
+
+    }
+
+    @Override
+    public void sendPaymentSuccessMail(String email, Payment payment, byte[] qrImage) {
+
+    }
 }

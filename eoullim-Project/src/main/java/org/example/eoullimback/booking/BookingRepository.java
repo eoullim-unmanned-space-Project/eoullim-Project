@@ -3,6 +3,7 @@ package org.example.eoullimback.booking;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.timeslot.TimeSlot;
+import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,6 +27,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             """)
     Optional<List<Booking>> findDetailByBookingCodeAndUser(@Param("userId") Long id, @Param("bookingCode") String bookingCode);
 
+    @Query("SELECT b FROM Booking b JOIN FETCH b.user WHERE b.bookingCode = :bookingCode")
     Optional<List<Booking>> findAllByBookingCode(String bookingCode);
 
     @Query("""
@@ -47,4 +49,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             ORDER BY b.id DESC
             """)
    List<Booking> findAllByUserIdAndBookingCodeAndStatus(@Param("userId")Long id, @Param("bookingCode")String bookingCode, @Param("status")BookingStatus status);
+
+    @Query("SELECT b FROM Booking b JOIN FETCH b.timeSlot WHERE b.bookingCode = :bookingCode ORDER BY b.timeSlot.startTime DESC")
+    Optional<List<Booking>> findByBookingCodeWithTimeSlots(@Param("bookingCode") String bookingCode);
 }

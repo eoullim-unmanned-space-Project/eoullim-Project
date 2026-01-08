@@ -23,42 +23,8 @@
             <button class="booking-filter-btn">취소</button>
         </div>
 
-        <div class="booking-list">
-            <div class="booking-card">
-                <!-- 이미지 영역 -->
-                <div class="booking-thumb">
-                    <img src="/images/room-sample.jpg" alt="스터디룸 이미지">
-                </div>
+        <div class="booking-list" id="booking-list">
 
-                <!-- 콘텐츠 영역 -->
-                <div class="booking-content">
-                    <div class="booking-card-header">
-                        <span class="booking-place">🚩 스터디룸 A</span>
-                        <span class="booking-status confirmed">예약완료</span>
-                    </div>
-
-                    <div class="booking-card-body">
-                        <div class="booking-info-row">
-                            <span class="label">예약 코드</span>
-                            <strong>ABC12345</strong>
-                        </div>
-
-                        <div class="booking-info-row">
-                            <span class="label">이용 시간</span>
-                            <span>2026.01.08 · 14:00 ~ 16:00</span>
-                        </div>
-
-                        <div class="booking-info-row price">
-                            <span class="label">결제 금액</span>
-                            <span>30,000원</span>
-                        </div>
-                    </div>
-
-                    <div class="booking-card-footer">
-                        <button class="booking-detail-btn">상세보기</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 </div>
@@ -75,11 +41,9 @@
 
             const activeBtn = document.querySelector('.booking-filter-btn.active');
             let status = (activeBtn && activeBtn.dataset.status) ? activeBtn.dataset.status : '';
-            alert(bookingCode);
-            alert(status);
 
             try {
-                 const response = await fetch(`/api/search?code=${bookingCode}&status=${status}`, {
+                 const response = await fetch(`/api/user/search?code=${bookingCode}&status=${status}`, {
                     method: "GET",
                     headers: {
                         "Content-Type" : "application/json"
@@ -92,7 +56,7 @@
 
                 const data = await response.json();
 
-                displayBookings()
+                displayBookings(data);
 
             } catch(error) {
                 console.error(error.message);
@@ -126,21 +90,192 @@
         function displayBookings(data) {
             const bookingList = document.getElementById('booking-list');
 
-            bookingList.innerHTML === ''
+            bookingList.innerHTML = ''
 
-            bookingList.forEach(booking => {
-                const card = document.createEvent('div');
+            if(!data || data.length === 0) {
+                bookingList.innerHTML = `
+                <div class="empty-card">
+                    <p class="empty-title">📅 예약 내역이 존재하지 않습니다</p>
+                    <p class="empty-desc">
+                        아직 예약한 내역이 없어요.<br>
+                        새로운 공간을 예약해 보세요!
+                    </p>
+                </div>
+                `;
+            }
+
+            data.forEach(booking => {
+                const card = document.createElement('div');
                 card.className = 'booking-card';
 
                 card.innerHTML = `
+                <div class="booking-thumb">
+                    <img src="/images/room-sample.jpg" alt="스터디룸 이미지">
+                </div>
+                <div class="booking-content">
+                    <div class="booking-card-header">
+                        <span class="booking-place">🚩${booking.roomName}</span>
+                        <span class="booking-status confirmed">${booking.status}</span>
+                    </div>
 
+                    <div class="booking-card-body">
+                        <div class="booking-info-row">
+                            <span class="label">예약 코드</span>
+                            <strong>${booking.bookingCode}</strong>
+                        </div>
 
-                `;
+                        <div class="booking-info-row">
+                            <span class="label">이용 시간</span>
+                            <span>${booking.displayTime}</span>
+                        </div>
 
-            })
+                        <div class="booking-info-row price">
+                            <span class="label">결제 금액</span>
+                            <span>${Number(booking.amount).toLocaleString()}원</span>
+                        </div>
+                    </div>
 
+                    <div class="booking-card-footer">
+                        <button class="booking-detail-btn" data-code="${booking.bookingCode}">상세보기</button>
+                    </div>
+                </div>`;
+
+                bookingList.appendChild(card);
+                });
+
+                const detailBtns = document.querySelectorAll('.booking-detail-btn');
+                detailBtns.forEach(btn => {
+                    btn.addEventListener('click', async () => {
+
+                    const bookingCode = btn.dataset.code;
+
+                    try {
+                        const response = await fetch(`/api/user/payment?code=${bookingCode}`);
+
+                        const data = await response.json();
+
+                        console.log(data);
+
+                        modal(data);
+
+                    } catch(error) {
+                        console.error("데이터를 불러오는 중 에러 발생:", error);
+                        alert("결제 내역을 불러오는데 실패했습니다.\n나중에 다시 시도해주세요.");
+                    }
+
+                  function modal(data) {
+                    const container = document.createElement('div');
+                    container.className = 'modal-overlay';
+
+                    container.innerHTML = `
+                        <div class="receipt-card">
+                            <button class="btn-close" type="button">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 6L6 18M6 6l12 12"/>
+                                </svg>
+                            </button>
+                            <header class="receipt-header">
+                                <div style="background: #e8f3ff; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3182f6" stroke-width="3">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                </div>
+                                <h2 class="status-text">${data.displayStatus}</h2>
+                                <p class="date" id="r-paidAt">2026년 1월 8일 21:30</p>
+                            </header>
+                            <section class="info-box">
+                                <div class="info-row">
+                                    <span class="label">이용자 이름</span>
+                                    <span class="value" id="r-name">${data.name}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">이용 공간</span>
+                                    <span class="value" id="r-roomName">${data.roomName}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">이용 시간</span>
+                                    <span class="value" id="r-time">${data.displayTime}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">인원 수</span>
+                                    <span class="value" id="r-qty">${data.qty}명</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">결제 방법</span>
+                                    <span class="value" id="r-method">${data.paymentMethod}</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="label">결제 상태</span>
+                                    <span class="value" id="r-status" style="color: #3182f6;">${data.displayStatus}</span>
+                                </div>
+                            </section>
+                            <div class="price-row">
+                                <span class="total-label">총 결제금액</span>
+                                <span class="total-amount" id="r-amount">${Number(data.amount).toLocaleString()}원</span>
+                            </div>
+                            <button class="btn-refund" type="button">환불 요청하기</button>
+                            <span class="order-id">주문번호: <span id="r-bookingCode">${data.bookingCode}</span></span>
+                        </div>`;
+
+                        document.body.appendChild(container);
+
+                        const statusText = container.querySelector('.status-text');
+                        const statusElement = container.querySelector('#r-status');
+                        const totalElement = container.querySelector('#r-amount');
+                        const refundBtn = container.querySelector('.btn-refund');
+                        const iconWrapper = container.querySelector('.receipt-header div');
+                        const iconCheck = iconWrapper.querySelector('polyline');
+
+                        const status = data.displayStatus;
+
+                        if (status === '결제준비') {
+                            statusText.style.color = "#6B7684";
+                            statusElement.style.color = "#6B7684";
+                            totalElement.style.color = "#6B7684";
+                            iconWrapper.style.backgroundColor = "#F2F4F6";
+                            iconCheck.setAttribute('stroke', "#6B7684");
+                            refundBtn.style.display = 'none';
+
+                        } else if (status === '환불완료') {
+                            statusText.style.color = "#19B36E";
+                            statusElement.style.color = "#19B36E";
+                            totalElement.style.color = "#19B36E";
+                            iconWrapper.style.backgroundColor = "#E7F9F0";
+                            iconCheck.setAttribute('stroke', "#19B36E");
+                            refundBtn.style.display = 'none';
+
+                        } else if (status === '결제취소' || status === '결제실패') {
+                            statusText.style.color = "#F04452";
+                            statusElement.style.color = "#F04452";
+                            totalElement.style.color = "#F04452";
+                            iconWrapper.style.backgroundColor = "#FEEFEF";
+                            iconCheck.setAttribute('stroke', "#F04452");
+                            refundBtn.style.display = 'none';
+
+                        } else {
+                            statusText.style.color = "#3182F6";
+                            statusElement.style.color = "#3182F6";
+                            totalElement.style.color = "#3182F6";
+                            iconWrapper.style.backgroundColor = "#E8F3FF";
+                            iconCheck.setAttribute('stroke', "#3182F6");
+                        }
+
+                        const closeBtn = container.querySelector('.btn-close');
+
+                        closeBtn.addEventListener('click', () => {
+                            container.remove();
+                        });
+
+                        container.addEventListener('click', (e) => {
+                             if(e.target === container) {
+                                container.remove();
+                             }
+                        });
+                    } // MODAL End point
+                });
+            });
         }
-    })
+    }) // DOM End point
 
 
 
