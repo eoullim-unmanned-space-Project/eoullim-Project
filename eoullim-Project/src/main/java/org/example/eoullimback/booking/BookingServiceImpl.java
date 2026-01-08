@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -97,20 +98,24 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public UserResponse.UserBookingDTO searchBookings(Long id, String bookingCode, BookingStatus status) {
+    public List<UserResponse.UserBookingDTO> searchBookings(Long id, String bookingCode, BookingStatus status) {
 
         // bookingCode = null 값을 인식을 못해서 에러 발생
         String code = (bookingCode == null || bookingCode.isEmpty()) ? null : bookingCode;
 
         List<Booking> bookingEntities =  bookingRepository.findAllByUserIdAndBookingCodeAndStatus(id, code, status);
 
-        System.out.println(bookingEntities);
-
         if (bookingEntities.isEmpty()) {
-            return UserResponse.UserBookingDTO.empty();
+            UserResponse.UserBookingDTO.empty();
+
         }
 
-        return new UserResponse.UserBookingDTO(bookingEntities);
+        return bookingEntities.stream()
+                .collect(Collectors.groupingBy(Booking::getBookingCode))
+                .values()
+                .stream()
+                .map(UserResponse.UserBookingDTO::new)
+                .toList();
     }
 
 }

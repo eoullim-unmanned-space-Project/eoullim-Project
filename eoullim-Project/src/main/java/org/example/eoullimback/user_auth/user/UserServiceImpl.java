@@ -296,4 +296,21 @@ public class UserServiceImpl implements UserService{
         return user.getLoginId();
     }
 
+    @Override
+    public User findByUserIdAndEmail(String userId, String email) {
+
+        return userRepository.findByLoginIdAndEmail(userId, email)
+                .orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void updatePassword(String userId, String newPassword) {
+        User user = userRepository.findByLoginId(userId)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+    }
+
 }
