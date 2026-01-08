@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback._common.enums.bookig.BookingStatus;
+import org.example.eoullimback._common.enums.payment.PaymentMethod;
+import org.example.eoullimback._common.enums.payment.PaymentStatus;
 import org.example.eoullimback.booking.Booking;
+import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.example.eoullimback.user_auth.user.User;
 
@@ -94,11 +96,55 @@ public record UserResponse() {
 
             if (!timeSlots.isEmpty()) {
                 TimeSlotResponse.DetailDTO first = timeSlots.get(0);
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM월.dd일 HH:mm");
                 DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-                this.displayTime = first.getStartTime().format(dateTimeFormatter)
+                this.displayTime = first.getStartTime().format(dateTimeFormatter) + "시"
                         + " ~ "
+                        + first.getEndTime().format(timeFormatter) + "시";
+            }
+        }
+    }
+
+    @Data
+    public static class UserPaymentDTO {
+        private String name;
+        private String roomName;
+        private int qty;
+        private Long amount;
+        private List<TimeSlotResponse.DetailDTO> timeSlots;
+        private PaymentMethod paymentMethod;
+        private PaymentStatus paymentStatus;
+        private LocalDateTime approvedAt;
+        private String displayTime;
+        private String bookingCode;
+        private String displayStatus;
+
+         public UserPaymentDTO(Payment payment, List<TimeSlotResponse.DetailDTO> timeSlots) {
+            this.name = payment.getUser().getName();
+            this.roomName = payment.getBooking().getRoom().getName();
+            this.amount = payment.getAmount();
+            this.qty = payment.getBooking().getQty();
+            this.paymentMethod = payment.getMethod();
+            this.paymentStatus = payment.getStatus();
+            this.approvedAt = payment.getApprovedAt();
+            this.timeSlots = timeSlots;
+            this.bookingCode = payment.getOrderId();
+
+           this.displayStatus =  switch (this.paymentStatus) {
+                case READY -> "결제준비";
+                case REFUNDED -> "환불완료";
+                case CANCELLED -> "결제취소";
+                case FAILED -> "결제실패";
+                case SUCCESS -> "결제성공";
+            };
+
+            if (!timeSlots.isEmpty()) {
+                TimeSlotResponse.DetailDTO first = timeSlots.get(0);
+                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm -");
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(" HH:mm까지");
+
+                this.displayTime = first.getStartTime().format(dateTimeFormatter)
                         + first.getEndTime().format(timeFormatter);
             }
         }

@@ -96,3 +96,23 @@ hr {
 .info-row input {
   border: none;
 }
+
+.empty-card {
+    background: #fafafa;
+    border: 1px dashed #ddd;
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.empty-card .empty-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.empty-card .empty-desc {
+    font-size: 14px;
+    color: #888;
+}
+

@@ -204,3 +204,141 @@
 .booking-detail-btn:active {
     background-color: #1f2937;
 }
+
+
+
+/*********************************/
+/************* 모달 ***************/
+/*********************************/
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.receipt-card {
+    position: relative;
+    width: 360px;
+    background-color: #ffffff;
+    padding: 40px 24px 24px;
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    box-sizing: border-box;
+    color: #191f28;
+}
+
+/* 상단 우측 X 버튼 */
+.btn-close {
+    position: absolute;
+    top: 20px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #adb5bd;
+    padding: 8px;
+}
+
+/* 상단 헤더: 상태 및 날짜 */
+.receipt-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.receipt-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #191f28;
+    margin: 16px 0 8px 0;
+}
+
+.receipt-header .date {
+    font-size: 14px;
+    color: #6b7684;
+}
+
+/* 상세 정보 박스 */
+.info-box {
+    background-color: #f9fafb;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.label {
+    font-size: 14px;
+    color: #6b7684;
+}
+
+.value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #191f28;
+}
+
+/* 금액 표시 섹션 */
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+    margin-bottom: 32px;
+}
+
+.total-label {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.total-amount {
+    font-size: 24px;
+    font-weight: 700;
+    color: #3182f6; /* 강조 색상 */
+}
+
+/* 환불 버튼 스타일 */
+.btn-refund {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e5e8eb;
+    font-size: 15px;
+    font-weight: 600;
+    color: #191f28;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* 하단 주문 번호 */
+.order-id {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    color: block;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.r-bookingCode {
+    color: #191f28;
+}

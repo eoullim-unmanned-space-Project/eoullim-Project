@@ -13,8 +13,11 @@ import org.example.eoullimback._common.error.exception.*;
 import org.example.eoullimback.booking.Booking;
 import org.example.eoullimback.booking.BookingRepository;
 import org.example.eoullimback.notification.NotificationService;
+import org.example.eoullimback.timeslot.TimeSlot;
+import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
+import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -40,7 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${portone.imp-key}")
     private String impKey;
 
-    @Value("${portone.imp-secret}")
+    @Value("${portone.imp-secret-key}")
     private String impSecret;
 
     @Override
@@ -255,6 +258,26 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         payment.markFailed(code, failMessage);
+    }
+
+    @Override
+    public UserResponse.UserPaymentDTO paymentDetail(String bookingCode, Long userId) {
+
+        // 사용자가 페이먼트 내역이 존재하는지
+         Payment paymentEntity  = paymentRepository.findByUserIdWithPayment(userId, bookingCode)
+                .orElseThrow(() -> new Exception404(ErrorCode.PAYMENT_NOT_FOUND));
+
+        List<Booking> bookingEntities = bookingRepository.findByBookingCodeWithTimeSlots(bookingCode)
+                .orElseThrow(() ->  new Exception404(ErrorCode.BOOKING_NOT_FOUND));
+
+        List<TimeSlotResponse.DetailDTO> timeSlots = bookingEntities.stream()
+                .map(booking -> new TimeSlotResponse.DetailDTO(booking.getTimeSlot()))
+                .toList();
+
+        return new UserResponse.UserPaymentDTO(
+                paymentEntity,
+                timeSlots
+        );
     }
 
     private String generatePaymentKey(Long id) {

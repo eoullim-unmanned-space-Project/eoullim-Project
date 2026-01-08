@@ -3,7 +3,6 @@ package org.example.eoullimback.booking;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
-import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.room.RoomRepository;
@@ -15,8 +14,6 @@ import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

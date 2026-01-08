@@ -23,7 +23,7 @@ public class BookingScheduler {
     public void releaseSlot() {
         try {
             log.info("만료된 펜딩 슬롯을 해체하는 스케줄러를 시작합니다. 시간: {}", LocalDateTime.now());
-            List<Booking> bookings = bookingSchedulerService.releaseSlot();
+            bookingSchedulerService.releaseSlot();
 
 
         } catch (Exception e) {
