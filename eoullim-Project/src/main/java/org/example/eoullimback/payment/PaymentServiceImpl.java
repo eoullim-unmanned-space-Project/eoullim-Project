@@ -1,5 +1,8 @@
 package org.example.eoullimback.payment;
 
+import com.solapi.sdk.message.exception.SolapiEmptyResponseException;
+import com.solapi.sdk.message.exception.SolapiMessageNotReceivedException;
+import com.solapi.sdk.message.exception.SolapiUnknownException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
@@ -95,7 +98,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public String complete(Long userId, String impUid, String merchantUid) {
+    public String complete(Long userId, String impUid, String merchantUid) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
@@ -134,7 +137,7 @@ public class PaymentServiceImpl implements PaymentService {
                     log.info("부킹 예약 완료 상태 변경되었습니다. 부킹코드: {}, 부킹상태: {}", booking.getBookingCode(), booking.getStatus());
                 }
 
-//                notificationService.notifyPaymentSuccess(paymentEntity);
+                notificationService.notifyPaymentSuccess(paymentEntity);
                 log.info("결제 및 예약 확정 완료 되었습니다. 유저 ID: {}, 주문번호: {}, 결제금액: {}", user.getId(), paymentEntity.getId(), paymentEntity.getAmount());
                 break;
 
