@@ -28,6 +28,7 @@ public enum ErrorCode {
     PAYMENT_FAILED("포트원 인증실패: 관리자에게 문의하세요"),
     PAYMENT_AMOUNT_MISMATCH("금액이 다릅니다."),
     PAYMENT_ALREADY_PROCESSED("이미 결제된 주문입니다."),
+    INVALID_QR_CODE("유효하지 않은 QR 코드입니다."),
 
     // ====
     // 401 Unauthorized

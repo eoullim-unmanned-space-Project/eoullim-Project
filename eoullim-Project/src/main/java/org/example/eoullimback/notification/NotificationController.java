@@ -9,6 +9,7 @@ import org.example.eoullimback.user_auth.user.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -32,6 +33,20 @@ public class NotificationController {
         model.addAttribute("sessionUser", sessionUser);
 
         return "notification/list";
+    }
+
+    // 메세지 링크 QrCode 페이지
+    // http://localhost:8080/notifications/qr
+    @GetMapping("/notifications/qr")
+    public String showQrPage(@RequestParam("code") String code,
+                             Model model) {
+
+        Notification notification = notificationService.validateQr(code);
+
+        model.addAttribute("qrPayload", notification.getQrCode());
+        model.addAttribute("createdAt", notification.getCreatedAt());
+
+        return "notification/qr";
     }
 
 //     TODO : 유저 더미 (삭제 예정)
