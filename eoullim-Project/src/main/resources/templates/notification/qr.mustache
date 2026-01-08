@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/css/notification/qr.css"/>
+<link rel="stylesheet" href="/css/layout/header.css"/>
+{{> layout/header}}
+<div class="container">
+    <div class="title">입장 안내</div>
+
+    <div class="info">
+        <div><strong>QR 코드</strong></div>
+        <div id="qr-box">
+            <input type="hidden" id="qrPayload" value="{{qrPayload}}">
+        </div>
+        <hr>
+        <div><strong>발급 시간</strong></div>
+        <div>{{createdAt}}</div>
+    </div>
+
+    <a href="/" class="btn">메인으로 이동</a>
+</div>
+
+{{> layout/footer}}
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const payload = document.getElementById("qrPayload").value;
+
+        new QRCode(document.getElementById("qr-box"), {
+            text: payload,
+            width: 200,
+            height: 200,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    });
+</script>

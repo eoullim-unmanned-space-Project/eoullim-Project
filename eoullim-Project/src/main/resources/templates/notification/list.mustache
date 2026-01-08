@@ -3,7 +3,7 @@
 {{> layout/header}}
 <div class="notification-container">
 
-    <h2 style="display: flex; justify-content: center">{{sessionUser.name}}님의 알림</h2>
+    <h2>{{sessionUser.name}}님의 알림</h2>
 
     <div class="notification-card">
     {{#notifications}}
@@ -25,14 +25,22 @@
             <div>
                 {{createdAt}}
             </div>
+
+            {{#qrCode}}
+                <div class="qr-link">
+                    <a href="/notifications/qr?code={{qrCode}}" class="qr-btn">
+                        QR 확인
+                    </a>
+                </div>
+            {{/qrCode}}
         </div>
     {{/notifications}}
 
+    {{^notifications}}
         <div class="notification-list-item">
-            {{^notifications}}
-                <p>알림이 없습니다.</p>
-            {{/notifications}}
+            <p>알림이 없습니다.</p>
         </div>
+    {{/notifications}}
     </div>
 </div>
 {{> layout/footer}}

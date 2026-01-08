@@ -13,4 +13,5 @@ public interface NotificationService {
     void notifyPaymentSuccess(Payment payment) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException;
     void notifyPaymentFailed(Payment payment, String reason);
     void notifyPaymentCancelled(Payment payment);
+    Notification validateQr(String code);
 }

@@ -4,7 +4,9 @@ import com.solapi.sdk.message.exception.SolapiEmptyResponseException;
 import com.solapi.sdk.message.exception.SolapiMessageNotReceivedException;
 import com.solapi.sdk.message.exception.SolapiUnknownException;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.notification.NotificationType;
+import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.user_auth.user.MailService;
 import org.springframework.stereotype.Service;
@@ -36,8 +38,8 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void notifyPaymentSuccess(Payment payment) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException {
 
-        String qrPayload = "ENTRY|" + payment.getOrderId();
-        byte[] qrImage = qrCodeGenerator.generate(qrPayload);
+        String qrPayload = "ENTRY_" + payment.getOrderId();
+//        byte[] qrImage = qrCodeGenerator.generate(qrPayload);
 
         Notification notification = Notification.builder()
                 .type(NotificationType.PAYMENT)
@@ -49,13 +51,9 @@ public class NotificationServiceImpl implements NotificationService {
 
         notificationRepository.save(notification);
 
-        mailService.sendPaymentSuccessMail(
+        solapiApiService.sendPaymentSuccessSms(
+                payment.getUser().getPhone(),
                 payment,
-                qrImage
-        );
-
-        solapiApiService.sendQrUrl(
-                "01034900690",
                 qrPayload
         );
 
@@ -86,6 +84,12 @@ public class NotificationServiceImpl implements NotificationService {
                 .build();
 
         notificationRepository.save(notification);
+    }
+
+    @Override
+    public Notification validateQr(String code) {
+        return notificationRepository.findByQrCode(code)
+                .orElseThrow(() -> new Exception400(ErrorCode.INVALID_QR_CODE));
     }
 
 }
