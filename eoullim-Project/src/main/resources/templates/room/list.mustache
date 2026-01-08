@@ -9,14 +9,15 @@
         <div class="left">
             <div class="main-content">
                 <p>{{place.name}}</p>
-                <span><img src="/img/room/주소.png" alt=""> {{place.address}}</span>
+                <span><img src="{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}" alt=""> {{place.address}}</span>
+                <input type="hidden" id="latitude" value="{{place.latitude}}">
+                <input type="hidden" id="longitude" value="{{place.longitude}}">
                 <p>룸 선택</p>
                 <div class="room-list">
                     {{#roomList}}
                         <div class="room-card" data-room-id="{{roomId}}"><img src="{{roomImagePath}}" alt="{{name}}">
                             <p>{{name}}</p>
                         </div>
-
 
                     {{/roomList}}
                 </div>
@@ -40,67 +41,7 @@
 
 
         <div class="right">
-            <form action="/room/1" method="post" enctype="multipart/form-data">
-                <div class="room-box">
-                    <h3 class="room-title">스터디룸 A</h3>
-                    <div class="room-img"></div>
-                    <p class="room-desc">
-                        · 조용한 스터디와 회의에 적합한
-                        공간입니다.
-                    </p>
-                    <hr>
-                    <p class="room-info">
-                        · 최대 인원: <strong>6</strong>
-                    </p>
-                    <hr>
-                    <p class="room-info">
-                        · 최소: 1시간부터 이용 가능
-                    </p>
-                    <hr>
-                    <p class="room-warning">
-                        · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
-                    </p>
-                </div>
-                <p><img src="/img/room/user.png" alt=""> 인원 수</p>
-                <div class="people-box">
-                    <button type="button" id="minusBtn">−</button>
-                    <input type="text" id="peopleCount" value="1" min="1" readonly>
-                    <button type="button" id="plusBtn">+</button>
-                </div>
-                <div class="amount-box">
-                    <strong id="amount">0</strong>원
-                </div>
-                <div class="timeslot-container" id="timeslot">
-                    <div class="timeslot" data-id="1">00:00 ~ 01:00</div>
-                    <div class="timeslot" data-id="2">01:00 ~ 02:00</div>
-                    <div class="timeslot" data-id="3">02:00 ~ 03:00</div>
-                    <div class="timeslot" data-id="4">03:00 ~ 04:00</div>
-                    <div class="timeslot" data-id="5">04:00 ~ 05:00</div>
-                    <div class="timeslot" data-id="6">05:00 ~ 06:00</div>
-                    <div class="timeslot" data-id="7">06:00 ~ 07:00</div>
-                    <div class="timeslot" data-id="8">07:00 ~ 08:00</div>
-                    <div class="timeslot" data-id="9">08:00 ~ 09:00</div>
-                    <div class="timeslot" data-id="10">09:00 ~ 10:00</div>
-                    <div class="timeslot" data-id="11">10:00 ~ 11:00</div>
-                    <div class="timeslot" data-id="12">11:00 ~ 12:00</div>
-                    <div class="timeslot" data-id="13">12:00 ~ 13:00</div>
-                    <div class="timeslot" data-id="14">13:00 ~ 14:00</div>
-                    <div class="timeslot" data-id="15">14:00 ~ 15:00</div>
-                    <div class="timeslot" data-id="16">15:00 ~ 16:00</div>
-                    <div class="timeslot" data-id="17">16:00 ~ 17:00</div>
-                    <div class="timeslot" data-id="18">17:00 ~ 18:00</div>
-                    <div class="timeslot" data-id="19">18:00 ~ 19:00</div>
-                    <div class="timeslot" data-id="20">19:00 ~ 20:00</div>
-                    <div class="timeslot" data-id="21">20:00 ~ 21:00</div>
-                    <div class="timeslot" data-id="22">21:00 ~ 22:00</div>
-                    <div class="timeslot" data-id="23">22:00 ~ 23:00</div>
-                    <div class="timeslot" data-id="24">23:00 ~ 24:00</div>
-                </div>
-                <input type="hidden" id="roomId" value="1">
-                <div class="booking-box">
-                    <button id="bookingBtn">예약하기</button>
-                </div>
-            </form>
+
         </div>
     </section>
 </div>
@@ -157,12 +98,26 @@
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17"></script>
 <script>
+
+
     // 1. 카카오 맵 로드 (중복 제거 및 구조 정리)
     kakao.maps.load(function () {
+        const latInput = document.getElementById("latitude");
+        const lngInput = document.getElementById("longitude");
+
+        // 값 가져오기 (문자열)
+        let latitudeStr = latInput.value;
+        let longitudeStr = lngInput.value;
+
+        // 숫자로 변환
+        let latitude = parseFloat(latitudeStr);
+        let longitude = parseFloat(longitudeStr);
+
+
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
+            navigator.geolocation.getCurrentPosition(() => {
+                var lat = latitude;
+                var lng = longitude;
                 var mapContainer = document.getElementById('map');
                 var mapOption = {center: new kakao.maps.LatLng(lat, lng), level: 6};
                 var map = new kakao.maps.Map(mapContainer, mapOption);
@@ -176,163 +131,17 @@
         }
     });
 
-    // 2. 타임슬롯 슬라이더 제어
-    const slider = document.querySelector('.timeslot-container');
-    const slots = slider.querySelectorAll('.timeslot');
+    document.addEventListener("DOMContentLoaded", () => {
 
-    let isDown = false;
-    let startX = 0;
-    let startScrollLeft = 0;
-    let moved = false;
+        let selectedSlots = [];
+        const PRICE_PER_HOUR = 10000; // 시간당 요금
 
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        moved = false;
-        startX = e.clientX;
-        startScrollLeft = slider.scrollLeft;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        const dx = e.clientX - startX;
-        if (Math.abs(dx) > 3) moved = true;
-        if (moved) {
-            e.preventDefault();
-            slider.scrollLeft = startScrollLeft - dx;
-        }
-    });
-
-    window.addEventListener('mouseup', () => {
-        isDown = false;
-    });
-
-    // 3. 가격 계산 함수
-    async function calculatePrice(timeSlotIds) {
-        const roomId = document.getElementById('roomId').value;
-        try {
-            const response = await fetch("/api/calculate-amount", {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({roomId: roomId, timeSlotIds: timeSlotIds})
-            });
-
-            const result = await response.json();
-            const amount = result.amount.amount;
-            updateBookingButton(amount);
-            return amount;
-        } catch (error) {
-            console.log("금액 계산에 실패했습니다.", error.message);
-            const selectSlots = document.querySelectorAll('.timeslot.selected');
-            selectSlots.forEach(slot => {
-                slot.classList.remove('selected');
-            });
-            alert("금액을 불러오는 중 오류가 발생하여 선택이 초기화되었습니다.");
-        }
-    }
-
-    // 4. 슬롯 클릭 이벤트
-    slots.forEach(slot => {
-        slot.addEventListener('click', () => {
-            slot.classList.toggle('selected');
-            const selectedSlots = document.querySelectorAll('.timeslot.selected');
-            const timeSlotIds = Array.from(selectedSlots).map(timeslot => parseInt(timeslot.dataset.id));
-
-            if (timeSlotIds.length > 0) {
-                calculatePrice(timeSlotIds);
-            } else {
-                updateBookingButton(0);
-            }
-        });
-    });
-
-    // 5. UI 업데이트
-    function updateBookingButton(amount) {
-        const totalAmount = document.getElementById('amount');
-        if (amount > 0) {
-            totalAmount.innerText = `${amount.toLocaleString()}`;
-        } else {
-            totalAmount.innerText = "0";
-        }
-    }
-
-    // 6. 인원수 조절 스크립트
-    document.addEventListener('DOMContentLoaded', () => {
-        const maxPeople = 6;
-        const minusBtn = document.getElementById('minusBtn');
-        const plusBtn = document.getElementById('plusBtn');
-        const input = document.getElementById('peopleCount');
-
-        const updateButtons = () => {
-            minusBtn.disabled = Number(input.value) <= 1;
-            plusBtn.disabled = Number(input.value) >= maxPeople;
-        };
-
-        minusBtn.addEventListener('click', () => {
-            let value = Number(input.value);
-            if (value > 1) {
-                input.value = value - 1;
-                updateButtons();
-            }
-        });
-
-        plusBtn.addEventListener('click', () => {
-            let value = Number(input.value);
-            if (value < maxPeople) {
-                input.value = value + 1;
-                updateButtons();
-            }
-        });
-
-        updateButtons();
-    });
-
-    // 7. 예약하기 버튼 클릭 이벤트 (수정 포인트)
-    document.getElementById('bookingBtn').addEventListener('click', async () => {
-        const roomId = Number(document.getElementById('roomId').value);
-        const qty = Number(document.getElementById('peopleCount').value);
-        const selectedSlots = document.querySelectorAll('.timeslot.selected');
-        const timeSlotIds = Array.from(selectedSlots).map(timeslot => parseInt(timeslot.dataset.id));
-
-        try {
-            if (timeSlotIds.length === 0) {
-                alert("타임슬롯을 선택해주세요.");
-                return;
-            }
-
-            alert(timeSlotIds);
-
-            const totalAmount = await calculatePrice(timeSlotIds);
-
-            const response = await fetch("/api/bookings", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({
-                    roomId: roomId,
-                    qty: qty,
-                    timeSlotIds: timeSlotIds,
-                    totalAmount: totalAmount
-                })
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message || "예약 실패");
-            }
-
-            const data = await response.json();
-            alert("예약이 완료되었습니다. 결제페이지로 넘어갑니다.");
-            location.href = `/booking/detail?code=${data.bookingCode}`;
-
-        } catch (error) {
-            alert(error.message);
-        }
-    });
+        // 1. 룸 리스트 가져오기
         document.querySelectorAll('.room-card').forEach(card => {
             card.addEventListener('click', async () => {
                 let roomRoot = card.dataset.roomId;
                 let roomId = Number(roomRoot);
 
-                alert(roomId);
                 const response = await fetch(`/api/room/${roomId}`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
@@ -340,9 +149,261 @@
                         roomId: roomId
                     })
                 });
-                alert(response.data);
+
+                if (!response.ok) {
+                    throw new Error("서버 오류");
+                }
+                let data = await response.json();
+                console.log(data.room);
+
+                RoomDetail(data.room);
+
             });
+            // 2. 상세조회 가져오기 기능
+            function RoomDetail(room) {
+                const container = document.querySelector(".right");
+                container.innerHTML = `
+                 <div class="room-box">
+                    <h3 class="room-title">${room.name}</h3>
+                    <div class="room-img" ><img src="${room.roomImagePath}" ${room.name}"></div>
+                    <p class="room-desc">
+                        · ${room.content}
+                    </p>
+                    <hr>
+                    <p class="room-info">
+                        · 최대 인원: <strong>${room.maxCapacity}</strong>
+                    </p>
+                    <hr>
+                    <p class="room-info">
+                        · 최소: 1시간부터 이용 가능
+                    </p>
+                    <hr>
+                    <p class="room-warning">
+                        · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
+                    </p>
+                </div>
+                <p><img src="/img/room/user.png" alt=""> 인원 수</p>
+                <div class="people-box">
+                    <button type="button" id="minusBtn">−</button>
+                    <input type="text" id="peopleCount" value="1" min="1" readonly>
+                    <button type="button" id="plusBtn">+</button>
+                </div>
+                <div class="amount-box">
+                    <strong id="amount">0</strong>원
+                </div>
+                <div class="timeslot-container" id="timeslot">
+                    <div class="timeslot-item">
+
+                    </div>
+                </div>
+                <input type="hidden" id="roomId" value="${room.roomId}">
+                <div class="booking-box">
+                    <button type="button" id="bookingBtn">예약하기</button>
+                </div>
+                `;
+
+                initCapacity(room.maxCapacity);
+
+                initTimeSlot(room.timeSlots);
+
+                document.getElementById('bookingBtn').addEventListener('click', () => {
+                    bookRoom();
+                });
+            }
         });
+
+        // 6. 인원수 조절 스크립트
+        function initCapacity(maxCapacity) {
+            const maxPeople = maxCapacity;
+            const minusBtn = document.getElementById('minusBtn');
+            const plusBtn = document.getElementById('plusBtn');
+            const input = document.getElementById('peopleCount');
+
+            const updateButtons = () => {
+                minusBtn.disabled = Number(input.value) <= 1;
+                plusBtn.disabled = Number(input.value) >= maxPeople;
+            };
+
+            minusBtn.addEventListener('click', () => {
+                let value = Number(input.value);
+                if (value > 1) {
+                    input.value = value - 1;
+                    updateButtons();
+                    calculateAmount();
+                }
+            });
+
+            plusBtn.addEventListener('click', () => {
+                let value = Number(input.value);
+                if (value < maxPeople) {
+                    input.value = value + 1;
+                    updateButtons();
+                    calculateAmount();
+                }
+            });
+
+            updateButtons();
+        }
+
+        function formatTime(time) {
+            return time.substring(11, 16);
+        }
+
+        function initTimeSlot(timeSlots) {
+            const container = document.querySelector("#timeslot");
+            container.innerHTML = "";
+
+            selectedSlots = []; // 초기화
+
+            timeSlots.forEach(slot => {
+                const div = document.createElement("div");
+                div.className = "timeslot";
+                div.dataset.id = slot.timeSlotId;
+                div.dataset.start = slot.startTime;
+                div.dataset.end = slot.endTime;
+                div.dataset.status = slot.status;
+
+                div.innerText = `${formatTime(slot.startTime)} ~ ${formatTime(slot.endTime)}`;
+
+                if (slot.status === "CLOSED") {
+                    // 부모 div에 스타일 적용
+                    div.classList.add("disabled");
+                } else {
+                    // 선택 가능한 슬롯 클릭 이벤트
+                    div.addEventListener("click", () => {
+                        if (div.classList.contains("active")) {
+                            div.classList.remove("active");
+                            selectedSlots = selectedSlots.filter(s => s.timeSlotId !== slot.timeSlotId);
+                        } else {
+                            div.classList.add("active");
+                            selectedSlots.push(slot);
+                        }
+                        calculateAmount();
+                    });
+                }
+
+                // 항상 container에 추가
+                container.appendChild(div);
+            });
+
+            initSlider(container);
+        }
+
+        async function calculateAmount() {
+            const roomId = document.getElementById("roomId")?.value;
+
+
+            if (!roomId || selectedSlots.length === 0) {
+                document.getElementById("amount").innerText = "0";
+                return;
+            }
+
+            let timeSlotIds = selectedSlots.map(slot => slot.timeSlotId);
+
+            try {
+                const response = await fetch("/api/calculate-amount", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        roomId: Number(roomId),
+                        timeSlotIds: timeSlotIds
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("금액 계산 실패");
+                }
+
+                const data = await response.json();
+
+                let amountDiv = document.getElementById("amount");
+
+                amountDiv.innerHTML = data.amount.amount ;
+
+                return data.amount.amount;
+
+            } catch (error) {
+                console.error(error);
+                alert("금액 계산 중 오류가 발생했습니다.");
+            }
+        }
+
+        function initSlider(slider) {
+            let isDown = false;
+            let startX = 0;
+            let startScrollLeft = 0;
+            let moved = false;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                moved = false;
+                startX = e.clientX;
+                startScrollLeft = slider.scrollLeft;
+                slider.classList.add('active');
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                const dx = e.clientX - startX;
+                if (Math.abs(dx) > 3) moved = true;
+                if (moved) {
+                    e.preventDefault();
+                    slider.scrollLeft = startScrollLeft - dx;
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.classList.remove('active');
+            });
+        }
+
+        async function bookRoom() {
+            const roomId = Number(document.getElementById('roomId').value);
+            const qty = Number(document.getElementById('peopleCount').value);
+            const selectedSlots = document.querySelectorAll('.timeslot.active');
+            const timeSlotIds = Array.from(selectedSlots).map(timeslot => parseInt(timeslot.dataset.id));
+
+
+            try {
+                if (timeSlotIds.length === 0) {
+                    alert("타임슬롯을 선택해주세요.");
+                    return;
+                }
+
+                // 총 금액 계산 (비동기 API 호출)
+                const totalAmount = await calculateAmount();
+
+                // 예약 API 호출
+                const response = await fetch("/api/bookings", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        roomId: roomId,
+                        qty: qty,
+                        timeSlotIds: timeSlotIds,
+                        totalAmount: totalAmount
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || "예약 실패");
+                }
+
+                const data = await response.json();
+                alert("예약이 완료되었습니다. 결제페이지로 넘어갑니다.");
+                location.href = `/booking/detail?code=${data.bookingCode}`;
+
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+    });
+
+
 </script>
 </body>
 {{> layout/footer}}
