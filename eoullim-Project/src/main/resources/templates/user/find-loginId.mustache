@@ -2,37 +2,42 @@
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
 <body>
+<div class="auth-wrapper">
+    <form class="findIdForm" id="findIdForm">
 
-<form class="findIdForm" id="findIdForm">
+        <h2>아이디 찾기</h2>
 
-    <h2>아이디 찾기</h2>
-
-    <div class="field">
-        <label for="name">이름</label>
-        <input type="text" id="name" name="name" required>
-    </div>
-
-    <div class="field">
-        <label for="email">이메일</label>
-        <div class="inline">
-            <input type="email" id="email" name="email" required>
-            <button type="button" id="sendEmailBtn">인증번호전송</button>
+        <div class="field">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" required>
         </div>
-    </div>
 
-    <div class="field hidden" id="verify-box">
-        <label for="code">인증 번호</label>
-        <div class="inline">
-            <input type="text" id="code" maxlength="6">
-            <button type="button" id="verifyCodeBtn">확인</button>
+        <div class="field">
+            <label for="email">이메일</label>
+            <div class="inline">
+                <input type="email" id="email" name="email" required>
+                <button type="button" id="sendEmailBtn">인증번호전송</button>
+            </div>
         </div>
-        <p id="verifyMsg" class="message"></p>
 
-        <button type="submit" id="submitBtn" disabled>아이디 찾기</button>
-        <p id="resultBox" class="result hidden"></p>
-    </div>
-</form>
+        <div class="field hidden" id="verify-box">
+            <label for="code">인증 번호</label>
+            <div class="inline">
+                <input type="text" id="code" maxlength="6">
+                <button type="button" id="verifyCodeBtn">확인</button>
+            </div>
+            <p id="verifyMsg" class="message"></p>
 
+            <button type="submit" id="submitBtn" disabled>아이디 찾기</button>
+            <p id="resultBox" class="result hidden"></p>
+
+            <div id="actionBtns" class="hidden">
+                <button type="button" id="loginBtn">로그인</button>
+                <button type="button" id="findPasswordBtn">비밀번호 찾기</button>
+            </div>
+        </div>
+    </form>
+</div>
 <script>
 
     let emailSending = false;
@@ -132,8 +137,19 @@
             const loginId = await res.text();
 
             const resultBox = document.getElementById("resultBox");
+            const actionBtns = document.getElementById("actionBtns")
             resultBox.textContent = `회원님의 아이디는 "${loginId}" 입니다.`;
             resultBox.classList.remove("hidden");
+
+            actionBtns.classList.remove("hidden");
+
+            document.getElementById("loginBtn").addEventListener("click", () => {
+                location.href = "/user/login";
+            });
+
+            document.getElementById("findPasswordBtn").addEventListener("click", () => {
+                location.href = "/user/find-password";
+            });
 
             document.getElementById("submitBtn").disabled = true;
         } catch {

@@ -1,21 +1,131 @@
+/* 공통 스타일 */
 * {
     box-sizing: border-box;
     font-family: 'Pretendard', sans-serif;
 }
 
-.hidden {
-    display: none;
+body {
+    margin: 0;
+    background: #f0f2f5;
+    overflow-x: hidden;
+}
+
+/* 중앙 정렬 wrapper */
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    padding-bottom: 100px;
+    background: #f0f2f5;
+}
+
+/* 카드 스타일 */
+.findIdForm {
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    margin: auto;
+}
+
+/* 제목 */
+.findIdForm h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #111827;
+}
+
+/* 각 input 필드 */
+.findIdForm .field {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.findIdForm label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.findIdForm input[type="text"],
+.findIdForm input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* 버튼 스타일 */
+.findIdForm button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #4f46e5;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.findIdForm button:hover {
+    background-color: #4338ca;
+}
+
+/* inline 버튼+input */
+.findIdForm .inline {
+    display: flex;
+    gap: 10px;
+}
+
+.findIdForm .inline input {
+    flex: 1;
+}
+
+/* 메시지 스타일 */
+.message {
+    margin-top: 8px;
+    font-size: 13px;
 }
 
 .message.success {
-    color: green;
+    color: #16a34a;
 }
 
 .message.error {
-    color: red;
+    color: #dc2626;
 }
 
-.inline {
-    display: flex;
-    gap: 8px;
+/* hidden 클래스 */
+.hidden {
+    display: none !important;
+}
+
+/* 결과 박스 */
+.result {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #111827;
+}
+
+#actionBtns button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #4f46e5;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#actionBtns button:hover {
+    background-color: #4338ca;
 }
