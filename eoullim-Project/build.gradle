@@ -31,6 +31,9 @@ dependencies {
 
     // 암호화
     implementation 'org.springframework.security:spring-security-crypto'
+    
+    // 솔라피
+    implementation 'com.solapi:sdk:1.0.3'
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mustache'

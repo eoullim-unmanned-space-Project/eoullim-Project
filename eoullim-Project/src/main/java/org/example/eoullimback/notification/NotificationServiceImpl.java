@@ -1,5 +1,8 @@
 package org.example.eoullimback.notification;
 
+import com.solapi.sdk.message.exception.SolapiEmptyResponseException;
+import com.solapi.sdk.message.exception.SolapiMessageNotReceivedException;
+import com.solapi.sdk.message.exception.SolapiUnknownException;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.notification.NotificationType;
 import org.example.eoullimback.payment.Payment;
@@ -11,12 +14,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final MailService mailService;
     private final QrCodeGenerator qrCodeGenerator;
+    private final SolapiApiService solapiApiService;
 
     @Override
     public List<NotificationResponse.NotificationResponseDTO> notificationList(Long id) {
@@ -29,7 +33,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void notifyPaymentSuccess(Payment payment) {
+    @Transactional
+    public void notifyPaymentSuccess(Payment payment) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException {
 
         String qrPayload = "ENTRY|" + payment.getOrderId();
         byte[] qrImage = qrCodeGenerator.generate(qrPayload);
@@ -45,15 +50,20 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.save(notification);
 
         mailService.sendPaymentSuccessMail(
-                payment.getUser().getEmail(),
                 payment,
                 qrImage
+        );
+
+        solapiApiService.sendQrUrl(
+                "01034900690",
+                qrPayload
         );
 
         notification.markAsSent();
     }
 
     @Override
+    @Transactional
     public void notifyPaymentFailed(Payment payment, String reason) {
         Notification notification = Notification.builder()
                 .type(NotificationType.CANCEL)
@@ -66,6 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    @Transactional
     public void notifyPaymentCancelled(Payment payment) {
         Notification notification = Notification.builder()
                 .type(NotificationType.CANCEL)

@@ -92,31 +92,129 @@ body {
 /* =========================
    notification LIST
 ========================= */
-
+/* 리스트 아이템 레이아웃 */
 .notification-list-item {
-    padding: 24px;
-    border-radius: 20px;
-    background: #f8fafc;
-    box-shadow: var(--card-shadow);
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid #e5e7eb;
 }
 
-.notification-list-item h4 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 8px;
+/* hover 효과 */
+.notification-list-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
+
+/* 왼쪽 텍스트 영역 */
+.notification-list-item > div:nth-child(2) {
+    flex: 1;
+}
+
+/* =========================
+   TYPE & STATUS BADGE
+========================= */
+
+.notification-list-item strong {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: #eef2ff;
+    color: #4338ca;
+}
+
+.notification-list-item span {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/*!* 상태별 컬러 예시 *!*/
+/*.notification-list-item span:contains("완료") {*/
+/*    color: #16a34a;*/
+/*}*/
+
+/*.notification-list-item span:contains("취소") {*/
+/*    color: #dc2626;*/
+/*}*/
+
+/* =========================
+   CONTENT STYLE
+========================= */
 
 .notification-list-item p {
-    font-size: 14px;
-    color: var(--text-sub);
+    margin: 10px 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #374151;
 }
 
-.notification-list-item a {
+.notification-list-item span {
     display: inline-block;
-    margin-top: 10px;
-    font-weight: 600;
-    color: var(--primary);
-    text-decoration: none;
+    margin-top: 4px;
 }
+
+/* =========================
+   DATE STYLE
+========================= */
+
+.notification-list-item > div:last-child {
+    font-size: 12px;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.notification-card > .notification-list-item:only-child {
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    box-shadow: none;
+    border: 2px dashed #d1d5db;
+    background: #f9fafb;
+}
+
+.notification-card p {
+    font-size: 16px;
+    color: #6b7280;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+    .notification-list-item {
+        flex-direction: column;
+    }
+
+    .notification-list-item > div:last-child {
+        align-self: flex-end;
+        margin-top: 10px;
+    }
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notification-list-item {
+    animation: fadeUp 0.4s ease forwards;
+}
+
 

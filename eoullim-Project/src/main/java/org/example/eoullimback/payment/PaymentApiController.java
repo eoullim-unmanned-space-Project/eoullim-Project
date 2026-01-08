@@ -1,5 +1,8 @@
 package org.example.eoullimback.payment;
 
+import com.solapi.sdk.message.exception.SolapiEmptyResponseException;
+import com.solapi.sdk.message.exception.SolapiMessageNotReceivedException;
+import com.solapi.sdk.message.exception.SolapiUnknownException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +38,7 @@ public class PaymentApiController {
 
 
     @PostMapping("/api/payment/complete")
-    public ResponseEntity<?> complete(@RequestBody PaymentRequest.CompleteDTO requestDTO, HttpSession session) {
+    public ResponseEntity<?> complete(@RequestBody PaymentRequest.CompleteDTO requestDTO, HttpSession session) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
 

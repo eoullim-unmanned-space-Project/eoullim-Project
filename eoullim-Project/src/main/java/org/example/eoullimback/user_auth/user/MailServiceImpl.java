@@ -7,6 +7,7 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.MailUtils;
 import org.example.eoullimback.payment.Payment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,6 +20,9 @@ public class MailServiceImpl implements MailService {
 
     private final JavaMailSender javaMailSender;
     private final HttpSession session;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail; // SMTP 계정
 
     @Override
     public void sendVerificationCode(String email) {
@@ -66,15 +70,25 @@ public class MailServiceImpl implements MailService {
 
     }
 
+
+
+
     @Override
-    public void sendPaymentSuccessMail(String email, Payment payment, byte[] qrImage) {
+    public void sendPaymentSuccessMail(Payment payment, byte[] qrImage) {
+
+        User user = (User) session.getAttribute("sessionUser");
+        if (user == null) {
+            throw new RuntimeException("로그인 유저 정보가 없습니다.");
+        }
+        String recipientEmail = user.getEmail();
 
         MimeMessage message = javaMailSender.createMimeMessage();
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setTo(email);
+            helper.setFrom(fromEmail);
+            helper.setTo(recipientEmail);
             helper.setSubject("[Eoullim] 결제 완료 - 무인 매장 입장권 안내");
 
             String html = """
@@ -111,7 +125,7 @@ public class MailServiceImpl implements MailService {
             );
             javaMailSender.send(message);
         } catch (Exception e) {
-            throw new RuntimeException("결제 완료 메일 발송 실패", e);
+            throw new Exception500(ErrorCode.MAIL_SEND_FAIL);
         }
     }
 }
