@@ -2,8 +2,6 @@ package org.example.eoullimback.room;
 
 import lombok.Data;
 import org.example.eoullimback._common.enums.room.RoomStatus;
-import org.example.eoullimback.room_image.RoomImage;
-import org.example.eoullimback.room_image.RoomImageResponse;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 
 import java.util.List;
@@ -25,7 +23,7 @@ public class RoomResponse {
 
     @Data
     public static class DetailDTO {
-        private Long id;
+        private Long roomId;
         private String name;
         private String content;
         private int maxCapacity;
@@ -35,13 +33,13 @@ public class RoomResponse {
         private List<TimeSlotResponse.DetailDTO> timeSlots;
 
         public DetailDTO(Room room) {
-            this.id = room.getId();
+            this.roomId = room.getId();
             this.name = room.getName();
             this.content = room.getContent();
             this.maxCapacity = room.getMaxCapacity();
             this.defaultPrice = room.getDefaultPrice();
             this.status = room.getStatus();
-            this.roomImagePath = "/images/" + room.getRoomImage();
+            this.roomImagePath = "/images/" + room.getRoomImage()   ;
             this.timeSlots = room.getTimeSlots().stream()
                     .map(timeSlot -> new TimeSlotResponse.DetailDTO(timeSlot))
                     .toList();
