@@ -29,6 +29,8 @@ public enum ErrorCode {
     PAYMENT_AMOUNT_MISMATCH("금액이 다릅니다."),
     PAYMENT_ALREADY_PROCESSED("이미 결제된 주문입니다."),
     INVALID_QR_CODE("유효하지 않은 QR 코드입니다."),
+    INVALID_PAYMENT_STATUS("결제완료된 상태만 환불이 가능합니다."),
+    ALREADY_REFUNDED("이미 환불 처리된 상태입니다."),
 
     // ====
     // 401 Unauthorized

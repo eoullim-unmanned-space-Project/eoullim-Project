@@ -6,8 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.payment.PaymentMethod;
 import org.example.eoullimback._common.enums.payment.PaymentStatus;
+import org.example.eoullimback._common.enums.payment.RefundStatus;
 import org.example.eoullimback.booking.Booking;
 import org.example.eoullimback.payment.Payment;
+import org.example.eoullimback.payment_refund.PaymentRefund;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.example.eoullimback.user_auth.user.User;
 
@@ -119,8 +121,10 @@ public record UserResponse() {
         private String displayTime;
         private String bookingCode;
         private String displayStatus;
+        private String paymentKey;
+        private RefundStatus refundStatus;
 
-         public UserPaymentDTO(Payment payment, List<TimeSlotResponse.DetailDTO> timeSlots) {
+         public UserPaymentDTO(Payment payment, List<TimeSlotResponse.DetailDTO> timeSlots, PaymentRefund paymentRefund) {
             this.name = payment.getUser().getName();
             this.roomName = payment.getBooking().getRoom().getName();
             this.amount = payment.getAmount();
@@ -130,6 +134,8 @@ public record UserResponse() {
             this.approvedAt = payment.getApprovedAt();
             this.timeSlots = timeSlots;
             this.bookingCode = payment.getOrderId();
+            this.paymentKey = payment.getPaymentKey();
+            this.refundStatus = paymentRefund.getStatus();
 
            this.displayStatus =  switch (this.paymentStatus) {
                 case READY -> "결제준비";

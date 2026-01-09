@@ -13,6 +13,8 @@ import org.example.eoullimback._common.error.exception.*;
 import org.example.eoullimback.booking.Booking;
 import org.example.eoullimback.booking.BookingRepository;
 import org.example.eoullimback.notification.NotificationService;
+import org.example.eoullimback.payment_refund.PaymentRefund;
+import org.example.eoullimback.payment_refund.PaymentRefundRepository;
 import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.example.eoullimback.user_auth.user.User;
@@ -39,11 +41,12 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final BookingRepository bookingRepository;
     private final NotificationService notificationService;
+    private final PaymentRefundRepository paymentRefundRepository;
 
     @Value("${portone.imp-key}")
     private String impKey;
 
-    @Value("${portone.imp-secret-key}")
+    @Value("${portone.imp-secret}")
     private String impSecret;
 
     @Override
@@ -274,9 +277,13 @@ public class PaymentServiceImpl implements PaymentService {
                 .map(booking -> new TimeSlotResponse.DetailDTO(booking.getTimeSlot()))
                 .toList();
 
+        PaymentRefund refundEntity = paymentRefundRepository.findByPayment(paymentEntity)
+                .orElse(null);
+
         return new UserResponse.UserPaymentDTO(
                 paymentEntity,
-                timeSlots
+                timeSlots,
+                refundEntity
         );
     }
 
