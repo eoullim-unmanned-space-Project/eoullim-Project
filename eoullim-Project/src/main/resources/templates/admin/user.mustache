@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Console</title>
+    <link rel="stylesheet" href="/css/admin/layout/nav.css">
+</head>
+<body>
+
+{{> admin/layout/nav}}
+
+<main>
+    <header>
+        <h1>회원관리</h1>
+    </header>
+    <div class="content-section">
+        <div class="section-header">
+            <h2>최근 회원</h2>
+            <button class="btn-text">전체보기</button>
+        </div>
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>상태</th>
+                <th>이름</th>
+                <th>이메일</th>
+                <th>휴대전화</th>
+                <th>생성일</th>
+                <th>회원가입 경로</th>
+                <th>상세보기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td><span class="badge">ACTIVE</span></td>
+                <td><strong>김지한</strong><br></td>
+                <td>jihan@email.com</td>
+                <td>010-1111-2222</td>
+                <td>2026-01-09 14:48</td>
+                <td><span class="kakao">KAKAO</span></td>
+                <td><button class="btn-detail">상세보기</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>
