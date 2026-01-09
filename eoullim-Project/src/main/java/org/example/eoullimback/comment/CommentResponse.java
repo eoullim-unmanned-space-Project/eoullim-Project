@@ -1,8 +1,7 @@
 package org.example.eoullimback.comment;
 
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import org.example.eoullimback._common.util.DateTimeUtil;
 
 public class CommentResponse {
 
@@ -12,7 +11,7 @@ public class CommentResponse {
         private Long id;
         private String content;
         private String name;
-        private LocalDateTime createdAt;
+        private String createdAt;
         private boolean isEditing;
         private boolean isOwner;
 
@@ -20,7 +19,7 @@ public class CommentResponse {
             this.id = comment.getId();
             this.content = comment.getContent();
             this.name = comment.getUser().getName();
-            this.createdAt = comment.getCreatedAt();
+            this.createdAt = DateTimeUtil.toKstString(comment.getCreatedAt());
             this.isEditing = editingCommentId != null
                     && comment.getId().equals(editingCommentId);
             this.isOwner = comment.isOwner(sessionUserId);
@@ -32,13 +31,13 @@ public class CommentResponse {
         private Long id;
         private String content;
         private String name;
-        private LocalDateTime updatedAt;
+        private String updatedAt;
 
         public UpdateFormDTO(Comment comment) {
             this.id = comment.getId();
             this.content = comment.getContent();
             this.name = comment.getUser().getName();
-            this.updatedAt = comment.getUpdatedAt();
+            this.updatedAt = DateTimeUtil.toKstString(comment.getUpdatedAt());
         }
     }
 }

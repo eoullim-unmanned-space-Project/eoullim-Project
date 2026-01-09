@@ -17,6 +17,9 @@ public class ReviewResponse {
         private Long roomId;
         private LocalDateTime createdAt;
 
+        private int stars;
+        private int emptyStars;
+
         public ListDTO(Review review) {
             this.id = review.getId();
             this.rating = review.getRating();
@@ -25,6 +28,8 @@ public class ReviewResponse {
             this.name = review.getUser().getName();
             this.roomId = review.getRoom().getId();
             this.createdAt = review.getCreatedAt();
+            this.stars = review.getRating();
+            this.emptyStars = 5 - review.getRating();
         }
     }
 
