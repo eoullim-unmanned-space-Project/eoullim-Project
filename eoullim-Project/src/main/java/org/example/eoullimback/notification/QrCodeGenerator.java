@@ -21,7 +21,7 @@ public class QrCodeGenerator {
             );
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            MatrixToImageWriter.writeToStream(matrix, "PNG", out);
+            MatrixToImageWriter.writeToStream(matrix, "JPG", out);
             return out.toByteArray();
         } catch (Exception e) {
             throw new RuntimeException("QR 코드 생성 실패", e);
