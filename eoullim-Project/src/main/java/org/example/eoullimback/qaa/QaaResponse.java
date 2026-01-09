@@ -1,8 +1,7 @@
 package org.example.eoullimback.qaa;
 
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import org.example.eoullimback._common.util.DateTimeUtil;
 
 public class QaaResponse {
 
@@ -15,7 +14,7 @@ public class QaaResponse {
         private final Long userId;
         private final String name;
         private final Long viewCount;
-        private final LocalDateTime createdAt;
+        private final String createdAt;
 
         public DetailDTO(Qaa qaa) {
             this.id = qaa.getId();
@@ -24,7 +23,7 @@ public class QaaResponse {
             this.userId = qaa.getUser() != null ? qaa.getUser().getId() : null;
             this.name = qaa.getUser() != null ? qaa.getUser().getName() : null;
             this.viewCount = qaa.getViewCount();
-            this.createdAt = qaa.getCreatedAt();
+            this.createdAt = DateTimeUtil.toKstString(qaa.getCreatedAt());
         }
     }
 
@@ -34,14 +33,14 @@ public class QaaResponse {
         private String title;
         private String name;
         private Long viewCount;
-        private LocalDateTime createdAt;
+        private String createdAt;
 
         public ListDTO(Qaa qaa) {
             this.id = qaa.getId();
             this.title = qaa.getTitle();
             this.name = qaa.getUser() != null ? qaa.getUser().getName() : null;
             this.viewCount = qaa.getViewCount();
-            this.createdAt = qaa.getCreatedAt();
+            this.createdAt = DateTimeUtil.toKstString(qaa.getCreatedAt());
         }
     }
 
@@ -51,14 +50,14 @@ public class QaaResponse {
         private String title;
         private String content;
         private String name;
-        private LocalDateTime updatedAt;
+        private String updatedAt;
 
         public UpdateFormDTO(Qaa qaa) {
             this.id = qaa.getId();
             this.title = qaa.getTitle();
             this.content = qaa.getContent();
             this.name = qaa.getUser() != null ? qaa.getUser().getName() : null;
-            this.updatedAt = qaa.getUpdatedAt();
+            this.updatedAt = DateTimeUtil.toKstString(qaa.getUpdatedAt());
         }
     }
 }

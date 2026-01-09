@@ -29,7 +29,7 @@ public class ReviewController {
         model.addAttribute("rating", rating);
         model.addAttribute("sort", sort);
 
-        return "review/list";
+        return "room/list";
     }
 
     @PostMapping("/rooms/{roomId}/reviews")

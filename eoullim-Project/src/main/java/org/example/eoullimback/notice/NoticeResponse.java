@@ -1,8 +1,7 @@
 package org.example.eoullimback.notice;
 
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import org.example.eoullimback._common.util.DateTimeUtil;
 
 public class NoticeResponse {
 
@@ -14,7 +13,7 @@ public class NoticeResponse {
         private String content;
         private Long userId;
         private String name;
-        private LocalDateTime createdAt;
+        private String createdAt;
 
         public DetailDTO(Notice notice) {
             this.id = notice.getId();
@@ -22,7 +21,7 @@ public class NoticeResponse {
             this.content = notice.getContent();
             this.userId = notice.getUser() != null ? notice.getUser().getId() : null;
             this.name = notice.getUser() != null ? notice.getUser().getName() : null;
-            this.createdAt = notice.getCreatedAt();
+            this.createdAt = DateTimeUtil.toKstString(notice.getCreatedAt());
         }
     }
 
@@ -31,13 +30,13 @@ public class NoticeResponse {
         private Long id;
         private String title;
         private String name;
-        private LocalDateTime createdAt;
+        private String createdAt;
 
         public ListDTO(Notice notice) {
             this.id = notice.getId();
             this.title = notice.getTitle();
             this.name = notice.getUser() != null ? notice.getUser().getName() : null;
-            this.createdAt = notice.getCreatedAt();
+            this.createdAt = DateTimeUtil.toKstString(notice.getCreatedAt());
         }
     }
 
@@ -47,14 +46,14 @@ public class NoticeResponse {
         private String title;
         private String content;
         private String name;
-        private LocalDateTime updatedAt;
+        private String updatedAt;
 
         public UpdateFormDTO(Notice notice) {
             this.id = notice.getId();
             this.title = notice.getTitle();
             this.content = notice.getContent();
             this.name = notice.getUser() != null ? notice.getUser().getName() : null;
-            this.updatedAt = notice.getUpdatedAt();
+            this.updatedAt = DateTimeUtil.toKstString(notice.getUpdatedAt());
         }
     }
 }
