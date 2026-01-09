@@ -1,0 +1,22 @@
+/* Sidebar Navigation */
+nav {
+    width: 260px;
+    height: 100vh;
+    background: var(--toss-white);
+    padding: 40px 20px;
+    position: fixed;
+    border-right: 1px solid var(--border-color);
+}
+
+.nav-brand { font-size: 22px; font-weight: 800; margin-bottom: 40px; padding-left: 12px; }
+.nav-menu { list-style: none; padding: 0; }
+.nav-item {
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: var(--text-sub);
+    cursor: pointer;
+    margin-bottom: 4px;
+    transition: 0.2s;
+}
+.nav-item:hover, .nav-item.active { background-color: #f9fafb; color: var(--toss-blue); }

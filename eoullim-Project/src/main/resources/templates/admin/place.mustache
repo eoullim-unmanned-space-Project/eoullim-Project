@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Console</title>
+    <link rel="stylesheet" href="/css/admin/layout/nav.css">
+</head>
+<body>
+
+{{> admin/layout/nav}}
+
+<main>
+    <header>
+        <h1>운영 관리</h1>
+    </header>
+
+    <div class="create-container">
+        <div class="action-card" onclick="alert('장소 생성 페이지로 이동')">
+            <div class="icon-box">📍</div>
+            <h3>장소 생성</h3>
+            <p>새로운 사업장이나 위치를 등록합니다.</p>
+        </div>
+        <div class="action-card" onclick="alert('방 생성 페이지로 이동')">
+            <div class="icon-box">🔑</div>
+            <h3>방 생성</h3>
+            <p>등록된 장소 내에 새로운 호실을 추가합니다.</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="section-header">
+            <h2>최근 방/장소 조회</h2>
+            <button class="btn-text">전체보기</button>
+        </div>
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>카테고리</th>
+                <th>이름</th>
+                <th>주소</th>
+                <th>방 이미지</th>
+                <th>생성일</th>
+                <th>수정일</th>
+                <th>상세보기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td><span class="badge">PARTY</span></td>
+                <td>해운대 파티룸</td>
+                <td>부산광역시 해운대구 우동 123-45</td>
+                <td>크리스마스룸.jpg</td>
+                <td>2026-01-09 14:48</td>
+                <td>2026-01-09 14:48</td>
+                <td><button class="btn-detail">상세보기</button></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>
