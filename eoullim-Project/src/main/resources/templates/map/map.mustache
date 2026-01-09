@@ -1,43 +1,34 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<link rel="stylesheet" href="/css/map/map.css">
 {{> layout/header}}
 <body>
 <section class="section">
-    <div class="map-container">
-        <div class="section-title">새로운 공간</div>
-        <div class="space-list">
-            {{#placePage.content}}
-                <a href="/place/{{id}}/room" class="space-card">
-                    <div class="space-img">
-                        <img src="{{profilePath}}" alt="프로필사진" class="space-img">
-                    </div>
-                    <div class="space-name">
-                        <h4>{{name}}</h4>
-                        <p>주소 : {{address}}</p>
-                        <p>카테고리 : {{category}}</p>
-                    </div>
-                </a>
-                <!--                <div class="d-flex justify-content-end mb-2">-->
-                <!--                    <a href="/place/{{id}}/update" class="btn btn-update">수정</a>-->
-                <!--                    <form action="/place/{{id}}/delete" method="post">-->
-                <!--                        <button class="btn btn-delete">삭제</button>-->
-                <!--                    </form>-->
-                <!--                </div>-->
-            {{/placePage.content}}
-        </div>
-        <div class="img-wrapper">
-            <img src="./img/맵이벤트.png" alt="">
-        </div>
-        <div class="pagination-container">
-            <button class="prev">&lt;</button>
-            <div class="pages"></div>
-            <button class="next">&gt;</button>
-        </div>
+    <div id="map"></div>
+    <div class="section-title">새로운 공간</div>
+    <div class="space-list">
+        {{#placePage.content}}
+            <a href="/place/{{id}}/room" class="space-card">
+                <div class="space-img">
+                    <img src="{{profilePath}}" alt="장소사진" class="space-img">
+                </div>
+                <div class="space-name">
+                    <h4>{{name}}</h4>
+                    <p><img src="/img/main/mainPlace.png" alt=""> 주소 : {{address}}</p>
+                    <p>카테고리 : {{category}}</p>
+                </div>
+            </a>
+        {{/placePage.content}}
+    </div>
+    <div class="img-wrapper">
+        <img src="./img/맵이벤트.png" alt="">
+    </div>
+    <div class="pagination-container">
+        <button class="prev">&lt;</button>
+        <div class="pages"></div>
+        <button class="next">&gt;</button>
     </div>
 </section>
-<section class="section">
-</section>
-<div class="section">
-</div>
+
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17&autoload=false"></script>
 
@@ -116,5 +107,6 @@
         }
     })
 </script>
+
 </body>
 {{> layout/footer}}
