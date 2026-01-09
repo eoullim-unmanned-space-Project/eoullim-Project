@@ -186,7 +186,7 @@
 .booking-detail-btn {
     padding: 9px 18px;
     border-radius: 8px;
-    background: tomato;
+    background: #6366f1;
     color: white;
     border: none;
     font-size: 13px;
@@ -198,7 +198,7 @@
 
 .booking-detail-btn:hover {
     transform: translateY(-1px);
-    background: #e5533d;
+    background: #4f46e5;
 }
 
 .booking-detail-btn:active {
@@ -337,6 +337,10 @@
     color: block;
     margin-top: 20px;
     font-weight: bold;
+}
+
+.booking-code {
+    font-weight: 700;
 }
 
 .r-bookingCode {

@@ -31,7 +31,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {
-
         const bookingBtn = document.querySelector('.booking-search-btn');
         const bookingInput = document.querySelector('.booking-input');
         const filterRoot = document.querySelectorAll('.booking-filter');
@@ -121,7 +120,7 @@
                     <div class="booking-card-body">
                         <div class="booking-info-row">
                             <span class="label">예약 코드</span>
-                            <strong>${booking.bookingCode}</strong>
+                            <span class="booking-code">${booking.bookingCode}</span>
                         </div>
 
                         <div class="booking-info-row">
@@ -154,7 +153,9 @@
 
                         const data = await response.json();
 
-                        console.log(data);
+                        if (!refundStatusMap[bookingCode]) {
+                            refundStatusMap[bookingCode] = null;
+                        }
 
                         modal(data);
 
@@ -164,6 +165,9 @@
                     }
 
                   function modal(data) {
+
+                      const isPending = data.refundStatus === 'REQUESTED';
+
                     const container = document.createElement('div');
                     container.className = 'modal-overlay';
 
@@ -213,7 +217,16 @@
                                 <span class="total-label">총 결제금액</span>
                                 <span class="total-amount" id="r-amount">${Number(data.amount).toLocaleString()}원</span>
                             </div>
-                            <button class="btn-refund" type="button">환불 요청하기</button>
+                            <div id="refund-section">
+                               ${isPending
+                                    ? `<button class="btn-refund" disabled style="background:#ccc; cursor:not-allowed; width:100%; padding:12px; border:none; border-radius:8px; color:white;">
+                                     환불 대기중
+                                   </button>`
+                                        : `<button class="btn-refund" type="button" data-paymentkey="${data.paymentKey}">
+                                     환불 요청하기
+                                   </button>`
+                                }
+                            </div>
                             <span class="order-id">주문번호: <span id="r-bookingCode">${data.bookingCode}</span></span>
                         </div>`;
 
@@ -222,11 +235,10 @@
                         const statusText = container.querySelector('.status-text');
                         const statusElement = container.querySelector('#r-status');
                         const totalElement = container.querySelector('#r-amount');
+                        const refundSection = container.querySelector("#refund-section");
                         const refundBtn = container.querySelector('.btn-refund');
                         const iconWrapper = container.querySelector('.receipt-header div');
                         const iconCheck = iconWrapper.querySelector('polyline');
-
-                        const status = data.displayStatus;
 
                         if (status === '결제준비') {
                             statusText.style.color = "#6B7684";
@@ -271,15 +283,85 @@
                                 container.remove();
                              }
                         });
+
+                       refundSection.onclick = async (e) => {
+
+                          if (e.target.classList.contains("btn-refund")) {
+                              const paymentKey = e.target.dataset.paymentkey;
+
+                              refundSection.innerHTML = `
+                                <div style="margin-top: 15px; border-top: 1px dashed #ddd; padding-top: 15px;">
+                                    <textarea id="refund-reason" placeholder="환불 사유를 적어주세요" style="
+                                        width: 100%; height: 70px; padding: 10px; border: 1px solid #eee;
+                                        border-radius: 8px; background: #fafafa; resize: none; margin-bottom: 8px;
+                                    "></textarea>
+                                    <div style="display: flex; gap: 6px;">
+                                        <button type="button" id="submit-refund" data-paymentkey="${paymentKey}" style="flex: 2; padding: 10px; background: #3182f6; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">확인 전송</button>
+                                        <button type="button" id="cancel-refund" data-paymentkey="${paymentKey}" style="flex: 1; padding: 10px; background: #eee; border: none; border-radius: 6px; cursor: pointer;">취소</button>
+                                    </div>
+                                </div>`;
+                              }
+
+                               if(e.target.id === 'submit-refund') {
+                                   const reason = document.getElementById('refund-reason').value;
+                                   const paymentKey = e.target.dataset.paymentkey;
+
+                                   if (!reason.trim()) {
+                                       alert("환불 사유를 작성해주세요.");
+                                   }
+
+                                   try {
+                                       const response = await fetch("/api/user/refund", {
+                                           method: "POST",
+                                           headers: {
+                                               "Content-Type" : "application/json"
+                                           },
+                                           body: JSON.stringify({
+                                               paymentKey: paymentKey,
+                                               reason: reason
+                                           })
+                                       })
+
+                                       if (!response.ok) {
+                                           alert("환불 실패")
+                                       }
+
+                                       if (response.ok) {
+                                           const result = await response.json();
+                                           alert(result.message);
+
+                                           console.log('서버 응답:', data);
+
+                                           refundSection.innerHTML =
+                                                   `<button class="btn-refund" disabled style="background:#ccc; cursor:not-allowed; width:100%; padding:12px; border:none; border-radius:8px; color:white;">
+                                                        환불 대기중
+                                                    </button>
+                                                    `;
+
+                                           await sendSearch();
+
+                                       } else {
+                                           alert("환불 처리에 실패했습니다.");
+                                       }
+                                   } catch (error) {
+                                       console.error("환불 요청에 에러가 발생했습니다.", error);
+
+                                   }
+                               }
+
+                              if (e.target.id === "cancel-refund") {
+                                  const paymentKey = e.target.dataset.paymentkey;
+                                  refundSection.innerHTML = `
+                                    <button class="btn-refund" type="button" data-paymentkey="${paymentKey}">
+                                        환불 요청하기
+                                    </button>`;
+                              }
+                      };
                     } // MODAL End point
                 });
             });
         }
     }) // DOM End point
-
-
-
-
 </script>
 
 </body>

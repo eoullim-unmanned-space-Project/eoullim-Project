@@ -7,8 +7,12 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.booking.BookingService;
+import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.payment.PaymentResponse;
 import org.example.eoullimback.payment.PaymentService;
+import org.example.eoullimback.payment_refund.PaymentRefundRequest;
+import org.example.eoullimback.payment_refund.PaymentRefundResponse;
+import org.example.eoullimback.payment_refund.PaymentRefundService;
 import org.example.eoullimback.user_auth.auth.AuthService;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
@@ -33,6 +37,7 @@ public class UserApiController {
     private final AuthService authService;
     private final BookingService bookingService;
     private final PaymentService paymentService;
+    private final PaymentRefundService paymentRefundService;
 
     @PostMapping("/api/email/send")
     public ResponseEntity<?> sendVerificationCode(@RequestBody UserRequest.EmailCheckDTO reqDTO) {
@@ -170,5 +175,15 @@ public class UserApiController {
         UserResponse.UserPaymentDTO userPaymentDTO = paymentService.paymentDetail(bookingCode, sessionUser.getId());
 
         return ResponseEntity.ok().body(userPaymentDTO);
+    }
+
+    @PostMapping("/api/user/refund")
+    public ResponseEntity<Map<String, String>> createRefund(@RequestBody PaymentRefundRequest.CreateRefundDTO createRefundDTO, HttpSession session) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        paymentRefundService.createRefund(createRefundDTO.getPaymentKey(), createRefundDTO.getReason(), sessionUser.getId());
+
+        return ResponseEntity.ok().body(Map.of("message", "환불요청을 접수했습니다."));
     }
 }
