@@ -27,7 +27,7 @@
             </div>
 
             <p class="username"><span>{{user.name}}</span>님</p>
-
+{{^isKakaoUser}}
             <div class="info-row">
                 <label class="label">휴대전화</label>
                 <input
@@ -59,14 +59,17 @@
                         readonly
                 />
             </div>
+{{/isKakaoUser}}
+            {{#sessionUser.canUpdateProfile}}
+                {{^isKakaoUser}}
 
-            {{#sessionUSer.canUpdateProfile}}
             <form action="/user/profile/edit" method="get">
                 <button type="submit" class="edit-btn">
                     회원정보 수정
                 </button>
             </form>
-            {{/sessionUSer.canUpdateProfile}}
+                {{/isKakaoUser}}
+            {{/sessionUser.canUpdateProfile}}
         </div>
     </main>
 </div>

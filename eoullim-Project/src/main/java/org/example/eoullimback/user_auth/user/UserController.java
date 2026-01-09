@@ -38,8 +38,11 @@ public class UserController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User user = userService.getMyProfile(sessionUser.getId());
 
+        boolean isKakaoUser = user.getProvider().equals(OAuthProvider.KAKAO);
+
         model.addAttribute("user", user);
         model.addAttribute("phone", user.getPhone() != null ? user.getPhone() : "");
+        model.addAttribute("isKakaoUser", isKakaoUser);
 
         return "user/profile";
     }
