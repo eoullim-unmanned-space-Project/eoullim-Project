@@ -20,7 +20,6 @@
             <button class="booking-filter-btn" data-status="CONFIRMED">예약완료</button>
             <button class="booking-filter-btn" data-status="CANCELED">예약취소</button>
             <button class="booking-filter-btn" data-status="REFUNDED">환불완료</button>
-            <button class="booking-filter-btn">취소</button>
         </div>
 
         <div class="booking-list" id="booking-list">
@@ -152,10 +151,6 @@
                         const response = await fetch(`/api/user/payment?code=${bookingCode}`);
 
                         const data = await response.json();
-
-                        if (!refundStatusMap[bookingCode]) {
-                            refundStatusMap[bookingCode] = null;
-                        }
 
                         modal(data);
 
