@@ -51,48 +51,39 @@
     <hr/>
     <div class="container">
         <h2 class="review-title">리뷰</h2>
-        <div class="review-grid">
-            <div class="review-card">
-                <div class="review-header">
-                    <img src="img/user1.jpg" alt="사용자1" class="review-profile">
-                    <div class="review-user">
-                        <p class="user-name">사용자1</p>
-                        <p class="user-star">★★★★☆</p>
+        {{#reviewablePayments}}
+            <a href="/rooms/{{roomId}}/reviews/new?placeId={{placeId}}&paymentId={{paymentId}}">
+                리뷰 작성하기
+            </a>
+        {{/reviewablePayments}}
+        {{^reviewablePayments}}
+            <p>작성 가능한 리뷰가 없습니다.</p>
+        {{/reviewablePayments}}
+        {{#reviews}}
+            <div class="review-grid">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-user">
+                            <p class="user-name">{{name}}</p>
+                            <p class="user-star">{{#stars}}★{{/stars}}{{#emptyStars}}☆{{/emptyStars}}</p>
+                        </div>
+
+                        {{#mine}}
+                            <a href="/reviews/{{id}}/update?placeId={{placeId}}">수정</a>
+                            <form action="/rooms/reviews/{{id}}/delete" method="post" style="display:inline;">
+                                <input type="hidden" name="placeId" value="{{placeId}}">
+                                <button type="submit">삭제</button>
+                            </form>
+                        {{/mine}}
                     </div>
+                    <p class="review-content">{{content}}</p>
                 </div>
-                <p class="review-content">룸이 깨끗하고 조용해서 공부하기 좋았습니다.</p>
             </div>
-            <div class="review-card">
-                <div class="review-header">
-                    <img src="img/user2.jpg" alt="사용자2" class="review-profile">
-                    <div class="review-user">
-                        <p class="user-name">사용자2</p>
-                        <p class="user-star">★★★★★</p>
-                    </div>
-                </div>
-                <p class="review-content">친절한 직원과 편안한 분위기!</p>
-            </div>
-            <div class="review-card">
-                <div class="review-header">
-                    <img src="img/user2.jpg" alt="사용자2" class="review-profile">
-                    <div class="review-user">
-                        <p class="user-name">사용자2</p>
-                        <p class="user-star">★★★★★</p>
-                    </div>
-                </div>
-                <p class="review-content">친절한 직원과 편안한 분위기!</p>
-            </div>
-            <div class="review-card">
-                <div class="review-header">
-                    <img src="img/user3.jpg" alt="사용자3" class="review-profile">
-                    <div class="review-user">
-                        <p class="user-name">사용자3</p>
-                        <p class="user-star">★★★☆☆</p>
-                    </div>
-                </div>
-                <p class="review-content">방이 조금 작았지만, 전반적으로 만족합니다.</p>
-            </div>
-        </div>
+        {{/reviews}}
+
+        {{^reviews}}
+            <div>아직 등록된 리뷰가 없습니다.</div>
+        {{/reviews}}
     </div>
 </section>
 

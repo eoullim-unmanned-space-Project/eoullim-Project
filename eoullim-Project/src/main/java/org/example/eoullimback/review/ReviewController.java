@@ -1,7 +1,11 @@
 package org.example.eoullimback.review;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception409;
+import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,12 +21,16 @@ public class ReviewController {
 
     @GetMapping("/rooms/{roomId}/reviews")
     public String reviewList(
+            HttpSession session,
             @PathVariable Long roomId,
             @RequestParam(required = false) Byte rating,
             @RequestParam(defaultValue = "latest") String sort,
             Model model
     ) {
-        List<ReviewResponse.ListDTO> reviews = reviewService.findByRoom(roomId, rating, sort);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
+
+        List<ReviewResponse.ListDTO> reviews = reviewService.findByRoom(userId, roomId);
 
         model.addAttribute("reviews", reviews);
         model.addAttribute("roomId", roomId);
@@ -32,60 +40,86 @@ public class ReviewController {
         return "room/list";
     }
 
+    @GetMapping("/rooms/{roomId}/reviews/new")
+    public String createForm(@RequestParam Long placeId,
+                             @PathVariable Long roomId,
+                             @RequestParam Long paymentId,
+                             Model model) {
+
+        if (reviewService.existsByPaymentId(paymentId)) {
+            throw new Exception409(ErrorCode.REVIEW_CONFLICT);
+        }
+        model.addAttribute("placeId", placeId);
+        model.addAttribute("roomId", roomId);
+        model.addAttribute("paymentId", paymentId);
+        model.addAttribute("review", new ReviewRequest.CreateDTO());
+        return "review/create-form";
+    }
+
     @PostMapping("/rooms/{roomId}/reviews")
-    public String create(
-            @PathVariable Long roomId,
-            @ModelAttribute("review") @Valid ReviewRequest.CreateDTO request,
-            BindingResult bindingResult
+    public String create(HttpSession session,
+                         @PathVariable Long roomId,
+                         @RequestParam Long placeId,
+                         @ModelAttribute("review") @Valid ReviewRequest.CreateDTO request,
+                         BindingResult bindingResult,
+                         Model model
     ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
+
         if (bindingResult.hasErrors()) {
+            model.addAttribute("roomId", roomId);
+            model.addAttribute("paymentId", request.getPaymentId());
             return "review/create-form";
         }
-
-        Long userId = getLoginUserId();
         reviewService.create(userId, roomId, request);
 
-        return "redirect:/rooms/" + roomId + "/reviews";
+        return "redirect:/place/" + placeId + "/room";
     }
 
     @GetMapping("/reviews/{reviewId}/update")
-    public String updateForm(
-            @PathVariable Long reviewId,
-            Model model
+    public String updateForm(@RequestParam Long placeId,
+                             @PathVariable Long reviewId,
+                             Model model
     ) {
         Review review = reviewService.findEntity(reviewId);
-        model.addAttribute("review",new ReviewResponse.UpdateFormDTO(review));
-
+        model.addAttribute("review", new ReviewResponse.UpdateFormDTO(review));
+        model.addAttribute("placeId", placeId);
         return "review/update-form";
     }
 
     @PostMapping("/rooms/reviews/{reviewId}")
-    public String update(
-            @PathVariable Long reviewId,
-            @ModelAttribute("review") @Valid ReviewRequest.UpdateDTO request,
-            BindingResult bindingResult
+    public String update(HttpSession session,
+                         @RequestParam Long placeId,
+                         @PathVariable Long reviewId,
+                         @ModelAttribute("review") @Valid ReviewRequest.UpdateDTO request,
+                         BindingResult bindingResult,
+                         Model model
     ) {
+        Review review = reviewService.findEntity(reviewId);
         if (bindingResult.hasErrors()) {
+            model.addAttribute("placeId", placeId);
+            model.addAttribute("review", new ReviewResponse.UpdateFormDTO(review));
             return "review/update-form";
         }
 
-        Long userId = getLoginUserId();
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
+
         reviewService.update(userId, reviewId, request);
 
-        return "redirect:/rooms/";
+        return "redirect:/place/" + placeId + "/room";
     }
 
     @PostMapping("/rooms/reviews/{reviewId}/delete")
-    public String delete(@PathVariable Long reviewId) {
+    public String delete(HttpSession session,
+                         @RequestParam Long placeId,
+                         @PathVariable Long reviewId) {
 
-        Long userId = getLoginUserId();
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
         reviewService.delete(userId, reviewId);
 
-        return "redirect:/rooms/";
-    }
-
-    // TODO: HttpSession 교체 (더미 데이터)
-    private Long getLoginUserId() {
-        return 1L;
+        return "redirect:/place/" + placeId + "/room";
     }
 }

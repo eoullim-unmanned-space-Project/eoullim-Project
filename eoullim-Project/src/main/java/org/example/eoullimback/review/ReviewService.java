@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReviewService {
 
-    List<ReviewResponse.ListDTO> findByRoom(Long roomId, Byte rating, String sort);
+    List<ReviewResponse.ListDTO> findByRoom(Long userId, Long roomId);
 
     void create(Long userId, Long roomId, ReviewRequest.@Valid CreateDTO request);
 
@@ -15,4 +15,10 @@ public interface ReviewService {
     void update(Long userId, Long reviewId, ReviewRequest.@Valid UpdateDTO request);
 
     void delete(Long userId, Long reviewId);
+
+    boolean existsByPaymentId(Long paymentId);
+
+    List<ReviewablePaymentDTO> findReviewablePayments(Long userId, Long roomId);
+
+    List<ReviewResponse.ListDTO> findLatestReviews(int limit);
 }

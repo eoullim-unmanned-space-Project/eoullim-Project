@@ -6,10 +6,18 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception409;
+import org.example.eoullimback.payment.Payment;
+import org.example.eoullimback.payment.PaymentRepository;
+import org.example.eoullimback.room.Room;
+import org.example.eoullimback.room.RoomRepository;
+import org.example.eoullimback.user_auth.user.User;
+import org.example.eoullimback.user_auth.user.UserRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,23 +26,36 @@ import java.util.List;
 public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
+    private final RoomRepository roomRepository;
+    private final PaymentRepository paymentRepository;
 
     @Override
-    public List<ReviewResponse.ListDTO> findByRoom(Long roomId, Byte rating, String sort) {
+    public List<ReviewResponse.ListDTO> findByRoom(Long sessionUserId, Long roomId) {
+        List<Review> reviews = reviewRepository.findByRoomId(roomId);
+        return reviews.stream()
+                .map(r -> new ReviewResponse.ListDTO(r, sessionUserId))
+                .toList();
+    }
 
-        List<Review> reviews = (rating == null)
-                ? reviewRepository.findByRoomId(roomId)
-                : reviewRepository.findByRoomIdAndRating(roomId, rating);
+    @Override
+    public boolean existsByPaymentId(Long paymentId) {
+        return reviewRepository.existsByPaymentId(paymentId);
+    }
 
-        if("rating".equalsIgnoreCase(sort)) {
-            reviews.sort(Comparator.comparing(Review::getRating).reversed());
-        } else {
-            reviews.sort(Comparator.comparing(Review::getRating).reversed());
-        }
+    @Override
+    public List<ReviewablePaymentDTO> findReviewablePayments(Long userId, Long roomId) {
+        return reviewRepository.findReviewablePayment(userId, roomId);
 
+    }
+
+    @Override
+    public List<ReviewResponse.ListDTO> findLatestReviews(int limit) {
+        var pageable = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Review> reviews = reviewRepository.findAll(pageable).getContent();
         return reviews.stream()
                 .map(ReviewResponse.ListDTO::new)
-                .toList();
+                        .toList();
     }
 
     @Override
@@ -45,8 +66,23 @@ public class ReviewServiceImpl implements ReviewService{
             throw new Exception409(ErrorCode.REVIEW_CONFLICT);
         }
 
-        // 나중에 추가 예정 (User, Room, Payment)(더미데이터 확인 후)
-        Review review = request.toEntity(null, null, null);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new Exception409(ErrorCode.USER_NOT_FOUND));
+
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new Exception409(ErrorCode.ROOM_NOT_FOUND));
+
+        Payment payment = paymentRepository.findById(request.getPaymentId())
+                .orElseThrow(() -> new Exception409(ErrorCode.PAYMENT_NOT_FOUND));
+
+        Review review = Review.builder()
+                .user(user)
+                .room(room)
+                .payment(payment)
+                .rating(request.getRating())
+                .content(request.getContent())
+                .build();
+
         reviewRepository.save(review);
     }
 
@@ -58,6 +94,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
+    @Transactional
     public void update(Long userId, Long reviewId, ReviewRequest.@Valid UpdateDTO request) {
 
         Review review = findEntity(reviewId);
