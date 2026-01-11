@@ -2,6 +2,7 @@ package org.example.eoullimback.user_auth.auth.dto.request;
 
 import lombok.Data;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.enums.user.Role;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback.user_auth.user.User;
 
@@ -17,13 +18,16 @@ public class AuthRequest {
         private String phone;
 
        public User toEntity() {
-           return User.builder()
+           User user = User.builder()
                    .loginId(this.loginId)
                    .password(this.password)
                    .name(this.name)
                    .email(this.email)
                    .phone(this.phone)
                    .build();
+
+           user.addRole(Role.USER);
+           return user;
        }
 
        public void validate() {
