@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PaymentRefundRepository extends JpaRepository<PaymentRefund, Long> {
@@ -22,4 +23,24 @@ public interface PaymentRefundRepository extends JpaRepository<PaymentRefund, Lo
     boolean existsByPaymentAndStatus(Payment payment, RefundStatus status);
 
     Optional<PaymentRefund> findByPayment(Payment paymentEntity);
+
+    @Query("""
+            SELECT pr FROM PaymentRefund pr
+            JOIN FETCH pr.payment p
+            JOIN FETCH p.user u
+            JOIN FETCH p.booking b
+            JOIN FETCH b.room r
+            ORDER BY pr.createdAt DESC
+            """)
+    List<PaymentRefund> findAllWithPayment();
+
+    @Query("""
+           SELECT pr FROM PaymentRefund pr
+           JOIN FETCH pr.payment p
+           JOIN FETCH p.user u
+           JOIN FETCH p.booking b
+           JOIN FETCH b.room r
+           WHERE pr.id = :id
+           """)
+    Optional<PaymentRefund> findByIdPayment(@Param("id")Long id);
 }

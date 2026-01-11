@@ -77,7 +77,6 @@ public class AuthController {
             User sessionUser = authService.login(request);
 
             session.setAttribute("sessionUser", sessionUser);
-
             return "redirect:/main/main";
 
         } catch (Exception400 | Exception401 | Exception404 e) {

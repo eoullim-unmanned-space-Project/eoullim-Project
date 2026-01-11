@@ -161,7 +161,8 @@
 
                   function modal(data) {
 
-                      const isPending = data.refundStatus === 'REQUESTED';
+                    const refundStatus = data ? data.refundStatus : null;
+                    const isPending = refundStatus === 'REQUESTED';
 
                     const container = document.createElement('div');
                     container.className = 'modal-overlay';

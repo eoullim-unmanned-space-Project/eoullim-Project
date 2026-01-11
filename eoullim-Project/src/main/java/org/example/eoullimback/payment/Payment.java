@@ -111,8 +111,8 @@ public class Payment extends BaseTimeEntity {
                 this.failureMessage = failureMessage;
         }
 
-    public void markRefunded() {
-                this.status = PaymentStatus.REFUNDED;
-                this.cancelledAt = LocalDateTime.now();
-        }
+        public void markRefunded() {
+                    this.status = PaymentStatus.REFUNDED;
+                    this.cancelledAt = LocalDateTime.now();
+            }
 }

@@ -28,7 +28,7 @@ public class UserController {
             throw new Exception401(ErrorCode.USER_NOT_FOUND);
         }
 
-        return "redirect:/";
+        return "redirect:/main/main";
     }
 
     // // http://localhost:8080/users/profile/1
