@@ -24,6 +24,7 @@ public class AuthRequest {
                    .name(this.name)
                    .email(this.email)
                    .phone(this.phone)
+                   .profileImage("/img/user/default.png")
                    .build();
 
            user.addRole(Role.USER);
