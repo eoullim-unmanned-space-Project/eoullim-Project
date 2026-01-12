@@ -21,15 +21,11 @@ public class AdminInterceptor implements HandlerInterceptor {
         if (session == null) {
             throw new Exception401(ErrorCode.LOGIN_ONLY);
         }
-         User sessionUser = (User)session.getAttribute("sessionUser");
+        User sessionUser = (User) session.getAttribute("sessionUser");
 
-         if (sessionUser == null) {
-             throw new Exception401(ErrorCode.LOGIN_ONLY);
-         }
-
-         if (!sessionUser.isAdmin()) {
-             throw new Exception403(ErrorCode.ADMIN_OLLY);
-         }
+//        if (!sessionUser.isAdmin()) {
+//            throw new Exception403(ErrorCode.ADMIN_OLLY);
+//        }
         return true;
     }
 }

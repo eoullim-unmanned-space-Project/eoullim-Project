@@ -41,7 +41,43 @@
 
 
         <div class="right">
+            <div class="room-box">
+                <h3 class="room-title">방</h3>
+                <div class="room-img"  style="background-image: url('/img/main/크리스마스파티룸.jpg')" ></div>
+                <p class="room-desc">
+                    · 내용
+                </p>
+                <hr>
+                <p class="room-info">
+                    · 최대 인원: <strong>인원</strong>
+                </p>
+                <hr>
+                <p class="room-info">
+                    · 최소: 1시간부터 이용 가능
+                </p>
+                <hr>
+                <p class="room-warning">
+                    · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
+                </p>
+            </div>
+            <p><img src="/img/room/user.png" alt=""> 인원 수</p>
+            <div class="people-box">
+                <button type="button" id="minusBtn">−</button>
+                <input type="text" id="peopleCount" value="1" min="1" readonly>
+                <button type="button" id="plusBtn">+</button>
+            </div>
+            <div class="amount-box">
+                <strong id="amount">0</strong>원
+            </div>
+            <div class="timeslot-container" id="timeslot">
+                <div class="timeslot-item">
 
+                </div>
+            </div>
+            <input type="hidden" id="roomId" value="${room.roomId}">
+            <div class="booking-box">
+                <button type="button" id="bookingBtn">예약하기</button>
+            </div>
         </div>
     </section>
 </div>
@@ -156,7 +192,7 @@
                 container.innerHTML = `
                  <div class="room-box">
                     <h3 class="room-title">${room.name}</h3>
-                    <div class="room-img" ><img src="${room.roomImagePath}" ${room.name}"></div>
+                    <div class="room-img"  style="background-image: url('${room.roomImagePath}')" ></div>
                     <p class="room-desc">
                         · ${room.content}
                     </p>
