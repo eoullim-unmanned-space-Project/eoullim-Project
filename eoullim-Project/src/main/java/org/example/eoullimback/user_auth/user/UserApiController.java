@@ -72,18 +72,14 @@ public class UserApiController {
     }
 
     @PostMapping("/api/verify-password")
-    public ResponseEntity<?> verifyPassword(@RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO, HttpSession session) {
+    public ResponseEntity<Boolean> verifyPassword(@RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO, HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            throw new Exception401(ErrorCode.LOGIN_UNAUTHORIZED);
-        }
 
         passwordCheckDTO.validate();
 
         authService.verifyPassword(sessionUser, passwordCheckDTO.getPassword());
 
-        return ResponseEntity.ok().body(Map.of("verified", true));
+        return ResponseEntity.ok().body(true);
     }
 
     @PostMapping("/api/find/email/send")

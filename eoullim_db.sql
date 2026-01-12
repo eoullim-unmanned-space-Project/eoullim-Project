@@ -9,11 +9,14 @@ SELECT * FROM items;
 SELECT * FROM places;	
 SELECT * FROM rooms;
 SELECT * FROM users;
+SELECT * FROM user_roles;	
 SELECT * FROM bookings;
 SELECT * FROM payments;
+SELECT * FROM roles;
+SELECT * FROM payment_refunds;
 
-DELETE FROM payments WHERE id =1;
-DELETE FROM bookings WHERE id = 1;
+-- DELETE FROM payments WHERE id =1;
+-- DELETE FROM bookings WHERE id = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
@@ -32,7 +35,6 @@ DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS qaas;
 DROP TABLE IF EXISTS file_infos;
 DROP TABLE IF EXISTS user_roles;
-DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -59,22 +61,21 @@ CREATE TABLE users (
   UNIQUE KEY `uk_users_email` (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 정보 테이블';
 
-select * from users;
-
-CREATE TABLE IF NOT EXISTS roles (
-  role_name VARCHAR(30) PRIMARY KEY COMMENT '사용자 권한'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='권한 코드(USER, MANAGER, ADMIN)';
+select * from users WHERE id = 1;
 
 CREATE TABLE IF NOT EXISTS user_roles (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   
   user_id BIGINT NOT NULL COMMENT '사용자',
-  
   role_name VARCHAR(30) NOT NULL COMMENT '사용자 권한',
   
-  CONSTRAINT `fk_user_roles_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_user_roles_role_name` FOREIGN KEY (role_name) REFERENCES roles(role_name)
+UNIQUE KEY `uk_user_role` (user_id, role_name)
+  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 권한 매핑';
+
+INSERT INTO user_roles (user_id, role_name)
+VALUES (1, 'ADMIN');
+
 
 CREATE TABLE file_infos (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -280,7 +281,7 @@ CREATE TABLE payment_refunds (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
   
-  CHECK (status IN('REQUESTED','COMPLETED','FAILED')),
+  CHECK (status IN('REQUESTED','COMPLETED','FAILED', 'REJECTED')),
   
   INDEX `idx_payment_refunds_payment_id` (payment_id),
   

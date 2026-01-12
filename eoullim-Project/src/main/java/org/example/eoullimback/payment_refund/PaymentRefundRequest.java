@@ -9,4 +9,9 @@ public class PaymentRefundRequest {
         private String paymentKey;
         private String reason;
     }
+
+    @Data
+    public static class RejectionDTO {
+        private String reason;
+    }
 }

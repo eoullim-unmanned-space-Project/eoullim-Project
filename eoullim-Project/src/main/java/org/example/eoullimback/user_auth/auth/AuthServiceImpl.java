@@ -1,21 +1,16 @@
 package org.example.eoullimback.user_auth.auth;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback._common.enums.RoleType;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.Status;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
-import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +20,6 @@ public class AuthServiceImpl implements AuthService {
     private final AuthRepository authRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
     private final MailService mailService;
 
     @Override
@@ -34,13 +28,9 @@ public class AuthServiceImpl implements AuthService {
 
         request.validate();
 
-        Role userRole = roleRepository.findById(RoleType.USER)
-                .orElseThrow(() -> new Exception403(ErrorCode.ROLE_NOT_FOUND));
-
         String hashPwd = passwordEncoder.encode(request.getPassword());
 
         User user = request.toEntity();
-        user.addRole(userRole);
         user.setPassword(hashPwd);
 
         return authRepository.save(user);

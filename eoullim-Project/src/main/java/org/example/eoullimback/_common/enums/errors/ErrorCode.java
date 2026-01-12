@@ -31,6 +31,10 @@ public enum ErrorCode {
     INVALID_QR_CODE("유효하지 않은 QR 코드입니다."),
     INVALID_PAYMENT_STATUS("결제완료된 상태만 환불이 가능합니다."),
     ALREADY_REFUNDED("이미 환불 처리된 상태입니다."),
+    EMPTY_REASON("관리자 환불 사유는 필수입니다."),
+    INVALID_REFUND_STATUS("REQUESTED 상태만 환불 처리가 가능합니다."),
+    PORT_ONE_ERROR("포트원 인증 실패: 관리자 설정을 확인해주세요."),
+    FAILED_REFUND("환불에 실패했습니다."),
 
     // ====
     // 401 Unauthorized
@@ -67,6 +71,7 @@ public enum ErrorCode {
     PAYMENT_NOT_FOUND("결제 내역이 존재하지 않습니다"),
     PAYMENT_DATA_NOT_FOUND("결제 데이터가 존재하지 않습니다."),
     NOTIFICATION_NOT_FOUND("알림을 찾을 수 없습니다."),
+    PAYMENT_REFUND_NOT_FOUND("환불 결과가 존재하지 않습니다"),
 
 
     // ====
@@ -84,7 +89,8 @@ public enum ErrorCode {
     // ====
     INTERNAL_ERROR("서버 내부 오류가 발했습니다."),
     FILE_SAVE_FAILED("파일 저장에 실패했습니다."),
-    MAIL_SEND_FAIL("메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.");;
+    FAIL_PORT_ONE_RESPONSE("포트원 응답이 비어있습니다."),
+    MAIL_SEND_FAIL("메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.");
 
 
     private final String message;

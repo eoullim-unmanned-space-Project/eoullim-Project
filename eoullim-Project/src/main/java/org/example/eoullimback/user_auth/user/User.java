@@ -3,16 +3,15 @@ package org.example.eoullimback.user_auth.user;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.eoullimback._common.base.BaseTimeEntity;
-import org.example.eoullimback._common.enums.RoleType;
 import org.example.eoullimback._common.enums.user.OAuthProvider;
+import org.example.eoullimback._common.enums.user.Role;
 import org.example.eoullimback._common.enums.user.Status;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "users",
         uniqueConstraints = {
@@ -49,8 +48,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserRole> userRoles = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private List<UserRole> roles = new ArrayList<>();
 
     private LocalDateTime withdrawnAt;
 
@@ -112,26 +112,22 @@ public class User extends BaseTimeEntity {
         return this.id.equals(userId);
     }
 
-
     public void addRole(Role role) {
-        UserRole userRole = new UserRole(this, role);
-        userRoles.add(userRole);
-        role.getUserRoles().add(userRole);
+        this.roles.add(UserRole.builder().user(this).role(role).build());
     }
 
-    public Set<RoleType> getRoleTypes() {
-        return userRoles.stream()
-                .map(u -> u.getRole().getName())
-                .collect(Collectors.toUnmodifiableSet());
-    }
+    public boolean hasRole(Role role) {
 
-    public boolean hasRole(RoleType roleType) {
-        return userRoles.stream()
-                .anyMatch(u -> u.getRole().getName() == roleType);
+        if (this.roles == null || this.roles.isEmpty()) {
+            return false;
+        }
+
+        return this.roles.stream()
+                .anyMatch(r -> r.getRole() == role);
     }
 
     public boolean isAdmin() {
-        return hasRole(RoleType.ADMIN);
+        return hasRole(Role.ADMIN);
     }
 
     public boolean getIsAdmin() {
@@ -140,10 +136,6 @@ public class User extends BaseTimeEntity {
 
     public String getRoleDisplay() {
         return isAdmin() ? "ADMIN" : "USER";
-    }
-
-    public void deleteRole(Role role) {
-        userRoles.removeIf(u -> u.getRole().getName() == role.getName());
     }
 
     public boolean isLocalUser() {

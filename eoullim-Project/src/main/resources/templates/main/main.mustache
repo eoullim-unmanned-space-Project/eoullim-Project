@@ -49,16 +49,23 @@
 
     <section class="section">
         <div class="section-title">방금 올라온 후기</div>
-        <div class="review-list">
-            <div class="review-card">후기 1</div>
-            <div class="review-card">후기 2</div>
-            <div class="review-card">후기 3</div>
-        </div>
-        <div class="review-list" style="margin-top: 20px;">
-            <div class="review-card">후기 4</div>
-            <div class="review-card">후기 5</div>
-            <div class="review-card">후기 6</div>
-        </div>
+        {{#reviews}}
+            <div class="review-grid">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-user">
+                            <p class="user-name">{{name}}</p>
+                            <p class="user-star">{{#stars}}★{{/stars}}{{#emptyStars}}☆{{/emptyStars}}</p>
+                        </div>
+                    </div>
+                    <p class="review-content">{{content}}</p>
+                </div>
+            </div>
+        {{/reviews}}
+
+        {{^reviews}}
+            <div>아직 등록된 리뷰가 없습니다.</div>
+        {{/reviews}}
     </section>
 </main>
 

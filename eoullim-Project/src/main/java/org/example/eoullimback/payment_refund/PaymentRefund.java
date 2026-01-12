@@ -59,6 +59,10 @@ public class PaymentRefund extends BaseTimeEntity {
         this.requestedAt = (requestedAt != null) ? requestedAt : LocalDateTime.now();
     }
 
+    public boolean checkRequest() {
+        return this.status == RefundStatus.REQUESTED;
+    }
+
     public void markCompleted() {
         this.status = RefundStatus.COMPLETED;
         this.completedAt = LocalDateTime.now();
@@ -70,6 +74,11 @@ public class PaymentRefund extends BaseTimeEntity {
         this.status = RefundStatus.FAILED;
         this.failureCode = failureCode;
         this.failureMessage = failureMessage;
+    }
+
+    public void markReject(String reason) {
+        this.status = RefundStatus.REJECTED;
+        this.reason = reason;
     }
 
 }

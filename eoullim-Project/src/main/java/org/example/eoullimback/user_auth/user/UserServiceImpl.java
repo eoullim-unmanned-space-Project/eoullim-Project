@@ -3,6 +3,7 @@ package org.example.eoullimback.user_auth.user;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.OAuthProvider;
+import org.example.eoullimback._common.enums.user.Role;
 import org.example.eoullimback._common.enums.user.Status;
 import org.example.eoullimback._common.error.exception.*;
 import org.example.eoullimback._common.util.FileUtil;
@@ -28,7 +29,6 @@ import java.io.IOException;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${oauth.kakao.client-id}")
@@ -115,27 +115,6 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public User getOrCreateKakaoUser(UserResponse.KakaoProfile kakaoProfile) {
 
-//        String name = kakaoProfile.getProperties().getNickname() + "_" + kakaoProfile.getId();
-//
-//        User userOrigin = getUsername(name);
-//
-//        if (userOrigin == null) {
-//            // 최초 카카오 소셜 로그인 사용자)
-//            User newUser = User.builder()
-//                    .name(name)
-//                    .password(passwordEncoder.encode(tencoKey))// 소셜 로그인은 임시 비밀번호를 설정
-//                    .email(name + "@kakao.com") // 선택사항(카카오 이메일 비즈니스 앱 신청)
-//                    .provider(OAuthProvider.KAKAO)
-//                    .build();
-//
-//            String profileImages = kakaoProfile.getProperties().getProfileImage();
-//            if (profileImages != null && !profileImages.isEmpty()) {
-//                newUser.setProfileImage(profileImages); // 카카오에서 넘겨받은 URL 그대로 저장
-//            }
-//            signupSocialUser(newUser);
-//            userOrigin = newUser; // 필수
-//        }
-
         String kakaoId = kakaoProfile.getId().toString();
         String loginId = "KAKAO_" + kakaoId;
         String nickname = kakaoProfile.getProperties().getNickname();
@@ -156,6 +135,7 @@ public class UserServiceImpl implements UserService{
                     .build();
 
             String profileImage = kakaoProfile.getProperties().getProfileImage();
+
             if (profileImage != null && !profileImage.isEmpty()) {
                 newUser.setProfileImage(profileImage);
             }
@@ -260,14 +240,16 @@ public class UserServiceImpl implements UserService{
 
     public void signupSocialUser(User user) {
         userRepository.save(user);
+        user.addRole(Role.USER);
     }
-
 
     /**
      * 비밀번호 검증
+     *
+     * @return
      */
     @Override
-    public void verifyPassword(Long id, String password) {
+    public boolean verifyPassword(Long id, String password) {
 
         User userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception400(ErrorCode.USER_NOT_FOUND));
@@ -275,6 +257,8 @@ public class UserServiceImpl implements UserService{
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
+
+        return true;
     }
 
     @Override

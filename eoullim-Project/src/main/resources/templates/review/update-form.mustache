@@ -1,7 +1,31 @@
 <link rel="stylesheet" href="/css/user/loginStyle.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div>
+<body>
 
-</div>
+<h2>리뷰 수정</h2>
+
+<form action="/rooms/reviews/{{review.id}}" method="post">
+    <input type="hidden" name="placeId" value="{{placeId}}">
+
+    <div>
+        <label>별점</label>
+        <select name="rating">
+            <option value="5" {{#isRating5}}selected{{/isRating5}}>★★★★★</option>
+            <option value="4" {{#isRating4}}selected{{/isRating4}}>★★★★</option>
+            <option value="3" {{#isRating3}}selected{{/isRating3}}>★★★</option>
+            <option value="2" {{#isRating2}}selected{{/isRating2}}>★★</option>
+            <option value="1" {{#isRating1}}selected{{/isRating1}}>★</option>
+        </select>
+    </div>
+
+    <div>
+        <label>리뷰 내용</label><br>
+        <textarea name="content" rows="5" cols="40"
+                  placeholder="리뷰를 입력하세요">{{review.content}}</textarea>
+    </div>
+
+    <button type="submit">수정</button>
+</form>
+</body>
 {{> layout/footer}}

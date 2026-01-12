@@ -3,9 +3,8 @@ package org.example.eoullimback.notification;
 import lombok.Data;
 import org.example.eoullimback._common.enums.notification.NotificationStatus;
 import org.example.eoullimback._common.enums.notification.NotificationType;
+import org.example.eoullimback._common.util.DateTimeUtil;
 import org.example.eoullimback.payment.Payment;
-
-import java.time.LocalDateTime;
 
 public class NotificationResponse {
 
@@ -17,7 +16,7 @@ public class NotificationResponse {
         private NotificationStatus status;
         private String message;
         private String qrCode;
-        private LocalDateTime createdAt;
+        private String createdAt;
 
         private String orderId;
         private String productName;
@@ -29,7 +28,7 @@ public class NotificationResponse {
             this.status = notification.getStatus();
             this.message = notification.getMessage();
             this.qrCode = notification.getQrCode();
-            this.createdAt = notification.getCreatedAt();
+            this.createdAt = DateTimeUtil.toKstString(notification.getCreatedAt());
 
             Payment payment = notification.getPayment();
             this.orderId = payment.getOrderId();
