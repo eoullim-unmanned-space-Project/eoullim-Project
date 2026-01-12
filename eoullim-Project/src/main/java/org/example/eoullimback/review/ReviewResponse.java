@@ -17,6 +17,7 @@ public class ReviewResponse {
         private Long userId;
         private String name;
         private Long roomId;
+        private Long placeId;
         private Long paymentId;
         private LocalDateTime createdAt;
 
@@ -35,6 +36,7 @@ public class ReviewResponse {
             this.content = review.getContent();
             this.name = review.getUser().getName();
             this.roomId = review.getRoom().getId();
+            this.placeId = review.getRoom().getPlace().getId();
             this.paymentId = review.getPayment().getId();
             this.createdAt = review.getCreatedAt();
 

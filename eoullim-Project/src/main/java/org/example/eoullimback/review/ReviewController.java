@@ -19,26 +19,27 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/rooms/{roomId}/reviews")
-    public String reviewList(
-            HttpSession session,
-            @PathVariable Long roomId,
-            @RequestParam(required = false) Byte rating,
-            @RequestParam(defaultValue = "latest") String sort,
-            Model model
-    ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
-
-        List<ReviewResponse.ListDTO> reviews = reviewService.findByRoom(userId, roomId);
-
-        model.addAttribute("reviews", reviews);
-        model.addAttribute("roomId", roomId);
-        model.addAttribute("rating", rating);
-        model.addAttribute("sort", sort);
-
-        return "room/list";
-    }
+//    @GetMapping("/rooms/{roomId}/reviews")
+//    public String reviewList(
+//            HttpSession session,
+//            @PathVariable Long roomId,
+//            @RequestParam Long placeId,
+//            @RequestParam(required = false) Byte rating,
+//            @RequestParam(defaultValue = "latest") String sort,
+//            Model model
+//    ) {
+//        User sessionUser = (User) session.getAttribute("sessionUser");
+//        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
+//
+//        List<ReviewResponse.ListDTO> reviews = reviewService.findByRoom(userId, roomId);
+//
+//        model.addAttribute("reviews", reviews);
+//        model.addAttribute("roomId", roomId);
+//        model.addAttribute("rating", rating);
+//        model.addAttribute("sort", sort);
+//
+//        return "room/list";
+//    }
 
     @GetMapping("/rooms/{roomId}/reviews/new")
     public String createForm(@RequestParam Long placeId,

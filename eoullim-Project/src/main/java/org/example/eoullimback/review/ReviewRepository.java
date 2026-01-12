@@ -17,15 +17,29 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByRoomId(@Param("roomId") long roomId);
 
     @Query("""
-        SELECT new org.example.eoullimback.review.ReviewablePaymentDTO(p.id)
-                FROM Payment p
-                WHERE p.user.id = :userId
-                and p.id not in (
-                        SELECT r.payment.id
-                        FROM Review r
-                        WHERE r.room.id = :roomId
-                )
-        """)
+    SELECT r
+    FROM Review r
+    JOIN FETCH r.user
+    JOIN FETCH r.room rm
+    JOIN FETCH rm.place
+    WHERE rm.id = :roomId
+      AND rm.place.id = :placeId
+""")
+    List<Review> findByRoomAndPlace(@Param("roomId") Long roomId, @Param("placeId") Long placeId);
+
+    @Query("""
+    SELECT new org.example.eoullimback.review.ReviewablePaymentDTO(
+        p.id,
+        p.booking.room.id,
+        p.booking.room.place.id
+    )
+    FROM Payment p
+    WHERE p.user.id = :userId
+      AND p.booking.room.id = :roomId
+      AND p.id NOT IN (
+          SELECT r.payment.id FROM Review r
+      )
+""")
     List<ReviewablePaymentDTO> findReviewablePayment(@Param("userId") Long userId,  @Param("roomId") Long roomId);
 
     boolean existsByPaymentId(Long paymentId);

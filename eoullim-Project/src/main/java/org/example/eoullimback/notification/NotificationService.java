@@ -14,4 +14,6 @@ public interface NotificationService {
     void notifyPaymentFailed(Payment payment, String reason);
     void notifyPaymentCancelled(Payment payment);
     Notification validateQr(String code);
+
+     void useQrcode(Long userId, Long id);
 }
