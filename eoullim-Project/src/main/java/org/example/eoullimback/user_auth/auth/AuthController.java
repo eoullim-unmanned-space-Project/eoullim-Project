@@ -77,7 +77,7 @@ public class AuthController {
             User sessionUser = authService.login(request);
 
             session.setAttribute("sessionUser", sessionUser);
-            return "redirect:/main/main";
+            return "redirect:/admin/place";
 
         } catch (Exception400 | Exception401 | Exception404 e) {
             model.addAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");

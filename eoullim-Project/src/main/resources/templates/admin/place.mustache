@@ -1,14 +1,13 @@
 {{> admin/layout/nav}}
 
-<link rel="stylesheet" href="/css/admin/user/user.css">
-<!--{> layout/header}}-->
+
 <main>
     <header>
         <h1>운영 관리</h1>
     </header>
 
     <div class="create-container">
-        <div class="action-card" onclick="alert('장소 생성 페이지로 이동')">
+        <div class="action-card" id="place-create-btn">
             <div class="icon-box">📍</div>
             <h3>장소 생성</h3>
             <p>새로운 사업장이나 위치를 등록합니다.</p>
@@ -25,7 +24,7 @@
             <h2>최근 방/장소 조회</h2>
             <button class="btn-text">전체보기</button>
         </div>
-        <table class="data-table">
+        <table class="place-table">
             <thead>
             <tr>
                 <th>번호</th>
@@ -39,21 +38,128 @@
             </tr>
             </thead>
             <tbody>
+            {{#placePage.content}}
             <tr>
-                <td>1</td>
-                <td><span class="badge">PARTY</span></td>
-                <td>해운대 파티룸</td>
-                <td>부산광역시 해운대구 우동 123-45</td>
-                <td>크리스마스룸.jpg</td>
-                <td>2026-01-09 14:48</td>
-                <td>2026-01-09 14:48</td>
-                <td><button class="btn-detail">상세보기</button></td>
+                <td>{{id}}</td>
+                <td><span class="badge">{{category}}</span></td>
+                <td>{{name}}</td>
+                <td>{{address}}</td>
+                <td class="profile-path">{{profilePath}}</td>
+                <td>{{createdAt}}</td>
+                <td>{{updatedAt}}</td>
+                <td>
+                    <button class="action-button detail approve-btn" data-id="{{id}}">승인</button>
+                    <button class="action-button delete rejection-btn" data-id="{{id}}">거절</button>
+                    <button class="action-button update detail-btn" data-id="{{id}}">상세보기</button>
+                </td>
             </tr>
+            {{/placePage.content}}
 
             </tbody>
         </table>
     </div>
 </main>
+<div class="modal-overlay" id="place-create-modal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2>장소 생성</h2>
+        </div>
 
+        <div class="modal-data-box">
+                <div class="mb-3">
+                    <span class="data-label">장소 명</span>
+                    <input type="text" class="data-value" id="place-name" placeholder="장소명을 입력해주세요.">
+                </div>
+                <div class="mb-3">
+                    <span class="data-label">주소</span>
+                    <input type="text" class="data-value" id="place-address" placeholder="주소를 입력해주세요.">
+                </div>
+                <div class="mb-3">
+                    <span class="data-label">위도</span>
+                    <input type="text" class="data-value" id="place-latitude" placeholder="위도를 입력해주세요.">
+                </div>
+                <div class="mb-3">
+                    <span class="data-label">경도</span>
+                    <input type="text" class="data-value" id="place-longitude" placeholder="경도를 입력해주세요.">
+                </div>
+                <div class="mb-3">
+                    <span class="data-label">카테고리</span>
+                    <select class="data-value" id="place-category">
+                        <option VALUE="">선택하세요</option>
+                        <option VALUE="PARTY">PARTY</option>
+                        <option VALUE="STUDY">STUDY</option>
+                        <option VALUE="PRACTICE">PRACTICE</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <span class="data-label">장소 이미지 첨부</span>
+                    <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*">
+                    <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
+                </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-confirm btn-blue" onclick="saveModal()">생성</button>
+            <button type="button" class="btn-confirm btn-red" onclick="closeDetailModal()">닫기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const placeCreateBtn = document.getElementById("place-create-btn");
+        const placeCreateModal = document.getElementById("place-create-modal");
+
+        placeCreateBtn.addEventListener('click', () => {
+            placeCreateModal.style.display = 'flex';
+
+        });
+    });
+
+    document.getElementById('btn-place-create').addEventListener('click', async () => {
+
+        data.append('name', document.getElementById('place-name').value);
+    })
+
+    async function saveModal() {
+        const formData = new FormData();
+
+        formData.append("name", document.getElementById("place-name").value);
+        formData.append("address", document.getElementById("place-address").value);
+        formData.append("latitude", document.getElementById("place-latitude").value);
+        formData.append("longitude", document.getElementById("place-longitude").value);
+        formData.append("category", document.getElementById("place-category").value);
+
+        const imageInput = document.getElementById("profileImage");
+        if (imageInput.files.length > 0) {
+            formData.append("profileImage", imageInput.files[0]);
+        }
+
+        const response = await fetch("/place/create", {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            const msg = await response.text();
+            alert(msg);
+            return;
+        }
+
+        closeDetailModal();
+    }
+
+    function closeDetailModal() {
+        const modal = document.getElementById('place-create-modal');
+        document.getElementById("place-name").value = "";
+        document.getElementById("place-address").value = "";
+        document.getElementById("place-latitude").value = "";
+        document.getElementById("place-longitude").value = "";
+        document.getElementById("place-category").value = "";
+        document.getElementById("profileImage").value = "";
+
+        modal.style.display = 'none';
+    }
+</script>
 </body>
 </html>

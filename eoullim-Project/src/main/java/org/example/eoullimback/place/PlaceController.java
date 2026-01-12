@@ -9,12 +9,10 @@ import org.example.eoullimback.review.ReviewablePaymentDTO;
 import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
 import org.example.eoullimback.user_auth.user.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,23 +26,13 @@ public class PlaceController {
     private final RoomService roomService;
     private final ReviewService reviewService;
 
-    // 생성
-    @GetMapping("/place/create")
-    public String createForm() {
-
-        return "place/create";
-//        place-create
-//        room-create
-    }
-
     @PostMapping("/place/create")
-    public String createProc(PlaceRequest.CreateDTO request) {
+    public ResponseEntity<?> createProc(@ModelAttribute PlaceRequest.CreateDTO request) {
 
         request.validate();
+        placeService.placeCreate(request);
 
-        Place place = placeService.placeCreate(request);
-
-        return "redirect:/main/main";
+        return ResponseEntity.ok().body(request);
     }
 
     // 전체 조회

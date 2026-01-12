@@ -500,6 +500,7 @@
 
         approveBtn.forEach(btn => {
             btn.addEventListener('click', async() => {
+                alert('승인 아이디: ' + btn.dataset.id);
 
                 let id = btn.dataset.id;
 
