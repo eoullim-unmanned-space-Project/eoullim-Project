@@ -27,7 +27,7 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
     @Value("${portone.imp-key}")
     private String impKey;
 
-    @Value("${portone.imp-secret-key}")
+    @Value("${portone.imp-secret}")
     private String impSecret;
 
     private final PaymentRefundRepository paymentRefundRepository;

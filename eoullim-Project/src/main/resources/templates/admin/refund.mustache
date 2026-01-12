@@ -32,81 +32,50 @@
         min-height: 100vh;
     }
 
-    /* --- 사이드 네비게이션 (고정 너비) --- */
-    .side-navigation {
-        width: 280px;
+    /* Sidebar Navigation */
+    nav {
+        width: 260px;
         height: 100vh;
-        background-color: var(--bg-surface);
-        padding: 40px 16px;
+        background: white;
+        padding: 40px 20px;
         position: fixed;
-        top: 0; left: 0;
-        border-right: 1px solid var(--line-default);
-        display: flex;
-        flex-direction: column;
-        z-index: 100;
+        border-right: 1px solid var(--border-color);
     }
 
-    .brand-logo {
+    .nav-brand {
         font-size: 22px;
-        font-weight: 700;
-        color: var(--text-primary);
-        padding: 0 20px;
-        margin-bottom: 36px;
-        letter-spacing: -0.5px;
+        font-weight: 800;
+        margin-bottom: 40px;
+        padding-left: 12px;
     }
 
-    .menu-list { list-style: none; padding: 0; margin: 0; }
-    .menu-item { margin-bottom: 4px; }
-
-    .menu-link {
-        display: block;
-        text-decoration: none;
-        padding: 14px 20px;
-        border-radius: 14px;
-        font-size: 15px;
-        font-weight: 600;
-        color: var(--text-secondary);
-        transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    .nav-menu {
+        list-style: none;
+        padding: 0;
     }
 
-    .menu-link:hover {
-        background-color: #f9fafb;
-        color: var(--text-primary);
-    }
-
-    .menu-item.active .menu-link {
-        background-color: #f2f4f6;
-        color: var(--point-color);
-    }
-
-    .menu-group { margin-top: 24px; }
-    .group-title {
-        font-size: 12px;
-        font-weight: 700;
-        color: var(--text-tertiary);
-        padding-left: 20px;
-        margin-bottom: 8px;
-    }
-
-    .sub-link {
-        display: block;
-        text-decoration: none;
-        padding: 12px 20px;
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--text-secondary);
+    .nav-item {
+        padding: 14px 16px;
         border-radius: 12px;
-        margin-left: 12px;
+        font-weight: 600;
+        color: var(--text-sub);
+        cursor: pointer;
+        margin-bottom: 4px;
+        transition: 0.2s;
     }
 
-    .sub-link:hover { color: var(--point-color); }
+    .nav-item:hover,
+    .nav-item.active {
+        background-color: #f9fafb;
+        color: var(--toss-blue);
+    }
 
-    /* --- 메인 콘텐츠 영역 (화면 전체 확장) --- */
     main {
-        margin-left: 280px; /* 사이드바 너비만큼 제외 */
-        padding: 40px 40px 60px 40px;
-        width: calc(100% - 280px); /* 남은 너비 모두 사용 */
+        margin-left: 280px;
+        padding: 40px 20px;
+        width: auto;
         flex-grow: 1;
+        box-sizing: border-box;
     }
 
     header {
@@ -359,25 +328,20 @@
     font-size: 14px;
     padding: 12px;
 }
-.btn-ghost:hover { color: var(--text-secondary);
-
-
-.refund-payment-key {
-    font-size: 12px;
-}
+.btn-ghost:hover { color: var(--text-secondary); }
 
 </style>
 <body>
-<nav class="side-navigation">
-    <div class="brand-logo">어울림 대시보드</div>
-    <ul class="menu-list">
-        <a href="/admin/users" class="menu-link">사용자</a>
-        <a href="/admin/users" class="menu-link">장소</a>
-        <a href="/admin/users" class="menu-link">룸</a>
-        <a href="/admin/users" class="menu-link">예약내역</a>
-        <a href="/admin/users" class="menu-link">결제내역</a>
-        <a href="/admin/notifications" class="menu-link">Q&A</a>
-        <a href="/admin/notices" class="menu-link">공지사항</a>
+<nav>
+    <div class="nav-brand">Console</div>
+    <ul class="nav-menu">
+        <li class="nav-item active">📊 대시보드</li>
+        <li class="nav-item">🏠 장소/방 관리</li>
+        <li class="nav-item">🫥 회원 관리</li>
+        <li class="nav-item">🧾 결제 내역</li>
+        <li class="nav-item">📫 Q&A</li>
+        <li class="nav-item">⭐ 리뷰 내역</li>
+        <li class="nav-item">🎧 고객 지원</li>
     </ul>
 </nav>
 <main>
