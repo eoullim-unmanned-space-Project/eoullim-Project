@@ -1,0 +1,21 @@
+/* --- 메인 콘텐츠 영역 (화면 전체 확장) --- */
+main {
+    margin-left: 120px; /* 사이드바 너비만큼 제외 */
+    padding: 40px 40px 60px 40px;
+    width: calc(100% - 120px); /* 남은 너비 모두 사용 */
+    flex-grow: 1;
+}
+
+td.profile-path {
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.place-table td {
+    padding: 24px 10px;
+    font-size: 15px;
+    border-bottom: 1px solid var(--line-subs);
+    color: var(--text-secondary);
+}
