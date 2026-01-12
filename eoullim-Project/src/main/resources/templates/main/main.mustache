@@ -49,8 +49,8 @@
 
     <section class="section">
         <div class="section-title">방금 올라온 후기</div>
-        {{#reviews}}
             <div class="review-grid">
+            {{#reviews}}
                 <div class="review-card">
                     <div class="review-header">
                         <div class="review-user">
@@ -60,8 +60,8 @@
                     </div>
                     <p class="review-content">{{content}}</p>
                 </div>
+            {{/reviews}}
             </div>
-        {{/reviews}}
 
         {{^reviews}}
             <div>아직 등록된 리뷰가 없습니다.</div>

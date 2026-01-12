@@ -1,31 +1,43 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
+<link rel="stylesheet" href="/css/review/review.css">
 {{> layout/header}}
+
 <body>
+<div class="review-form-container">
+    <h2>리뷰 수정</h2>
 
-<h2>리뷰 수정</h2>
+    <form action="/rooms/reviews/{{review.id}}" method="post">
+        <input type="hidden" name="placeId" value="{{placeId}}">
 
-<form action="/rooms/reviews/{{review.id}}" method="post">
-    <input type="hidden" name="placeId" value="{{placeId}}">
+        <div class="review-form-group">
+            <label>별점</label>
 
-    <div>
-        <label>별점</label>
-        <select name="rating">
-            <option value="5" {{#isRating5}}selected{{/isRating5}}>★★★★★</option>
-            <option value="4" {{#isRating4}}selected{{/isRating4}}>★★★★</option>
-            <option value="3" {{#isRating3}}selected{{/isRating3}}>★★★</option>
-            <option value="2" {{#isRating2}}selected{{/isRating2}}>★★</option>
-            <option value="1" {{#isRating1}}selected{{/isRating1}}>★</option>
-        </select>
-    </div>
+            <div class="star-rating" aria-label="별점 선택">
+                <input type="radio" id="u-star5" name="rating" value="5" {{#isRating5}}checked{{/isRating5}}>
+                <label for="u-star5" title="5점">★</label>
 
-    <div>
-        <label>리뷰 내용</label><br>
-        <textarea name="content" rows="5" cols="40"
-                  placeholder="리뷰를 입력하세요">{{review.content}}</textarea>
-    </div>
+                <input type="radio" id="u-star4" name="rating" value="4" {{#isRating4}}checked{{/isRating4}}>
+                <label for="u-star4" title="4점">★</label>
 
-    <button type="submit">수정</button>
-</form>
+                <input type="radio" id="u-star3" name="rating" value="3" {{#isRating3}}checked{{/isRating3}}>
+                <label for="u-star3" title="3점">★</label>
+
+                <input type="radio" id="u-star2" name="rating" value="2" {{#isRating2}}checked{{/isRating2}}>
+                <label for="u-star2" title="2점">★</label>
+
+                <input type="radio" id="u-star1" name="rating" value="1" {{#isRating1}}checked{{/isRating1}}>
+                <label for="u-star1" title="1점">★</label>
+            </div>
+        </div>
+
+        <div class="review-form-group">
+            <label>리뷰 내용</label>
+            <textarea name="content" rows="5" placeholder="리뷰를 입력하세요">{{review.content}}</textarea>
+        </div>
+
+        <button type="submit" class="review-submit-btn">수정 완료</button>
+    </form>
+</div>
 </body>
+
 {{> layout/footer}}

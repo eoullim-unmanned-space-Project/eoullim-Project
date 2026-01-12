@@ -1,32 +1,44 @@
-<link rel="stylesheet" href="/css/user/loginStyle.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
+<link rel="stylesheet" href="/css/review/review.css">
 {{> layout/header}}
+
 <body>
+<div class="review-form-container">
+    <h2>리뷰 작성</h2>
 
-<h2>리뷰 작성</h2>
+    <form action="/rooms/{{roomId}}/reviews" method="post">
+        <input type="hidden" name="placeId" value="{{placeId}}">
+        <input type="hidden" name="paymentId" value="{{paymentId}}">
 
-<form action="/rooms/{{roomId}}/reviews" method="post">
-    <input type="hidden" name="placeId" value="{{placeId}}">
-    <input type="hidden" name="paymentId" value="{{paymentId}}">
-    <div>
-        <label>별점</label>
-        <select name="rating">
-            <option value="5">★★★★★</option>
-            <option value="4">★★★★</option>
-            <option value="3">★★★</option>
-            <option value="2">★★</option>
-            <option value="1">★</option>
-        </select>
-    </div>
+        <div class="review-form-group">
+            <label>별점</label>
 
-    <div>
-        <label>리뷰 내용</label><br>
-        <textarea name="content" rows="5" cols="40"
-                  placeholder="리뷰를 입력하세요"></textarea>
-    </div>
+            <div class="star-rating" aria-label="별점 선택">
+                <input type="radio" id="star5" name="rating" value="5" checked>
+                <label for="star5" title="5점">★</label>
 
-    <button type="submit">등록</button>
+                <input type="radio" id="star4" name="rating" value="4">
+                <label for="star4" title="4점">★</label>
 
-</form>
+                <input type="radio" id="star3" name="rating" value="3">
+                <label for="star3" title="3점">★</label>
+
+                <input type="radio" id="star2" name="rating" value="2">
+                <label for="star2" title="2점">★</label>
+
+                <input type="radio" id="star1" name="rating" value="1">
+                <label for="star1" title="1점">★</label>
+            </div>
+        </div>
+
+        <div class="review-form-group">
+            <label>리뷰 내용</label>
+            <textarea name="content" rows="5" placeholder="리뷰를 입력하세요"></textarea>
+        </div>
+
+        <button type="submit" class="review-submit-btn">등록하기</button>
+    </form>
+</div>
 </body>
+
 {{> layout/footer}}

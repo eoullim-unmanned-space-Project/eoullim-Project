@@ -1,5 +1,6 @@
 package org.example.eoullimback.qaa;
 
+import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback.user_auth.user.User;
 
 public interface QaaService {
@@ -12,4 +13,6 @@ public interface QaaService {
     QaaResponse.UpdateFormDTO update(Long qaaId, QaaRequest.UpdateDTO updateRequest, User sessionUser);
 
     void delete(Long qaaId, User sessionUser);
+
+    QaaResponse.ListPageDTO myQaaList(Long userId, int page, int size);
 }

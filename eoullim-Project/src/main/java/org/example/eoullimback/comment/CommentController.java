@@ -22,8 +22,7 @@ public class CommentController {
             HttpSession session
     ) {
 
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+        User sessionUser = (User) session.getAttribute("sessionUser");
         commentService.createComment(saveRequest, sessionUser.getId());
 
         return "redirect:/qaas/" + saveRequest.getQaaId();
@@ -34,8 +33,7 @@ public class CommentController {
     public String updateForm(@PathVariable Long id,
                              HttpSession session
     ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+        User sessionUser = (User) session.getAttribute("sessionUser");
         Long qaaId = commentService.getQaaIdByCommentId(id);
 
         session.setAttribute("commentId", id);
@@ -49,8 +47,7 @@ public class CommentController {
                                 CommentRequest.UpdateDTO request,
                                 HttpSession session
     ) {
-//        User sessionUser =  (User)session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+        User sessionUser =  (User)session.getAttribute("sessionUser");
         Long qaaId = commentService.getQaaIdByCommentId(id);
 
         commentService.updateComment(request, id, sessionUser.getId());
@@ -60,28 +57,13 @@ public class CommentController {
         return "redirect:/qaas/" + qaaId;
     }
 
-    @PostMapping("comments/{id}/delete")
+    @PostMapping("/comments/{id}/delete")
     public String deleteComment(@PathVariable(name = "id") Long commentId,
                                 HttpSession session
     ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+        User sessionUser = (User) session.getAttribute("sessionUser");
         Long qaaId = commentService.deleteComment(commentId, sessionUser.getId());
 
         return "redirect:/qaas/" + qaaId;
     }
-
-    // TODO : 유저 더미 (삭제 예정)
-    private User getLoginUserId(HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            User dummyUser = new User();
-            dummyUser.setId(1L);
-            session.setAttribute("sessionUser", dummyUser);
-            return dummyUser;
-        }
-        return sessionUser;
-    }
-
 }

@@ -1,0 +1,359 @@
+/* ======================
+   메인 영역
+====================== */
+.mypage-main {
+    flex: 1;
+    padding: 40px;
+    background: white;
+}
+
+/* ======================
+   SEARCH
+====================== */
+.booking-search {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.booking-search h2 {
+    font-size: 18px;
+    margin-bottom: 14px;
+}
+
+.booking-search-row {
+    display: flex;
+    gap: 10px;
+}
+
+.booking-input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+.booking-search-btn {
+    padding: 0 18px;
+    border-radius: 14px;
+    border: none;
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.booking-search-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-1px);
+}
+
+/* ======================
+   REVIEW LIST & CARD
+====================== */
+.booking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px; /* 필터가 없으니 간격 확보 */
+}
+
+.booking-card {
+    display: flex;
+    gap: 18px;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transition: transform 0.15s ease;
+}
+
+.booking-card:hover {
+    transform: translateY(-3px);
+}
+
+.booking-thumb {
+    width: 140px;
+    height: 120px;
+    border-radius: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f3f4f6;
+}
+
+.booking-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.booking-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.booking-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.booking-place {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.booking-status {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.booking-status.confirmed {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.booking-status.used {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.booking-status.cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.booking-card-body {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+.booking-info-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.booking-info-row .label {
+    width: 70px;
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+.booking-info-row.price span:last-child {
+    font-weight: 700;
+    color: #111827;
+}
+
+.booking-code {
+    font-weight: 700;
+}
+
+/* 별점 라인 */
+.booking-info-row span:last-child {
+    letter-spacing: 0.5px;
+}
+
+.booking-card-footer {
+    margin-top: 12px;
+    text-align: right;
+}
+
+/* 리뷰 작성/수정 버튼 */
+.booking-detail-btn {
+    display: inline-block; /* a 태그 버튼화 */
+    padding: 9px 18px;
+    border-radius: 8px;
+    background: #6366f1;
+    color: white;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(99, 102, 241, 0.25);
+    transition: all 0.2s ease;
+    text-decoration: none; /* a 밑줄 제거 */
+}
+
+.booking-detail-btn:hover {
+    transform: translateY(-1px);
+    background: #4f46e5;
+}
+
+.booking-detail-btn:active {
+    background-color: #1f2937;
+}
+
+/* ======================
+   EMPTY CARD
+====================== */
+.empty-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 28px 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    text-align: center;
+    color: #6b7280;
+}
+
+.empty-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.empty-desc {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/*********************************/
+/************* 모달 ***************/
+/*********************************/
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.receipt-card {
+    position: relative;
+    width: 360px;
+    background-color: #ffffff;
+    padding: 40px 24px 24px;
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    box-sizing: border-box;
+    color: #191f28;
+}
+
+/* 상단 우측 X 버튼 */
+.btn-close {
+    position: absolute;
+    top: 20px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #adb5bd;
+    padding: 8px;
+}
+
+/* 상단 헤더 */
+.receipt-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.receipt-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #191f28;
+    margin: 16px 0 8px 0;
+}
+
+.receipt-header .date {
+    font-size: 14px;
+    color: #6b7684;
+}
+
+/* 상세 정보 */
+.info-box {
+    background-color: #f9fafb;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.label {
+    font-size: 14px;
+    color: #6b7684;
+}
+
+.value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #191f28;
+}
+
+/* 금액 표시 */
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px;
+    margin-bottom: 32px;
+}
+
+.total-label {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.total-amount {
+    font-size: 24px;
+    font-weight: 700;
+    color: #3182f6;
+}
+
+/* 리뷰 작성/수정 버튼*/
+.btn-refund {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e5e8eb;
+    font-size: 15px;
+    font-weight: 600;
+    color: #191f28;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.btn-refund:hover {
+    background: #f3f4f6;
+    transform: translateY(-1px);
+}
+
+/* 하단 주문 번호 */
+.order-id {
+    display: block;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #191f28;
+}

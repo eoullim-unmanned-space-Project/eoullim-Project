@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="/css/layout/header.css">
+<link rel="stylesheet" href="/css/user/qna.css">
+{{> layout/header}}
+
+<div class="user-container">
+    {{> layout/sideBar}}
+
+    <section class="user-main">
+        <h2>Q&A</h2>
+
+        <div class="qna-form">
+            <h3>질문 작성</h3>
+            <form action="/user/qna" method="post">
+                <div class="info-row">
+                    <label>제목</label>
+                    <input type="text" name="title" placeholder="질문 제목을 입력하세요" required>
+                </div>
+                <div class="info-row">
+                    <label>내용</label>
+                    <textarea name="content" placeholder="질문 내용을 입력하세요" required></textarea>
+                </div>
+                <button type="submit" class="edit-btn full-btn">작성</button>
+            </form>
+        </div>
+
+        <div class="qna-box">
+            <h3>내 질문 목록</h3>
+
+            {{#qaaPage.list}}
+                <div class="qna-item">
+                    <div class="qna-question">
+                        <span>Q.</span>
+                        <a href="/user/qna/{{id}}">{{title}}</a>
+                        <span class="qna-meta">조회수 {{viewCount}} · {{createdAt}}</span>
+                    </div>
+
+                    <div class="qna-actions">
+                        <a href="/user/qna/{{id}}/edit" class="edit-btn">수정</a>
+                        <form action="/user/qna/{{id}}/delete" method="post">
+                            <button class="delete-btn">삭제</button>
+                        </form>
+                    </div>
+                </div>
+            {{/qaaPage.list}}
+
+            {{^qaaPage.list}}
+                <div class="empty-text">아직 작성한 질문이 없습니다.</div>
+            {{/qaaPage.list}}
+        </div>
+    </section>
+</div>
+
+{{> layout/footer}}
