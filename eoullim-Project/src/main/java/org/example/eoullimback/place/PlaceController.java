@@ -14,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,6 +66,7 @@ public class PlaceController {
     @GetMapping("/place/{placeId}/room")
     public String ListRoom(Model model,
                            @PathVariable Long placeId,
+//                           @RequestParam(required = false) Long roomId,
                            HttpSession session
     ) {
         // 리뷰 작성 시 로그인
@@ -77,9 +80,9 @@ public class PlaceController {
         if (!roomList.isEmpty()) {
             Long roomId = roomList.get(0).getRoomId();
             model.addAttribute("roomId", roomId);
-            List<ReviewResponse.ListDTO> reviews = reviewService.findByRoom(userId, roomId);
+            List<ReviewResponse.ListDTO> reviews = reviewService.findByRoom(userId, placeId, roomId);
             model.addAttribute("reviews", reviews);
-            if(userId != null){
+            if (userId != null) {
                 List<ReviewablePaymentDTO> reviewablePayments =
                         reviewService.findReviewablePayments(userId, roomId);
                 model.addAttribute("reviewablePayments", reviewablePayments);

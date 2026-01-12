@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ReviewService {
 
-    List<ReviewResponse.ListDTO> findByRoom(Long userId, Long roomId);
+    List<ReviewResponse.ListDTO> findByRoom(Long sessionUserId, Long placeId, Long roomId);
 
     void create(Long userId, Long roomId, ReviewRequest.@Valid CreateDTO request);
 

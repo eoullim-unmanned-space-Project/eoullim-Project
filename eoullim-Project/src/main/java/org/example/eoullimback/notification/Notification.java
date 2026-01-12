@@ -71,4 +71,15 @@ public class Notification {
         this.sentAt = LocalDateTime.now();
     }
 
+    public void markAsFail() {
+        this.status = NotificationStatus.FAILED;
+    }
+
+    public void markAsCancel() {
+        this.status = NotificationStatus.FAILED;
+    }
+
+    public void markAsComplete() {
+        this.status = NotificationStatus.COMPLETED;
+    }
 }

@@ -7,6 +7,7 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.booking.BookingService;
+import org.example.eoullimback.notification.NotificationService;
 import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.payment.PaymentResponse;
 import org.example.eoullimback.payment.PaymentService;
@@ -38,6 +39,7 @@ public class UserApiController {
     private final BookingService bookingService;
     private final PaymentService paymentService;
     private final PaymentRefundService paymentRefundService;
+    private final NotificationService notificationService;
 
     @PostMapping("/api/email/send")
     public ResponseEntity<?> sendVerificationCode(@RequestBody UserRequest.EmailCheckDTO reqDTO) {
@@ -182,4 +184,16 @@ public class UserApiController {
 
         return ResponseEntity.ok().body(Map.of("message", "환불요청을 접수했습니다."));
     }
+
+    @PostMapping("/api/user/use-qrCode/{id}")
+    public ResponseEntity<?> useQrcode(HttpSession session, @PathVariable Long id) {
+
+        System.out.println(id + "1111111111111111111111111111111111111111111111111111111111");
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        notificationService.useQrcode(sessionUser.getId(), id);
+        return ResponseEntity.ok().body(null);
+    }
+
 }

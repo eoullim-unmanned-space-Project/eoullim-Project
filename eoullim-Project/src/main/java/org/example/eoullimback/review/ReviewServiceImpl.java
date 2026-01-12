@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,8 +30,8 @@ public class ReviewServiceImpl implements ReviewService{
     private final PaymentRepository paymentRepository;
 
     @Override
-    public List<ReviewResponse.ListDTO> findByRoom(Long sessionUserId, Long roomId) {
-        List<Review> reviews = reviewRepository.findByRoomId(roomId);
+    public List<ReviewResponse.ListDTO> findByRoom(Long sessionUserId, Long placeId, Long roomId) {
+        List<Review> reviews = reviewRepository.findByRoomAndPlace(placeId, roomId);
         return reviews.stream()
                 .map(r -> new ReviewResponse.ListDTO(r, sessionUserId))
                 .toList();
@@ -69,11 +68,10 @@ public class ReviewServiceImpl implements ReviewService{
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new Exception409(ErrorCode.USER_NOT_FOUND));
 
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new Exception409(ErrorCode.ROOM_NOT_FOUND));
-
-        Payment payment = paymentRepository.findById(request.getPaymentId())
+        Payment payment = paymentRepository.findByIdWithBookingAndRoom(request.getPaymentId())
                 .orElseThrow(() -> new Exception409(ErrorCode.PAYMENT_NOT_FOUND));
+
+        Room room = payment.getBooking().getRoom();
 
         Review review = Review.builder()
                 .user(user)
