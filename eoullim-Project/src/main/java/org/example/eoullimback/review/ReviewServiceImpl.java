@@ -31,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<ReviewResponse.ListDTO> findByRoom(Long sessionUserId, Long placeId, Long roomId) {
-        List<Review> reviews = reviewRepository.findByRoomAndPlace(placeId, roomId);
+        List<Review> reviews = reviewRepository.findByRoomAndPlace(roomId, placeId);
         return reviews.stream()
                 .map(r -> new ReviewResponse.ListDTO(r, sessionUserId))
                 .toList();

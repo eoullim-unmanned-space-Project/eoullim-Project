@@ -30,4 +30,12 @@ public interface QaaRepository extends JpaRepository<Qaa, Long> {
     @Modifying
     @Query("UPDATE Qaa q SET q.viewCount = q.viewCount + 1 WHERE q.id = :id")
     void increaseViewCount(@Param("id") Long id);
+
+    @Query(
+            value = "SELECT q FROM Qaa q JOIN FETCH q.user " +
+                    "WHERE q.user.id = :userId " +
+                    "ORDER BY q.createdAt DESC",
+            countQuery = "SELECT COUNT(q) FROM Qaa q WHERE q.user.id = :userId"
+    )
+    Page<Qaa> findMyQaaList(@Param("userId") Long userId, Pageable pageable);
 }

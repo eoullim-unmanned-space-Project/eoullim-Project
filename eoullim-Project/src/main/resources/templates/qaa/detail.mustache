@@ -12,27 +12,8 @@
             <h2><b>{{qaa.title}}</b></h2>
         </div>
 
-        <div class="qaa-btn-group" style="justify-content: flex-end">
-            <form action="/qaas/{{qaa.id}}/update" method="get">
-                <button class="qaa-btn qaa-btn-secondary">수정</button>
-            </form>
-            <form action="/qaas/{{qaa.id}}/delete" method="post">
-                <button class="qaa-btn qaa-btn-danger">삭제</button>
-            </form>
-        </div>
-
         <div class="qaa-content">
             {{qaa.content}}
-        </div>
-
-        <div class="qaa-card">
-            <form class="qaa-form" action="/qaa/{qaaId}/comments/new" method="post">
-                <input type="hidden" name="qaaId" value="{{qaa.id}}">
-                <textarea rows="2" name="content" placeholder="댓글을 입력하세요." style="justify-content: flex-start"></textarea>
-                <div class="qaa-btn-group" style="justify-content: flex-end">
-                    <button class="qaa-btn qaa-btn-primary" type="submit">댓글 등록</button>
-                </div>
-            </form>
         </div>
 
         {{#commentList}}

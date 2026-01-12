@@ -3,6 +3,8 @@ package org.example.eoullimback.qaa;
 import lombok.Data;
 import org.example.eoullimback._common.util.DateTimeUtil;
 
+import java.util.List;
+
 public class QaaResponse {
 
     @Data
@@ -41,6 +43,15 @@ public class QaaResponse {
             this.name = qaa.getUser() != null ? qaa.getUser().getName() : null;
             this.viewCount = qaa.getViewCount();
             this.createdAt = DateTimeUtil.toKstString(qaa.getCreatedAt());
+        }
+    }
+
+    @Data
+    public static class ListPageDTO {
+        private final List<ListDTO> list;
+
+        public ListPageDTO(List<ListDTO> list) {
+            this.list = list;
         }
     }
 

@@ -228,12 +228,74 @@ body {
 .review-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .review-card { background-color: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; height: 100%; margin-top: 10px;
   height: auto;   }
-.review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-.review-profile { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
-.review-user .user-name { font-weight: 600; margin: 0;  }
-.review-user .user-star { color: #facc15; margin: 0; font-size: 14px; }
-.review-content { font-size: 14px; line-height: 1.5; color: #374151; }
-.review-section hr { border: none; border: 1px solid #e5e7eb; }
+/* 헤더 정렬  */
+.review-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* 버튼 래퍼 */
+.review-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* form */
+.inline-form {
+  display: inline;
+  margin: 0;
+}
+
+/* 공통 버튼 스타일 */
+.review-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+/* 수정 버튼 */
+.review-btn.edit {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #4338ca;
+}
+
+.review-btn.edit:hover {
+  background: #e0e7ff;
+  transform: translateY(-1px);
+}
+
+/* 삭제 버튼 */
+.review-btn.delete {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #be123c;
+}
+
+.review-btn.delete:hover {
+  background: #ffe4e6;
+  transform: translateY(-1px);
+}
+
+/* 클릭감 */
+.review-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
 
 #map {
   pointer-events: none;

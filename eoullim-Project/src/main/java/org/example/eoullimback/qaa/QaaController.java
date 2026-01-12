@@ -4,6 +4,8 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback.comment.CommentResponse;
 import org.example.eoullimback.comment.CommentServiceImpl;
 import org.example.eoullimback.user_auth.user.User;
@@ -39,8 +41,8 @@ public class QaaController {
             @Valid QaaRequest.CreateDTO request
     ) {
 
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
         qaaService.createQaa(request, sessionUser);
         return "redirect:/qaas";
     }
@@ -65,47 +67,56 @@ public class QaaController {
     // Q&A 상세 보기 화면 요청
     // http://localhost:8080/qaas/{id}
     @GetMapping("/qaas/{id}")
-    public String detailQaaForm(@PathVariable(name = "id") Long qaaId,
+    public String detailQaaForm(@PathVariable Long id,
                                 Model model,
-                                HttpSession session
-    ) {
-        qaaService.increaseViewCount(qaaId);
+                                HttpSession session) {
 
-        QaaResponse.DetailDTO qaa = qaaService.qaaDetailResponse(qaaId);
+        qaaService.increaseViewCount(id);
 
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+        QaaResponse.DetailDTO qaa = qaaService.qaaDetailResponse(id);
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        Long sessionUserId = sessionUser != null ? sessionUser.getId() : null;
 
         boolean isOwner = sessionUser != null
                 && qaa.getUserId() != null
-                && qaa.getUserId().equals(sessionUser.getId());
+                && qaa.getUserId().equals(sessionUserId);
 
-        Long sessionUserId = sessionUser != null ? sessionUser.getId() : null;
+        Long editingCommentId = (Long) session.getAttribute("commentId");
 
-        Long commentId = (Long) session.getAttribute("commentId");
+        List<CommentResponse.ListDTO> commentList =
+                commentService.listComment(id, sessionUserId, editingCommentId);
 
-        List<CommentResponse.ListDTO> commentList = commentService.listComment(qaaId, sessionUserId, commentId);
-
-        model.addAttribute("isOwner", isOwner);
         model.addAttribute("qaa", qaa);
         model.addAttribute("commentList", commentList);
+        model.addAttribute("isOwner", isOwner);
+        model.addAttribute("sessionUser", sessionUser); // null 가능
 
         return "qaa/detail";
     }
 
-    // Q&A 수정 화면 요청
-    // http://localhost:8080/qaas/{id}/update
-    @GetMapping("/qaas/{id}/update")
+    @GetMapping("/user/qna/{id}/edit")
     public String editForm(@PathVariable Long id,
-                           Model model,
-                           HttpSession session
-    ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+                           HttpSession session,
+                           Model model) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
 
         QaaResponse.UpdateFormDTO qaa = qaaService.findUpdateForm(id, sessionUser.getId());
         model.addAttribute("qaa", qaa);
+        model.addAttribute("user", sessionUser);
         return "qaa/update-form";
+    }
+
+    @PostMapping("/user/qna/{id}/edit")
+    public String update(@PathVariable Long id,
+                         @Valid QaaRequest.UpdateDTO request,
+                         HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        qaaService.update(id, request, sessionUser);
+        return "redirect:/user/qna/" + id;
     }
 
     // Q&A 수정 요청 기능
@@ -115,8 +126,8 @@ public class QaaController {
                             @Valid QaaRequest.UpdateDTO updateRequest,
                             HttpSession session
     ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
         qaaService.update(id, updateRequest, sessionUser);
         return "redirect:/qaas";
     }
@@ -127,22 +138,76 @@ public class QaaController {
     public String deleteQaa(@PathVariable Long id,
                             HttpSession session
     ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+        User sessionUser = (User) session.getAttribute("sessionUser");
         qaaService.delete(id, sessionUser);
         return "redirect:/qaas";
     }
 
-    // TODO : 유저 더미 (삭제 예정)
-    private User getLoginUserId(HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+    @GetMapping("/user/qna")
+    public String myQnaPage(HttpSession session, Model model,
+                            @RequestParam(defaultValue = "1") int page,
+                            @RequestParam(defaultValue = "5") int size) {
 
-        if (sessionUser == null) {
-            User dummyUser = new User();
-            dummyUser.setId(1L);
-            session.setAttribute("sessionUser", dummyUser);
-            return dummyUser;
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        int pageIndex = Math.max(0, page - 1);
+
+        QaaResponse.ListPageDTO qaaPage =
+                qaaService.myQaaList(sessionUser.getId(), pageIndex, size);
+
+        model.addAttribute("qaaPage", qaaPage);
+        model.addAttribute("user", sessionUser);       // 사이드바용
+        model.addAttribute("sessionUser", sessionUser);
+
+        return "user/qna";
+    }
+
+    // 내 Q&A 작성
+    @PostMapping("/user/qna")
+    public String createMyQna(HttpSession session,
+                              @Valid QaaRequest.CreateDTO request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        qaaService.createQaa(request, sessionUser);
+        return "redirect:/user/qna";
+    }
+
+    @GetMapping("/user/qna/{id}")
+    public String myQnaDetail(@PathVariable Long id,
+                              HttpSession session,
+                              Model model) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        qaaService.increaseViewCount(id);
+        QaaResponse.DetailDTO qaa = qaaService.qaaDetailResponse(id);
+
+        if (!qaa.getUserId().equals(sessionUser.getId())) {
+            throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
-        return sessionUser;
+
+        Long editingCommentId = (Long) session.getAttribute("commentId");
+        List<CommentResponse.ListDTO> commentList =
+                commentService.listComment(id, sessionUser.getId(), editingCommentId);
+
+        model.addAttribute("qaa", qaa);
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("user", sessionUser);
+
+        return "user/qna-detail";
+    }
+
+
+
+    @PostMapping("/user/qna/{id}/delete")
+    public String delete(@PathVariable Long id, HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        qaaService.delete(id, sessionUser);
+        return "redirect:/user/qna";
     }
 }

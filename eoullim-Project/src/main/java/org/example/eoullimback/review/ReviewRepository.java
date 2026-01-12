@@ -43,4 +43,32 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<ReviewablePaymentDTO> findReviewablePayment(@Param("userId") Long userId,  @Param("roomId") Long roomId);
 
     boolean existsByPaymentId(Long paymentId);
+
+    @Query("""
+        SELECT new org.example.eoullimback.review.ReviewListItemDTO(
+            p.id,
+            p.orderId,
+            p.booking.room.id,
+            p.booking.room.place.id,
+            p.booking.room.name,
+            p.amount,
+            CASE WHEN r.id IS NULL THEN false ELSE true END,
+            r.id,
+            r.rating,
+            r.content
+        )
+        FROM Payment p
+        LEFT JOIN Review r ON r.payment.id = p.id
+        WHERE p.user.id = :userId
+          AND (:code = '' OR p.orderId LIKE %:code%)
+          AND (
+              (:status = 'WRITABLE' AND r.id IS NULL AND p.status = org.example.eoullimback._common.enums.payment.PaymentStatus.COMPLETED)
+              OR (:status = 'DONE' AND r.id IS NOT NULL)
+              OR (:status = '')
+          )
+        ORDER BY p.requestedAt DESC
+        """)
+    List<ReviewListItemDTO> findMyReviewList(@Param("userId") Long userId,
+                                             @Param("code") String code,
+                                             @Param("status") String status);
 }
