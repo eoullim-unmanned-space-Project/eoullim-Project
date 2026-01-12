@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/css/layout/header.css">
+<link rel="stylesheet" href="/css/user/booking.css">
+{{> layout/header}}
+<body>
+<div class="mypage-container">
+    {{> layout/sideBar}}
+    <!-- 메인 -->
+    <section class="mypage-main">
+
+        <div class="booking-search">
+            <h2>리뷰 조회</h2>
+            <div class="booking-search-row">
+                <input class="booking-input" type="text" placeholder="예약 코드를 입력해 주세요">
+                <button class="booking-search-btn">조회</button>
+            </div>
+        </div>
+        <div class="booking-filter">
+            <button class="booking-filter-btn">리뷰작성</button>
+            <button class="booking-filter-btn" data-status="PENDING">작성완료</button>
+        </div>
+
+        <div class="booking-list" id="booking-list">
+
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+    }) // DOM End point
+</script>
+
+</body>
+{{> layout/footer}}
