@@ -83,7 +83,6 @@ public class Payment extends BaseTimeEntity {
         private LocalDateTime approvedAt;
         private LocalDateTime cancelledAt;
 
-
         @Builder
         public Payment(User user, Booking booking, String orderId, String paymentKey, Long amount, PaymentMethod method, PaymentStatus status, String productName) {
             this.user = user;
