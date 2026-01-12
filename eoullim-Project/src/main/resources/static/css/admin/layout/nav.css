@@ -95,10 +95,11 @@ body {
 
 /* --- 메인 콘텐츠 영역 (화면 전체 확장) --- */
 main {
-    margin-left: 280px; /* 사이드바 너비만큼 제외 */
-    padding: 40px 40px 60px 40px;
-    width: calc(100% - 280px); /* 남은 너비 모두 사용 */
+    margin-left: 280px;
+    padding: 40px 20px;
+    width: auto;
     flex-grow: 1;
+    box-sizing: border-box;
 }
 
 header {

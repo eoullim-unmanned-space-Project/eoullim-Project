@@ -48,7 +48,9 @@
                 <td>{{createdAt}}</td>
                 <td>{{updatedAt}}</td>
                 <td>
-                    <button class="btn-detail">상세보기</button>
+                    <button class="action-button detail approve-btn" data-id="{{id}}">승인</button>
+                    <button class="action-button delete rejection-btn" data-id="{{id}}">거절</button>
+                    <button class="action-button update detail-btn" data-id="{{id}}">상세보기</button>
                 </td>
             </tr>
             {{/placePage.content}}

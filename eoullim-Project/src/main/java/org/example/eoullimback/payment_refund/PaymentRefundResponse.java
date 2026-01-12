@@ -35,7 +35,7 @@ public class PaymentRefundResponse {
         private String displayStatus;
         private PaymentMethod paymentMethod;
 
-        AdminListDTO(PaymentRefund paymentRefund) {
+        AdminListDTO(PaymentRefund paymentRefund, List<TimeSlotResponse.DetailDTO> timeSlots) {
             this.id = paymentRefund.getId();
             this.refundStatus = paymentRefund.getStatus();
             this.roomName = paymentRefund.getPayment().getBooking().getRoom().getName();
@@ -45,11 +45,7 @@ public class PaymentRefundResponse {
             this.paymentMethod = paymentRefund.getPayment().getMethod();
             this.createdAt = paymentRefund.getCreatedAt();
 
-            List<TimeSlot> slots = paymentRefund.getPayment().getBooking().getRoom().getTimeSlots();
-
-            this.timeSlots = slots.stream()
-                    .map(TimeSlotResponse.DetailDTO::new)
-                    .toList();
+            this.timeSlots = timeSlots;
 
             this.displayStatus =  switch (this.refundStatus) {
                 case REQUESTED -> "환불요청";
@@ -85,7 +81,7 @@ public class PaymentRefundResponse {
         private String reason;
         private LocalDateTime requestedAt;
 
-        AdminDetailDTO(PaymentRefund paymentRefund) {
+        AdminDetailDTO(PaymentRefund paymentRefund, List<TimeSlotResponse.DetailDTO> timeSlots) {
             this.id = paymentRefund.getId();
             this.refundStatus = paymentRefund.getStatus();
             this.roomName = paymentRefund.getPayment().getBooking().getRoom().getName();
@@ -97,11 +93,7 @@ public class PaymentRefundResponse {
             this.reason = paymentRefund.getReason();
             this.requestedAt = paymentRefund.getRequestedAt();
 
-            List<TimeSlot> slots = paymentRefund.getPayment().getBooking().getRoom().getTimeSlots();
-
-            this.timeSlots = slots.stream()
-                    .map(TimeSlotResponse.DetailDTO::new)
-                    .toList();
+            this.timeSlots = timeSlots;
 
             this.displayStatus =  switch (this.refundStatus) {
                 case REQUESTED -> "환불요청";

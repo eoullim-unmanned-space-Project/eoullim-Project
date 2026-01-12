@@ -8,12 +8,16 @@ SELECT * FROM time_slots;
 SELECT * FROM items;
 SELECT * FROM places;	
 SELECT * FROM rooms;
+
+SELECT * FROM rooms WHERE place_id = 2;
+
 SELECT * FROM users;
 SELECT * FROM user_roles;	
 SELECT * FROM bookings;
-SELECT * FROM payments;
+SELECT * FROM payments;	
 SELECT * FROM roles;
 SELECT * FROM payment_refunds;
+SELECT * FROM reviews;
 
 -- DELETE FROM payments WHERE id =1;
 -- DELETE FROM bookings WHERE id = 1;
@@ -254,7 +258,7 @@ CREATE TABLE payments (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
-  CHECK (status IN('READY','SUCCESS','FAILED','CANCELLED','REFUNDED')),
+  CHECK (status IN('READY','SUCCESS','FAILED','CANCELLED','REFUNDED', 'COMPLETED')),
 
   UNIQUE KEY `uk_payments_payment_key` (payment_key),
   
