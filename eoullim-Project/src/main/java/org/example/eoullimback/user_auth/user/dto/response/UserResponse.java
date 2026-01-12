@@ -143,6 +143,7 @@ public record UserResponse() {
                 case CANCELLED -> "결제취소";
                 case FAILED -> "결제실패";
                 case SUCCESS -> "결제성공";
+               case COMPLETED -> "이용완료";
             };
 
             if (!timeSlots.isEmpty()) {
