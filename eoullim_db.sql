@@ -19,8 +19,8 @@ SELECT * FROM roles;
 SELECT * FROM payment_refunds;
 SELECT * FROM reviews;
 
--- DELETE FROM payments WHERE id =1;
--- DELETE FROM bookings WHERE id = 1;
+DELETE FROM payments WHERE id =1;
+DELETE FROM bookings WHERE id = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;

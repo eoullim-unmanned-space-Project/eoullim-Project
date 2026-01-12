@@ -223,7 +223,7 @@
                                 </div>
                                 <div class="info-row">
                                     <span class="label">결제 상태</span>
-                                    <span class="value" id="r-status" style="color: #3182f6;">${data.displayStatus}</span>
+                                    <span class="value" id="r-status" style="color: #3182f6;" data-status="${data.displayStatus}">${data.displayStatus}</span>
                                 </div>
                             </section>
                             <div class="price-row">
@@ -253,6 +253,8 @@
                         const iconWrapper = container.querySelector('.receipt-header div');
                         const iconCheck = iconWrapper.querySelector('polyline');
 
+                       const status = statusElement.dataset.status;
+                       
                         if (status === '결제준비') {
                             statusText.style.color = "#6B7684";
                             statusElement.style.color = "#6B7684";
@@ -267,6 +269,14 @@
                             totalElement.style.color = "#19B36E";
                             iconWrapper.style.backgroundColor = "#E7F9F0";
                             iconCheck.setAttribute('stroke', "#19B36E");
+                            refundBtn.style.display = 'none';
+
+                        } else if (status === '이용완료') {
+                            statusText.style.color = "#6B7684";
+                            statusElement.style.color = "#6B7684";
+                            totalElement.style.color = "#6B7684";
+                            iconWrapper.style.backgroundColor = "#F2F4F6";
+                            iconCheck.setAttribute('stroke', "#6B7684");
                             refundBtn.style.display = 'none';
 
                         } else if (status === '결제취소' || status === '결제실패') {

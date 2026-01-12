@@ -20,7 +20,6 @@ public interface PaymentRefundRepository extends JpaRepository<PaymentRefund, Lo
             """)
     Optional<Payment> findByUserIdAndPaymentKey(@Param("userId")Long userId, @Param("paymentKey")String paymentKey);
 
-    boolean existsByPaymentAndStatus(Payment payment, RefundStatus status);
 
     Optional<PaymentRefund> findByPayment(Payment paymentEntity);
 
@@ -43,4 +42,6 @@ public interface PaymentRefundRepository extends JpaRepository<PaymentRefund, Lo
            WHERE pr.id = :id
            """)
     Optional<PaymentRefund> findByIdPayment(@Param("id")Long id);
+
+    boolean existsByPayment(Payment payment);
 }

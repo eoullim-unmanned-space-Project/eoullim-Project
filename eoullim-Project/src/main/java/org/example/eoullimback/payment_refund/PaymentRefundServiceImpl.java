@@ -54,7 +54,7 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
             throw new Exception400(ErrorCode.INVALID_PAYMENT_STATUS);
         }
 
-        if (paymentRefundRepository.existsByPaymentAndStatus(payment, RefundStatus.REQUESTED)) {
+        if (paymentRefundRepository.existsByPayment(payment)) {
             throw new Exception400(ErrorCode.ALREADY_REFUNDED);
         }
 
@@ -121,7 +121,11 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
             throw new Exception400(ErrorCode.EMPTY_REASON);
         }
 
+        Payment payment = refundEntity.getPayment();
+
         refundEntity.markReject(reason);
+
+        payment.markCompleted();
     }
 
     @Override
