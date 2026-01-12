@@ -169,6 +169,8 @@
                 let roomRoot = card.dataset.roomId;
                 let roomId = Number(roomRoot);
 
+                alert(roomId);
+
                 const response = await fetch(`/api/room/${roomId}`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
