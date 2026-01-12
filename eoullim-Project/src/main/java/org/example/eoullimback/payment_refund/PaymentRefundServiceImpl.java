@@ -1,14 +1,21 @@
 package org.example.eoullimback.payment_refund;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.payment.PaymentStatus;
 import org.example.eoullimback._common.enums.payment.RefundStatus;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception500;
+import org.example.eoullimback.booking.Booking;
+import org.example.eoullimback.booking.BookingRepository;
 import org.example.eoullimback.payment.Payment;
+import org.example.eoullimback.payment.PaymentRepository;
 import org.example.eoullimback.payment.PaymentResponse;
+import org.example.eoullimback.timeslot.TimeSlot;
+import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -18,7 +25,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -31,6 +40,8 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
     private String impSecret;
 
     private final PaymentRefundRepository paymentRefundRepository;
+    private final PaymentRepository paymentRepository;
+    private final BookingRepository bookingRepository;
 
     @Override
     @Transactional
@@ -62,8 +73,20 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
 
         List<PaymentRefund> refundEntities = paymentRefundRepository.findAllWithPayment();
 
+        List<Booking> bookingEntities = bookingRepository.findAllWithTimeSlot();
+
+        Map<String, List<TimeSlotResponse.DetailDTO>> slotsMap = bookingEntities.stream()
+                .collect(Collectors.groupingBy(
+                        Booking::getBookingCode,
+                        Collectors.mapping(b -> new TimeSlotResponse.DetailDTO(b.getTimeSlot()), Collectors.toList())
+                ));
+
         return refundEntities.stream()
-                .map(PaymentRefundResponse.AdminListDTO::new)
+                .map(refund -> {
+                    String bookingCode = refund.getPayment().getOrderId(); // 혹은 bookingCode 필드
+                    List<TimeSlotResponse.DetailDTO> slots = slotsMap.getOrDefault(bookingCode, List.of());
+                    return new PaymentRefundResponse.AdminListDTO(refund, slots);
+                })
                 .toList();
     }
 
@@ -73,7 +96,15 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
         PaymentRefund refundEntity = paymentRefundRepository.findByIdPayment(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.PAYMENT_REFUND_NOT_FOUND));
 
-        return new PaymentRefundResponse.AdminDetailDTO(refundEntity);
+        String bookingCode = refundEntity.getPayment().getOrderId();
+        List<Booking> bookingEntities = bookingRepository.findAllByBookingCodeWithTimeSlot(bookingCode)
+                .orElseThrow(() -> new Exception404(ErrorCode.TIMESLOT_NOT_FOUND));
+
+        List<TimeSlotResponse.DetailDTO> timeSlots = bookingEntities.stream()
+                .map(booking -> new TimeSlotResponse.DetailDTO(booking.getTimeSlot()))
+                .toList();
+
+        return new PaymentRefundResponse.AdminDetailDTO(refundEntity, timeSlots);
     }
 
     @Override
@@ -111,6 +142,15 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
 
         payment.markRefunded();
         refundEntity.markCompleted();
+
+        List<Booking> bookingEntities = bookingRepository.findAllByBookingCodeWithTimeSlot(payment.getBooking().getBookingCode())
+                .orElseThrow(() -> new Exception404(ErrorCode.TIMESLOT_NOT_FOUND));
+
+            for (Booking booking : bookingEntities) {
+                    booking.changeRefund();
+                    booking.getTimeSlot().open();
+                    log.info("환불이 정상적으로 처리되었습니다. 예약 상태:{}, 타임슬롯 상태:{}", booking.getStatus(), booking.getTimeSlot().getStatus());
+            }
     }
 
     private void cancelPortOne(String impUid, Long amount) {
