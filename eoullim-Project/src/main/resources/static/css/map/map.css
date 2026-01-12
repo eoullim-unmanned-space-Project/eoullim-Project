@@ -168,7 +168,7 @@ body {
 
 .space-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* 반응형 그리드 */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px;
 }
 
@@ -228,15 +228,13 @@ body {
 
 .space-name p:last-child {
     display: inline-block;
-    background: #4f46e5;
+    background: linear-gradient(135deg, #FEE500, #FFD400);
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: bold;
     color: white;
 }
-
-/**/
 
 .card {
     flex: 1 1 calc(25% - 12px);

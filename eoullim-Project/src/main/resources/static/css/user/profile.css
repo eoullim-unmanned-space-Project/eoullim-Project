@@ -116,3 +116,35 @@ hr {
     color: #888;
 }
 
+.kakao-status-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    width: fit-content;
+}
+
+.kakao-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.static-switch {
+    width: 44px;
+    height: 22px;
+    background-color: #FEE500;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+.static-circle {
+    width: 14px;
+    height: 14px;
+    background-color: #3C1E1E;
+    border-radius: 50%;
+    margin-left: auto;
+}

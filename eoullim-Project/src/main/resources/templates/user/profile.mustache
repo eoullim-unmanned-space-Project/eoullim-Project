@@ -63,13 +63,23 @@
             {{#sessionUser.canUpdateProfile}}
                 {{^isKakaoUser}}
 
-            <form action="/user/profile/edit" method="get">
-                <button type="submit" class="edit-btn">
-                    회원정보 수정
-                </button>
-            </form>
+                    <form action="/user/profile/edit" method="get">
+                        <button type="submit" class="edit-btn">
+                            회원정보 수정
+                        </button>
+                    </form>
+
                 {{/isKakaoUser}}
             {{/sessionUser.canUpdateProfile}}
+
+            {{#isKakaoUser}}
+                <div class="kakao-status-wrapper">
+                    <span class="kakao-label">카카오 로그인</span>
+                    <div class="static-switch">
+                        <div class="static-circle"></div>
+                    </div>
+                </div>
+            {{/isKakaoUser}}
         </div>
     </main>
 </div>
