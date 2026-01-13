@@ -7,18 +7,102 @@ import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.enums.payment.PaymentMethod;
 import org.example.eoullimback._common.enums.payment.PaymentStatus;
 import org.example.eoullimback._common.enums.payment.RefundStatus;
+import org.example.eoullimback._common.enums.user.OAuthProvider;
+import org.example.eoullimback._common.enums.user.Status;
 import org.example.eoullimback.booking.Booking;
 import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.payment_refund.PaymentRefund;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.example.eoullimback.user_auth.user.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
 public record UserResponse() {
+
+    @Data
+    public static class AdminUserDetailDTO {
+        private Long id;
+        private String loginId;
+        private String name;
+        private String phone;
+        private String email;
+        private Status status;
+        private OAuthProvider provider;
+        private String displayProvider;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+        private String suspendedReason;
+        private LocalDateTime suspendedAt;
+        private LocalDateTime withdrawnAt;
+
+        public AdminUserDetailDTO(User user) {
+            this.id = user.getId();
+            this.loginId = user.getLoginId();
+            this.name = user.getName();
+            this.phone = user.getPhone() != null ? user.getPhone() : "/";
+            this.email = user.getEmail() != null ? user.getEmail() : "/";
+            this.status = user.getStatus();
+            this.provider = user.getProvider() != null
+                    ? user.getProvider()
+                    : OAuthProvider.LOCAL;
+
+            this.createdAt = user.getCreatedAt();
+            this.updatedAt = user.getUpdatedAt();
+
+            this.displayProvider = switch (this.provider) {
+                case KAKAO -> "KAKAO";
+                case NAVER -> "NAVER";
+                case LOCAL -> "LOCAL";
+                case GOOGLE -> "GOOGLE";
+            };
+
+            this.suspendedReason = user.getSuspendedReason();
+            this.suspendedAt = user.getSuspendedAt();
+            this.withdrawnAt = user.getWithdrawnAt();
+        }
+    }
+
+    @Data
+    @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class AdminListDTO {
+        private Long id;
+        private String loginId;
+        private String name;
+        private Status status;
+        private String displayStatus;
+        private OAuthProvider provider;
+        private String displayProvider;
+        private LocalDate createdAt;
+
+        public AdminListDTO(User user) {
+            this.id = user.getId();
+            this.loginId = user.getLoginId();
+            this.name = user.getName();
+            this.status = user.getStatus();
+            this.provider = user.getProvider() != null
+                    ? user.getProvider()
+                    : OAuthProvider.LOCAL;
+            this.createdAt = LocalDate.from(user.getCreatedAt());
+
+            this.displayStatus = switch (this.status) {
+                case ACTIVE -> "활성화";
+                case WITHDRAWN -> "탈퇴";
+                case SUSPENDED -> "정지";
+            };
+
+
+            this.displayProvider = switch (this.provider) {
+                case KAKAO -> "KAKAO";
+                case NAVER -> "NAVER";
+                case LOCAL -> "LOCAL";
+                case GOOGLE -> "GOOGLE";
+            };
+        }
+    }
 
     public record Detail(
             String name,

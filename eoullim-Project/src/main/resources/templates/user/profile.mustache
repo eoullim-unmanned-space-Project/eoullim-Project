@@ -27,50 +27,61 @@
             </div>
 
             <p class="username"><span>{{user.name}}</span>님</p>
-{{^isKakaoUser}}
-            <div class="info-row">
-                <label class="label">휴대전화</label>
-                <input
-                        type="tel"
-                        name="phone"
-                        class="value-input"
-                        value="{{phone}}"
-                />
-            </div>
+            {{^isKakaoUser}}
+                <div class="info-row">
+                    <label class="label">휴대전화</label>
+                    <input
+                            type="tel"
+                            name="phone"
+                            class="value-input"
+                            value="{{phone}}"
+                            readonly
+                    />
+                </div>
 
-            <div class="info-row">
-                <label class="label">이메일(ID)</label>
-                <input
-                        type="email"
-                        name="email"
-                        class="value-input"
-                        value="{{user.email}}"
-                        readonly
-                />
-            </div>
+                <div class="info-row">
+                    <label class="label">이메일(ID)</label>
+                    <input
+                            type="email"
+                            name="email"
+                            class="value-input"
+                            value="{{user.email}}"
+                            readonly
+                    />
+                </div>
 
-            <div class="info-row">
-                <label class="label">가입일</label>
-                <input
-                        type="email"
-                        name="email"
-                        class="value-input"
-                        value="{{user.createdAt}}"
-                        readonly
-                />
-            </div>
-{{/isKakaoUser}}
+                <div class="info-row">
+                    <label class="label">가입일</label>
+                    <input
+                            type="email"
+                            name="email"
+                            class="value-input"
+                            value="{{user.createdAt}}"
+                            readonly
+                    />
+                </div>
+
+                <div class="btn-wrapper">
+                    <form action="/user/leave" method="POST"
+                          onsubmit="return confirm('정말 탈퇴하시겠습니까?')">
+<!--                        <label class="label">회원탈퇴</label>-->
+                        <button type="submit" class="edit-btn">
+                            탈퇴하기
+                        </button>
+                    </form>
+                </div>
+            {{/isKakaoUser}}
             {{#sessionUser.canUpdateProfile}}
                 {{^isKakaoUser}}
 
-                    <form action="/user/profile/edit" method="get">
-                        <button type="submit" class="edit-btn">
-                            회원정보 수정
-                        </button>
-                    </form>
-
+                    <!--                    <form action="/user/profile/edit" method="get">-->
+                    <!--                        <button type="submit" class="edit-btn">-->
+                    <!--                            회원정보 수정-->
+                    <!--                        </button>-->
+                    <!--                    </form>-->
                 {{/isKakaoUser}}
             {{/sessionUser.canUpdateProfile}}
+
 
             {{#isKakaoUser}}
                 <div class="kakao-status-wrapper">
@@ -83,5 +94,6 @@
         </div>
     </main>
 </div>
+
 </body>
 {{> layout/footer}}

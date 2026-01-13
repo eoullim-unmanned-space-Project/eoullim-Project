@@ -5,6 +5,7 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.Status;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
+import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.*;
@@ -28,6 +29,11 @@ public class AuthServiceImpl implements AuthService {
 
         request.validate();
 
+        boolean exists = userRepository.existsByEmailAndStatus(request.getEmail(), Status.ACTIVE);
+        if (exists) {
+            throw new Exception400(ErrorCode.DUPLICATE_EMAIL);
+        }
+
         String hashPwd = passwordEncoder.encode(request.getPassword());
 
         User user = request.toEntity();
@@ -44,15 +50,20 @@ public class AuthServiceImpl implements AuthService {
         User userEntity = authRepository.findByLoginIdWithRoles(request.getLoginId())
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
-        if (userEntity.getStatus() == Status.WITHDRAWN) {
-            throw new Exception400(ErrorCode.USER_STATUS_WITHDRAWN);
-        }
-
         if (!passwordEncoder.matches(request.getPassword(),
                 userEntity.getPassword()
         )) {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
+
+        if (userEntity.getStatus() == Status.WITHDRAWN) {
+            throw new Exception403(ErrorCode.USER_STATUS_WITHDRAWN);
+        }
+        if (userEntity.getStatus() == Status.SUSPENDED) {
+            throw new Exception403(ErrorCode.USER_STATUS_SUSPENDED, userEntity.getSuspendedReason());
+        }
+
+
 
         return userEntity;
     }

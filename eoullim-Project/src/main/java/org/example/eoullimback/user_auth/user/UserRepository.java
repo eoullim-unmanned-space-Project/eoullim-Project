@@ -1,7 +1,6 @@
 package org.example.eoullimback.user_auth.user;
 
-import jakarta.servlet.http.HttpSession;
-import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
+import org.example.eoullimback._common.enums.user.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -18,4 +17,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByNameAndEmail(String name, String email);
 
     Optional<User> findByLoginIdAndEmail(String loginId, String email);
+
+    Optional<User> findByEmailAndStatus(String email, Status status);
+
+    Optional<User> findByNameAndEmailAndStatus(String name, String email, Status status);
+
+    Optional<User> findByLoginIdAndEmailAndStatus(String loginId, String email, Status status);
+
+    boolean existsByEmailAndStatus(String email, Status status);
 }

@@ -56,10 +56,13 @@ CREATE TABLE users (
   status VARCHAR(20) NOT NULL COMMENT '사용자 상태',
   
   provider VARCHAR(20) NOT NULL DEFAULT 'LOCAL',
+  
+  suspended_reason VARCHAR(255) NULL COMMENT '회원 정지 사유',
 
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 계정 생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '사용자 계정(프로필) 수정일',
   withdrawn_at DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '사용자 탈퇴일',
+  suspended_at DATETIME(6) NULL COMMENT '회원 정지 일시',
 
   CHECK(status IN('ACTIVE', 'WITHDRAWN', 'SUSPENDED')),
 

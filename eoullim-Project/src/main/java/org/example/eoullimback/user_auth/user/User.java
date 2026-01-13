@@ -59,6 +59,12 @@ public class User extends BaseTimeEntity {
     @ColumnDefault("'LOCAL'")
     private OAuthProvider provider;
 
+    @Column(name = "suspended_reason", length = 255)
+    private String suspendedReason;
+
+    @Column(name = "suspended_at")
+    private LocalDateTime suspendedAt;
+
     @Builder
     public User(Long id, String loginId, String password, String name,
                 String phone, String email, Status status, String profileImage,
@@ -147,5 +153,18 @@ public class User extends BaseTimeEntity {
 
     public boolean canUpdateProfile() {
         return isLocalUser();
+    }
+
+    public void suspend(String reason) {
+        this.status = Status.SUSPENDED;
+        this.suspendedReason = reason;
+        this.suspendedAt = LocalDateTime.now();
+    }
+
+    public void restore() {
+        this.status = Status.ACTIVE;
+        this.suspendedReason = null;
+        this.suspendedAt = null;
+        this.withdrawnAt = null;
     }
 }

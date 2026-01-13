@@ -148,3 +148,25 @@ hr {
     border-radius: 50%;
     margin-left: auto;
 }
+
+.btn-wrapper {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 16px;
+}
+
+.btn-wrapper .edit-btn {
+    width: auto;
+    padding: 12px 32px;
+    margin: 0 16px;
+    border-radius: 8px;
+    background: #e11d48;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-wrapper .edit-btn:hover {
+    background: #be123c;
+}

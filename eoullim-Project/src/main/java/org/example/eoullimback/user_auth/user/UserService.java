@@ -1,6 +1,9 @@
 package org.example.eoullimback.user_auth.user;
 
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
+import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
+
+import java.util.List;
 
 public interface UserService {
     User getMyProfile(Long id);
@@ -23,4 +26,12 @@ public interface UserService {
     User findByUserIdAndEmail(String userId, String email);
 
     void updatePassword(String userId, String newPassword);
+
+    List<UserResponse.AdminListDTO> getUserList();
+
+    User findById(Long userId);
+
+    void suspendUser(Long userId, String reason);
+
+    void restoreUser(Long userId);
 }
