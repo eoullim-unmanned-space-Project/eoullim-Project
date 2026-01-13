@@ -4,4 +4,6 @@ import java.time.YearMonth;
 
 public interface TimeSlotSchedulerService {
     void createNextMonthTimeSlot(YearMonth nextMonth);
+
+    void releaseHoldSlots();
 }

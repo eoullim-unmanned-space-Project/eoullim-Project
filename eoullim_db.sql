@@ -11,7 +11,9 @@ SELECT * FROM rooms;
 
 SELECT * FROM rooms WHERE place_id = 2;
 
+SELECT * FROM time_slots;
 SELECT * FROM users;
+SELECT * FROM rooms;
 SELECT * FROM user_roles;	
 SELECT * FROM bookings;
 SELECT * FROM payments;	
@@ -182,8 +184,10 @@ CREATE TABLE time_slots (
   end_time DATETIME(6) NOT NULL COMMENT '종료시간',
   capacity INT NOT NULL COMMENT '인원 수 지정',
   status VARCHAR(20) NOT NULL DEFAULT 'OPEN' COMMENT '슬롯 상태',
-
-  CHECK (status IN('OPEN','CLOSED')),
+  
+  holdexpired_at DATETIME(6) NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '대기된 시간',
+  
+  CHECK (status IN('OPEN','CLOSED','HOLD')),
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
 
   UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_Month, start_time),
