@@ -167,9 +167,13 @@
                     try {
                         const response = await fetch(`/api/user/payment?code=${bookingCode}`);
 
-                        const data = await response.json();
-
-                        modal(data);
+                        if(response.ok) {
+                           const data = await response.json();
+                           modal(data);
+                        } else {
+                            alert("결제 내역을 불러오는중 오류가 발생하였습니다.");
+                            location.reload();
+                        }
 
                     } catch(error) {
                         console.error("데이터를 불러오는 중 에러 발생:", error);
@@ -177,7 +181,6 @@
                     }
 
                   function modal(data) {
-
                     const refundStatus = data ? data.refundStatus : null;
                     const isPending = refundStatus === 'REQUESTED';
 
