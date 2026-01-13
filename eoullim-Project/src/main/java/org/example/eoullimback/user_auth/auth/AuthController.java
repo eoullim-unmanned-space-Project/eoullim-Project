@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
+import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.MailService;
@@ -77,7 +78,22 @@ public class AuthController {
             User sessionUser = authService.login(request);
 
             session.setAttribute("sessionUser", sessionUser);
-            return "redirect:/main/main";
+            return "redirect:/admin/place";
+
+        } catch (Exception403 e) {
+            String defaultMsg = e.getMessage();
+            String reason = e.getReason();
+
+            String loginErrorMsg;
+            if (reason != null && !reason.isEmpty()) {
+                loginErrorMsg = defaultMsg + "\n사유: " + reason;
+            } else {
+                loginErrorMsg = defaultMsg;
+            }
+
+            model.addAttribute("loginError", loginErrorMsg);
+
+            return "user/login";
 
         } catch (Exception400 | Exception401 | Exception404 e) {
             model.addAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");

@@ -1,0 +1,101 @@
+.app-header * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    width: 100%;
+}
+
+.header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.logo a { text-decoration: none; color: #111827; }
+.logo span { color: #4f46e5; }
+
+.nav {
+    display: flex;
+    gap: 32px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #6b7280;
+    font-weight: 500;
+    font-size: 15px;
+    transition: color 0.2s ease;
+}
+
+.nav a:hover {
+    color: #111827;
+}
+
+.header-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-auth a, .header-auth .name {
+    text-decoration: none;
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.header-auth .name { color: #111827; }
+.header-auth .divider { color: #e5e7eb; font-size: 12px; }
+
+.mode-toggle {
+    display: flex;
+    background: #f3f4f6;
+    border-radius: 999px;
+    padding: 4px;
+    gap: 4px;
+    margin-left: 20px;
+    border: 1px solid color: #191919;
+;
+}
+
+.toggle-btn {
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #6b7280;
+    transition: all 0.25s ease;
+}
+
+.toggle-btn.map.active {
+    background: linear-gradient(135deg, #FEE500, #FFD400);
+    color: white;
+    box-shadow: 0 6px 16px rgba(254, 229, 0, 0.45);
+}

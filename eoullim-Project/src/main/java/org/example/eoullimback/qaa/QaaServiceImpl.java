@@ -14,6 +14,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -106,5 +109,24 @@ public class QaaServiceImpl implements QaaService {
 
         commentRepository.deleteByQaaId(qaaId);
         qaaRepository.delete(qaa);
+    }
+
+    public QaaResponse.ListPageDTO myQaaList(Long userId, int page, int size) {
+        int validPage = Math.max(0, page);
+        int validSize = Math.max(1, Math.min(50, size));
+
+        Pageable pageable = PageRequest.of(
+                validPage,
+                validSize,
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+
+        List<Qaa> qaaList = qaaRepository.findMyQaaList(userId, pageable).getContent();
+
+        List<QaaResponse.ListDTO> dtoList = qaaList.stream()
+                .map(QaaResponse.ListDTO::new)
+                .collect(Collectors.toList());
+
+        return new QaaResponse.ListPageDTO(dtoList);
     }
 }

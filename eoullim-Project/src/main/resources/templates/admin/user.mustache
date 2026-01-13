@@ -411,19 +411,19 @@
             </div>
             <div class="data-row">
                 <span class="data-label">이메일</span>
-                <span class="data-value" style="color: var(--point-color);" id="user-email"></span>
+                <span class="data-value" id="user-email"></span>
             </div>
             <div class="data-row">
                 <span class="data-label">가입경로</span>
-                <span class="data-value" style="color: var(--point-color);" id="user-provider"></span>
+                <span class="data-value" id="user-provider"></span>
             </div>
             <div class="data-row">
                 <span class="data-label">가입일</span>
-                <span class="data-value" style="color: var(--point-color);" id="user-created-at"></span>
+                <span class="data-value" id="user-created-at"></span>
             </div>
             <div class="data-row">
                 <span class="data-label">수정일</span>
-                <span class="data-value" style="color: var(--point-color);" id="user-updated-at"></span>
+                <span class="data-value" id="user-updated-at"></span>
             </div>
             <div class="data-row">
                 <span class="data-label">현재 상태</span>
@@ -478,15 +478,37 @@
 
                     actionBtn.dataset.userId =userId;
 
-                    if (data.suspendedReason) {
+                    // if (data.suspendedReason) {
+                    //     suspendDiv.style.display = 'block';
+                    //     document.getElementById('suspendReasonInput').value = data.suspendedReason;
+                    //     actionBtn.innerText = "복구";
+                    //     actionBtn.className = "btn btn-primary"; // 파랑 or 초록
+                    //     actionBtn.onclick = restoreUser;
+                    // } else {
+                    //     actionBtn.innerText = "정지";
+                    //     actionBtn.className = "btn btn-danger"; // 빨강
+                    //     actionBtn.onclick = suspendUser;
+                    // }
+                    if (data.status === "SUSPENDED") {
+                        // 정지 상태일 때
                         suspendDiv.style.display = 'block';
-                        document.getElementById('suspendReasonInput').value = data.suspendedReason;
+                        document.getElementById('suspendReasonInput').value = data.suspendedReason || "";
                         actionBtn.innerText = "복구";
-                        actionBtn.className = "btn btn-primary"; // 파랑 or 초록
+                        actionBtn.className = "btn btn-primary";  // 파란 버튼
                         actionBtn.onclick = restoreUser;
+
+                    } else if (data.status === "WITHDRAWN") {
+                        // 탈퇴 상태일 때
+                        suspendDiv.style.display = 'none';  // 정지사유 없음
+                        actionBtn.innerText = "탈퇴복구";
+                        actionBtn.className = "btn btn-primary";  // 파란 버튼
+                        actionBtn.onclick = restoreUser;
+
                     } else {
+                        // 정상 상태 (ACTIVE 등)
+                        suspendDiv.style.display = 'none';
                         actionBtn.innerText = "정지";
-                        actionBtn.className = "btn btn-danger"; // 빨강
+                        actionBtn.className = "btn btn-danger";  // 빨간 버튼
                         actionBtn.onclick = suspendUser;
                     }
 

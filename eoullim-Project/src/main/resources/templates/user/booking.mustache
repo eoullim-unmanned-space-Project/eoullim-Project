@@ -22,6 +22,8 @@
             <button class="booking-filter-btn" data-status="REFUNDED">환불완료</button>
         </div>
 
+        <button id="use-qrcode-btn">asdf</button>
+
         <div class="booking-list" id="booking-list">
 
         </div>
@@ -33,6 +35,22 @@
         const bookingBtn = document.querySelector('.booking-search-btn');
         const bookingInput = document.querySelector('.booking-input');
         const filterRoot = document.querySelectorAll('.booking-filter');
+        const useqrcodebtn = document.getElementById('use-qrcode-btn');
+
+        useqrcodebtn.addEventListener("click", async () => {
+            const response = await fetch('/api/user/use-qrCode/2', {
+                method: 'POST',
+                headers: {
+                    "Content-Type" : "application/json"
+                }
+            });
+            if (!response.ok){
+                alert("값을 불러오는데 실패했습니다.");
+
+            }
+            alert("성공");
+        })
+
 
         async function sendSearch() {
             let bookingCode = bookingInput.value.trim() || '';
@@ -113,7 +131,7 @@
                 <div class="booking-content">
                     <div class="booking-card-header">
                         <span class="booking-place">🚩${booking.roomName}</span>
-                        <span class="booking-status confirmed">${booking.status}</span>
+                        <span class="booking-status confirmed" data-status="${[booking.status]}">${booking.status}</span>
                     </div>
 
                     <div class="booking-card-body">
@@ -139,12 +157,11 @@
                 </div>`;
 
                 bookingList.appendChild(card);
-                });
+            });
 
                 const detailBtns = document.querySelectorAll('.booking-detail-btn');
                 detailBtns.forEach(btn => {
                     btn.addEventListener('click', async () => {
-
                     const bookingCode = btn.dataset.code;
 
                     try {
@@ -206,7 +223,7 @@
                                 </div>
                                 <div class="info-row">
                                     <span class="label">결제 상태</span>
-                                    <span class="value" id="r-status" style="color: #3182f6;">${data.displayStatus}</span>
+                                    <span class="value" id="r-status" style="color: #3182f6;" data-status="${data.displayStatus}">${data.displayStatus}</span>
                                 </div>
                             </section>
                             <div class="price-row">
@@ -236,6 +253,8 @@
                         const iconWrapper = container.querySelector('.receipt-header div');
                         const iconCheck = iconWrapper.querySelector('polyline');
 
+                       const status = statusElement.dataset.status;
+                       
                         if (status === '결제준비') {
                             statusText.style.color = "#6B7684";
                             statusElement.style.color = "#6B7684";
@@ -250,6 +269,14 @@
                             totalElement.style.color = "#19B36E";
                             iconWrapper.style.backgroundColor = "#E7F9F0";
                             iconCheck.setAttribute('stroke', "#19B36E");
+                            refundBtn.style.display = 'none';
+
+                        } else if (status === '이용완료') {
+                            statusText.style.color = "#6B7684";
+                            statusElement.style.color = "#6B7684";
+                            totalElement.style.color = "#6B7684";
+                            iconWrapper.style.backgroundColor = "#F2F4F6";
+                            iconCheck.setAttribute('stroke', "#6B7684");
                             refundBtn.style.display = 'none';
 
                         } else if (status === '결제취소' || status === '결제실패') {

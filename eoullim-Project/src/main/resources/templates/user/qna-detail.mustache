@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="/css/layout/header.css">
+<link rel="stylesheet" href="/css/user/qna.css">
+{{> layout/header}}
+
+<div class="user-container">
+    {{> layout/sideBar}}
+
+    <section class="user-main">
+        <h2>Q&A 상세</h2>
+
+        <div class="qna-item">
+            <div class="qna-question">
+                <span>Q.</span> {{qaa.title}}
+                <span class="qna-meta">조회수 {{qaa.viewCount}} · {{qaa.createdAt}}</span>
+            </div>
+
+            <div class="qna-content">{{qaa.content}}</div>
+
+            <div class="qna-actions">
+                <a href="/user/qna" class="edit-btn">목록</a>
+                <a href="/user/qna/{{qaa.id}}/edit" class="edit-btn">수정</a>
+                <form action="/user/qna/{{qaa.id}}/delete" method="post">
+                    <button class="delete-btn">삭제</button>
+                </form>
+            </div>
+        </div>
+
+        <hr style="margin:24px 0;"/>
+
+        <h3>댓글</h3>
+
+        {{#commentList}}
+            <div style="border:1px solid #e5e7eb; border-radius:10px; padding:12px; margin-top:10px;">
+                <div style="font-size:12px; color:#6b7280;">{{name}} · {{createdAt}}</div>
+                <div style="white-space:pre-wrap; margin-top:6px;">{{content}}</div>
+            </div>
+        {{/commentList}}
+
+        {{^commentList}}
+            <div style="padding:12px; color:#6b7280;">아직 댓글이 없습니다.</div>
+        {{/commentList}}
+    </section>
+</div>
+
+{{> layout/footer}}

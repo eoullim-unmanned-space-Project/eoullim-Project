@@ -52,4 +52,18 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("SELECT b FROM Booking b JOIN FETCH b.timeSlot WHERE b.bookingCode = :bookingCode ORDER BY b.timeSlot.startTime DESC")
     Optional<List<Booking>> findByBookingCodeWithTimeSlots(@Param("bookingCode") String bookingCode);
+
+    @Query("""
+           SELECT b FROM Booking b
+           JOIN FETCH b.timeSlot ts
+           WHERE b.bookingCode = :bookingCode
+           ORDER BY ts.startTime
+           """)
+    Optional<List<Booking>> findAllByBookingCodeWithTimeSlot(@Param("bookingCode") String bookingCode);
+
+    @Query("""
+       SELECT b From Booking b
+       JOIN FETCH b.timeSlot
+    """)
+    List<Booking> findAllWithTimeSlot();
 }

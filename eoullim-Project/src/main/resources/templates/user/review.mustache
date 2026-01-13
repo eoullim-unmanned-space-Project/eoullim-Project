@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="/css/layout/header.css">
+<link rel="stylesheet" href="/css/user/review.css">
+{{> layout/header}}
+<body>
+<div class="mypage-container">
+    {{> layout/sideBar}}
+    <!-- 메인 -->
+    <section class="mypage-main">
+
+        <div class="booking-search">
+            <h2>리뷰 조회</h2>
+            <div class="booking-search-row">
+                <input class="booking-input" type="text" placeholder="예약 코드를 입력해 주세요">
+                <button class="booking-search-btn">조회</button>
+            </div>
+        </div>
+
+        <div class="booking-list" id="booking-list">
+
+        </div>
+    </section>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const searchBtn = document.querySelector(".booking-search-btn");
+        const searchInput = document.querySelector(".booking-input");
+        const listRoot = document.getElementById("booking-list");
+
+        const STATUS = "WRITABLE"; // 결제당 리뷰 1개 정책
+
+        async function sendSearch() {
+            const code = (searchInput.value || "").trim();
+
+            const res = await fetch(
+                    `/api/user/reviews?code=${encodeURIComponent(code)}&status=${STATUS}`
+            );
+
+            if (!res.ok) {
+                alert("리뷰 목록 조회 실패");
+                return;
+            }
+
+            const data = await res.json();
+            render(data);
+        }
+
+        function render(items) {
+            listRoot.innerHTML = "";
+
+            if (!items || items.length === 0) {
+                listRoot.innerHTML = `
+              <div class="empty-card">
+                <p class="empty-title">리뷰 작성 가능한 내역이 없습니다</p>
+                <p class="empty-desc">결제가 완료된 예약만 리뷰를 작성할 수 있어요.</p>
+              </div>`;
+                return;
+            }
+
+            items.forEach(it => {
+                const card = document.createElement("div");
+                card.className = "booking-card";
+
+                const actionBtn = it.hasReview
+                        ? `<a class="booking-detail-btn"
+                       href="/reviews/${it.reviewId}/update?placeId=${it.placeId}">
+                       리뷰 수정
+                   </a>`
+                        : `<a class="booking-detail-btn"
+                       href="/rooms/${it.roomId}/reviews/new?placeId=${it.placeId}&paymentId=${it.paymentId}">
+                       리뷰 작성
+                   </a>`;
+
+                const stars = it.hasReview
+                        ? `${"★".repeat(it.rating || 0)}${"☆".repeat(5 - (it.rating || 0))}`
+                        : "";
+
+                card.innerHTML = `
+              <div class="booking-thumb">
+                <img src="/images/room-sample.jpg" alt="이미지">
+              </div>
+              <div class="booking-content">
+                <div class="booking-card-header">
+                  <span class="booking-place">🚩${it.roomName}</span>
+                  <span class="booking-status confirmed">
+                    ${it.hasReview ? "작성완료" : "작성가능"}
+                  </span>
+                </div>
+
+                <div class="booking-card-body">
+                  <div class="booking-info-row">
+                    <span class="label">예약 코드</span>
+                    <span class="booking-code">${it.bookingCode || ""}</span>
+                  </div>
+
+                  <div class="booking-info-row price">
+                    <span class="label">결제 금액</span>
+                    <span>${Number(it.amount || 0).toLocaleString()}원</span>
+                  </div>
+
+                  ${it.hasReview ? `
+                    <div class="booking-info-row">
+                      <span class="label">별점</span>
+                      <span>${stars}</span>
+                    </div>` : ""}
+                </div>
+
+                <div class="booking-card-footer">
+                  ${actionBtn}
+                </div>
+              </div>
+            `;
+
+                listRoot.appendChild(card);
+            });
+        }
+
+        searchBtn.addEventListener("click", sendSearch);
+        searchInput.addEventListener("keyup", e => {
+            if (e.key === "Enter") sendSearch();
+        });
+
+        sendSearch();
+    });
+</script>
+
+</body>
+{{> layout/footer}}

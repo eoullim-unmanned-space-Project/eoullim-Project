@@ -1,0 +1,115 @@
+/* ======================
+   REVIEW FORM LAYOUT
+====================== */
+.review-form-container {
+  max-width: 520px;
+  margin: 60px auto;
+  background: #ffffff;
+  padding: 32px 28px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.review-form-container h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 28px;
+  text-align: center;
+  color: #111827;
+}
+
+/* ======================
+   FORM FIELD
+====================== */
+.review-form-group {
+  margin-bottom: 20px;
+}
+
+.review-form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+.review-form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  resize: none;
+  box-sizing: border-box;
+}
+
+.review-form-group textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
+}
+
+/* ======================
+   STAR RATING
+====================== */
+.star-rating {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  gap: 6px;
+  user-select: none;
+}
+
+.star-rating input {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 28px;
+  line-height: 1;
+  color: #e5e7eb;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease;
+}
+
+/* hover 시 */
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #facc15;
+  transform: scale(1.05);
+}
+
+/* 선택된 값 */
+.star-rating input:checked ~ label {
+  color: #fbbf24;
+}
+
+/* 클릭 애니메이션 */
+.star-rating label:active {
+  transform: scale(0.92);
+}
+
+/* ======================
+   BUTTON
+====================== */
+.review-submit-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: #6366f1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.review-submit-btn:hover {
+  background: #4f46e5;
+  transform: translateY(-1px);
+}
+
+.review-submit-btn:active {
+  background: #1f2937;
+}

@@ -8,15 +8,19 @@ SELECT * FROM time_slots;
 SELECT * FROM items;
 SELECT * FROM places;	
 SELECT * FROM rooms;
+
+SELECT * FROM rooms WHERE place_id = 2;
+
 SELECT * FROM users;
 SELECT * FROM user_roles;	
 SELECT * FROM bookings;
-SELECT * FROM payments;
+SELECT * FROM payments;	
 SELECT * FROM roles;
 SELECT * FROM payment_refunds;
+SELECT * FROM reviews;
 
--- DELETE FROM payments WHERE id =1;
--- DELETE FROM bookings WHERE id = 1;
+DELETE FROM payments WHERE id =1;
+DELETE FROM bookings WHERE id = 1;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
@@ -257,7 +261,7 @@ CREATE TABLE payments (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
-  CHECK (status IN('READY','SUCCESS','FAILED','CANCELLED','REFUNDED')),
+  CHECK (status IN('READY','SUCCESS','FAILED','CANCELLED','REFUNDED', 'COMPLETED')),
 
   UNIQUE KEY `uk_payments_payment_key` (payment_key),
   
@@ -318,7 +322,7 @@ CREATE TABLE notifications (
   payment_id BIGINT NOT NULL COMMENT '결제 ID (결제 완료 이벤트와 연결)',
   
   type VARCHAR(20) NOT NULL COMMENT '알림(PAYMENT, REFUND, CANCEL, BOOKING)',
-  status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '전송 상태(PENDING, SENT, FAILED)',
+  status VARCHAR(20) NOT NULL DEFAULT 'PENDING' COMMENT '전송 상태(PENDING, SENT, FAILED, COMPLETED)',
   message VARCHAR(255) NOT NULL COMMENT '전송 메시지',
   qr_code VARCHAR(100) NULL COMMENT 'QR 코드 토큰',
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),

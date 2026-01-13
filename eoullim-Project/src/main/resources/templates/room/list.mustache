@@ -87,14 +87,6 @@
     <hr/>
     <div class="container">
         <h2 class="review-title">리뷰</h2>
-        {{#reviewablePayments}}
-            <a href="/rooms/{{roomId}}/reviews/new?placeId={{placeId}}&paymentId={{paymentId}}">
-                리뷰 작성하기
-            </a>
-        {{/reviewablePayments}}
-        {{^reviewablePayments}}
-            <p>작성 가능한 리뷰가 없습니다.</p>
-        {{/reviewablePayments}}
         {{#reviews}}
             <div class="review-grid">
                 <div class="review-card">
@@ -105,13 +97,16 @@
                         </div>
 
                         {{#mine}}
-                            <a href="/reviews/{{id}}/update?placeId={{placeId}}">수정</a>
-                            <form action="/rooms/reviews/{{id}}/delete" method="post" style="display:inline;">
-                                <input type="hidden" name="placeId" value="{{placeId}}">
-                                <button type="submit">삭제</button>
-                            </form>
+                            <div class="review-actions">
+                                <a class="review-btn edit" href="/reviews/{{id}}/update?placeId={{placeId}}">수정</a>
+                                <form action="/rooms/reviews/{{id}}/delete" method="post" class="inline-form">
+                                    <input type="hidden" name="placeId" value="{{placeId}}">
+                                    <button type="submit" class="review-btn delete">삭제</button>
+                                </form>
+                            </div>
                         {{/mine}}
                     </div>
+
                     <p class="review-content">{{content}}</p>
                 </div>
             </div>
@@ -168,6 +163,8 @@
             card.addEventListener('click', async () => {
                 let roomRoot = card.dataset.roomId;
                 let roomId = Number(roomRoot);
+
+                alert(roomId);
 
                 const response = await fetch(`/api/room/${roomId}`, {
                     method: "POST",

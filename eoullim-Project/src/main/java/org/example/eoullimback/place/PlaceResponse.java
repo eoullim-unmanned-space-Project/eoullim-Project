@@ -27,21 +27,25 @@ public class PlaceResponse {
 
     @Data
     public static class DetailDTO {
+        private Long id;
         private String name;
         private String address;
         private BigDecimal latitude;
         private BigDecimal longitude;
         private Category category;
-        private String createAt;
+        private String createdAt;
+        private String updatedAt;
         private String profilePath;
 
         public DetailDTO(Place place) {
+            this.id = place.getId();
             this.name = place.getName();
             this.address = place.getAddress();
             this.latitude = place.getLatitude();
             this.longitude = place.getLongitude();
             this.category = place.getCategory();
-            this.createAt = DateTimeUtil.toKstString(place.getCreatedAt());
+            this.createdAt = DateTimeUtil.toKstString(place.getCreatedAt());
+            this.updatedAt = DateTimeUtil.toKstString(place.getUpdatedAt());
             this.profilePath = "/images/" + place.getProfileImage();
         }
     }

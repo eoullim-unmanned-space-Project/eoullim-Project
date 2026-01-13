@@ -1,5 +1,6 @@
 package org.example.eoullimback.payment;
 
+import jakarta.validation.constraints.NotNull;
 import org.example.eoullimback.booking.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,4 +34,12 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
            WHERE b IN :bookingEntities
            """)
     List<Payment> findAllPaymentInBookings(List<Booking> bookingEntities);
+
+    @Query("""
+            SELECT p FROM Payment p
+                        JOIN FETCH p.booking b
+                                    JOIN FETCH b.room r
+                                                WHERE p.id = :paymentId
+            """)
+    Optional<Payment> findByIdWithBookingAndRoom(@NotNull(message = "결제 ID는 필수입니다.") Long paymentId);
 }

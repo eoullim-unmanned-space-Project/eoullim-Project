@@ -28,28 +28,6 @@ public class PlaceServiceImpl implements PlaceService{
     private final RoomImageRepository roomImageRepository;
 
     @Override
-    @Transactional
-    public Place placeCreate(PlaceRequest.CreateDTO request) {
-        String profileImageFileName = null;
-
-        if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
-            try {
-                if (!FileUtil.isImageFile((request.getProfileImage()))) {
-                    throw new Exception400(ErrorCode.ONLY_FILE_IMG);
-                }
-
-                profileImageFileName = FileUtil.saveFile(request.getProfileImage());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        Place place = request.toEntity(profileImageFileName);
-
-        return placeRepository.save(place);
-    }
-
-    @Override
     public PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placeList(int page, int size, String keyword) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(20, size));
@@ -74,6 +52,48 @@ public class PlaceServiceImpl implements PlaceService{
                 .toList();
 
         return newPlace;
+    }
+
+    // 관리자 용
+
+    @Override
+    @Transactional
+    public Place placeCreate(PlaceRequest.CreateDTO request) {
+        String profileImageFileName = null;
+
+        if (request.getProfileImage() != null && !request.getProfileImage().isEmpty()) {
+            try {
+                if (!FileUtil.isImageFile((request.getProfileImage()))) {
+                    throw new Exception400(ErrorCode.ONLY_FILE_IMG);
+                }
+
+                profileImageFileName = FileUtil.saveFile(request.getProfileImage());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        Place place = request.toEntity(profileImageFileName);
+
+        return placeRepository.save(place);
+    }
+
+    @Override
+    public PageResponse.PageDTO<Place, PlaceResponse.DetailDTO> placeAdminList(int page, int size, String keyword) {
+        int validPage = Math.max(0, page);
+        int validSize = Math.max(1, Math.min(20, size));
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(validPage, validSize, sort);
+
+        Page<Place> placePage;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            placePage = placeRepository.searchByKeyword(keyword.trim(), pageable);
+        } else {
+            placePage = placeRepository.findAll(pageable);
+        }
+
+        return new PageResponse.PageDTO<>(placePage, PlaceResponse.DetailDTO::new);
     }
 
     @Override

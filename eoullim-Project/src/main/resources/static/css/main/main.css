@@ -216,29 +216,50 @@ body {
 /* ======================
    후기
 ====================== */
-.review-list {
-    display: flex;
+.review-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개 */
     gap: 24px;
+    margin-top: 24px;
 }
 
+/* 카드 */
 .review-card {
-    flex: 1;
-    height: 200px;
+    background-color: #ffffff;
     border-radius: 16px;
-    background: linear-gradient(135deg, #10b981, #34d399);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #064e3b;
-    font-weight: 700;
-    cursor: pointer;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    -webkit-transition: .5s ease-in-out;
-    transition: .5s ease-in-out;
+    padding: 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .review-card:hover {
-    transform: scale(1.07);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+/* 상단 */
+.review-header {
+    margin-bottom: 10px;
+}
+
+.user-name {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.user-star {
+    font-size: 13px;
+    color: #facc15;
+}
+
+/* 내용 3줄 제한 */
+.review-content {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #374151;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }

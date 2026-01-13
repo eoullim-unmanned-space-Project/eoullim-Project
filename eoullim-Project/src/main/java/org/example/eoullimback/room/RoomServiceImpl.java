@@ -58,13 +58,13 @@ public class RoomServiceImpl implements RoomService{
 
     @Override
     public List<RoomResponse.ListDTO> roomList(Long placeId) {
+        Place placeEntity = placeRepository.findById(placeId)
+                .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
 
-        List<RoomResponse.ListDTO> roomList = roomRepository.findByPlaceId(placeId).stream()
+        return roomRepository.findByPlaceId(placeEntity.getId())
+                .stream()
                 .map(RoomResponse.ListDTO::new)
                 .toList();
-
-        return  roomList;
-
     }
 
     @Override
