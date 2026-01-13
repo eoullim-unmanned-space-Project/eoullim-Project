@@ -1,11 +1,11 @@
 /* --- 메인 콘텐츠 영역 (화면 전체 확장) --- */
-main {
-    margin-left: 280px;
-    padding: 40px 20px;
-    width: auto;
-    flex-grow: 1;
-    box-sizing: border-box;
-}
+/*main {*/
+/*    margin-left: 280px;*/
+/*    padding: 40px 20px;*/
+/*    width: auto;*/
+/*    flex-grow: 1;*/
+/*    box-sizing: border-box;*/
+/*}*/
 
 td.profile-path {
     max-width: 150px;

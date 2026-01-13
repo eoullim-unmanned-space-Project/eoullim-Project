@@ -39,26 +39,31 @@
             </thead>
             <tbody>
             {{#placePage.content}}
-            <tr>
-                <td>{{id}}</td>
-                <td><span class="badge">{{category}}</span></td>
-                <td>{{name}}</td>
-                <td>{{address}}</td>
-                <td class="profile-path">{{profilePath}}</td>
-                <td>{{createdAt}}</td>
-                <td>{{updatedAt}}</td>
-                <td>
-                    <button class="action-button detail approve-btn" data-id="{{id}}">승인</button>
-                    <button class="action-button delete rejection-btn" data-id="{{id}}">거절</button>
-                    <button class="action-button update detail-btn" data-id="{{id}}">상세보기</button>
-                </td>
-            </tr>
+                <tr>
+                    <td>{{id}}</td>
+                    <td><span class="badge">{{category}}</span></td>
+                    <td>{{name}}</td>
+                    <td>{{address}}</td>
+                    <td class="profile-path">{{profilePath}}</td>
+                    <td>{{createdAt}}</td>
+                    <td>{{updatedAt}}</td>
+                    <td>
+                        <button class="action-button detail" id="place-update-btn" data-id="{{id}}"
+                                data-name="{{name}}">수정
+                        </button>
+                        <button class="action-button delete place-delete-btn" data-id="{{id}}">삭제</button>
+                        <button class="action-button update" id="place-detail-btn" data-id="{{id}}">상세보기
+                        </button>
+                    </td>
+                </tr>
             {{/placePage.content}}
 
             </tbody>
         </table>
     </div>
 </main>
+
+<!-- 생성 모달 -->
 <div class="modal-overlay" id="place-create-modal">
     <div class="modal-card">
         <div class="modal-header">
@@ -66,36 +71,38 @@
         </div>
 
         <div class="modal-data-box">
-                <div class="mb-3">
-                    <span class="data-label">장소 명</span>
-                    <input type="text" class="data-value" id="place-name" placeholder="장소명을 입력해주세요.">
-                </div>
-                <div class="mb-3">
-                    <span class="data-label">주소</span>
-                    <input type="text" class="data-value" id="place-address" placeholder="주소를 입력해주세요.">
-                </div>
-                <div class="mb-3">
-                    <span class="data-label">위도</span>
-                    <input type="text" class="data-value" id="place-latitude" placeholder="위도를 입력해주세요.">
-                </div>
-                <div class="mb-3">
-                    <span class="data-label">경도</span>
-                    <input type="text" class="data-value" id="place-longitude" placeholder="경도를 입력해주세요.">
-                </div>
-                <div class="mb-3">
-                    <span class="data-label">카테고리</span>
-                    <select class="data-value" id="place-category">
-                        <option VALUE="">선택하세요</option>
-                        <option VALUE="PARTY">PARTY</option>
-                        <option VALUE="STUDY">STUDY</option>
-                        <option VALUE="PRACTICE">PRACTICE</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <span class="data-label">장소 이미지 첨부</span>
-                    <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*">
-                    <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
-                </div>
+            <div class="mb-3">
+                <span class="data-label">장소 명</span>
+                <input type="text" class="data-value" id="place-name" placeholder="장소명을 입력해주세요.">
+            </div>
+            <div class="mb-3">
+                <span class="data-label">주소</span>
+                <input type="text" class="data-value" id="place-address" placeholder="주소를 입력해주세요.">
+            </div>
+            <div class="mb-3">
+                <span class="data-label">위도</span>
+                <input type="text" class="data-value" id="place-latitude" placeholder="위도를 입력해주세요.">
+            </div>
+            <div class="mb-3">
+                <span class="data-label">경도</span>
+                <input type="text" class="data-value" id="place-longitude" placeholder="경도를 입력해주세요.">
+            </div>
+            <div class="mb-3">
+                <span class="data-label">카테고리</span>
+                <select class="data-value" id="place-category">
+                    <option VALUE="">선택하세요</option>
+                    <option VALUE="PARTY">PARTY</option>
+                    <option VALUE="STUDY">STUDY</option>
+                    <option VALUE="PRACTICE">PRACTICE</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <span class="data-label">장소 이미지 첨부</span>
+                <input type="file" class="form-control" id="place-profileImage" name="profileImage" accept="image/*">
+            </div>
+            <div>
+                <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
+            </div>
         </div>
 
         <div class="modal-actions">
@@ -105,22 +112,149 @@
     </div>
 </div>
 
+<!-- 수정 모달 -->
+<div class="modal-overlay" id="place-update-modal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2>장소 수정</h2>
+        </div>
+
+        <div class="modal-data-box">
+            <div class="data-row">
+                <span class="data-label">장소 번호</span>
+                <span class="data-value" id="place-update-id"></span>
+            </div>
+            <div class="mb-3">
+                <span class="data-label">장소 명</span>
+                <input type="text" class="data-value" id="place-update-name" placeholder="장소명을 입력해주세요.">
+            </div>
+            <div class="mb-3">
+                <span class="data-label">카테고리</span>
+                <select class="data-value" id="place-update-category">
+                    <option VALUE="">선택하세요</option>
+                    <option VALUE="PARTY">PARTY</option>
+                    <option VALUE="STUDY">STUDY</option>
+                    <option VALUE="PRACTICE">PRACTICE</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <span class="data-label">장소 이미지 첨부</span>
+                <input type="file" class="form-control" id="place-update-profileImage" name="profileImage"
+                       accept="image/*">
+            </div>
+            <div>
+                <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-confirm btn-blue" onclick="updateModal(id)">수정 완료</button>
+            <button type="button" class="btn-confirm btn-red" onclick="closeDetailModal()">닫기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 상세보기 모달 -->
+<div class="modal-overlay" id="place-detail-modal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2>장소 상세 정보</h2>
+        </div>
+
+        <div class="modal-data-box">
+            <div class="data-row">
+                <span class="data-label">장소 번호</span>
+                <span class="data-value" id="detail-place-id"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">이름</span>
+                <span class="data-value" id="detail-place-name"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">주소</span>
+                <span class="data-value" id="detail-place-address"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">위도</span>
+                <span class="data-value" style="color: var(--point-color);" id="detail-place-latitude"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">경도</span>
+                <span class="data-value" style="color: var(--point-color);" id="detail-place-longitude"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">카테고리</span>
+                <span class="data-value" style="color: var(--point-color);" id="detail-place-category"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">방 이미지</span>
+            </div>
+            <div class="data-row">
+                <img src="" alt="" class="data-value" id="detail-place-profileImage">
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-confirm btn-blue" onclick="closeDetailModal()">확인</button>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const placeCreateBtn = document.getElementById("place-create-btn");
+        const placeUpdateBtn = document.getElementById("place-update-btn");
+        const placeDeleteBtn = document.querySelectorAll('.place-delete-btn');
+        const placeDetailBtn = document.getElementById("place-detail-btn");
         const placeCreateModal = document.getElementById("place-create-modal");
+        const placeUpdateModal = document.getElementById("place-update-modal");
+        const placeDetailModal = document.getElementById("place-detail-modal");
 
         placeCreateBtn.addEventListener('click', () => {
             placeCreateModal.style.display = 'flex';
+        });
 
+        placeUpdateBtn.addEventListener('click', () => {
+            const id = placeUpdateBtn.getAttribute("data-id");
+            const name = placeUpdateBtn.getAttribute("data-name");
+
+
+            document.getElementById("place-update-id").textContent = id;
+            document.getElementById("place-update-name").value = name;
+
+            placeUpdateModal.style.display = 'flex';
+        });
+
+        placeDetailBtn.addEventListener('click', () => {
+            placeDetailModal.style.display = 'flex';
+        });
+
+        placeDeleteBtn.forEach(button => {
+            button.addEventListener('click', async () => {
+                const id = button.getAttribute('data-id');
+
+                const confirmDelete = confirm('정말로 삭제하시겠습니까?');
+                if (!confirmDelete) return;
+
+                try {
+                    const response = await fetch(`/place/${id}`, {
+                        method: 'DELETE',
+                    });
+                    // const data = await response.json();
+
+                    if (response.ok) {
+                        alert("삭제되었습니다.");
+                        location.reload();
+                    }
+
+                } catch (err) {
+                    console.error(err);
+                }
+            });
         });
     });
 
-    document.getElementById('btn-place-create').addEventListener('click', async () => {
-
-        data.append('name', document.getElementById('place-name').value);
-    })
-
+    // 저장 모달
     async function saveModal() {
         const formData = new FormData();
 
@@ -130,36 +264,64 @@
         formData.append("longitude", document.getElementById("place-longitude").value);
         formData.append("category", document.getElementById("place-category").value);
 
-        const imageInput = document.getElementById("profileImage");
+        const imageInput = document.getElementById("place-profileImage");
         if (imageInput.files.length > 0) {
             formData.append("profileImage", imageInput.files[0]);
         }
 
-        const response = await fetch("/place/create", {
+        const response = await fetch(`/place/create`, {
             method: "POST",
             body: formData
         });
 
         if (!response.ok) {
-            const msg = await response.text();
-            alert(msg);
             return;
         }
 
         closeDetailModal();
+        location.reload();
+    }
+
+    // 수정 모달
+    async function updateModal() {
+        const id = document.getElementById("place-update-id").textContent;
+
+        const formData = new FormData();
+
+        formData.append("name", document.getElementById("place-update-name").value);
+        formData.append("category", document.getElementById("place-update-category").value);
+
+        const imageInput = document.getElementById("place-update-profileImage");
+        if (imageInput.files.length > 0) {
+            formData.append("profileImage", imageInput.files[0]);
+        }
+
+        const response = await fetch(`/place/${id}`, {
+            method: "PUT",
+            body: formData
+        });
+
+        closeDetailModal();
+        location.reload();
     }
 
     function closeDetailModal() {
-        const modal = document.getElementById('place-create-modal');
+        const createModal = document.getElementById('place-create-modal');
+        const updateModal = document.getElementById('place-update-modal');
+        const detailModal = document.getElementById('place-detail-modal');
         document.getElementById("place-name").value = "";
         document.getElementById("place-address").value = "";
         document.getElementById("place-latitude").value = "";
         document.getElementById("place-longitude").value = "";
         document.getElementById("place-category").value = "";
-        document.getElementById("profileImage").value = "";
+        document.getElementById("place-profileImage").value = "";
 
-        modal.style.display = 'none';
+        createModal.style.display = 'none';
+        updateModal.style.display = 'none';
+        detailModal.style.display = 'none';
     }
+
+
 </script>
 </body>
 </html>
