@@ -1,0 +1,85 @@
+<link rel="stylesheet" href="/css/admin/layout/nav.css">
+<link rel="stylesheet" href="/css/admin/notice/notice.css">
+
+<div class="admin-layout">
+    {{> admin/layout/nav}}
+
+    <main class="admin-main">
+        <div class="notice-container">
+
+            <div class="notice-card">
+                <h2 style="margin:0 0 10px 0;">공지사항 관리</h2>
+                <a class="notice-btn notice-btn-primary" href="/admin/notices/new">
+                    공지 작성
+                </a>
+            </div>
+
+            {{#noticePage.content}}
+                <div class="notice-list-item">
+                    <h4>
+                        <a href="/admin/notices/{{id}}">
+                            {{title}}
+                        </a>
+                    </h4>
+                    <p>
+                        작성자 : {{name}}
+                        | 작성일 : {{createdAt}}
+                    </p>
+                </div>
+            {{/noticePage.content}}
+
+            {{^noticePage.content}}
+                <div class="notice-card">
+                    등록된 공지사항이 없습니다.
+                </div>
+            {{/noticePage.content}}
+
+            <div class="notice-card">
+                <form class="notice-form" action="/admin/notices" method="get">
+                    <input type="text"
+                           name="keyword"
+                           placeholder="검색어를 입력해주세요."
+                           value="{{keyword}}">
+
+                    <input type="hidden" name="page" value="1">
+                    <input type="hidden" name="size" value="{{noticePage.size}}">
+
+                    <div class="notice-btn-group">
+                        <button class="notice-btn notice-btn-primary" type="submit">
+                            검색
+                        </button>
+                        <a class="notice-btn notice-btn-secondary" href="/admin/notices">
+                            초기화
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="notice-pagination">
+                {{#noticePage.previousPageNumber}}
+                    <a href="/admin/notices?page={{noticePage.previousPageNumber}}&size={{noticePage.size}}&keyword={{keyword}}">
+                    Previous
+                    </a>
+                {{/noticePage.previousPageNumber}}
+                {{^noticePage.previousPageNumber}}
+                    <a class="disabled">Previous</a>
+                {{/noticePage.previousPageNumber}}
+
+                {{#noticePage.pageLinks}}
+                    <a href="/admin/notices?page={{displayNumber}}&size={{noticePage.size}}&keyword={{keyword}}">
+                    {{displayNumber}}
+                    </a>
+                {{/noticePage.pageLinks}}
+
+                {{#noticePage.nextPageNumber}}
+                    <a href="/admin/notices?page={{noticePage.nextPageNumber}}&size={{noticePage.size}}&keyword={{keyword}}">
+                    Next
+                    </a>
+                {{/noticePage.nextPageNumber}}
+                {{^noticePage.nextPageNumber}}
+                    <a class="disabled">Next</a>
+                {{/noticePage.nextPageNumber}}
+            </div>
+        </div>
+    </main>
+</div>

@@ -23,14 +23,13 @@ public class CommentServiceImpl implements CommentService{
     private final QaaRepository qaaRepository;
     private final UserRepository userRepository;
 
-    /**
-     * 댓글 작성
-     */
     @Transactional
     @Override
-    public Comment createComment(CommentRequest.createDTO request, Long sessionUserId) {
+    public Comment createCommentAsAdmin(CommentRequest.createDTO request, Long adminUserId) {
 
-        User userEntity = userRepository.findById(sessionUserId)
+//        if (!isAdmin(adminUserId)) throw new Exception403(ErrorCode.ACCESS_DENIED);
+
+        User userEntity = userRepository.findById(adminUserId)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         Qaa qaaEntity = qaaRepository.findById(request.getQaaId())
@@ -52,47 +51,14 @@ public class CommentServiceImpl implements CommentService{
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 댓글에서 qaaId
-     */
-    @Override
-    public Long getQaaIdByCommentId(Long commentId) {
-
-        Comment comment = commentRepository.findByWithUser(commentId)
-                .orElseThrow(() -> new Exception404(ErrorCode.COMMENT_NOT_FOUND));
-
-        return comment.getQaa().getId();
-    }
-
-    /**
-     * 댓글 수정
-     */
     @Transactional
     @Override
-    public CommentResponse.UpdateFormDTO updateComment(CommentRequest.UpdateDTO request, Long commentId, Long sessionUserId) {
+    public Long deleteCommentAsAdmin(Long commentId, Long adminUserId) {
 
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new Exception404(ErrorCode.COMMENT_NOT_FOUND));
+//         if (!isAdmin(adminUserId)) throw new Exception403(ErrorCode.ACCESS_DENIED);
 
-        if(!comment.isOwner(sessionUserId)) {
-            throw new Exception403(ErrorCode.ACCESS_DENIED);
-        }
-        comment.updateContent(request.getContent());
-        return new CommentResponse.UpdateFormDTO(comment);
-    }
-
-    /**
-     * 댓글 삭제
-     */
-    @Transactional
-    @Override
-    public Long deleteComment(Long commentId, Long sessionUserId) {
         Comment commentEntity = commentRepository.findByWithUser(commentId)
                 .orElseThrow(() -> new Exception404(ErrorCode.COMMENT_NOT_FOUND));
-
-        if(!commentEntity.isOwner(sessionUserId)) {
-            throw new Exception403(ErrorCode.ACCESS_DENIED);
-        }
 
         Long qaaId = commentEntity.getQaa().getId();
         commentRepository.delete(commentEntity);

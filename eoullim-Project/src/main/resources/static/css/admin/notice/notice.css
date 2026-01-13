@@ -1,27 +1,30 @@
+/* =========================
+   Notice Page Common Styles
+   (nav.css는 수정하지 않음)
+========================= */
+
 :root {
     --sidebar-width: 280px;
 
     --white: #ffffff;
-    --bg-soft: #f8fafc;
-
     --text-main: #191f28;
     --text-sub: #4e5968;
-
     --primary: #272d61;
 
-    --border: #e5e7eb;
+    --border-light: #e5e7eb;
     --card-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
-body {
-    display: block;
-    min-height: auto;
-}
-
 /* =========================
-   Admin Layout
+   Layout
 ========================= */
 
+/* nav */
+body {
+    display: block;
+}
+
+/* admin */
 .admin-layout {
     display: flex;
     width: 100%;
@@ -39,9 +42,10 @@ body {
     justify-content: center;
 }
 
-.qaa-container {
+/* container */
+.notice-container {
     width: 100%;
-    max-width: 980px; /* 적당한 폭 */
+    max-width: 980px;
     margin: 0 auto;
 }
 
@@ -49,49 +53,62 @@ body {
    Card / List
 ========================= */
 
-.qaa-card,
-.qaa-list-item {
+.notice-card {
     background: var(--white);
     border-radius: 20px;
-    box-shadow: var(--card-shadow);
-}
-
-.qaa-card {
     padding: 32px;
+    box-shadow: var(--card-shadow);
     margin-bottom: 24px;
 }
 
-.qaa-list-item {
-    padding: 20px 24px;
+.notice-list-item {
+    background: var(--white);
+    border-radius: 18px;
+    padding: 22px 24px;
+    box-shadow: var(--card-shadow);
     margin-bottom: 16px;
 }
 
-.qaa-list-item h4 {
+.notice-list-item h4 {
     margin: 0 0 8px 0;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
 }
 
-.qaa-list-item p {
+.notice-list-item p {
     margin: 0;
     font-size: 14px;
     color: var(--text-sub);
-    line-height: 1.5;
 }
 
-.qaa-list-item a {
+.notice-list-item a {
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: 700;
     color: var(--primary);
     text-decoration: none;
+}
+
+/* =========================
+   Detail Content
+========================= */
+
+.notice-title {
+    font-size: 24px;
     font-weight: 800;
+    margin-bottom: 8px;
 }
 
-.qaa-list-item a:hover {
-    text-decoration: underline;
+.notice-meta {
+    font-size: 14px;
+    color: var(--text-sub);
+    margin-bottom: 16px;
 }
 
-/* detail 페이지 텍스트 줄바꿈 */
-.qaa-card div[style*="white-space"] {
+.notice-content {
+    white-space: pre-wrap;
     line-height: 1.6;
+    font-size: 15px;
     color: var(--text-main);
 }
 
@@ -99,121 +116,102 @@ body {
    Form
 ========================= */
 
-.qaa-form input[type="text"],
-.qaa-form textarea {
+.notice-form input[type="text"],
+.notice-form textarea {
     width: 100%;
-    padding: 14px 16px;
+    padding: 16px 18px;
     border-radius: 14px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-light);
     font-size: 15px;
+    margin-bottom: 16px;
     background: var(--white);
     box-sizing: border-box;
 }
 
-.qaa-form textarea {
-    min-height: 90px;
+.notice-form textarea {
     resize: vertical;
+    min-height: 160px;
 }
 
-.qaa-form input[type="text"]:focus,
-.qaa-form textarea:focus {
+.notice-form input:focus,
+.notice-form textarea:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-}
-
-/* form 간격 */
-.qaa-form {
-    margin: 0;
-}
-
-.qaa-form input[type="text"] {
-    margin-bottom: 14px;
-}
-
-.qaa-form textarea {
-    margin-bottom: 14px;
 }
 
 /* =========================
    Buttons
 ========================= */
 
-.qaa-btn-group {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.qaa-btn-group form {
-    margin: 0;
-}
-
-.qaa-btn {
-    padding: 10px 14px;
-    border-radius: 12px;
+.notice-btn {
+    padding: 10px 16px;
+    border-radius: 14px;
     font-size: 14px;
     font-weight: 800;
-    border: 1px solid transparent;
+    border: none;
     cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
+    transition: all 0.2s;
 }
 
-.qaa-btn-primary {
+.notice-btn-primary {
     background: var(--primary);
     color: #fff;
 }
 
-.qaa-btn-secondary {
+.notice-btn-secondary {
     background: #e5e7eb;
     color: var(--text-sub);
 }
 
-.qaa-btn-danger {
+.notice-btn-danger {
     background: #fee2e2;
     color: #b91c1c;
 }
 
-/* hover (애니메이션 없이 색만) */
-.qaa-btn-primary:hover { filter: brightness(0.95); }
-.qaa-btn-secondary:hover { filter: brightness(0.97); }
-.qaa-btn-danger:hover { filter: brightness(0.97); }
+.notice-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+}
+
+.notice-btn-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+.notice-btn-group form {
+    margin: 0;
+}
 
 /* =========================
    Pagination
 ========================= */
 
-.pagination {
+.notice-pagination {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin: 24px 0 10px;
-    flex-wrap: wrap;
+    margin-top: 30px;
 }
 
-.pagination a {
-    padding: 10px 12px;
+.notice-pagination a {
+    padding: 10px 14px;
     border-radius: 12px;
-    background: var(--white);
+    background: #ffffff;
     box-shadow: var(--card-shadow);
     text-decoration: none;
-    font-weight: 800;
-    font-size: 14px;
+    font-weight: 700;
     color: var(--text-main);
-    border: 1px solid transparent;
 }
 
-.pagination a:hover {
-    border-color: var(--primary);
-    color: var(--primary);
+.notice-pagination a:hover {
+    background: var(--primary);
+    color: #fff;
 }
 
-/* Previous/Next 비활성 처리 */
-.pagination a[href="#"] {
+.notice-pagination a.disabled {
     pointer-events: none;
-    opacity: 0.45;
+    opacity: 0.4;
 }

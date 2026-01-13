@@ -1,17 +1,15 @@
 <link rel="stylesheet" href="/css/admin/layout/nav.css">
 <link rel="stylesheet" href="/css/admin/qna/qna.css">
-
 <div class="admin-layout">
     {{> admin/layout/nav}}
-
     <main class="admin-main">
         <div class="qaa-container">
-
+            <header>
+                <h1>QnA 관리 및 답글 작성</h1>
+            </header>
             {{#qaaPage.content}}
                 <div class="qaa-list-item">
-                    <h4>
-                        <a href="/admin/qna/{{id}}">{{title}}</a>
-                    </h4>
+                    <h4><a href="/admin/qna/{{id}}">{{title}}</a></h4>
                     <p>
                         작성자 : {{name}}
                         | 작성일 : {{createdAt}}
@@ -19,24 +17,17 @@
                     </p>
                 </div>
             {{/qaaPage.content}}
-
             <div class="qaa-card">
                 <form class="qaa-form" action="/admin/qna" method="get">
-                    <label>
-                        <input type="text" name="keyword" placeholder="검색어를 입력해주세요."
-                               value="{{keyword}}">
-                    </label>
-
+                    <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{keyword}}">
                     <input type="hidden" name="page" value="1">
                     <input type="hidden" name="size" value="{{qaaPage.size}}">
-
                     <div class="qaa-btn-group" style="justify-content: flex-end">
                         <button class="qaa-btn qaa-btn-primary" type="submit">검색</button>
                         <a href="/admin/qna" class="qaa-btn qaa-btn-secondary">초기화</a>
                     </div>
                 </form>
             </div>
-
             <div class="pagination">
                 {{#qaaPage.previousPageNumber}}
                     <a href="/admin/qna?page={{qaaPage.previousPageNumber}}&size={{qaaPage.size}}">Previous</a>
@@ -44,11 +35,9 @@
                 {{^qaaPage.previousPageNumber}}
                     <a href="#">Previous</a>
                 {{/qaaPage.previousPageNumber}}
-
                 {{#qaaPage.pageLinks}}
                     <a href="/admin/qna?page={{displayNumber}}&size={{qaaPage.size}}">{{displayNumber}}</a>
                 {{/qaaPage.pageLinks}}
-
                 {{#qaaPage.nextPageNumber}}
                     <a href="/admin/qna?page={{qaaPage.nextPageNumber}}&size={{qaaPage.size}}">Next</a>
                 {{/qaaPage.nextPageNumber}}

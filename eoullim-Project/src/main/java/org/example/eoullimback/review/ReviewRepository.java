@@ -27,21 +27,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 """)
     List<Review> findByRoomAndPlace(@Param("roomId") Long roomId, @Param("placeId") Long placeId);
 
-    @Query("""
-    SELECT new org.example.eoullimback.review.ReviewablePaymentDTO(
-        p.id,
-        p.booking.room.id,
-        p.booking.room.place.id
-    )
-    FROM Payment p
-    WHERE p.user.id = :userId
-      AND p.booking.room.id = :roomId
-      AND p.id NOT IN (
-          SELECT r.payment.id FROM Review r
-      )
-""")
-    List<ReviewablePaymentDTO> findReviewablePayment(@Param("userId") Long userId,  @Param("roomId") Long roomId);
-
     boolean existsByPaymentId(Long paymentId);
 
     @Query("""
@@ -52,6 +37,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             p.booking.room.place.id,
             p.booking.room.name,
             p.amount,
+            p.status,
             CASE WHEN r.id IS NULL THEN false ELSE true END,
             r.id,
             r.rating,
@@ -61,14 +47,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         LEFT JOIN Review r ON r.payment.id = p.id
         WHERE p.user.id = :userId
           AND (:code = '' OR p.orderId LIKE %:code%)
-          AND (
-              (:status = 'WRITABLE' AND r.id IS NULL AND p.status = org.example.eoullimback._common.enums.payment.PaymentStatus.COMPLETED)
-              OR (:status = 'DONE' AND r.id IS NOT NULL)
-              OR (:status = '')
-          )
         ORDER BY p.requestedAt DESC
         """)
     List<ReviewListItemDTO> findMyReviewList(@Param("userId") Long userId,
-                                             @Param("code") String code,
-                                             @Param("status") String status);
+                                             @Param("code") String code);
 }

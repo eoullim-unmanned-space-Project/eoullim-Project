@@ -7,7 +7,7 @@ import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback.comment.CommentResponse;
-import org.example.eoullimback.comment.CommentServiceImpl;
+import org.example.eoullimback.comment.CommentService;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +22,8 @@ import java.util.List;
 @Controller
 public class QaaController {
 
-    private final QaaServiceImpl qaaService;
-    private final CommentServiceImpl commentService;
+    private final QaaService qaaService;
+    private final CommentService commentService;
 
     // Q&A 작성 화면 요청
     // http://localhost:8080/qaas/new
@@ -228,32 +228,43 @@ public class QaaController {
 
         model.addAttribute("qaaPage", qaaPage);
         model.addAttribute("keyword", keyword != null ? keyword: "");
-        return "admin/qna";
+        return "admin/qna/qna";
     }
 
-    // 관리자 qna 상세보기
-    @GetMapping("/admin/qna/{id}")
+    @GetMapping("/admin/qna/{qaaId}")
     public String adminQaaDetail(HttpSession session,
                                  Model model,
-                                 @PathVariable Long id) {
-
-        qaaService.increaseViewCount(id);
-
-        QaaResponse.DetailDTO qaa = qaaService.qaaDetailResponse(id);
+                                 @PathVariable("qaaId") Long qaaId) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Long sessionUserId = sessionUser != null ? sessionUser.getId() : null;
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
 
+        qaaService.increaseViewCount(qaaId);
+
+        QaaResponse.DetailDTO qaa = qaaService.qaaDetailResponse(qaaId);
+
+        Long sessionUserId = sessionUser.getId();
         Long editingAdminId = (Long) session.getAttribute("adminId");
 
         List<CommentResponse.ListDTO> commentList =
-                commentService.listComment(id, sessionUserId, editingAdminId);
+                commentService.listComment(qaaId, sessionUserId, editingAdminId);
 
         model.addAttribute("qaa", qaa);
         model.addAttribute("commentList", commentList);
 
-        return "qaa/detail";
+        return "admin/qna/qna-detail";
     }
 
 
+    @PostMapping("/admin/qna/{qaaId}/delete")
+    public String adminDeleteQaa(@PathVariable("qaaId") Long qaaId,
+                                 HttpSession session) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        qaaService.deleteAsAdmin(qaaId, sessionUser);
+
+        return "redirect:/admin/qna";
+    }
 }

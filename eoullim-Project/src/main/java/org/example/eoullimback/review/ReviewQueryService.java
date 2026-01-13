@@ -13,9 +13,8 @@ public class ReviewQueryService {
 
     private final ReviewRepository reviewRepository;
 
-    public List<ReviewListItemDTO> findList(Long userId, String code, String status) {
+    public List<ReviewListItemDTO> findList(Long userId, String code) {
         String safeCode = (code == null) ? "" : code.trim();
-        String safeStatus = (status == null) ? "" : status.trim();
-        return reviewRepository.findMyReviewList(userId, safeCode, safeStatus);
+        return reviewRepository.findMyReviewList(userId, safeCode);
     }
 }

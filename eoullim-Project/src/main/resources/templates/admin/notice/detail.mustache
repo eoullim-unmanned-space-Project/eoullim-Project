@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="/css/admin/layout/nav.css">
+<link rel="stylesheet" href="/css/admin/notice/notice.css">
+
+<div class="admin-layout">
+    {{> admin/layout/nav}}
+
+    <main class="admin-main">
+        <div class="notice-container">
+
+            <div class="notice-card">
+                <h2 class="notice-title">{{notice.title}}</h2>
+
+                <p class="notice-meta">
+                    작성자 : {{notice.name}} | 작성일 : {{notice.createdAt}}
+                </p>
+
+                <hr style="margin:16px 0; opacity:0.35;">
+
+                <div class="notice-content">
+                    {{notice.content}}
+                </div>
+
+                <div class="notice-btn-group" style="margin-top:18px;">
+                    <a class="notice-btn notice-btn-secondary"
+                       href="/admin/notices">
+                        목록
+                    </a>
+
+                    <a class="notice-btn notice-btn-secondary"
+                       href="/admin/notices/{{notice.id}}/edit">
+                        수정
+                    </a>
+
+                    <form action="/admin/notices/{{notice.id}}/delete"
+                          method="post">
+                        <button class="notice-btn notice-btn-danger"
+                                type="submit">
+                            삭제
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
