@@ -3,9 +3,11 @@ package org.example.eoullimback.booking;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.room.RoomRepository;
+import org.example.eoullimback.timeslot.SseTimeSlotService;
 import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotRepository;
 import org.example.eoullimback.user_auth.user.User;
@@ -14,6 +16,7 @@ import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,6 +30,7 @@ public class BookingServiceImpl implements BookingService {
     private final RoomRepository roomRepository;
     private final TimeSlotRepository timeSlotRepository;
     private final BookingRepository bookingRepository;
+    private final SseTimeSlotService sseTimeSlotService;
 
     @Override
     @Transactional
@@ -41,7 +45,7 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
 
         // 타임슬롯이 있는지 for문 돌려야할것
-        List<TimeSlot> timeslotEntities = timeSlotRepository.findAllById(createDTO.getTimeSlotIds());
+        List<TimeSlot> timeslotEntities = timeSlotRepository.findAllByWithLock(createDTO.getTimeSlotIds());
 
         // 엔티티즈의 사이즈랑 받아온 사이즈가 다르다면 NOT FOUND
         if (timeslotEntities.size() != createDTO.getTimeSlotIds().size()) {
@@ -50,7 +54,11 @@ public class BookingServiceImpl implements BookingService {
 
         // 예약된 타임슬롯이 있다면 예외처리
         for (TimeSlot timeSlot : timeslotEntities) {
-            timeSlot.close();
+            if (!timeSlot.isOpen()) {
+                throw new Exception400(ErrorCode.ALREADY_TIMESLOT);
+            }
+
+            timeSlot.hold(LocalDateTime.now().plusMinutes(5));
         }
 
         // 예약 코드를 생성
@@ -65,6 +73,8 @@ public class BookingServiceImpl implements BookingService {
                 .toList();
 
         bookingRepository.saveAll(bookings);
+
+        sseTimeSlotService.timeSlotBroadcast(roomEntity.getId(), timeslotEntities);
 
         return bookingCode;
     }
