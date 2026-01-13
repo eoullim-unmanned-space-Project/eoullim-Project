@@ -140,6 +140,7 @@ public class PaymentServiceImpl implements PaymentService {
 
                 for (Booking booking : bookingEntities) {
                     booking.changeSuccess();
+                    booking.getTimeSlot().close();
                     log.info("부킹 예약 완료 상태 변경되었습니다. 부킹코드: {}, 부킹상태: {}", booking.getBookingCode(), booking.getStatus());
                 }
 

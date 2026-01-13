@@ -36,7 +36,6 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
     @PersistenceContext
     private EntityManager em;
 
-
     @Override
     @Transactional
     public void createNextMonthTimeSlot(YearMonth nextMonth) {
@@ -99,7 +98,6 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
             persistTimeSlotsWithItems(timeSlotList);
         }
     }
-
     private void persistTimeSlotsWithItems(List<TimeSlot> timeSlotList) {
         // 타임슬롯에 담아놓은 .add로
         // forEach문으로 반복문 처리
@@ -127,6 +125,17 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
 
         // .timeSlot을 담은 buffer도 값을 비워준다.
         timeSlotList.clear();
+    }
+
+    @Override
+    @Transactional
+    public void releaseHoldSlots() {
+
+        List<TimeSlot> timeSlotEntities = timeSlotRepository.findAllByStatusHold(SlotStatus.HOLD, LocalDateTime.now());
+
+        timeSlotEntities.forEach(
+                TimeSlot::open
+        );
     }
 
     private boolean isWeekend(LocalDate date) {

@@ -178,7 +178,6 @@
                     throw new Error("서버 오류");
                 }
                 let data = await response.json();
-                console.log(data.room);
 
                 RoomDetail(data.room);
 
@@ -230,6 +229,8 @@
 
                 initTimeSlot(room.timeSlots);
 
+                initSSE(room.roomId);
+
                 document.getElementById('bookingBtn').addEventListener('click', () => {
                     bookRoom();
                 });
@@ -275,7 +276,6 @@
 
         function initTimeSlot(timeSlots) {
             const container = document.querySelector("#timeslot");
-            container.innerHTML = "";
 
             selectedSlots = []; // 초기화
 
@@ -289,7 +289,7 @@
 
                 div.innerText = `${formatTime(slot.startTime)} ~ ${formatTime(slot.endTime)}`;
 
-                if (slot.status === "CLOSED") {
+                if (slot.status === "CLOSED" || slot.status === "HOLD") {
                     // 부모 div에 스타일 적용
                     div.classList.add("disabled");
                 } else {
@@ -307,6 +307,61 @@
                 }
 
                 // 항상 container에 추가
+                container.appendChild(div);
+            });
+
+            initSlider(container);
+        }
+
+        function initSSE(roomId) {
+           const eventSource = new EventSource(`/api/sse/${roomId}/timeslot-connect`);
+
+           eventSource.onopen = () => console.log("SSE 타임슬롯 연결 성공");
+           eventSource.onerror = () => console.log("SSE 연결 에러 (자동연결 재시도)");
+
+           window.addEventListener("beforeunload", () => {
+               eventSource.close();
+           });
+
+           eventSource.addEventListener('timeSlotUpdate', (e) => {
+                const updateSlots = JSON.parse(e.data);
+
+                console.log("타임슬롯 변경:", updateSlots);
+
+                updateTimeSlotUI(updateSlots);
+           });
+        }
+
+        function updateTimeSlotUI(updateSlots) {
+            const container = document.querySelector("#timeslot");
+            container.innerHTML = "";
+
+            updateSlots.forEach(slot => {
+                const div = document.createElement("div");
+                div.className = "timeslot";
+                div.dataset.id = slot.timeSlotId;
+                div.dataset.start = slot.startTime;
+                div.dataset.end = slot.endTime;
+                div.dataset.status = slot.status;
+
+                div.innerText = `${formatTime(slot.startTime)} ~ ${formatTime(slot.endTime)}`;
+
+                if (slot.status === "CLOSED" || slot.status === "HOLD") {
+                    div.classList.add("disabled");
+                } else {
+                    // 선택 가능한 슬롯 클릭 이벤트
+                    div.addEventListener("click", () => {
+                        if (div.classList.contains("active")) {
+                            div.classList.remove("active");
+                            selectedSlots = selectedSlots.filter(s => s.timeSlotId !== slot.timeSlotId);
+                        } else {
+                            div.classList.add("active");
+                            selectedSlots.push(slot);
+                        }
+                        calculateAmount();
+                    });
+                }
+
                 container.appendChild(div);
             });
 
@@ -389,7 +444,6 @@
             const qty = Number(document.getElementById('peopleCount').value);
             const selectedSlots = document.querySelectorAll('.timeslot.active');
             const timeSlotIds = Array.from(selectedSlots).map(timeslot => parseInt(timeslot.dataset.id));
-
 
             try {
                 if (timeSlotIds.length === 0) {

@@ -64,6 +64,9 @@ public class TimeSlot {
     @Column(nullable = false)
     private SlotStatus status;
 
+    @Column(name = "holdexpired_at")
+    private LocalDateTime holdExpiredAt;
+
     @Builder
     public TimeSlot(Long id, Room room, String slotMonth,  LocalDateTime startTime, LocalDateTime endTime, int capacity, SlotStatus status) {
         this.id = id;
@@ -75,15 +78,28 @@ public class TimeSlot {
         this.status = status;
     }
 
+    public boolean isOpen() {
+        return this.status ==  SlotStatus.OPEN;
+    }
+
     public void close() {
         if (this.status == SlotStatus.CLOSED) {
             throw new Exception400(ErrorCode.ALREADY_BOOKED_TIME_SLOT);
         }
 
         this.status = SlotStatus.CLOSED;
+        this.holdExpiredAt = null;
     }
 
     public void open() {
         this.status = SlotStatus.OPEN;
+        this.holdExpiredAt = null;
     }
+
+    public void hold(LocalDateTime holdExpiredAt) {
+        this.status = SlotStatus.HOLD;
+        this.holdExpiredAt = holdExpiredAt;
+    }
+
+
 }
