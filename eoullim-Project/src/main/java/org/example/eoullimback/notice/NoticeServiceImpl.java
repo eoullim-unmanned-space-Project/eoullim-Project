@@ -95,4 +95,29 @@ public class NoticeServiceImpl implements NoticeService {
 
         noticeRepository.delete(notice);
     }
+
+    @Override
+    public PageResponse.PageDTO<Notice, NoticeResponse.ListDTO> adminNoticeListFindAll(User sessionUser, int page, int size, String keyword) {
+        if (sessionUser == null) {
+            throw new Exception403(ErrorCode.LOGIN_ONLY);
+        }
+
+        int validPage = Math.max(0, page);
+        int validSize = Math.max(1, Math.min(50, size));
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(validPage, validSize, sort);
+
+        Page<Notice> noticePage;
+        if(keyword != null && !keyword.trim().isEmpty()) {
+            noticePage = noticeRepository.findByTitleContainingOrContentContaining(keyword.trim(), pageable);
+        } else {
+            noticePage = noticeRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
+        }
+
+        return new PageResponse.PageDTO<>(
+                noticePage,
+                NoticeResponse.ListDTO::new
+        );
+    }
 }

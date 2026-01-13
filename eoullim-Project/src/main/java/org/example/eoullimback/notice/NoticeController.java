@@ -18,22 +18,20 @@ public class NoticeController {
 
     private final NoticeService noticeService;
 
-    // 공지사항 작성 화면 요청
+    // 공지사항 관리자 작성 화면 요청
     // http://localhost:8080/notices/new
     @GetMapping("/notices/new")
-    public String createNoticeForm() {
+    public String createNoticeForm(HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionSUser");
         return "notice/create-form";
     }
 
-    // 공지사항 작성 요청 기능
+    // 공지사항 관리자 작성 요청 기능
     // http://localhost:8080/notices/new
     @PostMapping("/notices/new")
-    public String createNotice(
-            HttpSession session,
-            @Valid NoticeRequest.CreateDTO request
-    ) {
-//        User sessionUser = (User) session.getAttribute("sessionSUser");
-        User sessionUser = getLoginUserId(session);
+    public String createNotice(HttpSession session,
+                               @Valid NoticeRequest.CreateDTO request) {
+        User sessionUser = (User) session.getAttribute("sessionSUser");
         noticeService.save(request, sessionUser);
 
         return "redirect:/notices";
@@ -45,8 +43,7 @@ public class NoticeController {
     public String listNotice(Model model,
                              @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "5") int size,
-                             @RequestParam(required = false) String keyword
-    ) {
+                             @RequestParam(required = false) String keyword) {
         int pageIndex = Math.max(0, page - 1);
 
         PageResponse.PageDTO<Notice, NoticeResponse.ListDTO> noticePage = noticeService.noticeListFindAll(pageIndex, size, keyword);
@@ -60,59 +57,60 @@ public class NoticeController {
     // 공지사항 상세 보기 화면 요청
     // http://localhost:8080/notices/{id}
     @GetMapping("/notices/{id}")
-    public String detailNotice(
-            @PathVariable Long id,
-            Model model
-    ) {
+    public String detailNotice(@PathVariable Long id,
+                               Model model) {
         model.addAttribute("notice", noticeService.findById(id));
         return "notice/detail";
     }
 
-    // 공지사항 수정 화면 요청
+    // 공지사항 관리자 수정 화면 요청
     // http://localhost:8080/notices
     @GetMapping("/notices/{id}/update")
     public String updateNoticeForm(@PathVariable Long id,
-                                 Model model
-    ) {
+                                   Model model) {
         model.addAttribute("notice", noticeService.findUpdateForm(id));
         return "notice/update-form";
     }
 
-    // 공지사항 수정 요청 기능
+    // 공지사항 관리자 수정 요청 기능
     // http://localhost:8080/notices/{id}
     @PostMapping("/notices/{id}/update")
     public String updateNotice(@PathVariable Long id,
                                NoticeRequest.UpdateDTO request,
-                               HttpSession session
-    ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+                               HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
         noticeService.update(id, request, sessionUser);
         return "redirect:/notices/{id}";
     }
 
-    // 공지사항 삭제 요청 기능
+    // 공지사항 관리자 삭제 요청 기능
     // http://localhost:8080/notices/{id}/delete
     @PostMapping("/notices/{id}/delete")
     public String deleteNotice(@PathVariable Long id,
-                               HttpSession session
-    ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
+                               HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
         noticeService.delete(id, sessionUser);
         return "redirect:/notices";
     }
 
-    // TODO : 유저 더미 (삭제 예정)
-    private User getLoginUserId(HttpSession session) {
+    // 공지사항 관리자 목록
+    @GetMapping("/admin/notices")
+    public String adminListNotice(HttpSession session,
+                                  Model model,
+                                  @RequestParam(defaultValue = "1") int page,
+                                  @RequestParam(defaultValue = "5") int size,
+                                  @RequestParam(required = false) String keyword) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        if (sessionUser == null) {
-            User dummyUser = new User();
-            dummyUser.setId(1L);
-            session.setAttribute("sessionUser", dummyUser);
-            return dummyUser;
-        }
-        return sessionUser;
+        int pageIndex = Math.max(0, page - 1);
+
+        PageResponse.PageDTO<Notice, NoticeResponse.ListDTO> noticePage = noticeService.adminNoticeListFindAll(sessionUser, pageIndex, size, keyword);
+
+        model.addAttribute("noticePage", noticePage);
+        model.addAttribute("keyword", keyword != null ? keyword: "");
+
+        return "admin/notice";
     }
+
+    // 공지사항 관리자 상세 보기 작성
 }

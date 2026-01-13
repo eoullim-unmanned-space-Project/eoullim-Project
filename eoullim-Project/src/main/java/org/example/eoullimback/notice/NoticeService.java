@@ -16,4 +16,6 @@ public interface NoticeService {
     NoticeResponse.UpdateFormDTO update(Long id, NoticeRequest.UpdateDTO request, User sessionUser);
 
     void delete(Long id, User sessionUser);
+
+    PageResponse.PageDTO<Notice, NoticeResponse.ListDTO> adminNoticeListFindAll(User sessionUser, int pageIndex, int size, String keyword);
 }
