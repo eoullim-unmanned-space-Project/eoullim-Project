@@ -219,7 +219,7 @@ public record UserResponse() {
             this.timeSlots = timeSlots;
             this.bookingCode = payment.getOrderId();
             this.paymentKey = payment.getPaymentKey();
-             this.refundStatus = (paymentRefund != null) ? paymentRefund.getStatus() : null;
+            this.refundStatus = (paymentRefund != null) ? paymentRefund.getStatus() : null;
 
            this.displayStatus =  switch (this.paymentStatus) {
                 case READY -> "결제준비";
