@@ -5,9 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.payment_refund.PaymentRefundResponse;
 import org.example.eoullimback.payment_refund.PaymentRefundService;
 import org.example.eoullimback.user_auth.user.User;
+import org.example.eoullimback.user_auth.user.UserService;
+import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -16,6 +20,7 @@ import java.util.List;
 public class AdminController {
 
     private final PaymentRefundService paymentRefundService;
+    private final UserService userService;
 
     // http://localhost:8080/admin/dashboard
     @GetMapping("/admin/dashboard")
@@ -37,4 +42,23 @@ public class AdminController {
 
         return "admin/refund";
     }
+
+    @GetMapping("/admin/users")
+    public String users(HttpSession session,Model model) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        List<UserResponse.AdminListDTO> userList = userService.getUserList();
+        model.addAttribute("adminUserList", userList);
+
+        return "admin/user";
+    }
+
+    @GetMapping("/admin/users/{userId}")
+    public ResponseEntity<UserResponse.AdminUserDetailDTO> getUserDetail(@PathVariable Long userId) {
+        User user = userService.findById(userId);
+
+        return ResponseEntity.ok(new UserResponse.AdminUserDetailDTO(user));
+    }
+
 }

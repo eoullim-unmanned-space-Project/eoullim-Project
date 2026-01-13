@@ -352,120 +352,195 @@
     <div class="content-surface">
         <div class="section-header">
             <h2>최근 회원 내역</h2>
-            <button class="text-link-btn">전체보기</button>
+<!--            <button class="text-link-btn">전체보기</button>-->
         </div>
         <table class="data-table">
             <thead>
             <tr class="th-list">
-                <th>환불번호</th>
-                <th>환불상태</th>
-                <th>방 이름</th>
-                <th>이용자</th>
-                <th>결제코드</th>
-                <th>결제금액</th>
-                <th>이용시간</th>
-                <th>환불일</th>
-                <th>결제경로</th>
+                <th>회원번호</th>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>가입경로</th>
+                <th>현재상태</th>
+                <th>가입일</th>
                 <th>버튼</th>
             </tr>
             </thead>
                 <tbody>
+
+                    {{#adminUserList}}
                 <tr class="tr-list">
-                    <td data-id=""></td>
-                    <td><span class="status-badge" data-status=""></span></td>
-                    <td></td>
-                    <td><strong></strong></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><span class="channel-kakao"></span></td>
+                    <td>{{id}}</td>
+                    <td>{{loginId}}</td>
+                    <td>{{name}}</td>
+                    <td>{{displayProvider}}</td>
+                    <td>{{status}}</td>
+                    <td>{{createdAt}}</td>
                     <td style="display: flex; justify-content: center; gap: 12px;">
-                        <button class="action-button detail approve-btn" >승인</button>
-                        <button class="action-button delete rejection-btn">거절</button>
-                        <button class="action-button update detail-btn">상세보기</button>
+<!--                        <button class="action-button detail approve-btn" >승인</button>-->
+<!--                        <button class="action-button delete rejection-btn">거절</button>-->
+                        <button class="action-button update detail-btn" onclick="userDetailModal({{id}})">상세보기</button>
                     </td>
                 </tr>
+                    {{/adminUserList}}
                 </tbody>
         </table>
     </div>
 
 </main>
 
-<!--  ★ modal ★ -->
+<!--  ★ modal ★ : 회원 수정 페이지 (?) -->
 <div class="modal-overlay" id="modal-detail">
     <div class="modal-card">
         <div class="modal-header">
-            <h2>상세 정보</h2>
-            <p>예약 및 환불 내역을 확인합니다</p>
+            <h2>회원 상세 정보</h2>
         </div>
 
         <div class="modal-data-box">
             <div class="data-row">
-                <span class="data-label">환불번호</span>
-                <span class="data-value" id="refund-id">1</span>
+                <span class="data-label">로그인 ID</span>
+                <span class="data-value" id="user-login-id"></span>
             </div>
             <div class="data-row">
-                <span class="data-label">환불상태</span>
-                <span class="data-value" id="refund-status">환불요청</span>
+                <span class="data-label">이름</span>
+                <span class="data-value" id="name"></span>
             </div>
             <div class="data-row">
-                <span class="data-label">공간명</span>
-                <span class="data-value" id="refund-room-name">어울림 루프탑 A</span>
+                <span class="data-label">전화번호</span>
+                <span class="data-value" id="user-phone"></span>
             </div>
             <div class="data-row">
-                <span class="data-label">사용자</span>
-                <span class="data-value" style="color: var(--point-color);" id="refund-user-name"></span>
+                <span class="data-label">이메일</span>
+                <span class="data-value" style="color: var(--point-color);" id="user-email"></span>
             </div>
             <div class="data-row">
-                <span class="data-label">결제번호</span>
-                <span class="data-value" style="color: var(--point-color);" id="refund-payment-key"></span>
+                <span class="data-label">가입경로</span>
+                <span class="data-value" style="color: var(--point-color);" id="user-provider"></span>
             </div>
             <div class="data-row">
-                <span class="data-label">결제금액</span>
-                <span class="data-value" style="color: var(--point-color);" id="refund-payment-amount"></span>
+                <span class="data-label">가입일</span>
+                <span class="data-value" style="color: var(--point-color);" id="user-created-at"></span>
             </div>
             <div class="data-row">
-                <span class="data-label">이용시간</span>
-                <span class="data-value" style="color: var(--point-color);" id="refund-display-time"></span>
+                <span class="data-label">수정일</span>
+                <span class="data-value" style="color: var(--point-color);" id="user-updated-at"></span>
             </div>
             <div class="data-row">
-                <span class="data-label">환불 생성일</span>
-                <span class="data-value" style="color: var(--point-color);" id="refund-created-at"></span>
+                <span class="data-label">현재 상태</span>
+                <span class="data-value" id="user-status"></span>
             </div>
-            <div class="data-row">
-                <span class="data-label">결제경로</span>
-                <span class="data-value" style="color: var(--point-color);" id="refund-payment-method"></span>
-            </div>
-            <div class="data-row">
-                <span class="data-label">사용자 환불사유</span>
-                <span class="data-value" style="color: var(--point-color);" id="refund-reason"></span>
+            <div class="data-row" id="suspendReasonDiv" style="display: none">
+                <label class="data-label">정지 사유</label>
+                <textarea class="form-control" id="suspendReasonInput" rows="3" placeholder="정지 사유를 입력해주세요."></textarea>
             </div>
         </div>
 
-        <div class="modal-actions">
-            <button class="btn-confirm btn-blue" onclick="">확인</button>
-        </div>
-    </div>
-</div>
-
-<div class="modal-overlay" id="modal-reject" style="margin-top: 50px;">
-    <div class="modal-card">
-        <div class="modal-header">
-            <h2>환불 거절</h2>
-            <p>사용자에게 전달할 거절 사유를 적어주세요</p>
-        </div>
-
-        <textarea class="modal-textarea" id="admin-reason" placeholder="이유를 입력해주세요 (예: 이용 수칙 위반)"></textarea>
-
-        <div class="modal-actions">
-            <button class="btn-confirm btn-red" id="btn-rejection">환불 거절 확정</button>
-            <button class="btn-confirm btn-ghost" onclick="">돌아가기</button>
+        <div class="modal-actions" id="modal-footer">
+            <button class="btn-ghost" onclick="closeModal()">닫기</button>
+            <button class="btn-confirm btn-blue" id="actionBtn">정지</button>
         </div>
     </div>
 </div>
 
 <script>
+    function formatDateTime(dateTimeStr) {
+        if (!dateTimeStr) return "/";
+
+        const date = new Date(dateTimeStr);
+
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        const hh = String(date.getHours()).padStart(2, '0');
+        const min = String(date.getMinutes()).padStart(2, '0');
+
+        return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
+    }
+    function userDetailModal(userId) {
+        fetch(`/admin/users/${userId}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log("데이터 표시 " + data);
+                    document.getElementById('user-login-id').innerText = data.loginId;
+                    document.getElementById('name').innerText = data.name;
+                    document.getElementById('user-phone').innerText = data.phone ?? "/";
+                    document.getElementById('user-email').innerText = data.email ?? "/";
+                    document.getElementById('user-provider').innerText = data.displayProvider;
+                    document.getElementById('user-created-at').innerText = formatDateTime(data.createdAt);
+                    document.getElementById('user-updated-at').innerText = formatDateTime(data.updatedAt);
+
+                    document.getElementById('user-status').innerText = data.status;
+
+                    const suspendDiv = document.getElementById('suspendReasonDiv');
+                    const actionBtn = document.getElementById('actionBtn');
+                    suspendDiv.style.display = 'none';
+                    document.getElementById('suspendReasonInput').value = "";
+
+                    actionBtn.dataset.userId =userId;
+
+                    if (data.suspendedReason) {
+                        suspendDiv.style.display = 'block';
+                        document.getElementById('suspendReasonInput').value = data.suspendedReason;
+                        actionBtn.innerText = "복구";
+                        actionBtn.className = "btn btn-primary"; // 파랑 or 초록
+                        actionBtn.onclick = restoreUser;
+                    } else {
+                        actionBtn.innerText = "정지";
+                        actionBtn.className = "btn btn-danger"; // 빨강
+                        actionBtn.onclick = suspendUser;
+                    }
+
+                    document.getElementById('modal-detail').style.display = 'flex';
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("유저 정보를 불러오지 못했습니다.");
+
+                })
+    }
+    function closeModal() {
+        document.getElementById('modal-detail').style.display = 'none';
+    }
+
+    function suspendUser() {
+        const userId = this.dataset.userId;
+        const reason = document.getElementById('suspendReasonInput').value.trim();
+        if (!reason) {
+            alert("정지 사유를 입력해주세요.");
+            document.getElementById('suspendReasonDiv').style.display = 'block';
+            return;
+        }
+
+        if (!confirm("정지 처리하시겠습니까?")) return;
+
+        fetch(`/admin/user/${userId}/suspend`, {
+            method: "PATCH",
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({ reason })
+        }).then(res => {
+            if (res.ok) location.reload();
+            else alert("정지 처리 실패");
+        })
+    }
+
+    function restoreUser() {
+        const userId = this.dataset.userId;
+        if (!confirm("복구 처리하시겠습니까?")) return;
+
+        fetch(`/admin/user/${userId}/restore`, { method: 'PATCH' })
+                .then(res => {
+                    if (res.ok) location.reload();
+                    else alert("복구 처리 실패");
+                });
+    }
+
+    function formatDateTime(dateTomeStr) {
+        if (!dateTomeStr) return "/";
+        const d = new Date(dateTomeStr);
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    }
+
+
 </script>
 </body>
 </html>

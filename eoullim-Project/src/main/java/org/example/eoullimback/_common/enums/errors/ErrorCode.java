@@ -18,6 +18,7 @@ public enum ErrorCode {
     NAME_REQUIRED("이름은 필수입니다."),
     INVALID_EMAIL_FORMAT("올바른 이메일 형식이 아닙니다."),
     MISSING_EMAIL("이메일을 입력해주세요."),
+    DUPLICATE_EMAIL("이미 가입된 이메일입니다."),
     ONLY_FILE_IMG("이미지 파일만 업로드 가능합니다."),
     PHONE_REQUIRED("전화번호는 필수입니다."),
     MAX_FILE_IMG("파일 이미지는 5장 이어야 합니다."),
@@ -50,6 +51,7 @@ public enum ErrorCode {
     ADMIN_OLLY("관리자만 접근 할 수 있습니다."),
     LOGIN_ONLY("로그인이 필요합니다."),
     SOCIAL_USER_CANNOT_UPDATE("소셜 로그인 계정은 회원정보를 수정할 수 없습니다."),
+    USER_STATUS_SUSPENDED("현재 회원은 정지된 상태입니다."),
 
     // ====
     // 404 Not Found
