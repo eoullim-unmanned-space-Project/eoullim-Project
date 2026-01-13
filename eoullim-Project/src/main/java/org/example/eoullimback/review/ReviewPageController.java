@@ -17,7 +17,6 @@ public class ReviewPageController {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         model.addAttribute("user", sessionUser);
-        model.addAttribute("sessionUser", sessionUser);
 
         return "user/review";
     }

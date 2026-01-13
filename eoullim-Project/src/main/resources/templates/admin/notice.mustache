@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Console</title>
+</head>
+
+<style>
+    :root {
+        --point-color: #3182f6;
+        --bg-canvas: #f2f4f6;
+        --bg-surface: #ffffff;
+        --text-primary: #191f28;
+        --text-secondary: #4e5968;
+        --text-tertiary: #8b95a1;
+        --line-default: #e5e8eb;
+        --line-subs: #f9fafb;
+    }
+
+    * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+        margin: 0; padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+        background-color: var(--bg-canvas);
+        color: var(--text-primary);
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    nav {
+        width: 260px;
+        height: 100vh;
+        background: white;
+        padding: 40px 20px;
+        position: fixed;
+        border-right: 1px solid var(--border-color);
+    }
+
+    main {
+        margin-left: 280px;
+        padding: 40px 20px;
+        width: auto;
+        flex-grow: 1;
+        box-sizing: border-box;
+    }
+
+    header {
+        margin-bottom: 32px;
+        padding-left: 8px;
+    }
+
+    header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0; }
+
+    .section-header h2 { font-size: 20px; font-weight: 700; margin: 0; }
+
+    .data-table th {
+        text-align: left;
+        padding: 16px;
+        color: var(--text-tertiary);
+        font-size: 14px;
+        font-weight: 600;
+        border-bottom: 1px solid var(--line-default);
+    }
+
+    .data-table td {
+        padding: 24px 16px;
+        font-size: 15px;
+        border-bottom: 1px solid var(--line-subs);
+        color: var(--text-secondary);
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table td strong { color: var(--text-primary); font-weight: 600; }
+
+    .th-list th {
+        text-align: center;
+        padding: 12px 8px;
+        color: #4E5968;
+        font-size: 14px;
+    }
+
+    .tr-list td {
+        text-align: center;
+    }
+
+    @keyframes modal-pop {
+        0% { transform: scale(0.9); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header h2 {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.8px;
+        margin-bottom: 8px;
+    }
+
+    .modal-header p {
+        color: var(--text-tertiary);
+        font-size: 14px;
+        margin: 0;
+    }
+
+</style>
+<body>
+    <nav>
+        {{> admin/layout/nav}}
+    </nav>
+    <main>
+        <header>
+            <h1>공지사항 관리</h1>
+            <a href="/notices/new" class="notice-btn notice-btn-primary">공지사항 작성</a>
+        </header>
+    </main>
+
+    {{#noticePage.content}}
+        <div class="notice-list-item" style="justify-content: flex-end">
+            <h4>
+                <a href="/notices/{{id}}">{{title}}</a>
+            </h4>
+            <p>작성자 : {{name}} | 작성일 : {{createdAt}}</p>
+        </div>
+    {{/noticePage.content}}
+
+    {{^noticePage.content}}
+        아직 공지사항이 없습니다.
+    {{/noticePage.content}}
+
+    <div class="notice-card" style="background-color: #f1f5f9">
+        <form class="notice-form" action="/notices" method="get">
+            <label>
+                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
+            </label>
+            <div>
+                <input type="hidden" name="page" value="1">
+                <input type="hidden" name="size" value="{{noticePage.size}}">
+                <div class="notice-btn-group" style="justify-content: flex-end">
+                    <button class="notice-btn notice-btn-primary" type="submit">검색</button>
+                    <a href="/notices" class="notice-btn notice-btn-secondary">초기화</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="pagination">
+        {{#noticePage.previousPageNumber}}
+            <a href="/notices?page={{noticePage.previousPageNumber}}">Previous </a>
+        {{/noticePage.previousPageNumber}}
+        {{^noticePage.previousPageNumber}}
+            <a href="#">Previous</a>
+        {{/noticePage.previousPageNumber}}
+
+        {{#noticePage.pageLinks}}
+            <a href="/notices?page={{displayNumber}}&size={{noticePage.size}}">{{displayNumber}} </a>
+        {{/noticePage.pageLinks}}
+
+        {{#noticePage.nextPageNumber}}
+            <a href="/notices?page={{noticePage.nextPageNumber}}">Next </a>
+        {{/noticePage.nextPageNumber}}
+        {{^noticePage.nextPageNumber}}
+            <a href="#">Next</a>
+        {{/noticePage.nextPageNumber}}
+    </div>
+</body>
+</html>
