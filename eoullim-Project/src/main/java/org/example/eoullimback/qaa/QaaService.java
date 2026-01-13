@@ -19,4 +19,9 @@ public interface QaaService {
     QaaResponse.ListPageDTO myQaaList(Long userId, int page, int size);
 
     PageResponse.PageDTO<Qaa, QaaResponse.ListDTO> adminQaaListFindAll(Long userId, int page, int size, String keyword);
+
+
+    QaaResponse.UpdateFormDTO findUpdateForm(Long id, Long userId);
+
+    void deleteAsAdmin(Long qaaId, User sessionUser);
 }

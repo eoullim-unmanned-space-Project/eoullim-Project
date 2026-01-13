@@ -152,4 +152,18 @@ public class QaaServiceImpl implements QaaService {
                 QaaResponse.ListDTO::new
         );
     }
+
+    @Transactional
+    @Override
+    public void deleteAsAdmin(Long qaaId, User sessionUser) {
+        if (sessionUser == null) {
+            throw new Exception403(ErrorCode.LOGIN_ONLY);
+        }
+
+        Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
+                .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
+
+        commentRepository.deleteByQaaId(qaaId);
+        qaaRepository.delete(qaa);
+    }
 }

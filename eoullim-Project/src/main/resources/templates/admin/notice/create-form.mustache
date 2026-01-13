@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="/css/admin/layout/nav.css">
+<link rel="stylesheet" href="/css/admin/notice/notice.css">
+
+<div class="admin-layout">
+    {{> admin/layout/nav}}
+
+    <main class="admin-main">
+        <div class="notice-container">
+
+            <div class="notice-card">
+                <h2 style="margin:0 0 12px 0;">공지사항 작성</h2>
+
+                <form class="notice-form" action="/admin/notices/new" method="post">
+                    <input type="text"
+                           name="title"
+                           placeholder="제목을 입력해주세요.">
+
+                    <textarea name="content"
+                              placeholder="내용을 입력해주세요."
+                              style="min-height:180px;"></textarea>
+
+                    <div class="notice-btn-group">
+                        <a class="notice-btn notice-btn-secondary"
+                           href="/admin/notices">
+                            취소
+                        </a>
+                        <button class="notice-btn notice-btn-primary"
+                                type="submit">
+                            등록
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </main>
+</div>

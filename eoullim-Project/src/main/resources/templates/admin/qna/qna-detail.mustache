@@ -1,0 +1,67 @@
+<link rel="stylesheet" href="/css/admin/layout/nav.css">
+<link rel="stylesheet" href="/css/admin/qna/qna.css">
+
+<div class="admin-layout">
+    {{> admin/layout/nav}}
+
+    <main class="admin-main">
+        <div class="qaa-container">
+
+            <div class="qaa-card">
+                <h2>{{qaa.title}}</h2>
+                <p>작성자 : {{qaa.name}} | 작성일 : {{qaa.createdAt}} | 조회수 : {{qaa.viewCount}}</p>
+                <hr/>
+                <div style="white-space: pre-wrap;">{{qaa.content}}</div>
+
+                <form action="/admin/qna/{{qaa.id}}/delete" method="post" style="margin-top:15px;">
+                    <button class="qaa-btn qaa-btn-danger" type="submit">QnA 삭제</button>
+                </form>
+            </div>
+
+            <div class="qaa-card">
+                <form class="qaa-form" action="/admin/qna/{{qaa.id}}/comments/new" method="post">
+                    <input type="hidden" name="qaaId" value="{{qaa.id}}">
+                    <textarea name="content" placeholder="댓글을 입력해주세요."></textarea>
+
+                    <div class="qaa-btn-group" style="justify-content:flex-end;">
+                        <button class="qaa-btn qaa-btn-primary" type="submit">댓글 등록</button>
+                        <a href="/admin/qna" class="qaa-btn qaa-btn-secondary">목록</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="qaa-card">
+                <h3>댓글</h3>
+
+                {{#commentList}}
+                    <div class="qaa-list-item">
+                        <p><b>{{name}}</b> | {{createdAt}}</p>
+
+                        {{#isEditing}}
+                            <form class="qaa-form" action="/admin/comments/{{id}}/update" method="post">
+                                <textarea name="content">{{content}}</textarea>
+                                <div class="qaa-btn-group">
+                                    <a href="/admin/qna/{{qaa.id}}" class="qaa-btn qaa-btn-secondary">취소</a>
+                                </div>
+                            </form>
+                        {{/isEditing}}
+
+                        {{^isEditing}}
+                            <div style="white-space: pre-wrap;">{{content}}</div>
+                            <div class="qaa-btn-group" style="justify-content:flex-end;">
+                                <form action="/admin/comments/{{id}}/delete" method="post">
+                                    <button class="qaa-btn qaa-btn-danger" type="submit">삭제</button>
+                                </form>
+                            </div>
+                        {{/isEditing}}
+                    </div>
+                {{/commentList}}
+
+                {{^commentList}}
+                    <div>아직 댓글이 없습니다.</div>
+                {{/commentList}}
+            </div>
+
+        </div>
+    </main>
+</div>
