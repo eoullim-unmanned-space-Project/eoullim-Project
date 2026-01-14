@@ -7,9 +7,7 @@ import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -54,5 +52,18 @@ public class BookingApiController {
         String bookingCode = bookingService.saveBooking(sessionUser.getId(), createDTO);
 
         return ResponseEntity.ok().body(Map.of("bookingCode", bookingCode));
+    }
+
+    @PostMapping("/api/booking/cancel/{bookingCode}")
+    public ResponseEntity<?> cancelBooking (
+            @PathVariable String bookingCode,
+            HttpSession session
+    ) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        bookingService.cancelBooking(sessionUser.getId(), bookingCode);
+
+        return ResponseEntity.ok().body(null);
     }
 }

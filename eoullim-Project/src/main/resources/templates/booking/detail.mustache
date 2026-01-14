@@ -217,7 +217,20 @@
                 return;
             }
 
-            location.href = `/place/${roomId}/room`;
+            const response = await fetch(`/api/booking/cancel/${bookingCode}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                }
+            });
+
+            if(response.ok) {
+                alert("예약을 취소하셨습니다.");
+                location.href = `/place/${roomId}/room`;
+            } else {
+            const errorData = await response.json();
+            alert(errorData.message || "예약 취소를 하지못했습니다.\n잠시 후 다시 시도해주세요.");
+        }
         });
 
      }); // DOMContentLoaded 끝
