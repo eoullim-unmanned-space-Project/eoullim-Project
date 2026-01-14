@@ -311,7 +311,7 @@ body {
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;}
 .calendar-grid div { padding: 10px; text-align: center; cursor: pointer; border-radius: 4px; font-size: 14px; }
 .calendar-grid div:hover { background-color: #f0f0f0; }
-.calendar-grid div.active { background-color: tomato; color: white; font-weight: bold; }
+.calendar-grid div.active { background-color: #4f46e5 ; color: white; font-weight: bold; }
 .calendar-grid div.other-month { color: #ccc; cursor: default; }
 
 .calendar-day.no-data {

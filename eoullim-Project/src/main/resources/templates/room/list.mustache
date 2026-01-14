@@ -301,6 +301,10 @@
                 } else {
                     dayEl.onclick = () => {
 
+                    const amountDiv = document.getElementById("amount");
+
+                    amountDiv.innerHTML = '0';
+
                     document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('active'));
 
                     dayEl.classList.add('active');
@@ -440,7 +444,6 @@
             container.innerHTML = "";
 
             updateSlots.forEach(slot => {
-                const div = document.createElement("div");
                 div.className = "timeslot";
                 div.dataset.id = slot.timeSlotId;
                 div.dataset.start = slot.startTime;
@@ -474,7 +477,6 @@
         async function calculateAmount() {
             const roomId = document.getElementById("roomId")?.value;
 
-
             if (!roomId || selectedSlots.length === 0) {
                 document.getElementById("amount").innerText = "0";
                 return;
@@ -500,9 +502,9 @@
 
                 const data = await response.json();
 
-                let amountDiv = document.getElementById("amount");
+                const amountDiv = document.getElementById("amount");
 
-                amountDiv.innerHTML = data.amount.amount ;
+                amountDiv.innerHTML = data.amount.amount.toLocaleString() ;
 
                 return data.amount.amount;
 
