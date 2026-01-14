@@ -61,7 +61,7 @@
                     </div>
                     <div class="total-row">
                         <span style="font-weight: 700; font-size: 15px;">총 결제 금액</span>
-                        <span>{{amount}}원</span>
+                        <span class="amount-box" data-amount="{{amount}}"></span>
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-primary" id="paymentBtn">결제하기</button>
@@ -91,6 +91,11 @@
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+         const amountBox = document.querySelector(".amount-box");
+         const amountStr = amountBox.dataset.amount;
+         const amount = Number(amountStr);
+         amountBox.innerText = amount.toLocaleString() + "원";
+
          // 1. 초기 설정 및 데이터 추출
          const channelKey = 'channel-key-20a2905a-5dbf-4f2d-a466-013da8c5e67c';
 
@@ -189,7 +194,6 @@
          }); // paymentBtn 이벤트 끝
 
         async function paymentCancel(paymentKey) {
-            alert(paymentKey);
             try {
                 await fetch("/api/payment/cancel", {
                    method: "POST",
@@ -200,6 +204,8 @@
                        merchant_uid: paymentKey
                    })
                 });
+
+                location.href = `/place/${roomId}/room`;
 
             } catch (error) {
                 console.error("결제 취소 중 오류가 발생했습니다.", error);

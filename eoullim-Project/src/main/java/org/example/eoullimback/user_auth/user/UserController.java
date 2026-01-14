@@ -2,6 +2,7 @@ package org.example.eoullimback.user_auth.user;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.OAuthProvider;
 import org.example.eoullimback._common.error.exception.Exception401;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
@@ -24,7 +26,7 @@ public class UserController {
             User user = userService.kakaoSocialLogin(code);
             session.setAttribute("sessionUser", user);
         } catch (Exception e) {
-            System.out.println("소셜 로그인 실패: " + e.getMessage());
+            log.error("소셜 로그인 실패: {}", e.getMessage(), e);
             throw new Exception401(ErrorCode.USER_NOT_FOUND);
         }
 
@@ -105,7 +107,6 @@ public class UserController {
 
         return "redirect:/auth/login";
     }
-
 
     /**
      * 화면 : 사용자 비밀번호 체크

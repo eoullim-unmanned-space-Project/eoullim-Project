@@ -101,9 +101,6 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public void useQrcode(Long userId, Long id) {
 
-        System.out.println(id);
-        System.out.println(userId);
-
         Notification notification = notificationRepository.findByIdWithUser(userId, id).orElseThrow(()-> new Exception404(ErrorCode.NOTIFICATION_NOT_FOUND));
 
         System.out.println(notification);
