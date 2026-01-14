@@ -1,15 +1,22 @@
 <link rel="stylesheet" href="/css/room/listStyle.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
+<link rel="stylesheet" href="/css/booking/bookingStyle.css">
 
 {{> layout/header}}
 <body>
 <div class="container">
     <!--    <section class="section"></section>-->
     <section class="sub-section">
+        <div class="hero-card">
+            <div class="hero-img"></div>
+            <div class="hero-body">
+                <h1>{{place.name}}</h1>
+                <p><img src="{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}" alt="{{place.address}}<">  {{place.address}}</p>
+            </div>
+        </div>
+
         <div class="left">
             <div class="main-content">
-                <p>{{place.name}}</p>
-                <span><img src="{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}" alt=""> {{place.address}}</span>
                 <input type="hidden" id="latitude" value="{{place.latitude}}">
                 <input type="hidden" id="longitude" value="{{place.longitude}}">
                 <p>룸 선택</p>

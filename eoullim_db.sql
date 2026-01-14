@@ -4,26 +4,6 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
-SELECT * FROM time_slots;
-SELECT * FROM items;
-SELECT * FROM places;	
-SELECT * FROM rooms;
-
-SELECT * FROM rooms WHERE place_id = 2;
-
-SELECT * FROM time_slots;
-SELECT * FROM users;
-SELECT * FROM rooms;
-SELECT * FROM user_roles;	
-SELECT * FROM bookings;
-SELECT * FROM payments;	
-SELECT * FROM roles;
-SELECT * FROM payment_refunds;
-SELECT * FROM reviews;
-
-DELETE FROM payments WHERE id =1;
-DELETE FROM bookings WHERE id = 1;
-
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
 DROP TABLE IF EXISTS reviews;
@@ -373,6 +353,26 @@ CREATE TABLE notices (
 
 -- --------------------------
 USE eoullim_db;
+
+SELECT * FROM time_slots;
+SELECT * FROM items;
+SELECT * FROM places;	
+SELECT * FROM rooms;
+
+SELECT * FROM rooms WHERE place_id = 2;
+
+SELECT * FROM time_slots;
+SELECT * FROM users;
+SELECT * FROM rooms;
+SELECT * FROM user_roles;	
+SELECT * FROM bookings;
+SELECT * FROM payments;	
+SELECT * FROM roles;
+SELECT * FROM payment_refunds;
+SELECT * FROM reviews;
+
+DELETE FROM payments WHERE id =1;
+DELETE FROM bookings WHERE id = 1;
 
 INSERT INTO places (name, address, latitude, longitude, category, profile_image, created_at, updated_at)
 VALUES
