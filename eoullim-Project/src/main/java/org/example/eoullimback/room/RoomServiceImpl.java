@@ -13,10 +13,12 @@ import org.example.eoullimback.room_image.RoomImage;
 import org.example.eoullimback.room_image.RoomImageRepository;
 import org.example.eoullimback.room_image.RoomImageResponse;
 import org.example.eoullimback.timeslot.TimeSlotRepository;
+import org.example.eoullimback.timeslot.TimeSlotServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,6 +30,7 @@ public class RoomServiceImpl implements RoomService{
     private final RoomRepository roomRepository;
     private final RoomImageRepository roomImageRepository;
     private final TimeSlotRepository timeSlotRepository;
+    private final TimeSlotServiceImpl timeSlotService;
 
     @Override
     @Transactional
@@ -52,7 +55,13 @@ public class RoomServiceImpl implements RoomService{
 
         Room room = request.toEntity(place, roomImageFileName);
 
-        return roomRepository.save(room);
+        Room saveRoom = roomRepository.save(room);
+
+        LocalDate today = LocalDate.now();
+
+        timeSlotService.createRoomInTimeSlots(saveRoom, today);
+
+        return saveRoom;
 
     }
 
