@@ -122,4 +122,16 @@ public class AuthRequest {
             }
         }
     }
+
+    @Data
+    public static class UserSuspendRequestDTO {
+
+        private String reason;
+
+        public void validate() {
+            if (reason == null || reason.trim().isBlank()) {
+                throw new Exception400(ErrorCode.INVALID_INPUT);
+            }
+        }
+    }
 }

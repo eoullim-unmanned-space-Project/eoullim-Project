@@ -18,7 +18,5 @@ public interface ReviewService {
 
     boolean existsByPaymentId(Long paymentId);
 
-    List<ReviewablePaymentDTO> findReviewablePayments(Long userId, Long roomId);
-
     List<ReviewResponse.ListDTO> findLatestReviews(int limit);
 }

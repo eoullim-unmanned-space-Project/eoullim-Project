@@ -188,8 +188,6 @@ public class UserApiController {
     @PostMapping("/api/user/use-qrCode/{id}")
     public ResponseEntity<?> useQrcode(HttpSession session, @PathVariable Long id) {
 
-        System.out.println(id + "1111111111111111111111111111111111111111111111111111111111");
-
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         notificationService.useQrcode(sessionUser.getId(), id);

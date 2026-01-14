@@ -7,7 +7,7 @@ import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback.comment.CommentResponse;
-import org.example.eoullimback.comment.CommentServiceImpl;
+import org.example.eoullimback.comment.CommentService;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +22,8 @@ import java.util.List;
 @Controller
 public class QaaController {
 
-    private final QaaServiceImpl qaaService;
-    private final CommentServiceImpl commentService;
+    private final QaaService qaaService;
+    private final CommentService commentService;
 
     // Q&A 작성 화면 요청
     // http://localhost:8080/qaas/new
@@ -47,7 +47,7 @@ public class QaaController {
         return "redirect:/qaas";
     }
 
-    // Q&A 목록 화면 요청
+    // Q&A 전체 목록 화면 요청
     // http://localhost:8080/qaas
     @GetMapping("/qaas")
     public String listQaa(Model model,
@@ -90,11 +90,11 @@ public class QaaController {
         model.addAttribute("qaa", qaa);
         model.addAttribute("commentList", commentList);
         model.addAttribute("isOwner", isOwner);
-        model.addAttribute("sessionUser", sessionUser); // null 가능
 
         return "qaa/detail";
     }
 
+    // 마이프로필 qna 수정 요청 폼
     @GetMapping("/user/qna/{id}/edit")
     public String editForm(@PathVariable Long id,
                            HttpSession session,
@@ -108,6 +108,7 @@ public class QaaController {
         return "qaa/update-form";
     }
 
+    // 마이프로필 qna 수정
     @PostMapping("/user/qna/{id}/edit")
     public String update(@PathVariable Long id,
                          @Valid QaaRequest.UpdateDTO request,
@@ -119,7 +120,7 @@ public class QaaController {
         return "redirect:/user/qna/" + id;
     }
 
-    // Q&A 수정 요청 기능
+    // Q&A 메인 화면 수정 요청 기능
     // http://localhost:8080/qaas/{id}/update
     @PostMapping("/qaas/{id}/update")
     public String updateQaa(@PathVariable Long id,
@@ -143,6 +144,7 @@ public class QaaController {
         return "redirect:/qaas";
     }
 
+    // 마이프로필 qna 리스트 화면
     @GetMapping("/user/qna")
     public String myQnaPage(HttpSession session, Model model,
                             @RequestParam(defaultValue = "1") int page,
@@ -157,13 +159,12 @@ public class QaaController {
                 qaaService.myQaaList(sessionUser.getId(), pageIndex, size);
 
         model.addAttribute("qaaPage", qaaPage);
-        model.addAttribute("user", sessionUser);       // 사이드바용
-        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("user", sessionUser);
 
         return "user/qna";
     }
 
-    // 내 Q&A 작성
+    // 마이프로필 Q&A 작성
     @PostMapping("/user/qna")
     public String createMyQna(HttpSession session,
                               @Valid QaaRequest.CreateDTO request) {
@@ -174,6 +175,7 @@ public class QaaController {
         return "redirect:/user/qna";
     }
 
+    // 마이프로필 qna 세부사항
     @GetMapping("/user/qna/{id}")
     public String myQnaDetail(@PathVariable Long id,
                               HttpSession session,
@@ -194,14 +196,12 @@ public class QaaController {
 
         model.addAttribute("qaa", qaa);
         model.addAttribute("commentList", commentList);
-        model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("user", sessionUser);
 
         return "user/qna-detail";
     }
 
-
-
+    // 마이프로필 qna 삭제
     @PostMapping("/user/qna/{id}/delete")
     public String delete(@PathVariable Long id, HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -209,5 +209,62 @@ public class QaaController {
 
         qaaService.delete(id, sessionUser);
         return "redirect:/user/qna";
+    }
+
+    // admin qna 세부사항
+    @GetMapping("/admin/qna")
+    public String adminQaaList(HttpSession session,
+                               Model model,
+                               @RequestParam(defaultValue = "1") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(required = false) String keyword
+    ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        int pageIndex = Math.max(0, page - 1);
+
+        PageResponse.PageDTO<Qaa, QaaResponse.ListDTO> qaaPage = qaaService.adminQaaListFindAll(sessionUser.getId(), pageIndex, size, keyword);
+
+        model.addAttribute("qaaPage", qaaPage);
+        model.addAttribute("keyword", keyword != null ? keyword: "");
+        return "admin/qna/qna";
+    }
+
+    @GetMapping("/admin/qna/{qaaId}")
+    public String adminQaaDetail(HttpSession session,
+                                 Model model,
+                                 @PathVariable("qaaId") Long qaaId) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        qaaService.increaseViewCount(qaaId);
+
+        QaaResponse.DetailDTO qaa = qaaService.qaaDetailResponse(qaaId);
+
+        Long sessionUserId = sessionUser.getId();
+        Long editingAdminId = (Long) session.getAttribute("adminId");
+
+        List<CommentResponse.ListDTO> commentList =
+                commentService.listComment(qaaId, sessionUserId, editingAdminId);
+
+        model.addAttribute("qaa", qaa);
+        model.addAttribute("commentList", commentList);
+
+        return "admin/qna/qna-detail";
+    }
+
+
+    @PostMapping("/admin/qna/{qaaId}/delete")
+    public String adminDeleteQaa(@PathVariable("qaaId") Long qaaId,
+                                 HttpSession session) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        qaaService.deleteAsAdmin(qaaId, sessionUser);
+
+        return "redirect:/admin/qna";
     }
 }

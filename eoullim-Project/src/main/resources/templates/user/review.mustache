@@ -4,7 +4,6 @@
 <body>
 <div class="mypage-container">
     {{> layout/sideBar}}
-    <!-- 메인 -->
     <section class="mypage-main">
 
         <div class="booking-search">
@@ -15,9 +14,7 @@
             </div>
         </div>
 
-        <div class="booking-list" id="booking-list">
-
-        </div>
+        <div class="booking-list" id="booking-list"></div>
     </section>
 </div>
 
@@ -27,15 +24,10 @@
         const searchInput = document.querySelector(".booking-input");
         const listRoot = document.getElementById("booking-list");
 
-        const STATUS = "WRITABLE"; // 결제당 리뷰 1개 정책
-
         async function sendSearch() {
             const code = (searchInput.value || "").trim();
 
-            const res = await fetch(
-                    `/api/user/reviews?code=${encodeURIComponent(code)}&status=${STATUS}`
-            );
-
+            const res = await fetch(`/api/user/reviews?code=${encodeURIComponent(code)}`);
             if (!res.ok) {
                 alert("리뷰 목록 조회 실패");
                 return;
@@ -45,14 +37,27 @@
             render(data);
         }
 
+        function starsText(rating) {
+            const r = Number(rating || 0);
+            return `${"★".repeat(r)}${"☆".repeat(5 - r)}`;
+        }
+
+        function paymentStatusLabel(status) {
+            switch (status) {
+                case "COMPLETED": return "이용완료";
+                case "SUCCESS": return "결제성공(이용전)";
+                default: return status || "";
+            }
+        }
+
         function render(items) {
             listRoot.innerHTML = "";
 
             if (!items || items.length === 0) {
                 listRoot.innerHTML = `
               <div class="empty-card">
-                <p class="empty-title">리뷰 작성 가능한 내역이 없습니다</p>
-                <p class="empty-desc">결제가 완료된 예약만 리뷰를 작성할 수 있어요.</p>
+                <p class="empty-title">리뷰 내역이 없습니다</p>
+                <p class="empty-desc">결제/이용 내역이 존재하지 않습니다.</p>
               </div>`;
                 return;
             }
@@ -61,30 +66,55 @@
                 const card = document.createElement("div");
                 card.className = "booking-card";
 
-                const actionBtn = it.hasReview
-                        ? `<a class="booking-detail-btn"
+                const isCompleted = it.paymentStatus === "COMPLETED";
+
+                const statusText = it.hasReview
+                        ? "리뷰 작성 완료"
+                        : (isCompleted ? "리뷰 작성 가능" : "결제 완료 후 작성 가능");
+
+                let actionHtml = "";
+
+                if (it.hasReview) {
+                    actionHtml = `
+                  <div style="display:flex; gap:8px;">
+                    <a class="booking-detail-btn"
                        href="/reviews/${it.reviewId}/update?placeId=${it.placeId}">
                        리뷰 수정
-                   </a>`
-                        : `<a class="booking-detail-btn"
-                       href="/rooms/${it.roomId}/reviews/new?placeId=${it.placeId}&paymentId=${it.paymentId}">
-                       리뷰 작성
-                   </a>`;
-
-                const stars = it.hasReview
-                        ? `${"★".repeat(it.rating || 0)}${"☆".repeat(5 - (it.rating || 0))}`
-                        : "";
+                    </a>
+                    <button class="booking-detail-btn btn-delete-review"
+                            type="button"
+                            data-reviewid="${it.reviewId}">
+                       리뷰 삭제
+                    </button>
+                  </div>
+                `;
+                } else {
+                    if (isCompleted) {
+                        actionHtml = `
+                      <a class="booking-detail-btn"
+                         href="/rooms/${it.roomId}/reviews/new?placeId=${it.placeId}&paymentId=${it.paymentId}">
+                         리뷰 작성
+                      </a>
+                    `;
+                    } else {
+                        actionHtml = `
+                      <button class="booking-detail-btn" type="button" disabled
+                              style="background:#ccc; cursor:not-allowed;">
+                        이용 완료 후 작성
+                      </button>
+                    `;
+                    }
+                }
 
                 card.innerHTML = `
               <div class="booking-thumb">
                 <img src="/images/room-sample.jpg" alt="이미지">
               </div>
+
               <div class="booking-content">
                 <div class="booking-card-header">
                   <span class="booking-place">🚩${it.roomName}</span>
-                  <span class="booking-status confirmed">
-                    ${it.hasReview ? "작성완료" : "작성가능"}
-                  </span>
+                  <span class="booking-status confirmed">${statusText}</span>
                 </div>
 
                 <div class="booking-card-body">
@@ -98,20 +128,39 @@
                     <span>${Number(it.amount || 0).toLocaleString()}원</span>
                   </div>
 
+                  <div class="booking-info-row">
+                    <span class="label">결제 상태</span>
+                    <span>${paymentStatusLabel(it.paymentStatus)}</span>
+                  </div>
+
                   ${it.hasReview ? `
                     <div class="booking-info-row">
                       <span class="label">별점</span>
-                      <span>${stars}</span>
+                      <span>${starsText(it.rating)}</span>
                     </div>` : ""}
                 </div>
 
                 <div class="booking-card-footer">
-                  ${actionBtn}
+                  ${actionHtml}
                 </div>
               </div>
             `;
 
                 listRoot.appendChild(card);
+            });
+
+            document.querySelectorAll(".btn-delete-review").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const reviewId = btn.dataset.reviewid;
+                    if (!confirm("리뷰를 삭제할까요?")) return;
+
+                    const res = await fetch(`/api/user/reviews/${reviewId}`, { method: "DELETE" });
+                    if (!res.ok) {
+                        alert("리뷰 삭제 실패");
+                        return;
+                    }
+                    sendSearch();
+                });
             });
         }
 

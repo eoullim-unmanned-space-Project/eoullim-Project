@@ -22,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -263,14 +264,14 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByEmailAndStatus(email, Status.ACTIVE)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
     }
 
     @Override
     public String findLoginIdByNameAndEmail(String name, String email) {
 
-        User user = userRepository.findByNameAndEmail(name, email)
+        User user = userRepository.findByNameAndEmailAndStatus(name, email, Status.ACTIVE)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         if (!user.isLocalUser()) {
@@ -297,4 +298,49 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Override
+    public List<UserResponse.AdminListDTO> getUserList() {
+
+        List<User> userList = userRepository.findAll();
+
+        return userList.stream()
+                .map(UserResponse.AdminListDTO::new)
+                .toList();
+    }
+
+    @Override
+    public User findById(Long userId) {
+
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+    }
+
+    @Override
+    @Transactional
+    public void suspendUser(Long userId, String reason) {
+
+        User user = findById(userId);
+
+        if (user.getStatus() == Status.WITHDRAWN) {
+            throw new Exception400(ErrorCode.INVALID_INPUT);
+        }
+
+        if (user.getStatus() == Status.SUSPENDED) {
+            return;
+        }
+
+        user.suspend(reason);
+    }
+
+    @Override
+    @Transactional
+    public void restoreUser(Long userId) {
+        User user = findById(userId);
+
+        if (user.getStatus() == Status.ACTIVE) {
+            return;
+        }
+
+        user.restore();
+    }
 }

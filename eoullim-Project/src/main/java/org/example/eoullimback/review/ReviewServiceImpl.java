@@ -43,12 +43,6 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<ReviewablePaymentDTO> findReviewablePayments(Long userId, Long roomId) {
-        return reviewRepository.findReviewablePayment(userId, roomId);
-
-    }
-
-    @Override
     public List<ReviewResponse.ListDTO> findLatestReviews(int limit) {
         var pageable = PageRequest.of(0, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         List<Review> reviews = reviewRepository.findAll(pageable).getContent();

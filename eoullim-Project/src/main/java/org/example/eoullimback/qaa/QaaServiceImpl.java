@@ -37,6 +37,7 @@ public class QaaServiceImpl implements QaaService {
         return qaa;
     }
 
+    @Override
     public PageResponse.PageDTO<Qaa, QaaResponse.ListDTO> qaaListFindAll(int page, int size, String keyword) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(50, size)
@@ -111,6 +112,7 @@ public class QaaServiceImpl implements QaaService {
         qaaRepository.delete(qaa);
     }
 
+    @Override
     public QaaResponse.ListPageDTO myQaaList(Long userId, int page, int size) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(50, size));
@@ -128,5 +130,40 @@ public class QaaServiceImpl implements QaaService {
                 .collect(Collectors.toList());
 
         return new QaaResponse.ListPageDTO(dtoList);
+    }
+
+    @Override
+    public PageResponse.PageDTO<Qaa, QaaResponse.ListDTO> adminQaaListFindAll(Long userId, int page, int size, String keyword) {
+        int validPage = Math.max(0, page);
+        int validSize = Math.max(1, Math.min(50, size)
+        );
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(validPage, validSize, sort);
+
+        Page<Qaa> qaaPage;
+        if(keyword != null && !keyword.trim().isEmpty()) {
+            qaaPage = qaaRepository.findByTitleContainingOrContentContaining(keyword.trim(), pageable);
+        } else {
+            qaaPage = qaaRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
+        }
+        return new PageResponse.PageDTO<>(
+                qaaPage,
+                QaaResponse.ListDTO::new
+        );
+    }
+
+    @Transactional
+    @Override
+    public void deleteAsAdmin(Long qaaId, User sessionUser) {
+        if (sessionUser == null) {
+            throw new Exception403(ErrorCode.LOGIN_ONLY);
+        }
+
+        Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
+                .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
+
+        commentRepository.deleteByQaaId(qaaId);
+        qaaRepository.delete(qaa);
     }
 }

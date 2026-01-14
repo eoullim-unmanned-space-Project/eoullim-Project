@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback.review.ReviewResponse;
 import org.example.eoullimback.review.ReviewService;
-import org.example.eoullimback.review.ReviewablePaymentDTO;
 import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
 import org.example.eoullimback.user_auth.user.User;
@@ -14,9 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -74,11 +71,6 @@ public class PlaceController {
             model.addAttribute("roomId", roomId);
             List<ReviewResponse.ListDTO> reviews = reviewService.findByRoom(userId, placeId, roomId);
             model.addAttribute("reviews", reviews);
-            if (userId != null) {
-                List<ReviewablePaymentDTO> reviewablePayments =
-                        reviewService.findReviewablePayments(userId, roomId);
-                model.addAttribute("reviewablePayments", reviewablePayments);
-            }
         }
         return "room/list";
     }

@@ -18,101 +18,114 @@ public class NoticeController {
 
     private final NoticeService noticeService;
 
-    // 공지사항 작성 화면 요청
-    // http://localhost:8080/notices/new
-    @GetMapping("/notices/new")
-    public String createNoticeForm() {
-        return "notice/create-form";
-    }
-
-    // 공지사항 작성 요청 기능
-    // http://localhost:8080/notices/new
-    @PostMapping("/notices/new")
-    public String createNotice(
-            HttpSession session,
-            @Valid NoticeRequest.CreateDTO request
-    ) {
-//        User sessionUser = (User) session.getAttribute("sessionSUser");
-        User sessionUser = getLoginUserId(session);
-        noticeService.save(request, sessionUser);
-
-        return "redirect:/notices";
-    }
-
     // 공지사항 목록 화면 요청
     // http://localhost:8080/notices
     @GetMapping("/notices")
     public String listNotice(Model model,
                              @RequestParam(defaultValue = "1") int page,
                              @RequestParam(defaultValue = "5") int size,
-                             @RequestParam(required = false) String keyword
-    ) {
+                             @RequestParam(required = false) String keyword) {
         int pageIndex = Math.max(0, page - 1);
 
-        PageResponse.PageDTO<Notice, NoticeResponse.ListDTO> noticePage = noticeService.noticeListFindAll(pageIndex, size, keyword);
+        PageResponse.PageDTO<Notice, NoticeResponse.ListDTO> noticePage =
+                noticeService.noticeListFindAll(pageIndex, size, keyword);
 
         model.addAttribute("noticePage", noticePage);
-        model.addAttribute("keyword", keyword != null ? keyword: "");
-
+        model.addAttribute("keyword", keyword != null ? keyword : "");
         return "notice/list";
     }
 
     // 공지사항 상세 보기 화면 요청
     // http://localhost:8080/notices/{id}
-    @GetMapping("/notices/{id}")
-    public String detailNotice(
-            @PathVariable Long id,
-            Model model
-    ) {
-        model.addAttribute("notice", noticeService.findById(id));
+    @GetMapping("/notices/{noticeId}")
+    public String detailNotice(@PathVariable("noticeId") Long noticeId,
+                               Model model) {
+        model.addAttribute("notice", noticeService.findById(noticeId));
         return "notice/detail";
     }
 
-    // 공지사항 수정 화면 요청
-    // http://localhost:8080/notices
-    @GetMapping("/notices/{id}/update")
-    public String updateNoticeForm(@PathVariable Long id,
-                                 Model model
-    ) {
-        model.addAttribute("notice", noticeService.findUpdateForm(id));
-        return "notice/update-form";
-    }
+    //  관리자 공지 목록(관리자만)
+    @GetMapping("/admin/notices")
+    public String adminListNotice(HttpSession session,
+                                  Model model,
+                                  @RequestParam(defaultValue = "1") int page,
+                                  @RequestParam(defaultValue = "5") int size,
+                                  @RequestParam(required = false) String keyword) {
 
-    // 공지사항 수정 요청 기능
-    // http://localhost:8080/notices/{id}
-    @PostMapping("/notices/{id}/update")
-    public String updateNotice(@PathVariable Long id,
-                               NoticeRequest.UpdateDTO request,
-                               HttpSession session
-    ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
-        noticeService.update(id, request, sessionUser);
-        return "redirect:/notices/{id}";
-    }
-
-    // 공지사항 삭제 요청 기능
-    // http://localhost:8080/notices/{id}/delete
-    @PostMapping("/notices/{id}/delete")
-    public String deleteNotice(@PathVariable Long id,
-                               HttpSession session
-    ) {
-//        User sessionUser = (User) session.getAttribute("sessionUser");
-        User sessionUser = getLoginUserId(session);
-        noticeService.delete(id, sessionUser);
-        return "redirect:/notices";
-    }
-
-    // TODO : 유저 더미 (삭제 예정)
-    private User getLoginUserId(HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
+        noticeService.assertAdmin(sessionUser);
 
-        if (sessionUser == null) {
-            User dummyUser = new User();
-            dummyUser.setId(1L);
-            session.setAttribute("sessionUser", dummyUser);
-            return dummyUser;
-        }
-        return sessionUser;
+        int pageIndex = Math.max(0, page - 1);
+
+        PageResponse.PageDTO<Notice, NoticeResponse.ListDTO> noticePage =
+                noticeService.adminNoticeListFindAll(sessionUser, pageIndex, size, keyword);
+
+        model.addAttribute("noticePage", noticePage);
+        model.addAttribute("keyword", keyword != null ? keyword : "");
+        return "admin/notice/notice";
+    }
+
+    // 관리자 공지 상세(관리자만)
+    @GetMapping("/admin/notices/{noticeId}")
+    public String adminDetail(@PathVariable("noticeId") Long noticeId,
+                              HttpSession session,
+                              Model model) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        noticeService.assertAdmin(sessionUser);
+
+        model.addAttribute("notice", noticeService.findById(noticeId));
+        return "admin/notice/detail";
+    }
+
+    // 관리자 작성 폼(관리자만)
+    @GetMapping("/admin/notices/new")
+    public String createNoticeForm(HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        noticeService.assertAdmin(sessionUser);
+
+        return "admin/notice/create-form";
+    }
+
+    // 관리자 작성(관리자만)
+    @PostMapping("/admin/notices/new")
+    public String createNotice(HttpSession session,
+                               @Valid NoticeRequest.CreateDTO request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        noticeService.saveAsAdmin(request, sessionUser);
+
+        return "redirect:/admin/notices";
+    }
+
+    // 관리자 수정 폼(관리자만)
+    @GetMapping("/admin/notices/{noticeId}/edit")
+    public String updateNoticeForm(@PathVariable("noticeId") Long noticeId,
+                                   HttpSession session,
+                                   Model model) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        noticeService.assertAdmin(sessionUser);
+
+        model.addAttribute("notice", noticeService.findUpdateForm(noticeId));
+        return "admin/notice/update-form";
+    }
+
+    // 관리자 수정(관리자만)
+    @PostMapping("/admin/notices/{noticeId}/edit")
+    public String updateNotice(@PathVariable("noticeId") Long noticeId,
+                               NoticeRequest.UpdateDTO request,
+                               HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        noticeService.updateAsAdmin(noticeId, request, sessionUser);
+
+        return "redirect:/admin/notices/" + noticeId;
+    }
+
+    // 관리자 삭제(관리자만)
+    @PostMapping("/admin/notices/{noticeId}/delete")
+    public String deleteNotice(@PathVariable("noticeId") Long noticeId,
+                               HttpSession session) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        noticeService.deleteAsAdmin(noticeId, sessionUser);
+
+        return "redirect:/admin/notices";
     }
 }

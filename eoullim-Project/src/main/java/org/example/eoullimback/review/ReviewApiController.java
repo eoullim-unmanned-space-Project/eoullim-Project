@@ -5,9 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception409;
 import org.example.eoullimback.user_auth.user.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,15 +15,27 @@ import java.util.List;
 public class ReviewApiController {
 
     private final ReviewQueryService reviewQueryService;
+    private final ReviewService reviewService;
 
     @GetMapping("/api/user/reviews")
     public List<ReviewListItemDTO> list(HttpSession session,
-                                        @RequestParam(defaultValue = "") String code,
-                                        @RequestParam(defaultValue = "") String status) {
+                                        @RequestParam(defaultValue = "") String code) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
 
-        return reviewQueryService.findList(sessionUser.getId(), code, status);
+        return reviewQueryService.findList(sessionUser.getId(), code);
+    }
+
+    @DeleteMapping("/api/user/reviews/{reviewId}")
+    public ResponseEntity<?> delete(HttpSession session,
+                                    @PathVariable Long reviewId) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
+
+        reviewService.delete(sessionUser.getId(), reviewId);
+
+        return ResponseEntity.ok().build();
     }
 }

@@ -22,7 +22,7 @@
             <button class="booking-filter-btn" data-status="REFUNDED">환불완료</button>
         </div>
 
-        <button id="use-qrcode-btn">asdf</button>
+        <button id="use-qrcode-btn"></button>
 
         <div class="booking-list" id="booking-list">
 
@@ -50,7 +50,6 @@
             }
             alert("성공");
         })
-
 
         async function sendSearch() {
             let bookingCode = bookingInput.value.trim() || '';
@@ -110,15 +109,11 @@
 
             if(!data || data.length === 0) {
                 bookingList.innerHTML = `
-                <div class="empty-card">
-                    <p class="empty-title">📅 예약 내역이 존재하지 않습니다</p>
-                    <p class="empty-desc">
-                        아직 예약한 내역이 없어요.<br>
-                        새로운 공간을 예약해 보세요!
-                    </p>
-                </div>
-                `;
-            }
+                   <div class="empty-card">
+                    <p class="empty-title">예약 내역이 없습니다</p>
+                    <p class="empty-desc">⭐ 무인 공간을 이용해 보세요 !</p>
+                  </div>`;
+                }
 
             data.forEach(booking => {
                 const card = document.createElement('div');
@@ -167,9 +162,14 @@
                     try {
                         const response = await fetch(`/api/user/payment?code=${bookingCode}`);
 
-                        const data = await response.json();
-
-                        modal(data);
+                        if(response.ok) {
+                           const data = await response.json();
+                           console.log(data);
+                           modal(data);
+                        } else {
+                            alert("결제 내역을 불러오는중 오류가 발생하였습니다.");
+                            location.reload();
+                        }
 
                     } catch(error) {
                         console.error("데이터를 불러오는 중 에러 발생:", error);
@@ -177,7 +177,6 @@
                     }
 
                   function modal(data) {
-
                     const refundStatus = data ? data.refundStatus : null;
                     const isPending = refundStatus === 'REQUESTED';
 

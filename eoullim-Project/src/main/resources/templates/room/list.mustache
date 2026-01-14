@@ -67,6 +67,8 @@
                     · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
                 </p>
             </div>
+
+
             <p><img src="/img/room/user.png" alt=""> 인원 수</p>
             <div class="people-box">
                 <button type="button" id="minusBtn">−</button>
@@ -102,16 +104,6 @@
                             <p class="user-name">{{name}}</p>
                             <p class="user-star">{{#stars}}★{{/stars}}{{#emptyStars}}☆{{/emptyStars}}</p>
                         </div>
-
-                        {{#mine}}
-                            <div class="review-actions">
-                                <a class="review-btn edit" href="/reviews/{{id}}/update?placeId={{placeId}}">수정</a>
-                                <form action="/rooms/reviews/{{id}}/delete" method="post" class="inline-form">
-                                    <input type="hidden" name="placeId" value="{{placeId}}">
-                                    <button type="submit" class="review-btn delete">삭제</button>
-                                </form>
-                            </div>
-                        {{/mine}}
                     </div>
 
                     <p class="review-content">{{content}}</p>
@@ -128,6 +120,10 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17"></script>
 <script>
 
+    let currentAllSlots = [];
+    let selectedSlots = [];
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth();
 
     // 1. 카카오 맵 로드 (중복 제거 및 구조 정리)
     kakao.maps.load(function () {
@@ -162,16 +158,30 @@
 
     document.addEventListener("DOMContentLoaded", () => {
 
+         function changeDate(dateStr) {
+            console.log("전체 데이터(currentAllSlots):", currentAllSlots);
+            console.log("내가 클릭한 날짜(dateStr):", dateStr);
+
+            const filtered = currentAllSlots.filter(slot => {
+                if (!slot.startTime) return false;
+
+                const slotDate = slot.startTime.substring(0, 10);
+                return slotDate === dateStr;
+            });
+
+            const container = document.querySelector("#timeslot");
+            container.innerHTML = "";
+
+            initTimeSlot(filtered);
+        }
+
         let selectedSlots = [];
-        const PRICE_PER_HOUR = 10000; // 시간당 요금
 
         // 1. 룸 리스트 가져오기
         document.querySelectorAll('.room-card').forEach(card => {
             card.addEventListener('click', async () => {
                 let roomRoot = card.dataset.roomId;
                 let roomId = Number(roomRoot);
-
-                alert(roomId);
 
                 const response = await fetch(`/api/room/${roomId}`, {
                     method: "POST",
@@ -189,8 +199,11 @@
                 RoomDetail(data.room);
 
             });
+
             // 2. 상세조회 가져오기 기능
             function RoomDetail(room) {
+                currentAllSlots = room.timeSlots;
+
                 const container = document.querySelector(".right");
                 container.innerHTML = `
                  <div class="room-box">
@@ -212,6 +225,20 @@
                         · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
                     </p>
                 </div>
+
+                  <div class="calendar-wrapper">
+                    <div class="calendar-header">
+                        <button type="button" id="prevMonth">&lt;</button>
+                        <h3 id="calendarTitle"></h3>
+                        <button type="button" id="nextMonth">&gt;</button>
+                    </div>
+                    <div class="calendar-days">
+                        <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
+                    </div>
+                    <div id="calendarGrid" class="calendar-grid">
+                    </div>
+                </div>
+
                 <p><img src="/img/room/user.png" alt=""> 인원 수</p>
                 <div class="people-box">
                     <button type="button" id="minusBtn">−</button>
@@ -232,17 +259,97 @@
                 </div>
                 `;
 
+                initCalendar(currentYear, currentMonth);
+
                 initCapacity(room.maxCapacity);
 
-                initTimeSlot(room.timeSlots);
-
                 initSSE(room.roomId);
+
+                const now = new Date();
+
+                const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+
+                changeDate(todayStr);
 
                 document.getElementById('bookingBtn').addEventListener('click', () => {
                     bookRoom();
                 });
             }
         });
+
+        function initCalendar(year, month) {
+            const grid = document.getElementById('calendarGrid');
+
+            const title = document.getElementById('calendarTitle');
+
+            grid.innerHTML = '';
+            title.innerText = `${year}년 ${month + 1}월`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+
+            for(let month = 0; month < firstDay; month++) {
+                const emptyDiv = document.createElement('div');
+                grid.appendChild(emptyDiv);
+            }
+
+            for (let day = 1; day <= lastDate; day++) {
+                const dayEl = document.createElement('div');
+                dayEl.innerText = day;
+                dayEl.className = 'calendar-day';
+
+                const currentDay = day;
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                const hasData = currentAllSlots.some(slot => slot.startTime.startsWith(dateStr));
+
+                if (!hasData) {
+                    dayEl.classList.add('no-data');
+                } else {
+                    dayEl.onclick = () => {
+
+                    const amountDiv = document.getElementById("amount");
+
+                    amountDiv.innerHTML = '0';
+
+                    document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('active'));
+
+                    dayEl.classList.add('active');
+
+                    changeDate(dateStr);
+                    };
+                }
+                grid.appendChild(dayEl);
+            }
+
+            document.getElementById('prevMonth').onclick = () => {
+                let newMonth = month - 1;
+                let newYear = year;
+
+                if(newMonth < 0) {
+                    newMonth = 11;
+                    newYear --;
+                }
+
+                currentYear = newYear;
+                currentMonth = newMonth;
+                initCalendar(currentYear, currentMonth);
+            };
+
+            document.getElementById('nextMonth').onclick = () => {
+                let newMonth = month + 1;
+                let newYear = year;
+
+                if (newMonth > 11) {
+                    newMonth = 0;
+                    newYear++;
+                }
+                currentYear = newYear;
+                currentMonth = newMonth;
+                initCalendar(currentYear, currentMonth);
+            }
+
+        }
 
         // 6. 인원수 조절 스크립트
         function initCapacity(maxCapacity) {
@@ -344,7 +451,6 @@
             container.innerHTML = "";
 
             updateSlots.forEach(slot => {
-                const div = document.createElement("div");
                 div.className = "timeslot";
                 div.dataset.id = slot.timeSlotId;
                 div.dataset.start = slot.startTime;
@@ -378,7 +484,6 @@
         async function calculateAmount() {
             const roomId = document.getElementById("roomId")?.value;
 
-
             if (!roomId || selectedSlots.length === 0) {
                 document.getElementById("amount").innerText = "0";
                 return;
@@ -404,9 +509,9 @@
 
                 const data = await response.json();
 
-                let amountDiv = document.getElementById("amount");
+                const amountDiv = document.getElementById("amount");
 
-                amountDiv.innerHTML = data.amount.amount ;
+                amountDiv.innerHTML = data.amount.amount.toLocaleString() ;
 
                 return data.amount.amount;
 

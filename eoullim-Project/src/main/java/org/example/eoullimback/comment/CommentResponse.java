@@ -16,28 +16,17 @@ public class CommentResponse {
         private boolean isOwner;
 
         public ListDTO(Comment comment, Long sessionUserId, Long editingCommentId) {
+            this(comment, sessionUserId, editingCommentId, false);
+        }
+
+        public ListDTO(Comment comment, Long sessionUserId, Long editingCommentId, boolean isAdmin) {
             this.id = comment.getId();
             this.content = comment.getContent();
             this.name = comment.getUser().getName();
             this.createdAt = DateTimeUtil.toKstString(comment.getCreatedAt());
-            this.isEditing = editingCommentId != null
-                    && comment.getId().equals(editingCommentId);
-            this.isOwner = comment.isOwner(sessionUserId);
-        }
-    }
+            this.isEditing = editingCommentId != null && comment.getId().equals(editingCommentId);
 
-    @Data
-    public static class UpdateFormDTO {
-        private Long id;
-        private String content;
-        private String name;
-        private String updatedAt;
-
-        public UpdateFormDTO(Comment comment) {
-            this.id = comment.getId();
-            this.content = comment.getContent();
-            this.name = comment.getUser().getName();
-            this.updatedAt = DateTimeUtil.toKstString(comment.getUpdatedAt());
+            this.isOwner = isAdmin || comment.isOwner(sessionUserId);
         }
     }
 }
