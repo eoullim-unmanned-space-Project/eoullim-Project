@@ -15,6 +15,7 @@ public class RoomRequest {
 
     @Data
     public static class CreateDTO {
+        Long placeId;
         String name;
         String content;
         int maxCapacity;
@@ -24,6 +25,7 @@ public class RoomRequest {
         MultipartFile roomImage;
 
         public void validate() {
+
             if (name == null || name.trim().isEmpty()) {
                 throw new IllegalArgumentException("방명을 입력해주세요.");
             }

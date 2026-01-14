@@ -1,4 +1,3 @@
-/* Sidebar Navigation */
 :root {
     --point-color: #3182f6;
     --bg-canvas: #f2f4f6;
@@ -24,76 +23,44 @@ body {
     min-height: 100vh;
 }
 
-/* --- 사이드 네비게이션 (고정 너비) --- */
-.side-navigation {
-    width: 280px;
+/* Sidebar Navigation */
+nav {
+    width: 260px;
     height: 100vh;
-    background-color: var(--bg-surface);
-    padding: 40px 16px;
+    background: white;
+    padding: 40px 20px;
     position: fixed;
-    top: 0; left: 0;
-    border-right: 1px solid var(--line-default);
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
+    border-right: 1px solid var(--border-color);
 }
 
-.brand-logo {
+.nav-brand {
     font-size: 22px;
-    font-weight: 700;
-    color: var(--text-primary);
-    padding: 0 20px;
-    margin-bottom: 36px;
-    letter-spacing: -0.5px;
+    font-weight: 800;
+    margin-bottom: 40px;
+    padding-left: 12px;
 }
 
-.menu-list { list-style: none; padding: 0; margin: 0; }
-.menu-item { margin-bottom: 4px; }
-
-.menu-link {
-    display: block;
-    text-decoration: none;
-    padding: 14px 20px;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+.nav-menu {
+    list-style: none;
+    padding: 0;
 }
 
-.menu-link:hover {
-    background-color: #f9fafb;
-    color: var(--text-primary);
-}
-
-.menu-item.active .menu-link {
-    background-color: #f2f4f6;
-    color: var(--point-color);
-}
-
-.menu-group { margin-top: 24px; }
-.group-title {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-tertiary);
-    padding-left: 20px;
-    margin-bottom: 8px;
-}
-
-.sub-link {
-    display: block;
-    text-decoration: none;
-    padding: 12px 20px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-secondary);
+.nav-item {
+    padding: 14px 16px;
     border-radius: 12px;
-    margin-left: 12px;
+    font-weight: 600;
+    color: var(--text-sub);
+    cursor: pointer;
+    margin-bottom: 4px;
+    transition: 0.2s;
 }
 
-.sub-link:hover { color: var(--point-color); }
+.nav-item:hover,
+.nav-item.active {
+    background-color: #f9fafb;
+    color: var(--toss-blue);
+}
 
-/* --- 메인 콘텐츠 영역 (화면 전체 확장) --- */
 main {
     margin-left: 280px;
     padding: 40px 20px;
@@ -116,6 +83,7 @@ header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0
     padding: 32px 40px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.01);
     width: 100%;
+    margin-bottom: 22px;
 }
 
 .section-header {
@@ -352,11 +320,4 @@ header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0
     font-size: 14px;
     padding: 12px;
 }
-.btn-ghost:hover {
-    color: var(--text-secondary);
-
-
-    .refund-payment-key {
-        font-size: 12px;
-    }
-}
+.btn-ghost:hover { color: var(--text-secondary); }

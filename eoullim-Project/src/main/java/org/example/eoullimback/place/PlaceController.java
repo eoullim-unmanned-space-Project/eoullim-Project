@@ -23,20 +23,12 @@ public class PlaceController {
     private final RoomService roomService;
     private final ReviewService reviewService;
 
-    @PostMapping("/place/create")
-    public ResponseEntity<?> createProc(@ModelAttribute PlaceRequest.CreateDTO request) {
-
-        request.validate();
-        placeService.placeCreate(request);
-
-        return ResponseEntity.ok().body(request);
-    }
 
     // 전체 조회
     @GetMapping("/map")
     public String ListPlace(Model model,
                             @RequestParam(defaultValue = "1") int page,
-                            @RequestParam(defaultValue = "5") int size,
+                            @RequestParam(defaultValue = "8") int size,
                             @RequestParam(required = false) String keyword
     ) {
         int pageIndex = Math.max(0, page - 1);
@@ -81,37 +73,5 @@ public class PlaceController {
             model.addAttribute("reviews", reviews);
         }
         return "room/list";
-    }
-
-    // 수정
-    @GetMapping("/place/{placeId}/update")
-    public String UpdateForm(Model model,
-                             @PathVariable Long placeId
-    ) {
-
-        Place place = placeService.placeUpdateForm(placeId);
-        model.addAttribute("place", place);
-
-        return "place/update";
-    }
-
-    @PostMapping("/place/{placeId}/update")
-    public String UpdateProc(@PathVariable Long placeId,
-                             PlaceRequest.UpdateDTO request
-    ) {
-        request.validate();
-
-        Place place = placeService.placeUpdate(placeId, request);
-
-        return "redirect:/place/" + placeId + "/update";
-    }
-
-    // 삭제
-    @PostMapping("/place/{placeId}/delete")
-    public String deleteProc(@PathVariable Long placeId) {
-
-        placeService.placeDelete(placeId);
-
-        return "redirect:/";
     }
 }

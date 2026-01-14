@@ -91,7 +91,7 @@ public class AuthController {
             User sessionUser = authService.login(request);
 
             session.setAttribute("sessionUser", sessionUser);
-            return "redirect:/admin/place";
+            return "redirect:/main/main";
 
         } catch (Exception403 e) {
             String defaultMsg = e.getMessage();
