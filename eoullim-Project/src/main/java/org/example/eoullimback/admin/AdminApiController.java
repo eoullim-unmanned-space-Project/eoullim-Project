@@ -48,7 +48,7 @@ public class AdminApiController {
     public String getUserChart() {
 
         return "admin/user-chart";
-
+    }
     // =====
     // 장소
     // ====

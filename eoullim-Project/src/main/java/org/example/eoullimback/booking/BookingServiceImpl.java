@@ -130,4 +130,22 @@ public class BookingServiceImpl implements BookingService {
                 .toList();
     }
 
+    @Override
+    @Transactional
+    public void cancelBooking(Long userId, String bookingCode) {
+
+       List<Booking> bookingEntities = bookingRepository.findAllByBookingCodeWithUser(bookingCode, userId);
+
+       if (bookingEntities.isEmpty()) {
+           throw new Exception404(ErrorCode.BOOKING_NOT_FOUND);
+       }
+
+       for (Booking booking : bookingEntities) {
+           booking.changeCanceled();
+
+           if (booking.getTimeSlot() != null) {
+               booking.getTimeSlot().open();
+           }
+       }
+    }
 }

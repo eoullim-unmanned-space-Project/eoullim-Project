@@ -104,7 +104,8 @@
                 const card = document.createElement('div');
                 card.className = 'booking-card';
 
-                const isCancel = (booking.status === "취소완료") ? 'none' : 'block';
+                const isCancel = (booking.status !== "예약대기" && booking.status !== "취소완료") ? 'block' : 'none';
+                const isPending = booking.status === "예약대기" ? 'block' : 'none';
 
                 card.innerHTML = `
                 <div class="booking-thumb">
@@ -132,14 +133,38 @@
                             <span>${Number(booking.amount).toLocaleString()}원</span>
                         </div>
                     </div>
-
-                    <div class="booking-card-footer">
-                        <button class="booking-detail-btn" data-code="${booking.bookingCode}" style="display: ${isCancel}">상세보기</button>
+                     <div class="booking-card-footer">
+                        <button class="booking-detail-btn" data-code="${booking.bookingCode}" style="display: ${isCancel}">
+                            상세보기
+                        </button>
+                        <button class="booking-retry-btn" data-code="${booking.bookingCode}" style="display: ${isPending}">
+                            예약 페이지로 이동
+                        </button>
                     </div>
                 </div>`;
 
                 bookingList.appendChild(card);
             });
+
+            <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+            <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 버튼 수정 !!!!!!!!!!!!!!!!!!!!!! -->
+            <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+                bookingList.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('booking-detail-btn')) {
+                        const bookingCode = e.target.dataset.code;
+                        location.href = `/booking/${bookingCode}`;
+                    }
+
+                    if (e.target.classList.contains('booking-retry-btn')) {
+                        const bookingCode = e.target.dataset.code;
+
+                        if(confirm("다시 결제를 진행하시겠습니까?")) {
+                            location.href = `/booking/detail?code=${bookingCode}`;
+                        } else {
+                            return;
+                        }
+                    }
+                 });
 
                 const detailBtns = document.querySelectorAll('.booking-detail-btn');
                 detailBtns.forEach(btn => {

@@ -3,7 +3,6 @@ package org.example.eoullimback.booking;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.timeslot.TimeSlot;
-import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -66,4 +65,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
        JOIN FETCH b.timeSlot
     """)
     List<Booking> findAllWithTimeSlot();
+
+    @Query("""
+            SELECT b FROM Booking b
+            JOIN FETCH b.user u
+            WHERE b.bookingCode = :bookingCode
+            AND u.id = :userId
+            """)
+    List<Booking> findAllByBookingCodeWithUser(@Param("bookingCode")String bookingCode, @Param("userId")Long userId);
 }
