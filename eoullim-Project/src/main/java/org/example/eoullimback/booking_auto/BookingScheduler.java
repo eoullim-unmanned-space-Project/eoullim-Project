@@ -27,8 +27,7 @@ public class BookingScheduler {
 
 
         } catch (Exception e) {
-            log.error("부킹의 상태를 바꾸는데 실패했습니다. {}", e.getMessage());
-            throw new Exception500(ErrorCode.INTERNAL_ERROR);
+            log.error("부킹의 상태를 바꾸는데 실패했습니다. {}", e.getMessage(), e);
         }
     }
 }

@@ -191,7 +191,7 @@ public record UserResponse() {
             this.amount = grouping.getItemSnapshotPrice();
             this.bookingCode = grouping.getBookingCode();
             this.status = grouping.getStatus().getFormatter();
-            // 3개의 타임슬롯을 List로 묶어준다
+
             this.timeSlots = bookings.stream()
                     .map(booking -> new TimeSlotResponse.DetailDTO(booking.getTimeSlot())).toList();
 

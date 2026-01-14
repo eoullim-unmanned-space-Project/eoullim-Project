@@ -40,8 +40,6 @@ public class BookingController {
     @GetMapping("/booking/complete")
     public String completeBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
 
-        System.out.println(bookingCode);
-
         User sessionUser = (User) session.getAttribute("sessionUser");
 
         if (sessionUser == null) {
