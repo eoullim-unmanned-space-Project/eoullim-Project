@@ -8,8 +8,8 @@
     <section class="sub-section">
         <div class="left">
             <div class="main-content">
+                <img src="{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}" alt="">
                 <p>{{place.name}}</p>
-                <span><img src="{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}" alt=""> {{place.address}}</span>
                 <input type="hidden" id="latitude" value="{{place.latitude}}">
                 <input type="hidden" id="longitude" value="{{place.longitude}}">
                 <p>룸 선택</p>
@@ -18,10 +18,9 @@
                         <div class="room-card" data-room-id="{{roomId}}"><img src="{{roomImagePath}}" alt="{{name}}">
                             <p>{{name}}</p>
                         </div>
-
                     {{/roomList}}
                 </div>
-                <p>위치</p>
+                <p><img src="/img/room/위치.png" alt="장소마커" style="width: 24px; height: auto;">&nbsp; 위치</p>
                 <div id="map"></div>
                 <section class="rules-section">
                     <h2>📌 이용 규칙 안내</h2>
@@ -39,46 +38,20 @@
             </div>
         </div>
 
-
         <div class="right">
-            <div class="room-box">
-                <h3 class="room-title">방</h3>
-                <div class="room-img"  style="background-image: url('/img/main/크리스마스파티룸.jpg')" ></div>
-                <p class="room-desc">
-                    · 내용
-                </p>
-                <hr>
-                <p class="room-info">
-                    · 최대 인원: <strong>인원</strong>
-                </p>
-                <hr>
-                <p class="room-info">
-                    · 최소: 1시간부터 이용 가능
-                </p>
-                <hr>
-                <p class="room-warning">
-                    · 인원 초과 시 1인당 <strong>15,000원</strong> 추가
-                </p>
-            </div>
 
+        </div>
+        <div class="empty-right">
+            <div class="empty-room-container">
+                <div class="empty-room-card">
+                    <div class="character-bg" style="background-image: url('/img/room/이벤트이미지.png');"></div>
 
-            <p><img src="/img/room/user.png" alt=""> 인원 수</p>
-            <div class="people-box">
-                <button type="button" id="minusBtn">−</button>
-                <input type="text" id="peopleCount" value="1" min="1" readonly>
-                <button type="button" id="plusBtn">+</button>
-            </div>
-            <div class="amount-box">
-                <strong id="amount">0</strong>원
-            </div>
-            <div class="timeslot-container" id="timeslot">
-                <div class="timeslot-item">
-
+                    <div class="content-overlay">
+                        <div class="status-icon">🚀</div>
+                        <p class="main-text">룸을 선택하고 예약해보세요!</p>
+                        <p class="sub-text">원하시는 룸을 클릭하면<br>상세 정보가 나타납니다.</p>
+                    </div>
                 </div>
-            </div>
-            <input type="hidden" id="roomId" value="${room.roomId}">
-            <div class="booking-box">
-                <button type="button" id="bookingBtn">예약하기</button>
             </div>
         </div>
     </section>
@@ -196,8 +169,13 @@
             // 2. 상세조회 가져오기 기능
             function RoomDetail(room) {
                 currentAllSlots = room.timeSlots;
-
                 const container = document.querySelector(".right");
+                const emptyContainer = document.querySelector(".empty-right");
+
+                emptyContainer.style.display = 'none';
+
+                container.style.display = 'block';
+
                 container.innerHTML = `
                  <div class="room-box">
                     <h3 class="room-title">${room.name}</h3>
