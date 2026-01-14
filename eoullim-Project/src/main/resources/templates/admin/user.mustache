@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/css/admin/user/user.css">
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,330 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management Console</title>
 </head>
-
 <style>
-    :root {
-        --point-color: #3182f6;
-        --bg-canvas: #f2f4f6;
-        --bg-surface: #ffffff;
-        --text-primary: #191f28;
-        --text-secondary: #4e5968;
-        --text-tertiary: #8b95a1;
-        --line-default: #e5e8eb;
-        --line-subs: #f9fafb;
-    }
-
-    * {
-        box-sizing: border-box;
-        -webkit-font-smoothing: antialiased;
-    }
-
-    body {
-        margin: 0; padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
-        background-color: var(--bg-canvas);
-        color: var(--text-primary);
-        display: flex;
-        min-height: 100vh;
-    }
-
-    /* Sidebar Navigation */
-    nav {
-        width: 260px;
-        height: 100vh;
-        background: white;
-        padding: 40px 20px;
-        position: fixed;
-        border-right: 1px solid var(--border-color);
-    }
-
-    .nav-brand {
-        font-size: 22px;
-        font-weight: 800;
-        margin-bottom: 40px;
-        padding-left: 12px;
-    }
-
-    .nav-menu {
-        list-style: none;
-        padding: 0;
-    }
-
-    .nav-item {
-        padding: 14px 16px;
-        border-radius: 12px;
-        font-weight: 600;
-        color: var(--text-sub);
-        cursor: pointer;
-        margin-bottom: 4px;
-        transition: 0.2s;
-    }
-
-    .nav-item:hover,
-    .nav-item.active {
-        background-color: #f9fafb;
-        color: var(--toss-blue);
-    }
-
-    main {
-        margin-left: 280px;
-        padding: 40px 20px;
-        width: auto;
-        flex-grow: 1;
-        box-sizing: border-box;
-    }
-
-    header {
-        margin-bottom: 32px;
-        padding-left: 8px;
-    }
-
-    header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0; }
-
-    /* 섹션 카드 (가로로 가득 참) */
-    .content-surface {
-        background: var(--bg-surface);
-        border-radius: 24px;
-        padding: 32px 40px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.01);
-        width: 100%;
-    }
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-    }
-
-    .section-header h2 { font-size: 20px; font-weight: 700; margin: 0; }
-
-    /* 데이터 테이블 (유연한 너비) */
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: auto;
-    }
-
-    .data-table th {
-        text-align: left;
-        padding: 16px;
-        color: var(--text-tertiary);
-        font-size: 14px;
-        font-weight: 600;
-        border-bottom: 1px solid var(--line-default);
-    }
-
-    .data-table td {
-        padding: 24px 16px;
-        font-size: 15px;
-        border-bottom: 1px solid var(--line-subs);
-        color: var(--text-secondary);
-    }
-
-    .data-table tr:last-child td { border-bottom: none; }
-    .data-table td strong { color: var(--text-primary); font-weight: 600; }
-
-    /* 공용 컴포넌트 */
-    .status-badge {
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-size: 12px;
-        font-weight: 700;
-        background: #e8f3ff;
-        color: var(--point-color);
-    }
-
-    .channel-kakao {
-        padding: 6px 12px;
-        border-radius: 8px;
-        font-size: 12px;
-        font-weight: 700;
-        background: #FEE500;
-        color: #191919;
-    }
-
-    .action-button {
-        padding: 10px 16px;
-        background-color: #f2f4f6;
-        color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 600;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-        white-space: nowrap;
-    }
-
-    .text-link-btn {
-        background: none; border: none;
-        color: var(--point-color);
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-    }
-
-    .th-list th {
-        text-align: center;
-        padding: 12px 8px;
-        color: #4E5968;
-        font-size: 14px;
-    }
-
-    .tr-list td {
-        text-align: center;
-    }
-
-    .request {
-        background-color: #f2f4f6;
-        color: #4e5968;
-    }
-
-    .detail {
-        background-color: #E8F8EE;
-        color: #32C35A;
-    }
-
-    .update {
-        color: #3182F6;
-        background-color: #E8F3FF;
-    }
-
-    .delete {
-        background-color: #FEECEF;
-        color: #F04452;
-    }
-
-    .detail:hover {
-        background-color: #CEF0D9;
-    }
-
-    .update:hover {
-        background-color: #D6E8FF;
-    }
-
-    .delete:hover {
-        background-color: #FCD6DB;
-    }
-
-
-    .modal-overlay {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(10px);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-    }
-
-    .modal-card {
-        background: var(--bg-surface);
-        width: 100%;
-        max-width: 420px;
-        border-radius: 32px;
-        padding: 32px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        animation: modal-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    @keyframes modal-pop {
-        0% { transform: scale(0.9); opacity: 0; }
-        100% { transform: scale(1); opacity: 1; }
-    }
-
-    .modal-header {
-        text-align: center;
-        margin-bottom: 24px;
-    }
-
-    .modal-header h2 {
-        font-size: 22px;
-        font-weight: 800;
-        letter-spacing: -0.8px;
-        margin-bottom: 8px;
-    }
-
-    .modal-header p {
-        color: var(--text-tertiary);
-        font-size: 14px;
-        margin: 0;
-    }
-
-    .modal-data-box {
-        background-color: var(--bg-canvas);
-        border-radius: 20px;
-        padding: 20px;
-        margin-bottom: 24px;
-    }
-
-    .data-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 12px;
-    }
-
-    .data-row:last-child { margin-bottom: 0; }
-
-    .data-label { color: black; font-size: 13px; font-weight: 600; }
-    .data-value { color: black; font-size: 14px; font-weight: 700; }
-
-    .modal-textarea {
-        width: 100%;
-        height: 130px;
-        background: var(--bg-canvas);
-        border: 2px solid transparent;
-        border-radius: 18px;
-        padding: 16px;
-        font-size: 15px;
-        font-family: inherit;
-        resize: none;
-        outline: none;
-        transition: all 0.2s ease;
-        margin-bottom: 24px;
-        align-items: center;
-    }
-
-    .modal-textarea:focus {
-        background: white;
-        border-color: var(--point-color);
-        box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.1);
-    }
-
-    .modal-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .btn-confirm {
-        width: 100%;
-        padding: 18px;
-        border-radius: 18px;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: pointer;
-        border: none;
-        transition: all 0.2s;
-    }
-
-    .btn-blue { background-color: var(--point-color); color: white; }
-    .btn-blue:hover { background-color: #1b64da; transform: translateY(-2px); }
-
-    .btn-red { background-color: #FEECEF; color: #F04452; }
-    .btn-red:hover { background-color: #FCD6DB; }
-
-    .btn-ghost {
-        background: none;
-        color: var(--text-tertiary);
-        font-weight: 600;
-        font-size: 14px;
-        padding: 12px;
-    }
-    .btn-ghost:hover { color: var(--text-secondary); }
 
 </style>
 <body>
@@ -352,7 +31,7 @@
     <div class="content-surface">
         <div class="section-header">
             <h2>최근 회원 내역</h2>
-<!--            <button class="text-link-btn">전체보기</button>-->
+            <!--            <button class="text-link-btn">전체보기</button>-->
         </div>
         <table class="data-table">
             <thead>
@@ -366,24 +45,32 @@
                 <th>버튼</th>
             </tr>
             </thead>
-                <tbody>
+            <tbody>
 
-                    {{#adminUserList}}
+            {{#adminUserList}}
                 <tr class="tr-list">
                     <td>{{id}}</td>
                     <td>{{loginId}}</td>
                     <td>{{name}}</td>
-                    <td>{{displayProvider}}</td>
-                    <td>{{status}}</td>
+                    <td>
+                        <span class="{{providerClass}}">
+                            {{displayProvider}}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="user-status {{statusClass}}">
+                            {{displayStatus}}
+                        </span>
+                    </td>
                     <td>{{createdAt}}</td>
                     <td style="display: flex; justify-content: center; gap: 12px;">
-<!--                        <button class="action-button detail approve-btn" >승인</button>-->
-<!--                        <button class="action-button delete rejection-btn">거절</button>-->
+                        <!--                        <button class="action-button detail approve-btn" >승인</button>-->
+                        <!--                        <button class="action-button delete rejection-btn">거절</button>-->
                         <button class="action-button update detail-btn" onclick="userDetailModal({{id}})">상세보기</button>
                     </td>
                 </tr>
-                    {{/adminUserList}}
-                </tbody>
+            {{/adminUserList}}
+            </tbody>
         </table>
     </div>
 
@@ -427,22 +114,29 @@
             </div>
             <div class="data-row">
                 <span class="data-label">현재 상태</span>
-                <span class="data-value" id="user-status"></span>
+                <span class="data-value user-status" id="user-status"></span>
             </div>
             <div class="data-row" id="suspendReasonDiv" style="display: none">
                 <label class="data-label">정지 사유</label>
-                <textarea class="form-control" id="suspendReasonInput" rows="3" placeholder="정지 사유를 입력해주세요."></textarea>
+                <textarea id="suspendReasonInput" rows="3" placeholder="정지 사유를 입력해주세요."></textarea>
             </div>
         </div>
 
         <div class="modal-actions" id="modal-footer">
-            <button class="btn-ghost" onclick="closeModal()">닫기</button>
             <button class="btn-confirm btn-blue" id="actionBtn">정지</button>
+            <button class="btn-ghost" onclick="closeModal()">닫기</button>
         </div>
     </div>
 </div>
 
 <script>
+    function updateActionBtn(actionBtn, text, colorClass, clickHandler) {
+        actionBtn.innerText = text;
+        actionBtn.className = "btn-confirm" + colorClass;
+        actionBtn.onclick = null;
+        actionBtn.addEventListener('click', clickHandler);
+    }
+
     function formatDateTime(dateTimeStr) {
         if (!dateTimeStr) return "/";
 
@@ -456,6 +150,7 @@
 
         return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
     }
+
     function userDetailModal(userId) {
         fetch(`/admin/users/${userId}`)
                 .then(res => res.json())
@@ -469,47 +164,50 @@
                     document.getElementById('user-created-at').innerText = formatDateTime(data.createdAt);
                     document.getElementById('user-updated-at').innerText = formatDateTime(data.updatedAt);
 
-                    document.getElementById('user-status').innerText = data.status;
+                    const userStatusElement = document.getElementById('user-status');
+
+                    userStatusElement.innerText = data.displayStatus || data.status;
+                    userStatusElement.className = 'data-value user-status ' + (data.statusClass || '').toLowerCase();
+
+                    const userProviderElement = document.getElementById('user-provider');
+                    userProviderElement.innerText = data.displayProvider || "";
+                    userProviderElement.className = 'data-value provider-badge' + (data.providerClass || '').toLowerCase();
+
 
                     const suspendDiv = document.getElementById('suspendReasonDiv');
                     const actionBtn = document.getElementById('actionBtn');
+                    const reasonInput = document.getElementById('suspendReasonInput')
+
                     suspendDiv.style.display = 'none';
-                    document.getElementById('suspendReasonInput').value = "";
+                    reasonInput.value = "";
 
-                    actionBtn.dataset.userId =userId;
+                    actionBtn.dataset.userId = userId;
 
-                    // if (data.suspendedReason) {
-                    //     suspendDiv.style.display = 'block';
-                    //     document.getElementById('suspendReasonInput').value = data.suspendedReason;
-                    //     actionBtn.innerText = "복구";
-                    //     actionBtn.className = "btn btn-primary"; // 파랑 or 초록
-                    //     actionBtn.onclick = restoreUser;
-                    // } else {
-                    //     actionBtn.innerText = "정지";
-                    //     actionBtn.className = "btn btn-danger"; // 빨강
-                    //     actionBtn.onclick = suspendUser;
-                    // }
                     if (data.status === "SUSPENDED") {
                         // 정지 상태일 때
                         suspendDiv.style.display = 'block';
-                        document.getElementById('suspendReasonInput').value = data.suspendedReason || "";
-                        actionBtn.innerText = "복구";
-                        actionBtn.className = "btn btn-primary";  // 파란 버튼
-                        actionBtn.onclick = restoreUser;
+                        reasonInput.value = data.suspendedReason || "";
+
+                        reasonInput.readOnly = true;
+                        reasonInput.classList.add('readonly');
+
+                        updateActionBtn(actionBtn, "복구", "btn-blue", restoreUser);
 
                     } else if (data.status === "WITHDRAWN") {
                         // 탈퇴 상태일 때
                         suspendDiv.style.display = 'none';  // 정지사유 없음
-                        actionBtn.innerText = "탈퇴복구";
-                        actionBtn.className = "btn btn-primary";  // 파란 버튼
-                        actionBtn.onclick = restoreUser;
+                        reasonInput.value = "";
+                        reasonInput.readOnly = true;
+                        reasonInput.classList.add('readonly');
+
+                        updateActionBtn(actionBtn, "탈퇴복구", "btn-blue", restoreUser);
 
                     } else {
                         // 정상 상태 (ACTIVE 등)
                         suspendDiv.style.display = 'none';
-                        actionBtn.innerText = "정지";
-                        actionBtn.className = "btn btn-danger";  // 빨간 버튼
-                        actionBtn.onclick = suspendUser;
+                        reasonInput.readOnly = false;
+                        reasonInput.classList.remove('readonly');
+                        updateActionBtn(actionBtn, "정지", "btn-red", suspendUser);
                     }
 
                     document.getElementById('modal-detail').style.display = 'flex';
@@ -520,6 +218,7 @@
 
                 })
     }
+
     function closeModal() {
         document.getElementById('modal-detail').style.display = 'none';
     }
@@ -537,8 +236,8 @@
 
         fetch(`/admin/user/${userId}/suspend`, {
             method: "PATCH",
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({ reason })
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({reason})
         }).then(res => {
             if (res.ok) location.reload();
             else alert("정지 처리 실패");
@@ -549,7 +248,7 @@
         const userId = this.dataset.userId;
         if (!confirm("복구 처리하시겠습니까?")) return;
 
-        fetch(`/admin/user/${userId}/restore`, { method: 'PATCH' })
+        fetch(`/admin/user/${userId}/restore`, {method: 'PATCH'})
                 .then(res => {
                     if (res.ok) location.reload();
                     else alert("복구 처리 실패");
@@ -559,7 +258,7 @@
     function formatDateTime(dateTomeStr) {
         if (!dateTomeStr) return "/";
         const d = new Date(dateTomeStr);
-        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
     }
 
 

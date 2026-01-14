@@ -37,6 +37,8 @@ public enum ErrorCode {
     PORT_ONE_ERROR("포트원 인증 실패: 관리자 설정을 확인해주세요."),
     FAILED_REFUND("환불에 실패했습니다."),
     ALREADY_TIMESLOT("타임슬롯이 오픈된 상태만 가능합니다."),
+    MISSING_VERIFICATION_CODE("인증코드를 입력해주세요."),
+    INVALID_VERIFICATION_CODE("인증코드가 일치하지 않습니다."),
 
     // ====
     // 401 Unauthorized

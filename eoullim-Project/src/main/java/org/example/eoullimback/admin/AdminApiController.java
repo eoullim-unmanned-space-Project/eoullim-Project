@@ -36,4 +36,10 @@ public class AdminApiController {
 
         return ResponseEntity.ok().body(null);
     }
+
+    @GetMapping("/admin/user/chart")
+    public String getUserChart() {
+
+        return "admin/user-chart";
+    }
 }

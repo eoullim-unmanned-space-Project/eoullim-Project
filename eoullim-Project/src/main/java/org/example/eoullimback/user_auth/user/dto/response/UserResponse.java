@@ -74,8 +74,10 @@ public record UserResponse() {
         private String name;
         private Status status;
         private String displayStatus;
+        private String statusClass;
         private OAuthProvider provider;
         private String displayProvider;
+        private String providerClass;
         private LocalDate createdAt;
 
         public AdminListDTO(User user) {
@@ -94,12 +96,25 @@ public record UserResponse() {
                 case SUSPENDED -> "정지";
             };
 
+            this.statusClass = switch (this.status) {
+                case ACTIVE -> "active";
+                case WITHDRAWN -> "withdrawn";
+                case SUSPENDED -> "suspended";
+                default -> "unknown";
+            };
+
 
             this.displayProvider = switch (this.provider) {
                 case KAKAO -> "KAKAO";
                 case NAVER -> "NAVER";
                 case LOCAL -> "LOCAL";
                 case GOOGLE -> "GOOGLE";
+            };
+
+            this.providerClass = switch (this.provider) {
+                case KAKAO -> "provider-badge provider-kakao";
+                case LOCAL -> "provider-badge provider-local";
+                default -> "provider-badge provider-local";
             };
         }
     }
