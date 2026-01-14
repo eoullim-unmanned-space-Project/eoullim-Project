@@ -58,6 +58,7 @@
                     <div>
                         <button id="signupBtn" type="submit">회원가입</button>
                     </div>
+
                 </form>
             </div>
         </div>
@@ -189,6 +190,13 @@
                 return;
             }
         }
+
+        const isVerified = document.querySelector("#isEmailVerified").value;
+        if (isVerified !== "true") {
+            alert("이메일 인증을 완료해주세요.");
+            e.preventDefault();
+            return;
+        }
     });
 
     // 이메일 전송 API 호출 (AJAX)
@@ -241,18 +249,18 @@
                 body: JSON.stringify({email: email, code: code})
             });
 
-            let result = await response.json();
             let msgBox = document.querySelector("#msg");
-            alert("이메일 전송중....")
 
             if (response.ok) {
+                // let result = await response.json();
                 msgBox.innerHTML = "<span style='color: green'>인증되었습니다.</span>"
                 document.querySelector("#email").readOnly = true;
                 document.querySelector("#isEmailVerified").value = true;
             } else {
                 msgBox.innerHTML = "<span style='color: red'>인증번호가 틀렸습니다.</span>"
                 document.querySelector("#isEmailVerified").value = false;
-                document.querySelector("#sendNumber").style.display = "block";
+                document.querySelector("#sendEmail").style.display = "block";
+                alert("인증번호가 일치하지않습니다.");
             }
         } catch (e) {
             console.log(e);

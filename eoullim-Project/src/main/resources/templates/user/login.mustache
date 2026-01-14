@@ -12,12 +12,12 @@
                 <form action="/auth/login" method="post">
                     <div class="form-group">
                         <label>아이디</label>
-                        <input type="text" placeholder="아이디를 입력해주세요" name="loginId">
+                        <input type="text" placeholder="아이디를 입력해주세요" name="loginId" id="loginId">
                     </div>
 
                     <div class="form-group">
                         <label>비밀번호</label>
-                        <input type="password" placeholder="비밀번호를 입력해주세요" name="password">
+                        <input type="password" placeholder="비밀번호를 입력해주세요" name="password" id="password">
                     </div>
                     <button type="submit" id="signupBtn">로그인</button>
                     <div class="social-login">
@@ -44,4 +44,18 @@
         alert(`{{loginError}}`);
     </script>
 {{/loginError}}
+<script>
+    const loginForm = document.querySelector("form");
+
+    loginForm.addEventListener("submit", function (e) {
+        const id = document.querySelector("#loginId").value.trim();
+        const pw = document.querySelector("#password").value.trim();
+
+        if (!id || !pw) {
+            alert("아이디 또는 비밀번호를 입력해주세요.");
+            e.preventDefault();
+            return;
+        }
+    });
+</script>
 </body>
