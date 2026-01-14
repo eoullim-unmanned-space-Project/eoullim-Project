@@ -74,16 +74,4 @@ public class PlaceController {
         }
         return "room/list";
     }
-
-
-//    @PostMapping("/place/{placeId}")
-//    public String UpdateProc(@PathVariable Long placeId,
-//                             PlaceRequest.UpdateDTO request
-//    ) {
-//        request.validate();
-//
-//        Place place = placeService.placeUpdate(placeId, request);
-//
-//        return "redirect:/admin/place";
-//    }
 }
