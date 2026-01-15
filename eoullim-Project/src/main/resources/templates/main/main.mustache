@@ -67,6 +67,24 @@
             <div>아직 등록된 리뷰가 없습니다.</div>
         {{/reviews}}
     </section>
+
+    <section>
+    <!-- chatBot -->
+        <div class="chat-popup" id="chat-popup" aria-hidden="true">
+            <div class="header">
+                <h1>ChatBot</h1>
+                <button class="btn-close" id="btn-close" type="button" aria-label="닫기">✕</button>
+            </div>
+
+            <div class="chat-box" id="chat-box"></div>
+
+            <form class="input-area" id="chat-form">
+                <input type="text" class="input-msg" id="chat-input" placeholder="내용을 입력해주세요..." required>
+                <button type="submit" class="btn-send" id="btn-send">보내기</button>
+            </form>
+        </div>
+        <button class="chat-fab" id="chat-fab" type="button" aria-label="챗봇 열기">💬</button>
+    </section>
 </main>
 
 <script>
@@ -75,6 +93,18 @@
     const slides = document.querySelectorAll('.banner-slide');
     let currentIndex = 0;
 
+    // ---------------chatBot------------------ //
+    const popup = document.getElementById("chat-popup");
+    const fab = document.getElementById("chat-fab");
+    const btnClose = document.getElementById("btn-close");
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("chat-input");
+    const chatBox = document.getElementById("chat-box");
+    const btnSend = document.getElementById("btn-send");
+    const INIT_MESSAGE = `질문을 입력해주세요.\n예) 문의방법/공간안내/운영시간/위치/가격/예약/환불`;
+    let hasInitMessage = false;
+
+    // 배너 슬라이드 스크립트
     if (track && slides.length > 0) {
         function moveSlide(index) {
             track.style.transform = `translateX(-${index * 100}%)`;
@@ -89,6 +119,89 @@
             currentIndex = (currentIndex - 1 + slides.length) % slides.length;
             moveSlide(currentIndex);
         });
+    }
+
+    // ---------------chatBot------------------ //
+    function openChat() {
+        popup.classList.add("open");
+        popup.setAttribute("aria-hidden", "false");
+
+        // 챗봇 처음 메세지
+        if (!hasInitMessage) {
+            appendMessage("Bot", INIT_MESSAGE);
+            hasInitMessage = true;
+        }
+
+        setTimeout(() => input.focus(), 0);
+    }
+
+
+    function closeChat() {
+        popup.classList.remove("open");
+        popup.setAttribute("aria-hidden", "true");
+    }
+
+    // 토글
+    function toggleChat() {
+        if (popup.classList.contains("open")) closeChat();
+        else openChat();
+    }
+
+    fab.addEventListener("click", toggleChat);
+    btnClose.addEventListener("click", closeChat);
+
+    // (x) 닫기
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && popup.classList.contains("open")) closeChat();
+    });
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const userMsg = input.value.trim();
+        if (!userMsg) return;
+
+        appendMessage("나", userMsg);
+        input.value = "";
+
+        try {
+            btnSend.disabled = true;
+
+            const res = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: userMsg })
+            });
+
+            const reply = await res.text();
+            appendMessage("Bot", reply);
+        } catch (err) {
+            appendMessage("Bot", "(에러 발생: " + err.message + ")");
+        } finally {
+            btnSend.disabled = false;
+            input.focus();
+        }
+    });
+
+    function appendMessage(sender, message) {
+        const isMe = sender === "나";
+
+        const wrap = document.createElement("div");
+        wrap.className = "msg-box" + (isMe ? " me" : "");
+
+        const name = document.createElement("span");
+        name.className = "name";
+        name.textContent = sender;
+
+        const msg = document.createElement("span");
+        msg.className = "msg" + (isMe ? " me" : "");
+        msg.textContent = message;
+
+        wrap.appendChild(name);
+        wrap.appendChild(msg);
+
+        chatBox.appendChild(wrap);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 </script>
 
