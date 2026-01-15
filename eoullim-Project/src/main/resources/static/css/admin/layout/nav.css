@@ -102,9 +102,9 @@ header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0
     table-layout: auto;
 }
 
-.data-table th {
-    text-align: left;
-    padding: 16px;
+thead>.th-list>th {
+
+    text-align: center;
     color: var(--text-tertiary);
     font-size: 14px;
     font-weight: 600;

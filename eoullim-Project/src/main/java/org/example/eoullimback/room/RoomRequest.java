@@ -32,10 +32,10 @@ public class RoomRequest {
             if (content == null || content.trim().isEmpty()) {
                 throw new IllegalArgumentException("내용은 필수입니다.");
             }
-            if (maxCapacity >= 1) {
+            if (maxCapacity < 1) {
                 throw new IllegalArgumentException("최대 1명 이상이어야 합니다.");
             }
-            if (defaultPrice >= 100) {
+            if (defaultPrice < 100) {
                 throw new IllegalArgumentException("값은 100원부터 입니다.");
             }
             if (status == null) {
@@ -61,33 +61,29 @@ public class RoomRequest {
     public static class UpdateDTO {
         String name;
         String content;
-        Integer maxCapacity;
+        int maxCapacity;
         int defaultPrice;
         RoomStatus status;
         private MultipartFile roomImage;
         private String roomImageFileName;
 
         public void validate() {
+
             if (name == null || name.trim().isEmpty()) {
                 throw new IllegalArgumentException("방명을 입력해주세요.");
             }
             if (content == null || content.trim().isEmpty()) {
                 throw new IllegalArgumentException("내용은 필수입니다.");
             }
-            if (maxCapacity >= 1) {
+            if (maxCapacity < 1) {
                 throw new IllegalArgumentException("최대 1명 이상이어야 합니다.");
             }
-            if (defaultPrice >= 100) {
+            if (defaultPrice < 100) {
                 throw new IllegalArgumentException("값은 100원부터 입니다.");
             }
             if (status == null) {
                 throw new IllegalArgumentException("상태값은 필수 입니다.");
             }
         }
-    }
-
-    @Data
-    public static class detailDTO {
-        private Long roomId;
     }
 }

@@ -19,7 +19,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     """)
     Optional<Room> findByWithPlace(@Param("roomId") Long roomId);
 
-    void deleteByPlaceId(Long placeId);
+    @Query("SELECT r FROM Room r JOIN FETCH r.place ORDER BY r.id DESC")
+    List<Room> findAllWithPlace();
 
     List<Room> findByPlaceId(Long placeId);
 }

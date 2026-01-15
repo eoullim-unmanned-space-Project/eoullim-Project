@@ -10,11 +10,14 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback._common.enums.time_slot.SlotStatus;
 import org.example.eoullimback._common.error.exception.Exception400;
+import org.example.eoullimback.item.Item;
 import org.example.eoullimback.room.Room;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "time_slots",
@@ -66,6 +69,9 @@ public class TimeSlot {
 
     @Column(name = "holdexpired_at")
     private LocalDateTime holdExpiredAt;
+
+    @OneToMany(mappedBy = "timeSlot", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Item> items = new ArrayList<>();
 
     @Builder
     public TimeSlot(Long id, Room room, String slotMonth,  LocalDateTime startTime, LocalDateTime endTime, int capacity, SlotStatus status) {

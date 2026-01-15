@@ -10,7 +10,7 @@
             <h3>장소 생성</h3>
             <p>새로운 사업장이나 위치를 등록합니다.</p>
         </div>
-        <div class="action-card" onclick="alert('방 생성 페이지로 이동')">
+        <div class="action-card" id="room-create-btn">
             <div class="icon-box">🔑</div>
             <h3>방 생성</h3>
             <p>등록된 장소 내에 새로운 호실을 추가합니다.</p>
@@ -29,7 +29,6 @@
                 <th>카테고리</th>
                 <th>이름</th>
                 <th>주소</th>
-                <th>방 이미지</th>
                 <th>생성일</th>
                 <th>수정일</th>
                 <th>상세보기</th>
@@ -43,7 +42,6 @@
                     <td><span class="badge">{{category}}</span></td>
                     <td>{{name}}</td>
                     <td>{{address}}</td>
-                    <td class="profile-path">{{profilePath}}</td>
                     <td>{{createdAt}}</td>
                     <td>{{updatedAt}}</td>
                     <td>
@@ -73,40 +71,44 @@
         <table class="data-table">
             <thead>
             <tr class="th-list">
-                <th>번호</th>
-                <th>카테고리</th>
+                <th>방 번호</th>
+                <th>상태</th>
+                <th>장소 번호</th>
                 <th>이름</th>
-                <th>주소</th>
-                <th>방 이미지</th>
-                <th>생성일</th>
-                <th>수정일</th>
+                <th>내용</th>
+                <th>최대 인원</th>
+                <th>가격</th>
                 <th>상세보기</th>
             </tr>
             </thead>
 
             <tbody>
-            {{#placePage.content}}
+            {{#roomList}}
                 <tr class="tr-list">
-                    <td>{{id}}</td>
-                    <td><span class="badge">{{category}}</span></td>
+                    <td>{{roomId}}</td>
+                    <td><span class="badge">{{status}}</span></td>
+                    <td>{{placeId}}</td>
                     <td>{{name}}</td>
-                    <td>{{address}}</td>
-                    <td class="profile-path">{{profilePath}}</td>
-                    <td>{{createdAt}}</td>
-                    <td>{{updatedAt}}</td>
+                    <td>{{content}}</td>
+                    <td>{{maxCapacity}}</td>
+                    <td>{{defaultPrice}}</td>
                     <td>
-                        <button class="action-button detail place-update-btn" data-id="{{id}}"
+                        <button class="action-button detail room-update-btn" data-place-id="{{placeId}}"
+                                data-room-id="{{roomId}}" data-content="{{content}}" data-max-capacity="{{maxCapacity}}"
+                                data-default-price="{{defaultPrice}}"
                                 data-name="{{name}}">수정
                         </button>
-                        <button class="action-button delete place-delete-btn" data-id="{{id}}">삭제</button>
-                        <button class="action-button update place-detail-btn" data-id="{{id}}"
-                                data-name="{{name}}" data-address="{{address}}" data-latitude="{{latitude}}"
-                                data-longitude="{{longitude}}"
-                                data-category="{{category}}" data-profilePath="{{profilePath}}">상세보기
+                        <button class="action-button delete room-delete-btn" data-room-id="{{roomId}}">삭제
+                        </button>
+                        <button class="action-button update room-detail-btn" data-place-id="{{placeId}}"
+                                data-room-id="{{roomId}}"
+                                data-name="{{name}}" data-content="{{content}}" data-max-capacity="{{maxCapacity}}"
+                                data-default-price="{{defaultPrice}}"
+                                data-status="{{status}}" data-room-image-path="{{roomImagePath}}">상세보기
                         </button>
                     </td>
                 </tr>
-            {{/placePage.content}}
+            {{/roomList}}
             </tbody>
 
         </table>
@@ -114,83 +116,84 @@
 
 </main>
 
+<!-- 장소 -->
 <!-- 생성 모달 -->
 <div class="modal-overlay" id="place-create-modal">
     <div class="modal-card">
-        <div class="modal-header">
+        <div class="place-modal-header">
             <h2>장소 생성</h2>
         </div>
 
-        <div class="modal-data-box">
-            <div class="mb-3">
+        <div class="modal-input-box">
+            <div class="input-label">
                 <span class="data-label">장소 명</span>
-                <input type="text" class="data-value" id="place-name" placeholder="장소명을 입력해주세요.">
+                <input type="text" class="data-value" id="place-name" placeholder="장소명을 입력해주세요." required>
             </div>
-            <div class="mb-3">
+            <div class="input-label">
                 <span class="data-label">주소</span>
-                <input type="text" class="data-value" id="place-address" placeholder="주소를 입력해주세요.">
+                <input type="text" class="data-value" id="place-address" placeholder="주소를 입력해주세요." required>
             </div>
-            <div class="mb-3">
+            <div class="input-label">
                 <span class="data-label">위도</span>
-                <input type="text" class="data-value" id="place-latitude" placeholder="위도를 입력해주세요.">
+                <input type="text" class="data-value" id="place-latitude" placeholder="위도를 입력해주세요." required>
             </div>
-            <div class="mb-3">
+            <div class="input-label">
                 <span class="data-label">경도</span>
-                <input type="text" class="data-value" id="place-longitude" placeholder="경도를 입력해주세요.">
+                <input type="text" class="data-value" id="place-longitude" placeholder="경도를 입력해주세요." required>
             </div>
-            <div class="mb-3">
+            <div class="input-label">
                 <span class="data-label">카테고리</span>
-                <select class="data-value" id="place-category">
+                <select class="data-value" id="place-category" required>
                     <option VALUE="">선택하세요</option>
                     <option VALUE="PARTY">PARTY</option>
                     <option VALUE="STUDY">STUDY</option>
                     <option VALUE="PRACTICE">PRACTICE</option>
                 </select>
             </div>
-            <div class="mb-3">
+            <div class="input-label">
                 <span class="data-label">장소 이미지 첨부</span>
-                <input type="file" class="form-control" id="place-profileImage" name="profileImage" accept="image/*">
-            </div>
-            <div>
+                <input type="file" class="form-control" id="place-profileImage" name="profileImage"
+                       accept="image/*">
                 <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
             </div>
         </div>
 
         <div class="modal-actions">
-            <button class="btn-confirm btn-blue" onclick="saveModal()">생성</button>
-            <button type="button" class="btn-confirm btn-red" onclick="closeDetailModal()">닫기</button>
+            <button class="btn-confirm btn-blue" onclick="savePlaceModal()">생성</button>
+            <button type="button" class="btn-confirm btn-red" onclick="closePlaceModal()">닫기</button>
         </div>
     </div>
 </div>
 
+<!-- 장소 -->
 <!-- 수정 모달 -->
 <div class="modal-overlay" id="place-update-modal">
     <div class="modal-card">
-        <div class="modal-header">
+        <div class="place-modal-header">
             <h2>장소 수정</h2>
         </div>
 
-        <div class="modal-data-box">
+        <div class="modal-input-box">
             <div class="data-row">
                 <span class="data-label">장소 번호</span>
-                <span class="data-value" id="place-update-id"></span>
+                <span class="data-value" id="update-place-id"></span>
             </div>
-            <div class="mb-3">
+            <div class="input-label">
                 <span class="data-label">장소 명</span>
-                <input type="text" class="data-value" id="place-update-name" placeholder="장소명을 입력해주세요.">
+                <input type="text" class="data-value" id="update-place-name" placeholder="장소명을 입력해주세요." required>
             </div>
-            <div class="mb-3">
+            <div class="input-label">
                 <span class="data-label">카테고리</span>
-                <select class="data-value" id="place-update-category">
+                <select class="data-value" id="update-place-category" required>
                     <option VALUE="">선택하세요</option>
                     <option VALUE="PARTY">PARTY</option>
                     <option VALUE="STUDY">STUDY</option>
                     <option VALUE="PRACTICE">PRACTICE</option>
                 </select>
             </div>
-            <div class="mb-3">
+            <div class="input-label">
                 <span class="data-label">장소 이미지 첨부</span>
-                <input type="file" class="form-control" id="place-update-profileImage" name="profileImage"
+                <input type="file" class="form-control" id="update-place-profileImage" name="profileImage"
                        accept="image/*">
             </div>
             <div>
@@ -199,20 +202,20 @@
         </div>
 
         <div class="modal-actions">
-            <button class="btn-confirm btn-blue" onclick="updateModal(id)">수정 완료</button>
-            <button type="button" class="btn-confirm btn-red" onclick="closeDetailModal()">닫기</button>
+            <button class="btn-confirm btn-blue" onclick="updatePlaceModal()">수정 완료</button>
+            <button type="button" class="btn-confirm btn-red" onclick="closePlaceModal()">닫기</button>
         </div>
     </div>
 </div>
-
+<!-- 장소 -->
 <!-- 상세보기 모달 -->
 <div class="modal-overlay" id="place-detail-modal">
     <div class="modal-card">
-        <div class="modal-header">
+        <div class="place-modal-header">
             <h2>장소 상세 정보</h2>
         </div>
 
-        <div class="modal-data-box">
+        <div class="modal-input-box">
             <div class="data-row">
                 <span class="data-label">장소 번호</span>
                 <span class="data-value" id="detail-place-id"></span>
@@ -246,7 +249,181 @@
         </div>
 
         <div class="modal-actions">
-            <button class="btn-confirm btn-blue" onclick="closeDetailModal()">확인</button>
+            <button class="btn-confirm btn-blue" onclick="closePlaceModal()">확인</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- 방  -->
+<!-- 생성 모달 -->
+<div class="modal-overlay" id="room-create-modal">
+    <div class="modal-card">
+        <div class="place-modal-header">
+            <h2>방 생성</h2>
+        </div>
+
+        <div class="modal-input-box">
+            <div class="input-label">
+                <span class="data-label">장소 번호</span>
+                <input type="text" class="data-value" id="room-place-id" placeholder="장소 번호를 입력해주세요." required>
+            </div>
+            <div class="input-label">
+                <span class="data-label">방 이름</span>
+                <input type="text" class="data-value" id="room-name" placeholder="방 이름을 입력해주세요." required>
+            </div>
+            <div class="input-label">
+                <span class="data-label">내용</span>
+                <textarea type="text" class="data-value" id="room-content" placeholder="내용을 입력해주세요." required></textarea>
+            </div>
+            <div class="input-label">
+                <div class="input-label-flex">
+                    <div>
+                        <span class="data-label">최대 인원</span>
+                        <input type="text" class="data-value" id="room-max-capacity" placeholder="최대 인원을 입력해주세요." required>
+                    </div>
+                    <div>
+                        <span class="data-label">기본 가격</span>
+                        <input type="text" class="data-value" id="room-default-price" placeholder="기본 가격을 입력해주세요." required>
+                    </div>
+                </div>
+            </div>
+            <!--            <div class="input-label">-->
+            <!--                -->
+            <!--            </div>-->
+            <div class="input-label">
+                <span class="data-label">상태</span>
+                <select class="data-value" id="room-status" required>
+                    <option VALUE="">선택하세요</option>
+                    <option VALUE="OPEN">OPEN</option>
+                    <option VALUE="CLOSED">CLOSED</option>
+                    <option VALUE="CANCELED">CANCELED</option>
+                </select>
+            </div>
+            <div class="input-label">
+                <span class="data-label">방 이미지 첨부</span>
+                <input type="file" class="form-control" id="room-room-image" name="roomImage" accept="image/*">
+            </div>
+            <div>
+                <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-confirm btn-blue" onclick="saveRoomModal()">생성</button>
+            <button type="button" class="btn-confirm btn-red" onclick="closeRoomModal()">닫기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 방  -->
+<!-- 수정 모달 -->
+<div class="modal-overlay" id="room-update-modal">
+    <div class="modal-card">
+        <div class="place-modal-header">
+            <h2>방 수정</h2>
+        </div>
+
+        <div class="modal-input-box">
+            <div class="data-row">
+                <span class="data-label">방 번호</span>
+                <span class="data-value" id="update-room-id"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">장소 번호</span>
+                <span class="data-value" id="update-room-place-id"></span>
+            </div>
+            <div class="input-label">
+                <span class="data-label">방 이름</span>
+                <input type="text" class="data-value" id="update-room-name" placeholder="방 이름을 입력해주세요." required>
+            </div>
+            <div class="input-label">
+                <span class="data-label">내용</span>
+                <textarea class="data-value" id="update-room-content"
+                          placeholder="내용을 입력해주세요."></textarea>
+            </div>
+            <div class="input-label">
+                <span class="data-label">최대 인원</span>
+                <input type="text" class="data-value" id="update-room-max-capacity" placeholder="최대 인원을 입력해주세요." required>
+            </div>
+            <div class="input-label">
+                <span class="data-label">기본 가격</span>
+                <input type="text" class="data-value" id="update-room-default-price" placeholder="기본 가격을 입력해주세요." required>
+            </div>
+            <div class="input-label">
+                <span class="data-label">상태</span>
+                <select class="data-value" id="update-room-status" required>
+                    <option VALUE="">선택하세요</option>
+                    <option VALUE="OPEN">OPEN</option>
+                    <option VALUE="CLOSED">CLOSED</option>
+                    <option VALUE="CANCELED">CANCELED</option>
+                </select>
+            </div>
+            <div class="input-label">
+                <span class="data-label">방 이미지 첨부</span>
+                <input type="file" class="form-control" id="update-room-room-image" name="roomImage"
+                       accept="image/*">
+            </div>
+            <div>
+                <small class="form-text text-muted mt-1">이미지 파일만 업로드 가능합니다(JPG, PNG, GIF)</small>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-confirm btn-blue" onclick="updateRoomModal()">수정 완료</button>
+            <button type="button" class="btn-confirm btn-red" onclick="closeRoomModal()">닫기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 방 -->
+<!-- 상세보기 모달 -->
+<div class="modal-overlay" id="room-detail-modal">
+    <div class="modal-card">
+        <div class="place-modal-header">
+            <h2>방 상세 정보</h2>
+        </div>
+
+        <div class="modal-input-box">
+            <div class="data-row">
+                <span class="data-label">방 번호</span>
+                <span class="data-value" id="detail-room-id"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">장소 번호</span>
+                <span class="data-value" id="detail-room-place-id"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">이름</span>
+                <span class="data-value" id="detail-room-name"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">내용</span>
+                <span class="data-value" style="color: var(--point-color);" id="detail-room-content"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">최대 인원</span>
+                <span class="data-value" style="color: var(--point-color);" id="detail-room-max-capacity"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">기본 가격</span>
+                <span class="data-value" style="color: var(--point-color);" id="detail-room-default-price"></span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">상태</span>
+                <span class="data-value" style="color: var(--point-color);" id="detail-room-status"></span>
+            </div>
+
+            <div class="data-row">
+                <span class="data-label">방 이미지</span>
+            </div>
+            <div class="data-row">
+                <img src="" alt="" class="data-image" id="detail-room-room-image">
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn-confirm btn-blue" onclick="closeRoomModal()">확인</button>
         </div>
     </div>
 </div>
@@ -272,8 +449,8 @@
 
                 placeUpdateModal.style.display = 'flex';
 
-                document.getElementById("place-update-id").textContent = id;
-                document.getElementById("place-update-name").textContent = name;
+                document.getElementById("update-place-id").textContent = id;
+                document.getElementById("update-place-name").value = name;
             })
         });
 
@@ -311,7 +488,6 @@
                     const response = await fetch(`/place/${id}`, {
                         method: 'DELETE',
                     });
-                    // const data = await response.json();
 
                     if (response.ok) {
                         alert("삭제되었습니다.");
@@ -326,7 +502,7 @@
     });
 
     // 저장 모달
-    async function saveModal() {
+    async function savePlaceModal() {
         const formData = new FormData();
 
         formData.append("name", document.getElementById("place-name").value);
@@ -349,20 +525,20 @@
             return;
         }
 
-        closeDetailModal();
+        closePlaceModal();
         location.reload();
     }
 
     // 수정 모달
-    async function updateModal() {
-        const id = document.getElementById("place-update-id").textContent;
+    async function updatePlaceModal() {
+        const id = document.getElementById("update-place-id").textContent;
 
         const formData = new FormData();
 
-        formData.append("name", document.getElementById("place-update-name").value);
-        formData.append("category", document.getElementById("place-update-category").value);
+        formData.append("name", document.getElementById("update-place-name").value);
+        formData.append("category", document.getElementById("update-place-category").value);
 
-        const imageInput = document.getElementById("place-update-profileImage");
+        const imageInput = document.getElementById("update-place-profileImage");
         if (imageInput.files.length > 0) {
             formData.append("profileImage", imageInput.files[0]);
         }
@@ -372,11 +548,11 @@
             body: formData
         });
 
-        closeDetailModal();
+        closePlaceModal();
         location.reload();
     }
 
-    function closeDetailModal() {
+    function closePlaceModal() {
         const createModal = document.getElementById('place-create-modal');
         const updateModal = document.getElementById('place-update-modal');
         const detailModal = document.getElementById('place-detail-modal');
@@ -392,7 +568,168 @@
         detailModal.style.display = 'none';
     }
 
+    // ========
+    //  방 모달
+    // ========
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const roomCreateBtn = document.getElementById("room-create-btn");
+        const roomUpdateBtns = document.querySelectorAll(".room-update-btn");
+        const roomDeleteBtns = document.querySelectorAll(".room-delete-btn");
+        const roomDetailBtns = document.querySelectorAll(".room-detail-btn");
+        const roomCreateModal = document.getElementById("room-create-modal");
+        const roomUpdateModal = document.getElementById("room-update-modal");
+        const roomDetailModal = document.getElementById("room-detail-modal");
+
+        roomCreateBtn.addEventListener('click', () => {
+            roomCreateModal.style.display = 'flex';
+        });
+
+        roomUpdateBtns.forEach(button => {
+            button.addEventListener('click', () => {
+                const placeId = button.getAttribute('data-place-id');
+                const id = button.getAttribute('data-room-id');
+                const name = button.getAttribute('data-name');
+                const content = button.getAttribute('data-content');
+                const maxCapacity = button.getAttribute('data-max-capacity');
+                const defaultPrice = button.getAttribute('data-default-price');
+                console.log(maxCapacity);
+                console.log(defaultPrice);
+
+                roomUpdateModal.style.display = 'flex';
+
+                document.getElementById("update-room-place-id").textContent = placeId;
+                document.getElementById("update-room-id").textContent = id;
+                document.getElementById("update-room-name").value = name;
+                document.getElementById("update-room-content").value = content;
+                document.getElementById("update-room-max-capacity").value = maxCapacity;
+                document.getElementById("update-room-default-price").value = defaultPrice;
+            })
+        });
+
+        roomDetailBtns.forEach(button => {
+            button.addEventListener('click', () => {
+                const placeId = button.getAttribute('data-place-id');
+                const id = button.getAttribute('data-id');
+                const name = button.getAttribute('data-name');
+                const content = button.getAttribute('data-content');
+                const maxCapacity = button.getAttribute('data-max-capacity');
+                const defaultPrice = button.getAttribute('data-default-price');
+                const status = button.getAttribute('data-status');
+                const roomImagePath = button.getAttribute('data-room-image-path');
+
+                roomDetailModal.style.display = 'flex';
+
+                document.getElementById("detail-room-place-id").textContent = placeId;
+                document.getElementById("detail-room-id").textContent = id;
+                document.getElementById("detail-room-name").textContent = name;
+                document.getElementById("detail-room-content").textContent = content;
+                document.getElementById("detail-room-max-capacity").textContent = maxCapacity;
+                document.getElementById("detail-room-default-price").textContent = defaultPrice;
+                document.getElementById("detail-room-status").textContent = status;
+                document.getElementById("detail-room-room-image").src = roomImagePath || '/default-image.png';
+            })
+        });
+
+
+        roomDeleteBtns.forEach(button => {
+            button.addEventListener('click', async () => {
+                const roomId = button.getAttribute('data-room-id');
+
+                const confirmDelete = confirm('정말로 삭제하시겠습니까?');
+                if (!confirmDelete) return;
+
+                try {
+                    const response = await fetch(`/room/${roomId}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        alert("삭제되었습니다.");
+                        location.reload();
+                    } else {
+                        alert("예약중인 방이 있습니다.")
+                    }
+
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+        });
+    });
+
+    // 저장 모달
+    async function saveRoomModal() {
+        const formData = new FormData();
+
+        formData.append("placeId", document.getElementById("room-place-id").value);
+        formData.append("name", document.getElementById("room-name").value);
+        formData.append("content", document.getElementById("room-content").value);
+        formData.append("maxCapacity", document.getElementById("room-max-capacity").value);
+        formData.append("defaultPrice", document.getElementById("room-default-price").value);
+        formData.append("status", document.getElementById("room-status").value);
+
+        const imageInput = document.getElementById("room-room-image");
+        if (imageInput.files.length > 0) {
+            formData.append("roomImage", imageInput.files[0]);
+        }
+
+        const response = await fetch(`/room/create`, {
+            method: "POST",
+            body: formData
+        });
+
+        if (!response.ok) {
+            return;
+        }
+
+        closeRoomModal();
+        location.reload();
+    }
+
+    // 수정 모달
+    async function updateRoomModal() {
+        const roomId = document.getElementById("update-room-id").textContent;
+
+        const formData = new FormData();
+
+        formData.append("name", document.getElementById("update-room-name").value);
+        formData.append("content", document.getElementById("update-room-content").value);
+        formData.append("maxCapacity", document.getElementById("update-room-max-capacity").value);
+        formData.append("defaultPrice", document.getElementById("update-room-default-price").value);
+        formData.append("status", document.getElementById("update-room-status").value);
+
+        const imageInput = document.getElementById("update-room-room-image");
+        if (imageInput.files.length > 0) {
+            formData.append("roomImage", imageInput.files[0]);
+        }
+
+        const response = await fetch(`/room/${roomId}`, {
+            method: "PUT",
+            body: formData
+        });
+
+        closeRoomModal();
+        location.reload();
+    }
+
+    function closeRoomModal() {
+        const createModal = document.getElementById('room-create-modal');
+        const updateModal = document.getElementById('room-update-modal');
+        const detailModal = document.getElementById('room-detail-modal');
+        document.getElementById("room-place-id").value = "";
+        document.getElementById("room-name").value = "";
+        document.getElementById("room-content").value = "";
+        document.getElementById("room-max-capacity").value = "";
+        document.getElementById("room-default-price").value = "";
+        document.getElementById("room-room-image").value = "";
+
+        createModal.style.display = 'none';
+        updateModal.style.display = 'none';
+        detailModal.style.display = 'none';
+    }
+
 
 </script>
 </body>
-</html>
+</html></div>

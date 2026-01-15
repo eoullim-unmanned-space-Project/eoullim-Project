@@ -1,20 +1,80 @@
-/* --- 메인 콘텐츠 영역 (화면 전체 확장) --- */
-/*main {*/
-/*    margin-left: 280px;*/
-/*    padding: 40px 20px;*/
-/*    width: auto;*/
-/*    flex-grow: 1;*/
-/*    box-sizing: border-box;*/
-/*}*/
 
-td.profile-path {
-    max-width: 100px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.place-modal-header {
+    text-align: center;
+    margin-bottom: 12px;
 }
 
 .data-image {
     width: 100%;
     height: 100%;
+}
+
+.modal-input-box{
+    flex: 1;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+
+.input-label {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.input-label label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-left: 4px;
+}
+
+/* 인풋 공통 스타일 */
+.modal-input-box input, select {
+    width: 100%;
+    height: 48px; /* 높이 고정으로 깨짐 방지 */
+    padding: 2px 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    outline: none;
+    background: #fff;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.modal-input-box textarea {
+    width: 100%;
+    height: 80px;
+    padding: 2px 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    outline: none;
+    background: #fff;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    resize: none;
+}
+
+.modal-input-box input:hover {
+    border-color: #6366f1;
+}
+
+.modal-input-box input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.input-label-flex {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.form-control {
+    display: flex;
+    align-items: center;
 }

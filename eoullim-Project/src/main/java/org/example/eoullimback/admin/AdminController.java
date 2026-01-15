@@ -8,6 +8,8 @@ import org.example.eoullimback.payment_refund.PaymentRefundService;
 import org.example.eoullimback.place.Place;
 import org.example.eoullimback.place.PlaceResponse;
 import org.example.eoullimback.place.PlaceService;
+import org.example.eoullimback.room.RoomResponse;
+import org.example.eoullimback.room.RoomService;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserService;
 import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
@@ -27,6 +29,7 @@ public class AdminController {
     private final PaymentRefundService paymentRefundService;
     private final PlaceService placeService;
     private final UserService userService;
+    private final RoomService roomService;
 
     // http://localhost:8080/admin/dashboard
     @GetMapping("/admin/dashboard")
@@ -58,7 +61,10 @@ public class AdminController {
         int pageIndex = Math.max(0, page - 1);
         PageResponse.PageDTO<Place, PlaceResponse.DetailDTO> placePage = placeService.placeAdminList(pageIndex, size, keyword);
         model.addAttribute("placePage", placePage);
+        List<RoomResponse.AdminDetailDTO> roomList = roomService.roomAdminList();
+
         model.addAttribute("placeKeyword", keyword != null ? keyword : "");
+        model.addAttribute("roomList", roomList);
 
         return "/admin/place";
     }
