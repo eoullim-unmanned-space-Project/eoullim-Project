@@ -44,4 +44,11 @@ public interface PaymentRefundRepository extends JpaRepository<PaymentRefund, Lo
     Optional<PaymentRefund> findByIdPayment(@Param("id")Long id);
 
     boolean existsByPayment(Payment payment);
+
+
+    @Query("""
+        SELECT COUNT(pr) FROM PaymentRefund pr
+        WHERE pr.status = 'REQUESTED'
+        """)
+    Long countPaymentsInRefundRequested();
 }
