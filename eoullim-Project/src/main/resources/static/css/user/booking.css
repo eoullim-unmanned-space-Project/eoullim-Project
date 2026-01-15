@@ -180,7 +180,9 @@
 
 .booking-card-footer {
     margin-top: 12px;
-    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
 }
 
 .booking-detail-btn {
@@ -205,6 +207,28 @@
     background-color: #1f2937;
 }
 
+
+.booking-retry-btn {
+    padding: 9px 18px;
+    border-radius: 8px;
+    background: #6366f1;
+    color: white;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(99, 102, 241, 0.25);
+    transition: all 0.2s ease;
+}
+
+.booking-retry-btn:hover {
+    transform: translateY(-1px);
+    background: #4f46e5;
+}
+
+.booking-retry-btn:active {
+    background-color: #1f2937;
+}
 
 
 /*********************************/
@@ -366,4 +390,16 @@
 .empty-desc {
     font-size: 13px;
     line-height: 1.5;
+}
+
+.booking-timer {
+    color: tomato;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.timer-highlight>.label {
+    font-size: 10px;
+    color: black;
+    font-weight: bold;
 }
