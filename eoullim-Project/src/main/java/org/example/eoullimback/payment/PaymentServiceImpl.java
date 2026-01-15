@@ -53,22 +53,18 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public PaymentResponse.PrepareDTO prepare(Long id, String bookingCode) {
     
-        // 사용자 존재 여부
         User userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
-        // 부킹 존재 여부
         List<Booking> bookingEntities = bookingRepository.findAllByBookingCode(bookingCode)
                 .orElseThrow(() ->  new Exception404(ErrorCode.BOOKING_NOT_FOUND));
 
         Booking booking = bookingEntities.get(0);
 
-        // 부킹의 사용자가 결제한 해당 사용자가 맞는지 검증
         if (!booking.getUser().getId().equals(id)) {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
 
-        // 부킹의 상태값 확인 대기중이 아니면 예외처리
         if (booking.getStatus() != BookingStatus.PENDING) {
             throw new Exception400(ErrorCode.INVALID_BOOKING_STATUS);
         }
@@ -88,7 +84,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .booking(booking)
                 .orderId(booking.getBookingCode())
                 .paymentKey(paymentKey)
-                .amount(booking.getItemSnapshotPrice())
+                .amount(booking.getAmount())
                 .method(PaymentMethod.KAKAO_PAY)
                 .status(PaymentStatus.READY)
                 .productName(booking.getRoom().getName())
@@ -194,9 +190,11 @@ public class PaymentServiceImpl implements PaymentService {
 
             return response.getBody().getResponse().getAccessToken();
 
+        } catch (IllegalArgumentException e) {
+            throw new Exception400(ErrorCode.PAYMENT_FAILED);
         } catch (Exception e) {
             log.error("포트원 토큰 발급 중 오류 발생: ", e);
-            throw new Exception400(ErrorCode.PAYMENT_FAILED);
+            throw new Exception500(ErrorCode.INTERNAL_ERROR);
         }
     }
 
@@ -286,6 +284,16 @@ public class PaymentServiceImpl implements PaymentService {
                 timeSlots,
                 refundEntity
         );
+    }
+
+    @Override
+    public List<PaymentResponse.PaymentListDTO> getAllPaymentList() {
+
+        List<Payment> paymentEntities = paymentRepository.findAllPayment();
+
+        return paymentEntities.stream()
+                .map(PaymentResponse.PaymentListDTO::new)
+                .toList();
     }
 
     private String generatePaymentKey(Long id) {

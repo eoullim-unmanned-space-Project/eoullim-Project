@@ -12,4 +12,5 @@ public interface BookingService {
     String saveBooking(Long id, BookingRequest.createDTO createDTO);
     BookingResponse.DetailDTO detailBooking(Long id, String bookingCode);
     List<UserResponse.UserBookingDTO> searchBookings(Long id, String bookingCode, BookingStatus status);
+    void cancelBooking(Long id, String bookingCode);
 }

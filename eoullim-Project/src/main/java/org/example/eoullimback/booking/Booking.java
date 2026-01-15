@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception400;
+import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.user_auth.user.User;
@@ -97,15 +100,22 @@ public class Booking {
         this.status = (status != null) ? status : BookingStatus.PENDING;
     }
 
+
     public void changeSuccess() {
         this.status = BookingStatus.CONFIRMED;
     }
 
     public void changeCanceled() {
-        if (this.status != BookingStatus.CANCELED && this.status != BookingStatus.REFUNDED ) {
-            this.cancelledAt = LocalDateTime.now();
-            this.status = BookingStatus.CANCELED;
+        if (this.status == BookingStatus.CANCELED) {
+            throw new Exception400(ErrorCode.BOOKING_ALREADY_CANCELED);
         }
+
+        if (this.status == BookingStatus.REFUNDED) {
+            throw new Exception400(ErrorCode.BOOKING_ALREADY_CANCELED);
+        }
+
+        this.cancelledAt = LocalDateTime.now();
+        this.status = BookingStatus.CANCELED;
     }
 
     public void changeRefund() {

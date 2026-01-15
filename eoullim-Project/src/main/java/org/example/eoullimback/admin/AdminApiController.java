@@ -48,6 +48,12 @@ public class AdminApiController {
         return ResponseEntity.ok().body(null);
     }
 
+
+    @GetMapping("/admin/user/chart")
+    public String getUserChart() {
+
+        return "admin/user-chart";
+    }
     // =====
     // 장소(place)
     // ====
@@ -78,6 +84,7 @@ public class AdminApiController {
         placeService.placeDelete(placeId);
 
         return ResponseEntity.ok().body(null);
+
     }
 
     // =====

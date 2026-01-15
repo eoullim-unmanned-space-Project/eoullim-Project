@@ -41,9 +41,22 @@ public class AuthController {
      */
     @PostMapping("/signup")
     public String signup(@ModelAttribute AuthRequest.SignupRequestDTO request,
-                         HttpSession session
+                         HttpSession session, Model model
     ) {
         request.validate();
+
+        if (request.getVerificationCode() == null || request.getVerificationCode().trim().isEmpty()) {
+            model.addAttribute("signupError", ErrorCode.MISSING_VERIFICATION_CODE);
+            return "user/signup";
+        }
+
+        boolean isVerified = mailService.verifyVerificationCode(
+                request.getEmail(), request.getVerificationCode());
+
+        if (!isVerified) {
+            model.addAttribute("signupError", ErrorCode.INVALID_VERIFICATION_CODE);
+            return "user/signup";
+        }
 
         User newUser = authService.signup(request);
 

@@ -35,21 +35,6 @@
         const bookingBtn = document.querySelector('.booking-search-btn');
         const bookingInput = document.querySelector('.booking-input');
         const filterRoot = document.querySelectorAll('.booking-filter');
-        const useqrcodebtn = document.getElementById('use-qrcode-btn');
-
-        useqrcodebtn.addEventListener("click", async () => {
-            const response = await fetch('/api/user/use-qrCode/2', {
-                method: 'POST',
-                headers: {
-                    "Content-Type" : "application/json"
-                }
-            });
-            if (!response.ok){
-                alert("값을 불러오는데 실패했습니다.");
-
-            }
-            alert("성공");
-        })
 
         async function sendSearch() {
             let bookingCode = bookingInput.value.trim() || '';
@@ -116,8 +101,16 @@
                 }
 
             data.forEach(booking => {
+                console.log(booking.timeSlots);
                 const card = document.createElement('div');
                 card.className = 'booking-card';
+
+                const expireTime = (booking.timeSlots && booking.timeSlots.length > 0)
+                        ? booking.timeSlots[0].holdExpiredAt
+                        : null;
+
+                const isCancel = (booking.status !== "예약대기" && booking.status !== "취소완료") ? 'block' : 'none';
+                const isPending = booking.status === "예약대기" ? 'block' : 'none';
 
                 card.innerHTML = `
                 <div class="booking-thumb">
@@ -144,15 +137,48 @@
                             <span class="label">결제 금액</span>
                             <span>${Number(booking.amount).toLocaleString()}원</span>
                         </div>
-                    </div>
 
-                    <div class="booking-card-footer">
-                        <button class="booking-detail-btn" data-code="${booking.bookingCode}">상세보기</button>
+                          ${isPending === 'block' && expireTime ? `
+                         <div class="booking-info-row timer-highlight">
+                            <span class="label">⏱️ 결제 남은시간</span>
+                            <span class="booking-timer" data-expire="${expireTime}">계산중...</span>
+                        </div>
+                        ` : ''}
                     </div>
-                </div>`;
+                        <div class="booking-card-footer">
+                            ${isCancel !== 'none' ? `
+                                <button class="booking-detail-btn" data-code="${booking.bookingCode}">
+                                    상세보기
+                                </button>
+                            ` : ''}
+                            ${isPending !== 'none' ? `
+                                <button class="booking-retry-btn" data-code="${booking.bookingCode}">
+                                    예약 페이지로 이동
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>`;
 
                 bookingList.appendChild(card);
+                startTimer();
             });
+
+                bookingList.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('booking-detail-btn')) {
+                        const bookingCode = e.target.dataset.code;
+                        location.href = `/booking/${bookingCode}`;
+                    }
+
+                    if (e.target.classList.contains('booking-retry-btn')) {
+                        const bookingCode = e.target.dataset.code;
+
+                        if(confirm("다시 결제를 진행하시겠습니까?")) {
+                            location.href = `/booking/detail?code=${bookingCode}`;
+                        } else {
+                            return;
+                        }
+                    }
+                 });
 
                 const detailBtns = document.querySelectorAll('.booking-detail-btn');
                 detailBtns.forEach(btn => {
@@ -162,13 +188,11 @@
                     try {
                         const response = await fetch(`/api/user/payment?code=${bookingCode}`);
 
+                        console.log(response);
+
                         if(response.ok) {
                            const data = await response.json();
-                           console.log(data);
                            modal(data);
-                        } else {
-                            alert("결제 내역을 불러오는중 오류가 발생하였습니다.");
-                            location.reload();
                         }
 
                     } catch(error) {
@@ -382,6 +406,32 @@
                     } // MODAL End point
                 });
             });
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                const timerEl = document.querySelectorAll('.booking-timer');
+
+                timerEl.forEach(timer => {
+                    const expireStr = timer.dataset.expire;
+
+                    if(expireStr == null) return;
+
+                    const expireDate = new Date(expireStr.replace(' ', 'T')).getTime();
+                    const now = new Date().getTime();
+                    const diff = expireDate - now;
+
+                    if (diff <= 0) {
+                        alert("시간이 지나 예약이 취소되었습니다.");
+                        location.reload();
+                    }
+
+                    const minutes = Math.floor((diff / (1000 * 60)));
+                    const seconds = Math.floor(diff % (1000 * 60) / 1000);
+
+                    timer.innerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                });
+            }, 1000)
         }
     }) // DOM End point
 </script>
