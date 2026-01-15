@@ -101,8 +101,13 @@
                 }
 
             data.forEach(booking => {
+                console.log(booking.timeSlots);
                 const card = document.createElement('div');
                 card.className = 'booking-card';
+
+                const expireTime = (booking.timeSlots && booking.timeSlots.length > 0)
+                        ? booking.timeSlots[0].holdExpiredAt
+                        : null;
 
                 const isCancel = (booking.status !== "예약대기" && booking.status !== "취소완료") ? 'block' : 'none';
                 const isPending = booking.status === "예약대기" ? 'block' : 'none';
@@ -132,23 +137,32 @@
                             <span class="label">결제 금액</span>
                             <span>${Number(booking.amount).toLocaleString()}원</span>
                         </div>
+
+                          ${isPending === 'block' && expireTime ? `
+                         <div class="booking-info-row timer-highlight">
+                            <span class="label">⏱️ 결제 남은시간</span>
+                            <span class="booking-timer" data-expire="${expireTime}">계산중...</span>
+                        </div>
+                        ` : ''}
                     </div>
-                     <div class="booking-card-footer">
-                        <button class="booking-detail-btn" data-code="${booking.bookingCode}" style="display: ${isCancel}">
-                            상세보기
-                        </button>
-                        <button class="booking-retry-btn" data-code="${booking.bookingCode}" style="display: ${isPending}">
-                            예약 페이지로 이동
-                        </button>
-                    </div>
-                </div>`;
+                        <div class="booking-card-footer">
+                            ${isCancel !== 'none' ? `
+                                <button class="booking-detail-btn" data-code="${booking.bookingCode}">
+                                    상세보기
+                                </button>
+                            ` : ''}
+                            ${isPending !== 'none' ? `
+                                <button class="booking-retry-btn" data-code="${booking.bookingCode}">
+                                    예약 페이지로 이동
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>`;
 
                 bookingList.appendChild(card);
+                startTimer();
             });
 
-            <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-            <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 버튼 수정 !!!!!!!!!!!!!!!!!!!!!! -->
-            <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
                 bookingList.addEventListener('click', (e) => {
                     if (e.target.classList.contains('booking-detail-btn')) {
                         const bookingCode = e.target.dataset.code;
@@ -392,6 +406,32 @@
                     } // MODAL End point
                 });
             });
+        }
+
+        function startTimer() {
+            setInterval(() => {
+                const timerEl = document.querySelectorAll('.booking-timer');
+
+                timerEl.forEach(timer => {
+                    const expireStr = timer.dataset.expire;
+
+                    if(expireStr == null) return;
+
+                    const expireDate = new Date(expireStr.replace(' ', 'T')).getTime();
+                    const now = new Date().getTime();
+                    const diff = expireDate - now;
+
+                    if (diff <= 0) {
+                        alert("시간이 지나 예약이 취소되었습니다.");
+                        location.reload();
+                    }
+
+                    const minutes = Math.floor((diff / (1000 * 60)));
+                    const seconds = Math.floor(diff % (1000 * 60) / 1000);
+
+                    timer.innerText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                });
+            }, 1000)
         }
     }) // DOM End point
 </script>
