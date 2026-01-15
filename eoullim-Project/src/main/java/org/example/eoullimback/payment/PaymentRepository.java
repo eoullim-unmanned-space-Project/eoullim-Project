@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,4 +53,24 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
         ORDER BY p.id DESC
         """)
     List<Payment> findAllPayment();
+
+
+    @Query("""
+        SELECT COALESCE(SUM(p.amount), 0) FROM Payment p
+        WHERE p.status = 'COMPLETED'
+        AND p.createdAt >= CURRENT_DATE
+       """)
+    Long getTodaySales();
+
+
+    @Query("""
+        SELECT COALESCE(SUM(p.amount), 0) FROM Payment p
+        WHERE p.status = 'COMPLETED'
+        AND p.createdAt >= :startDay
+        AND p.createdAt < :endDay
+    """)
+    Long getYesterdaySales(@Param("startDay")LocalDateTime startDay, @Param("endDay")LocalDateTime endDay);
+
+
+
 }

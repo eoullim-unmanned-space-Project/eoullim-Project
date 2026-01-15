@@ -16,6 +16,7 @@ import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -149,5 +150,17 @@ public class BookingServiceImpl implements BookingService {
        }
 
 
+    }
+
+    @Override
+    public BookingResponse.CountDTO countTodayBookings() {
+
+        LocalDateTime today = LocalDate.now().atStartOfDay();
+        LocalDateTime yesterday = today.minusDays(1);
+
+        Long todayCount = bookingRepository.countTodayBookings(today);
+        Long yesterdayCount = bookingRepository.countYesterdayBookings(today, yesterday);
+
+        return new BookingResponse.CountDTO(todayCount, yesterdayCount);
     }
 }

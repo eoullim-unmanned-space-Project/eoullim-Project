@@ -8,4 +8,5 @@ public interface PaymentRefundService {
     PaymentRefundResponse.AdminDetailDTO detail(Long id);
     void rejection(Long id, String reason);
     void approve(Long id);
+    Long countPaymentsInRefundRequested();
 }
