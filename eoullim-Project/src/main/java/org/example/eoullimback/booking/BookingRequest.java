@@ -9,6 +9,7 @@ import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.user_auth.user.User;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BookingRequest {
@@ -31,7 +32,9 @@ public class BookingRequest {
         @Min(value = 100, message = "가격은 최소 100원 이상입니다.")
         private Long totalAmount;
 
-        public Booking toEntity(User user, Room room, TimeSlot timeSlot, String bookingCode, Long perSlotAmount) {
+        private LocalDate bookingDate;
+
+        public Booking toEntity(User user, Room room, TimeSlot timeSlot, String bookingCode, Long perSlotAmount, LocalDate bookingDate) {
             return Booking.builder()
                     .user(user)
                     .room(room)
@@ -40,6 +43,7 @@ public class BookingRequest {
                     .itemSnapshotPrice(totalAmount)
                     .qty(qty)
                     .amount(perSlotAmount)
+                    .bookingDate(bookingDate)
                     .build();
         }
     }
