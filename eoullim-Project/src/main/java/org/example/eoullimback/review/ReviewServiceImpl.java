@@ -70,7 +70,7 @@ public class ReviewServiceImpl implements ReviewService{
 
         String checkRequest = geminiService.checkReviewContent(request.getContent());
 
-        if (checkRequest.equals("BAD")) {
+        if ("BAD".equals(checkRequest) || checkRequest.toUpperCase().contains("BAD")) {
             throw new Exception400(ErrorCode.BAD_CONTENT);
         }
 
