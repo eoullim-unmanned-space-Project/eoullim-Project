@@ -88,7 +88,7 @@ public class TimeSlotServiceImpl {
     private int calculatePrice(Room room, LocalDate date) {
             int base = room.getDefaultPrice();
 
-            int weekendPrice = (int) (Math.round(base * 1.3 / 100.0) * 100);
+            int weekendPrice = (int) (Math.round(base * 1.3 / 100) * 100);
 
             if (isWeekend(date)) {
                 base += weekendPrice;

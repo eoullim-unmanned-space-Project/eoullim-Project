@@ -7,7 +7,11 @@ import org.example.eoullimback.payment_refund.PaymentRefundService;
 import org.example.eoullimback.place.Place;
 import org.example.eoullimback.place.PlaceRequest;
 import org.example.eoullimback.place.PlaceService;
+import org.example.eoullimback.room.Room;
+import org.example.eoullimback.room.RoomRequest;
+import org.example.eoullimback.room.RoomService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -18,6 +22,7 @@ public class AdminApiController {
 
     private final PaymentRefundService paymentRefundService;
     private final PlaceService placeService;
+    private final RoomService roomService;
 
     @GetMapping("/admin/refund/detail/{id}")
     public ResponseEntity<PaymentRefundResponse.AdminDetailDTO> detail(@PathVariable Long id) {
@@ -44,11 +49,11 @@ public class AdminApiController {
     }
 
     // =====
-    // 장소
+    // 장소(place)
     // ====
 
     @PostMapping("/place/create")
-    public ResponseEntity<?> createProc(PlaceRequest.CreateDTO request) {
+    public ResponseEntity<Place> createProc(PlaceRequest.CreateDTO request) {
 
         request.validate();
         Place place = placeService.placeCreate(request);
@@ -58,7 +63,7 @@ public class AdminApiController {
 
     @PutMapping("/place/{placeId}")
     public ResponseEntity<Map<String, Place>> UpdateProc(@PathVariable Long placeId,
-                             PlaceRequest.UpdateDTO request
+                                                         PlaceRequest.UpdateDTO request
     ) {
         request.validate();
 
@@ -71,6 +76,43 @@ public class AdminApiController {
     public ResponseEntity<Void> deleteProc(@PathVariable(name = "id") Long placeId) {
 
         placeService.placeDelete(placeId);
+
+        return ResponseEntity.ok().body(null);
+    }
+
+    // =====
+    // 방(room)
+    // ====
+
+    @PostMapping("/room/create")
+    public ResponseEntity<Room> createRoom(Model model,
+                                           RoomRequest.CreateDTO createDTO
+    ) {
+        createDTO.validate();
+
+        Room room = roomService.createRoom(createDTO);
+        model.addAttribute("room", room);
+
+        return ResponseEntity.ok().body(room);
+    }
+
+    @PutMapping("/room/{roomId}")
+    public ResponseEntity<Map<String, Room>> updateRoom(@PathVariable Long roomId,
+                                                        RoomRequest.UpdateDTO updateDTO
+    ) {
+
+        updateDTO.validate();
+
+        Room room = roomService.updateRoom(roomId, updateDTO);
+
+        return ResponseEntity.ok().body(Map.of("room", room));
+    }
+
+
+    @DeleteMapping("/room/{roomId}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
+
+        roomService.deleteRoom(roomId);
 
         return ResponseEntity.ok().body(null);
     }

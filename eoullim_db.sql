@@ -162,7 +162,7 @@ CREATE TABLE time_slots (
   
   room_id BIGINT NOT NULL COMMENT '방 번호',
   
-  slot_month CHAR(7) NOT NULL COMMENT '생성된 월',
+  slot_month CHAR(20) NOT NULL COMMENT '생성된 월',
   start_time DATETIME(6) NOT NULL COMMENT '시작시간',
   end_time DATETIME(6) NOT NULL COMMENT '종료시간',
   capacity INT NOT NULL COMMENT '인원 수 지정',
@@ -387,10 +387,10 @@ VALUES
 SELECT * FROM places;
 
 INSERT INTO rooms (place_id, name, content, max_capacity, default_price, status, room_image) VALUES
-(1, '스탠다드룸', '기본적인 편의시설을 갖춘 방', 2, 50000, 'OPEN', NULL),
-(1, '디럭스룸', '넓고 쾌적한 방', 3, 80000, 'OPEN', NULL),
-(1, '스위트룸', '럭셔리 스위트룸, 침대 2개', 4, 150000, 'CLOSED', NULL),
-(2, '커넥팅룸', '2개의 방이 연결된 구조', 6, 120000, 'OPEN', NULL),
-(3, '패밀리룸', '가족 단위 숙박에 적합', 5, 100000, 'OPEN', NULL);
+(3, '스탠다드룸', '기본적인 편의시설을 갖춘 방', 2, 50000, 'OPEN', NULL),
+(3, '디럭스룸', '넓고 쾌적한 방', 3, 80000, 'OPEN', NULL),
+(3, '스위트룸', '럭셔리 스위트룸, 침대 2개', 4, 150000, 'CLOSED', NULL),
+(4, '커넥팅룸', '2개의 방이 연결된 구조', 6, 120000, 'OPEN', NULL),
+(5, '패밀리룸', '가족 단위 숙박에 적합', 5, 100000, 'OPEN', NULL);
 SELECT * FROM rooms;
 SELECT * FROM room_images;

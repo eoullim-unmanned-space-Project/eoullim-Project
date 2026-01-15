@@ -28,17 +28,16 @@ public class RoomServiceImpl implements RoomService{
 
     private final PlaceRepository placeRepository;
     private final RoomRepository roomRepository;
-    private final RoomImageRepository roomImageRepository;
     private final TimeSlotRepository timeSlotRepository;
     private final TimeSlotServiceImpl timeSlotService;
 
     @Override
     @Transactional
-    public Room createRoom(Long placeId, RoomRequest.CreateDTO request) {
+    public Room createRoom(RoomRequest.CreateDTO request) {
 
         String roomImageFileName = null;
 
-        Place place = placeRepository.findById(placeId)
+        Place place = placeRepository.findById(request.placeId)
                 .orElseThrow(() -> new Exception404(ErrorCode.PLACE_NOT_FOUND));
 
         if (request.getRoomImage() != null && !request.getRoomImage().isEmpty()) {
@@ -133,5 +132,16 @@ public class RoomServiceImpl implements RoomService{
         timeSlotRepository.deleteAllByRoom(room);
 
         roomRepository.deleteById(roomId);
+    }
+
+
+    @Override
+    public List<RoomResponse.AdminDetailDTO> roomAdminList() {
+
+        return roomRepository.findAllWithPlace()
+                .stream()
+                .map(RoomResponse.AdminDetailDTO::new)
+                .toList();
+
     }
 }

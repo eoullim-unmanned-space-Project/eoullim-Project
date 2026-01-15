@@ -45,4 +45,31 @@ public class RoomResponse {
                     .toList();
         }
     }
+
+    @Data
+    public static class AdminDetailDTO {
+        private Long placeId;
+        private Long roomId;
+        private String name;
+        private String content;
+        private int maxCapacity;
+        private int defaultPrice;
+        private RoomStatus status;
+        private String roomImagePath;
+        private List<TimeSlotResponse.DetailDTO> timeSlots;
+
+        public AdminDetailDTO(Room room) {
+            this.placeId = room.getPlace().getId();
+            this.roomId = room.getId();
+            this.name = room.getName();
+            this.content = room.getContent();
+            this.maxCapacity = room.getMaxCapacity();
+            this.defaultPrice = room.getDefaultPrice();
+            this.status = room.getStatus();
+            this.roomImagePath = "/images/" + room.getRoomImage()   ;
+            this.timeSlots = room.getTimeSlots().stream()
+                    .map(timeSlot -> new TimeSlotResponse.DetailDTO(timeSlot))
+                    .toList();
+        }
+    }
 }
