@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -295,6 +296,19 @@ public class PaymentServiceImpl implements PaymentService {
                 .map(PaymentResponse.PaymentListDTO::new)
                 .toList();
     }
+
+    @Override
+    public PaymentResponse.SalesResponseDto getTodaySales() {
+        Long todaySales = paymentRepository.getTodaySales();
+
+        LocalDateTime startDay = LocalDateTime.now();
+        LocalDateTime endDay = startDay.minusDays(1);
+
+        Long yesterdaySales = paymentRepository.getYesterdaySales(startDay, endDay);
+
+        return new PaymentResponse.SalesResponseDto(todaySales, yesterdaySales);
+    }
+
 
     private String generatePaymentKey(Long id) {
         return "payment-" + id + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8);

@@ -13,4 +13,5 @@ public interface BookingService {
     BookingResponse.DetailDTO detailBooking(Long id, String bookingCode);
     List<UserResponse.UserBookingDTO> searchBookings(Long id, String bookingCode, BookingStatus status);
     void cancelBooking(Long id, String bookingCode);
+    BookingResponse.CountDTO countTodayBookings();
 }

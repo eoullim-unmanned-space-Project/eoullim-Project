@@ -227,4 +227,9 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
         }
     }
 
+
+    @Override
+    public Long countPaymentsInRefundRequested() {
+        return paymentRefundRepository.countPaymentsInRefundRequested();
+    }
 }

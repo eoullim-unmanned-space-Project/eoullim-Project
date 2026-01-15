@@ -12,6 +12,6 @@ public interface PaymentService {
     String complete(Long id, String impUid, String merchantUid) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException;
     void cancel(String paymentKey);
     UserResponse.UserPaymentDTO paymentDetail(String bookingCode, Long id);
-
     List<PaymentResponse.PaymentListDTO> getAllPaymentList();
+    PaymentResponse.SalesResponseDto getTodaySales();
 }

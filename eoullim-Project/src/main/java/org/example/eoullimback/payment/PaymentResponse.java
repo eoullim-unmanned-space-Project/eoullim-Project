@@ -139,4 +139,15 @@ public class PaymentResponse {
         }
     }
 
+    @Data
+    public static class SalesResponseDto {
+        private Long todaySales;
+        private Long yesterdaySales;
+
+        public SalesResponseDto(Long todaySales, Long yesterdaySales) {
+            this.todaySales = todaySales;
+            this.yesterdaySales = yesterdaySales;
+        }
+    }
+
 }

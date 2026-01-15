@@ -30,7 +30,6 @@
         min-height: 100vh;
     }
 
-    /* Sidebar Navigation (기존 유지) */
     nav {
         width: 260px; height: 100vh;
         background: white; padding: 40px 20px;
@@ -49,7 +48,6 @@
     header { margin-bottom: 32px; }
     header h1 { font-size: 28px; font-weight: 700; margin: 0; }
 
-    /* 대시보드 전용 스타일 */
     .stat-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -69,6 +67,15 @@
     .stat-change { margin-top: 8px; font-size: 13px; font-weight: 600; }
     .stat-change.up { color: var(--positive); }
     .stat-change.down { color: var(--negative); }
+
+    .todayPercent { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    .todayPercent.up { color: var(--positive); }
+    .todayPercent.down { color: var(--negative); }
+
+    .todayCount { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+
+    .todayCount.up { color: var(--positive); }
+    .todayCount.down { color: var(--negative); }
 
     .chart-section {
         display: grid;
@@ -90,7 +97,6 @@
     }
     .section-header h2 { font-size: 18px; font-weight: 700; margin: 0; }
 
-    /* 테이블 스타일 (기존 코드 최적화) */
     .data-table { width: 100%; border-collapse: collapse; }
     .data-table th {
         text-align: left; padding: 12px 16px;
@@ -103,7 +109,6 @@
     }
     .status-active { background: #e8f8ee; color: #32c35a; }
 
-    /* 퀵 메뉴 그리드 레이아웃 */
     .quick-menu-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -111,7 +116,6 @@
         margin-bottom: 32px;
     }
 
-    /* 개별 메뉴 카드 스타일 */
     .menu-card {
         background: var(--bg-surface);
         padding: 24px 20px;
@@ -120,12 +124,11 @@
         align-items: center;
         gap: 16px;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 부드러운 애니메이션 */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: 1px solid transparent;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
     }
 
-    /* 호버 효과: 살짝 위로 뜨면서 그림자와 테두리 강조 */
     .menu-card:hover {
         transform: translateY(-5px);
         background-color: #ffffff;
@@ -133,7 +136,6 @@
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
     }
 
-    /* 아이콘 박스 공통 스타일 */
     .menu-icon {
         width: 52px;
         height: 52px;
@@ -142,16 +144,14 @@
         align-items: center;
         justify-content: center;
         font-size: 24px;
-        flex-shrink: 0; /* 아이콘 크기 고정 */
+        flex-shrink: 0;
     }
 
-    /* 아이콘별 부드러운 파스텔 배경색 */
-    .qna-bg { background-color: #e8f3ff; }      /* 연한 파랑 */
-    .review-bg { background-color: #fff9e5; }   /* 연한 노랑 */
-    .user-bg { background-color: #f2f4f6; }     /* 연한 회색 */
-    .support-bg { background-color: #e8f8ee; }  /* 연한 초록 */
+    .qna-bg { background-color: #e8f3ff; }
+    .review-bg { background-color: #fff9e5; }
+    .user-bg { background-color: #f2f4f6; }
+    .support-bg { background-color: #e8f8ee; }
 
-    /* 텍스트 정보 영역 */
     .menu-info {
         display: flex;
         flex-direction: column;
@@ -171,7 +171,6 @@
         color: var(--text-tertiary);
     }
 
-    /* 반응형 대응: 화면이 작아지면 2열로 변경 */
     @media (max-width: 1200px) {
         .quick-menu-grid {
             grid-template-columns: repeat(2, 1fr);
@@ -228,18 +227,18 @@
     <div class="stat-grid">
         <div class="stat-card">
             <div class="stat-label">금일 매출액</div>
-            <div class="stat-value">2,450,000원</div>
-            <div class="stat-change up">▲ 12.5%</div>
+            <div class="stat-value"></div>
+            <div class="todayPercent"></div>
         </div>
         <div class="stat-card">
             <div class="stat-label">신규 예약</div>
-            <div class="stat-value">42건</div>
-            <div class="stat-change up">▲ 3건</div>
+            <div class="stat-value count"></div>
+            <div class="todayCount"></div>
         </div>
         <div class="stat-card">
             <div class="stat-label">대기 중인 환불</div>
-            <div class="stat-value">5건</div>
-            <div class="stat-change down" style=";">처리 필요</div>
+            <div class="stat-value refund-count">5건</div>
+            <div class="stat-change down" >처리 필요</div>
         </div>
         <div class="stat-card">
             <div class="stat-label">가입자 수</div>
@@ -315,8 +314,17 @@
 </main>
 
 <script>
+    let salesChart;
+
     document.addEventListener('DOMContentLoaded', () => {
         fetchPaymentList();
+        fetchTodaySales();
+        fetchTodayBookingCounts()
+        fetchRefundStatusInRequests()
+
+        setInterval(fetchTodaySales, 30000);
+        setInterval(fetchTodayBookingCounts, 30000);
+        setInterval(fetchRefundStatusInRequests, 30000);
     });
 
     async function fetchPaymentList() {
@@ -333,14 +341,12 @@
         }
     }
 
-
     function renderPaymentList(payments) {
         const tableBodyEl = document.querySelector(".table-body");
 
         tableBodyEl.innerHTML = '';
 
         payments.forEach(payment => {
-            console.log(payment);
             const amount = payment.amount.toLocaleString();
 
             const row = document.createElement("tr");
@@ -358,6 +364,119 @@
         });
     }
 
+    async function fetchTodaySales() {
+        const statValueEl = document.querySelector(".stat-value");
+        const percentEl = document.querySelector(".todayPercent");
+
+        try {
+            const response = await fetch("/api/admin/today-sales");
+
+            const data = await response.json();
+
+            const todaySale = data.todaySales || 0;
+            const yesterdaySales = data.yesterDaySales || 0;
+
+            statValueEl.innerText = todaySale.toLocaleString() + '원';
+
+            let percent = 0;
+
+            if (yesterdaySales > 0) {
+                percent = ((todaySale - yesterdaySales) / yesterdaySales ) * 100;
+
+                if (percent > 0)  {
+                    statValueEl.classList.add('up')
+                } else if (percent < 0 ) {
+                    statValueEl.classList.add('down');
+                }
+
+
+            } else if (yesterdaySales === 0 && todaySale > 0) {
+                statValueEl.classList.add('up');
+                percent = 100;
+            } else {
+                percent = 0;
+            }
+
+            const percentText = percent.toFixed(1) + '%';
+
+            percentEl.innerText = percentText;
+
+        } catch (error) {
+            console.error("데이터를 불러오는데 실패했습니다.", error);
+            alert("금액을 불러오지 못했습니다.");
+        }
+
+    }
+
+    async function fetchTodayBookingCounts() {
+        const countEl = document.querySelector(".count");
+        const todayCountEl = document.querySelector(".todayCount");
+        try {
+            const response = await fetch("/api/admin/new-bookings");
+
+            console.log(response);
+
+            const data = await response.json();
+
+            let upCount = data.todayCount - data.yesterdayCount;
+
+            countEl.innerText = data.todayCount + '건';
+
+            let rate = 0;
+
+            if (data.yesterdayCount > 0) {
+                rate = (upCount / data.yesterdayCount) * 100;
+            }
+
+            todayCountEl.classList.remove('up', 'down');
+
+            if (upCount > 0) {
+
+                if (rate === 0) {
+                    rate = 100;
+                }
+
+                todayCountEl.classList.add('up');
+                todayCountEl.innerText = `▲ ${upCount} (${rate.toFixed(1)}%)`;
+
+            } else if (upCount < 0) {
+                todayCountEl.classList.add('down');
+                todayCountEl.innerText = `▼ ${Math.abs(upCount)} (${Math.abs(rate).toFixed(1)}%)`;
+            } else {
+                todayCountEl.innerText = '변동 없음 (0건)';
+                todayCountEl.style.color = 'gray';
+            }
+
+        } catch (error) {
+            console.log("데이터를 불러오는데 실패했습니다.", error);
+            alert("값을 불러오지 못했습니다.");
+        }
+    }
+
+    async function fetchRefundStatusInRequests() {
+        const refundCountEl = document.querySelector(".refund-count");
+        const statChange = document.querySelector(".stat-change ");
+
+        try {
+            const response = await fetch("/api/admin/refunds/pending")
+
+            const data = await response.json();
+
+            let refundsCount = data.refundCounts;
+
+            refundCountEl.innerText = refundsCount + "건";
+
+            if (refundsCount == 0) {
+                statChange.style.display = 'none';
+            } else {
+                statChange.style.display = 'down';
+            }
+
+        } catch (error) {
+            console.error("데이터를 불러오는데 실패했습니다.", error);
+            alert("값을 불러오지 못했습니다.");
+        }
+    }
 
 
 </script>

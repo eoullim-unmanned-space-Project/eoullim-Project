@@ -73,4 +73,19 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             AND u.id = :userId
             """)
     List<Booking> findAllByBookingCodeWithUser(@Param("bookingCode")String bookingCode, @Param("userId")Long userId);
+
+    @Query("""
+        SELECT COUNT(b) FROM Booking b
+        WHERE b.status = 'CONFIRMED'
+        AND b.bookingTime > :today
+        """)
+    Long countTodayBookings(@Param("today")LocalDateTime today);
+
+    @Query("""
+        SELECT COUNT(b) FROM Booking b
+        WHERE b.status = 'CONFIRMED'
+        AND b.bookingTime <= :yesterday
+        AND b.bookingTime > :today
+        """)
+    Long countYesterdayBookings(@Param("today")LocalDateTime today, @Param("yesterday") LocalDateTime yesterday);
 }
