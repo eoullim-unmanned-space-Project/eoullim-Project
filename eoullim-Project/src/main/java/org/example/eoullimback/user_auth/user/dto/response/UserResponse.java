@@ -200,9 +200,13 @@ public record UserResponse() {
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM월.dd일 HH:mm");
                 DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-                this.displayTime = first.getStartTime().format(dateTimeFormatter) + "시"
+//                this.displayTime = first.getStartTime().format(dateTimeFormatter) + "시"
+//                        + " ~ "
+//                        + first.getEndTime().format(timeFormatter) + "시";
+
+                this.displayTime = first.getStartTime() + "시"
                         + " ~ "
-                        + first.getEndTime().format(timeFormatter) + "시";
+                        + first.getEndTime() + "시";
             }
         }
     }
@@ -247,11 +251,9 @@ public record UserResponse() {
 
             if (!timeSlots.isEmpty()) {
                 TimeSlotResponse.DetailDTO first = timeSlots.get(0);
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm -");
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(" HH:mm까지");
 
-                this.displayTime = first.getStartTime().format(dateTimeFormatter)
-                        + first.getEndTime().format(timeFormatter);
+                this.displayTime = first.getStartTime()
+                        + first.getEndTime();
             }
         }
     }

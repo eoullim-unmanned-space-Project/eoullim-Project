@@ -75,7 +75,7 @@ public class BookingServiceImpl implements BookingService {
                 perSlotAmount += remainder;
             }
 
-            Booking booking = createDTO.toEntity(userEntity, roomEntity, timeSlot, bookingCode, perSlotAmount);
+            Booking booking = createDTO.toEntity(userEntity, roomEntity, timeSlot, bookingCode, perSlotAmount, timeSlot.getStartTime().toLocalDate());
 
             bookingList.add(booking);
         }
@@ -148,6 +148,8 @@ public class BookingServiceImpl implements BookingService {
                booking.getTimeSlot().open();
            }
        }
+
+
     }
 
     @Override

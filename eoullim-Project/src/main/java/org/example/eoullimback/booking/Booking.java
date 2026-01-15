@@ -96,7 +96,7 @@ public class Booking {
         this.itemSnapshotPrice = itemSnapshotPrice;
         this.qty = qty;
         this.amount = amount;
-        this.bookingDate = LocalDate.now();
+        this.bookingDate = bookingDate;
         this.status = (status != null) ? status : BookingStatus.PENDING;
     }
 

@@ -5,20 +5,30 @@
 <body>
 <div class="container">
     <!--    <section class="section"></section>-->
+    <div class="place-header-card">
+        <div class="place-header-img"
+             style="background-image: url('{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}')"></div>
+        <div class="place-header-body">
+            <h1>{{place.name}}</h1>
+            <p><img src="/img/room/주소.png" alt="주소이미지">  {{place.address}}</p>
+        </div>
+    </div>
     <section class="sub-section">
         <div class="left">
             <div class="main-content">
-                <img src="{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}" alt="">
-                <p>{{place.name}}</p>
                 <input type="hidden" id="latitude" value="{{place.latitude}}">
                 <input type="hidden" id="longitude" value="{{place.longitude}}">
                 <p>룸 선택</p>
                 <div class="room-list">
+
                     {{#roomList}}
+                    <div class="room-item">
                         <div class="room-card" data-room-id="{{roomId}}"><img src="{{roomImagePath}}" alt="{{name}}">
                             <p>{{name}}</p>
                         </div>
+                    </div>
                     {{/roomList}}
+
                 </div>
                 <p><img src="/img/room/위치.png" alt="장소마커" style="width: 24px; height: auto;">&nbsp; 위치</p>
                 <div id="map"></div>
@@ -124,7 +134,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
 
-         function changeDate(dateStr) {
+        function changeDate(dateStr) {
             console.log("전체 데이터(currentAllSlots):", currentAllSlots);
             console.log("내가 클릭한 날짜(dateStr):", dateStr);
 
@@ -259,7 +269,7 @@
             const firstDay = new Date(year, month, 1).getDay();
             const lastDate = new Date(year, month + 1, 0).getDate();
 
-            for(let month = 0; month < firstDay; month++) {
+            for (let month = 0; month < firstDay; month++) {
                 const emptyDiv = document.createElement('div');
                 grid.appendChild(emptyDiv);
             }
@@ -279,15 +289,15 @@
                 } else {
                     dayEl.onclick = () => {
 
-                    const amountDiv = document.getElementById("amount");
+                        const amountDiv = document.getElementById("amount");
 
-                    amountDiv.innerHTML = '0';
+                        amountDiv.innerHTML = '0';
 
-                    document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('active'));
+                        document.querySelectorAll('.calendar-day').forEach(el => el.classList.remove('active'));
 
-                    dayEl.classList.add('active');
+                        dayEl.classList.add('active');
 
-                    changeDate(dateStr);
+                        changeDate(dateStr);
                     };
                 }
                 grid.appendChild(dayEl);
@@ -297,9 +307,9 @@
                 let newMonth = month - 1;
                 let newYear = year;
 
-                if(newMonth < 0) {
+                if (newMonth < 0) {
                     newMonth = 11;
-                    newYear --;
+                    newYear--;
                 }
 
                 currentYear = newYear;
@@ -399,22 +409,22 @@
         }
 
         function initSSE(roomId) {
-           const eventSource = new EventSource(`/api/sse/${roomId}/timeslot-connect`);
+            const eventSource = new EventSource(`/api/sse/${roomId}/timeslot-connect`);
 
-           eventSource.onopen = () => console.log("SSE 타임슬롯 연결 성공");
-           eventSource.onerror = () => console.log("SSE 연결 에러 (자동연결 재시도)");
+            eventSource.onopen = () => console.log("SSE 타임슬롯 연결 성공");
+            eventSource.onerror = () => console.log("SSE 연결 에러 (자동연결 재시도)");
 
-           window.addEventListener("beforeunload", () => {
-               eventSource.close();
-           });
+            window.addEventListener("beforeunload", () => {
+                eventSource.close();
+            });
 
-           eventSource.addEventListener('timeSlotUpdate', (e) => {
+            eventSource.addEventListener('timeSlotUpdate', (e) => {
                 const updateSlots = JSON.parse(e.data);
 
                 console.log("타임슬롯 변경:", updateSlots);
 
                 updateTimeSlotUI(updateSlots);
-           });
+            });
         }
 
         function updateTimeSlotUI(updateSlots) {
@@ -482,13 +492,13 @@
 
                 const amountDiv = document.getElementById("amount");
 
-                amountDiv.innerHTML = data.amount.amount.toLocaleString() ;
+                amountDiv.innerHTML = data.amount.amount.toLocaleString();
 
                 return data.amount.amount;
 
             } catch (error) {
                 console.error(error);
-                alert("금액 계산 중 오류가 발생했습니다.");
+                alert("로그인을 먼저 해주세요.");
             }
         }
 

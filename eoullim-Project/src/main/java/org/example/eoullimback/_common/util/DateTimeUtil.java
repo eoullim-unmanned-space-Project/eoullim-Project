@@ -1,5 +1,6 @@
 package org.example.eoullimback._common.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -13,6 +14,9 @@ public class DateTimeUtil {
     private static final DateTimeFormatter KST_FORMAT
             = DateTimeFormatter.ofPattern(("yyyy-MM-dd HH:mm:ss"));
 
+    private static final DateTimeFormatter KST_FORMAT_WITH_MINUTES
+            = DateTimeFormatter.ofPattern(("yyyy-MM-dd HH:mm"));
+
     private static final DateTimeFormatter ISO_UTC_FORMAT
             = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
@@ -22,6 +26,17 @@ public class DateTimeUtil {
         ZonedDateTime zdtUtc = utcLocalDateTime.atZone(ZoneId.of("UTC"));
         ZonedDateTime zdtKst = utcLocalDateTime.atZone(Z0NE_KST);
 
+
         return zdtKst.format(KST_FORMAT);
+    }
+
+    public static String toKstWithMinutesString(LocalDateTime utcLocalDateTime) {
+        if (utcLocalDateTime == null) return null;
+
+        ZonedDateTime zdtUtc = utcLocalDateTime.atZone(ZoneId.of("UTC"));
+        ZonedDateTime zdtKst = utcLocalDateTime.atZone(Z0NE_KST);
+
+
+        return zdtKst.format(KST_FORMAT_WITH_MINUTES);
     }
 }
