@@ -286,6 +286,16 @@ public class PaymentServiceImpl implements PaymentService {
         );
     }
 
+    @Override
+    public List<PaymentResponse.PaymentListDTO> getAllPaymentList() {
+
+        List<Payment> paymentEntities = paymentRepository.findAllPayment();
+
+        return paymentEntities.stream()
+                .map(PaymentResponse.PaymentListDTO::new)
+                .toList();
+    }
+
     private String generatePaymentKey(Long id) {
         return "payment-" + id + "_" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8);
     }

@@ -42,4 +42,14 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
                                                 WHERE p.id = :paymentId
             """)
     Optional<Payment> findByIdWithBookingAndRoom(@NotNull(message = "결제 ID는 필수입니다.") Long paymentId);
+
+    @Query("""
+        SELECT p FROM Payment p
+        JOIN FETCH p.user u
+        JOIN FETCH p.booking b
+        JOIN FETCH b.room r
+        JOIN FETCH r.place pe
+        ORDER BY p.id DESC
+        """)
+    List<Payment> findAllPayment();
 }

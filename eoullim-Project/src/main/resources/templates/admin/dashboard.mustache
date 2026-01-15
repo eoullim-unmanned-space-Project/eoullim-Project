@@ -178,6 +178,32 @@
         }
     }
 
+    .thead-box>tr>th {
+        text-align: center;
+    }
+
+    .tr-box>td {
+        text-align: center;
+    }
+
+    .kakao {
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #FEE500;
+        color: #191919;
+    }
+
+    .paymentBtn {
+        border:none;
+        background:none;
+        color:var(--point-color);
+        font-weight:600;
+        cursor:pointer;
+        color: var(--point-color);
+    }
+
 </style>
 
 <body>
@@ -213,7 +239,7 @@
         <div class="stat-card">
             <div class="stat-label">대기 중인 환불</div>
             <div class="stat-value">5건</div>
-            <div class="stat-change down" style="color: var(--point-color);">처리 필요</div>
+            <div class="stat-change down" style=";">처리 필요</div>
         </div>
         <div class="stat-card">
             <div class="stat-label">가입자 수</div>
@@ -267,40 +293,73 @@
 
     <div class="content-surface">
         <div class="section-header">
-            <h2>최근 예약 현황</h2>
-            <button style="border:none; background:none; color:var(--point-color); font-weight:600; cursor:pointer;">전체보기</button>
+            <h2>최근 결제 현황</h2>
+            <button class="paymentBtn" onclick="location.href='/admin/payment'">전체보기</button>
         </div>
         <table class="data-table">
-            <thead>
+            <thead class="thead-box">
             <tr>
-                <th>예약번호</th>
+                <th>결제번호</th>
                 <th>이용자</th>
                 <th>장소/방</th>
                 <th>결제금액</th>
-                <th>상태</th>
+                <th>결제경로</th>
+                <th>결제완료 시간</th>
+                <th>결제상태</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td>RE-20240501</td>
-                <td><strong>김토스</strong></td>
-                <td>어울림 루프탑 A</td>
-                <td>45,000원</td>
-                <td><span class="status-badge status-active">결제완료</span></td>
-            </tr>
-            <tr>
-                <td>RE-20240502</td>
-                <td><strong>이코딩</strong></td>
-                <td>강남 스터디룸 101</td>
-                <td>12,000원</td>
-                <td><span class="status-badge status-active">결제완료</span></td>
-            </tr>
+            <tbody class="table-body">
             </tbody>
         </table>
     </div>
 </main>
 
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchPaymentList();
+    });
+
+    async function fetchPaymentList() {
+        try {
+            const response = await fetch("/api/admin/payments");
+
+            const payments = await response.json();
+
+            renderPaymentList(payments);
+
+        } catch (error) {
+            console.error("데이터를 불러오는데 실패했습니다.", error);
+            alert("결제 리스트를 불러오지 못했습니다.");
+        }
+    }
+
+
+    function renderPaymentList(payments) {
+        const tableBodyEl = document.querySelector(".table-body");
+
+        tableBodyEl.innerHTML = '';
+
+        payments.forEach(payment => {
+            console.log(payment);
+            const amount = payment.amount.toLocaleString();
+
+            const row = document.createElement("tr");
+            row.className = "tr-box";
+            row.innerHTML = `
+                    <td>${payment.paymentKey}</td>
+                    <td><strong>${payment.name}</strong></td>
+                    <td>${payment.placeName}/${payment.roomName}</td>
+                    <td>${amount}</td>
+                    <td ><span class="kakao">${payment.paymentMethod}</span></td>
+                    <td>${payment.approvedAt}</td>
+                    <td><span class="status-badge status-active">${payment.displayStatus}</span></td>
+            `
+            tableBodyEl.appendChild(row);
+        });
+    }
+
+
+
 </script>
 </body>
 </html>
