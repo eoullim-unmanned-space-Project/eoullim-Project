@@ -5,11 +5,19 @@
 <body>
 <div class="container">
     <!--    <section class="section"></section>-->
+    <div class="place-header-card">
+        <div class="place-header-img" style="background-image: url('{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}')"></div>
+        <div class="place-header-body">
+            <div class="place-badge"></div>
+            <h1>{{place.name}}</h1>
+            <p><img src="/img/room/주소.png" alt="주소이미지">  {{place.address}}</p>
+        </div>
+    </div>
     <section class="sub-section">
         <div class="left">
             <div class="main-content">
-                <img src="{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}" alt="">
-                <p>{{place.name}}</p>
+<!--                <img src="{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}" alt="">-->
+<!--                <p>{{place.name}}</p>-->
                 <input type="hidden" id="latitude" value="{{place.latitude}}">
                 <input type="hidden" id="longitude" value="{{place.longitude}}">
                 <p>룸 선택</p>
