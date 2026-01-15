@@ -1,6 +1,9 @@
 package org.example.eoullimback.geminichatbot;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception500;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class GeminiServiceImpl implements GeminiService{
 
@@ -66,5 +70,56 @@ public class GeminiServiceImpl implements GeminiService{
                     Object text = parts.get(0).get("text");
                     return text == null ? "(text 없음)" : text.toString();
                 });
+    }
+
+    @Override
+    public String checkReviewContent(String content) {
+        try {
+            String formattedPrompt = contentFormatted(content);
+            Map<String, Object> body = Map.of(
+                    "contents", List.of(
+                            Map.of("parts", List.of(Map.of("text", formattedPrompt))))
+            );
+
+            return webClient.post()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/v1beta/models/gemini-2.5-flash:generateContent")
+                            .queryParam("key", apiKey)
+                            .build())
+                    .bodyValue(body)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .map(response -> {
+                        List<Map<String, Object>> candidates = (List<Map<String, Object>>) response.get("candidates");
+                        if (candidates == null || candidates.isEmpty()) return "ERROR";
+
+                        Map<String, Object> firstCandidate = (Map<String, Object>) candidates.get(0);
+                        Map<String, Object> aiContent = (Map<String, Object>) firstCandidate.get("content");
+                        List<Map<String, Object>> parts = (List<Map<String, Object>>) aiContent.get("parts");
+
+                        return parts.get(0).get("text").toString().trim();
+                    })
+                    .block();
+
+        } catch (Exception e) {
+            System.out.println("AI 서비스 통신 에러: " + e.getMessage());
+            throw new Exception500(ErrorCode.GEMINI_AI_SERVICE_ERROR);
+        }
+}
+
+    private String contentFormatted(String content) {
+
+        String clearContent = content.trim().replace("\"", "'");
+
+        return """
+                당신은 리뷰 작성 관리자 챗봇입니다. 다음 규칙에 따라 판별해주세요." +
+                "1. 욕설, 비하 발언, 정치적 혐오, 패드립, 인격모독, 타인에 대한 공격성 내용이 포함이 되어있다면 반드시 'BAD' 라고 답해줘." +
+                "2. 위의 내용에 해당하지 않는 깨끗한 게시글이면 'OK'라고 답해줘." +
+                "3. 설명은 생략하고 오직 'BAD' 또는 'OK' 단어 하나만 출력해줘." +
+                "예시 1: '여기 사장님 진짜 장사 그지같이 하네요.' --> BAD(비하발언) " +
+                "예시 2: '여기 사장님 엄청 친절하시네요.' --> OK" +
+                "이제 사용자가 작성한 리뷰 글을 판별해줘. " +
+                "사용자가 작성한 글 : %s
+                """ + clearContent;
     }
 }

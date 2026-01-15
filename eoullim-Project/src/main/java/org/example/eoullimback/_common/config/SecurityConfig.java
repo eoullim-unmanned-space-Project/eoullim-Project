@@ -46,22 +46,32 @@ public class SecurityConfig  {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-               // *** 권한 설정 ***
-                .authorizeHttpRequests(auth ->
-                        // 정적 리소스 작성
-                        auth.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                        // 공개 페이지
-                        .requestMatchers("/main").permitAll()
-                        // 회원 기능 (로그인 안 한 사람만)
-                        .requestMatchers("/login", "/signup").anonymous()
-                        // 생성/수정/삭제 (로그인 필요)
-                        .requestMatchers("/api/bookings").authenticated()
-                        // 관리자 페이지 권한 설정
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        // 나머지
+        http
+                .csrf(csrf -> csrf.disable()) // 테스트를 위해 CSRF 보안 해제
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/**").permitAll() // 일단 모든 페이지 접근 허용 (테스트용)
                         .anyRequest().authenticated()
                 )
+                .formLogin(form -> form.disable()) // 기본 로그인 창 비활성화
+                .httpBasic(basic -> basic.disable());
+
+        return http.build();
+    }
+//               // *** 권한 설정 ***
+//                .authorizeHttpRequests(auth ->
+//                        // 정적 리소스 작성
+//                        auth.requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+//                        // 공개 페이지
+//                        .requestMatchers("/main").permitAll()
+//                        // 회원 기능 (로그인 안 한 사람만)
+//                        .requestMatchers("/login", "/signup").anonymous()
+//                        // 생성/수정/삭제 (로그인 필요)
+//                        .requestMatchers("/api/bookings").authenticated()
+//                        // 관리자 페이지 권한 설정
+//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+//                        // 나머지
+//                        .anyRequest().authenticated()
+//                )
                 /**
                  * *** CSRF 설정 ***
                  * csrf                 ---> CSRF 설정을 시작
@@ -165,8 +175,8 @@ public class SecurityConfig  {
                  * 9. 우선 순위 !! POST, PUT, PATCH !!
                  *
                  */
-                .csrf(Customizer.withDefaults())
-                .build();
+//                .csrf(Customizer.withDefaults())
+//                .build();
     }
 
     /**
@@ -183,4 +193,3 @@ public class SecurityConfig  {
      *  ** 우리 프로젝트는 SSR + 비동기(FETCH) 서버 포트번호: 8080 **
      *
      */
-}
