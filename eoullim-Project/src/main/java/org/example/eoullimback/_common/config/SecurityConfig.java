@@ -47,7 +47,15 @@ public class SecurityConfig  {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // 테스트를 위해 CSRF 보안 해제
+                .csrf(csrf -> csrf.disable()) // 테스트를 위해 CSRF 보안 해제.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                // 세션 관리 - 로그인 시 세션 ID 재생성
+                .sessionManagement(session -> session
+                        .sessionFixation(sessionFixation ->
+                                sessionFixation.migrateSession()
+                        )
+                        .maximumSessions(1) // 중복 로그인 방지
+                )
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**").permitAll() // 일단 모든 페이지 접근 허용 (테스트용)
                         .anyRequest().authenticated()
