@@ -41,6 +41,7 @@ public enum ErrorCode {
     INVALID_VERIFICATION_CODE("인증코드가 일치하지 않습니다."),
     BOOKING_ALREADY_REFUNDED("이미 환불 처리된 예약입니다."),
     BOOKING_ALREADY_CANCELED("이미 취소 처리된 예약입니다."),
+    BAD_CONTENT("욕설이 섞여있는 댓글은 금지입니다."),
     // ====
     // 401 Unauthorized
     // ====
@@ -96,6 +97,7 @@ public enum ErrorCode {
     INTERNAL_ERROR("서버 내부 오류가 발했습니다."),
     FILE_SAVE_FAILED("파일 저장에 실패했습니다."),
     FAIL_PORT_ONE_RESPONSE("포트원 응답이 비어있습니다."),
+    GEMINI_AI_SERVICE_ERROR("제미나이 서버 오류 발생. 잠시 후 다시 시도해주세요."),
     MAIL_SEND_FAIL("메일 발송에 실패했습니다. 잠시 후 다시 시도해주세요.");
 
 

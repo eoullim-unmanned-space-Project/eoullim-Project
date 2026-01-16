@@ -1,11 +1,15 @@
 package org.example.eoullimback.qaa;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.comment.CommentRepository;
+import org.example.eoullimback.geminichatbot.GeminiService;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,12 +28,19 @@ public class QaaServiceImpl implements QaaService {
 
     private final QaaRepository qaaRepository;
     private final CommentRepository commentRepository;
+    private final GeminiService geminiService;
 
     @Transactional
     @Override
     public Qaa createQaa(QaaRequest.CreateDTO request, User sessionUser) {
         if (sessionUser == null) {
             throw new Exception403(ErrorCode.LOGIN_ONLY);
+        }
+
+        String checkRequest = geminiService.checkQaaTitleAndContent(request.getTitle(), request.getContent());
+
+        if ("BAD".equals(checkRequest) || checkRequest.toUpperCase().contains("BAD")) {
+            throw new Exception400(ErrorCode.BAD_CONTENT);
         }
 
         Qaa qaa = request.toEntity(sessionUser);

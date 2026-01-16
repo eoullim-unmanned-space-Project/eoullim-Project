@@ -3,9 +3,11 @@ package org.example.eoullimback.review;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception403;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception409;
+import org.example.eoullimback.geminichatbot.GeminiService;
 import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.payment.PaymentRepository;
 import org.example.eoullimback.room.Room;
@@ -28,6 +30,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
     private final PaymentRepository paymentRepository;
+    private final GeminiService geminiService;
 
     @Override
     public List<ReviewResponse.ListDTO> findByRoom(Long sessionUserId, Long placeId, Long roomId) {
@@ -64,6 +67,12 @@ public class ReviewServiceImpl implements ReviewService{
 
         Payment payment = paymentRepository.findByIdWithBookingAndRoom(request.getPaymentId())
                 .orElseThrow(() -> new Exception409(ErrorCode.PAYMENT_NOT_FOUND));
+
+        String checkRequest = geminiService.checkReviewContent(request.getContent());
+
+        if ("BAD".equals(checkRequest) || checkRequest.toUpperCase().contains("BAD")) {
+            throw new Exception400(ErrorCode.BAD_CONTENT);
+        }
 
         Room room = payment.getBooking().getRoom();
 

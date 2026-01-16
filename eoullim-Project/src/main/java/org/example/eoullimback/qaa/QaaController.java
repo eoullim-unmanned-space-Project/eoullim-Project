@@ -130,7 +130,7 @@ public class QaaController {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
         qaaService.update(id, updateRequest, sessionUser);
-        return "redirect:/qaas";
+        return "redirect:/user/qna/" + id;
     }
 
     // Q&A 삭제 요청 기능
@@ -141,7 +141,7 @@ public class QaaController {
     ) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         qaaService.delete(id, sessionUser);
-        return "redirect:/qaas";
+        return "redirect:/user/qna/" + id;
     }
 
     // 마이프로필 qna 리스트 화면
