@@ -19,4 +19,6 @@ public interface ReviewService {
     boolean existsByPaymentId(Long paymentId);
 
     List<ReviewResponse.ListDTO> findLatestReviews(int limit);
+
+    void adminDelete(Long adminUserId, Long reviewId);
 }
