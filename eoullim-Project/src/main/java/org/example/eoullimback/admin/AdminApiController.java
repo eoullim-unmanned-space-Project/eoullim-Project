@@ -10,11 +10,16 @@ import org.example.eoullimback.place.PlaceService;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.room.RoomRequest;
 import org.example.eoullimback.room.RoomService;
+import org.example.eoullimback.user_auth.user.DashboardUserService;
+import org.example.eoullimback.user_auth.user.UserService;
+import org.example.eoullimback.user_auth.user.dto.response.UserCountResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+import static org.example.eoullimback._common.util.NumberFormatUtils.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +28,8 @@ public class AdminApiController {
     private final PaymentRefundService paymentRefundService;
     private final PlaceService placeService;
     private final RoomService roomService;
+    private final UserService userService;
+    private final DashboardUserService dashboardUserService;
 
     @GetMapping("/admin/refund/detail/{id}")
     public ResponseEntity<PaymentRefundResponse.AdminDetailDTO> detail(@PathVariable Long id) {

@@ -420,6 +420,7 @@ body {
     background-color: white;
     overflow-y: auto;
     padding: 16px;
+    min-height: 0;
 }
 
 .msg-box {
@@ -486,3 +487,31 @@ body {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+/* 기본 상태: 숨김 */
+.chat-popup {
+    position: fixed;
+    right: 20px;
+    bottom: -500px;
+    width: 360px;
+    height: 500px;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+/* 활성화 상태 */
+.chat-popup.open {
+    bottom: 90px;         /* FAB 버튼 위 */
+    opacity: 1;
+    pointer-events: auto;
+}
+
