@@ -354,6 +354,13 @@ CREATE TABLE notices (
   CONSTRAINT `fk_notices_user` FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='대여시설 공지사항';
 
+CREATE TABLE sse_chat (
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    
+    sender VARCHAR(20) COMMENT '작성자',
+    message TEXT NOT NULL COMMENT '채팅 내용'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='SSE 실시간 채팅';
+
 -- --------------------------
 USE eoullim_db;
 
