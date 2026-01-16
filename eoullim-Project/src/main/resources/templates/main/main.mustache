@@ -206,22 +206,23 @@
             try {
                 btnSend.disabled = true;
 
-                // const res = await fetch("/chat/send", {
-                //     method: "POST",
-                //     headers: { "Content-Type": "application/json" },
-                //     body: JSON.stringify({ text: userMsg })
-                // });
-                //
-                // const reply = await res.text();
-                // appendMessage("Bot", reply);
-
-                const res = await fetch(`/chat/send?message=${encodeURIComponent(userMsg)}&send=나`, {
-                    method: "POST"
+                const res = await fetch("/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        text: userMsg
+                    })
                 });
 
                 if (!res.ok) {
                     appendMessage("Bot", "(서버 오류 발생)");
+                    return;
                 }
+
+                const reply = await res.text();
+                appendMessage("Bot", reply);
 
             } catch (err) {
                 appendMessage("Bot", "(에러 발생: " + err.message + ")");

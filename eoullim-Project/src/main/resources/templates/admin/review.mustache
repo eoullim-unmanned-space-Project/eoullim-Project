@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>관리자 - 리뷰 관리</title>
+
+    <style>
+        :root{
+            --sidebar-width: 280px;
+
+            --text-main:#111827;
+            --text-sub:#6b7280;
+
+            --bg:#f8fafc;
+            --card:#ffffff;
+
+            --border:#e5e7eb;
+            --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+            --primary: gray;
+            --danger:#ef4444;
+            --danger-bg:#fee2e2;
+
+            --btn-black:#111827;
+            --btn-white:#ffffff;
+        }
+
+        * { box-sizing: border-box; }
+        body{
+            margin:0;
+            font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+        }
+
+        /* ====== Admin Layout ====== */
+        .admin-layout{
+            display:flex;
+            min-height: 100vh;
+        }
+        .admin-main{
+            flex: 1;
+            padding: 28px 28px 40px;
+            min-width: 0;
+        }
+
+        /* ====== Page Header ====== */
+        .page-head{
+            display:flex;
+            align-items:flex-end;
+            justify-content:space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        .title-wrap h1{
+            margin:0;
+            font-size: 22px;
+            letter-spacing: -0.2px;
+        }
+        .title-wrap p{
+            margin: 6px 0 0;
+            color: var(--text-sub);
+            font-size: 13px;
+        }
+
+        /* ====== Card ====== */
+        .card{
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .card-top{
+            padding: 16px 16px 12px;
+            border-bottom: 1px solid var(--border);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* ====== Search ====== */
+        .search{
+            display:flex;
+            gap: 10px;
+            align-items:center;
+            flex-wrap: wrap;
+        }
+        .search input{
+            width: min(420px, 70vw);
+            height: 40px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            background: #fff;
+        }
+        .search input:focus{
+            border-color: rgba(245, 141, 5, 0.5);
+            box-shadow: 0 0 0 4px rgba(245, 141, 5, 0.14);
+        }
+        .btn{
+            height: 40px;
+            padding: 0 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            cursor:pointer;
+            background: #fff;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        .btn-primary{
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--btn-white);
+        }
+        .btn:disabled{
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .meta{
+            display:flex;
+            align-items:center;
+            gap: 10px;
+            color: var(--text-sub);
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        .chip{
+            display:inline-flex;
+            align-items:center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-sub);
+            font-size: 12px;
+            gap: 6px;
+        }
+
+        /* ====== Table ====== */
+        .table-wrap{
+            overflow-x:auto;
+        }
+        table{
+            width:100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+        thead th{
+            text-align:left;
+            font-size: 12px;
+            color: var(--text-sub);
+            padding: 12px 14px;
+            background: #fafafa;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        tbody td{
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+            font-size: 13px;
+        }
+        tbody tr:hover{
+            background: #fcfcfd;
+        }
+
+        .col-id{ width: 90px; }
+        .col-rating{ width: 90px; }
+        .col-user{ width: 180px; }
+        .col-room{ width: 220px; }
+        .col-payment{ width: 220px; }
+        .col-amount{ width: 120px; }
+        .col-date{ width: 180px; }
+        .col-actions{ width: 140px; text-align: right; }
+
+        .muted{ color: var(--text-sub); font-size: 12px; }
+        .content{
+            display:-webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.45;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .stars{
+            display:inline-flex;
+            gap: 2px;
+            font-size: 14px;
+            letter-spacing: -1px;
+        }
+        .star-on{ color: #f59e0b; }
+        .star-off{ color: #d1d5db; }
+
+        .danger-btn{
+            height: 34px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            background: var(--danger-bg);
+            color: var(--danger);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .danger-btn:hover{
+            filter: brightness(0.98);
+        }
+
+        /* ====== States ====== */
+        .state{
+            padding: 18px;
+            text-align:center;
+            color: var(--text-sub);
+            font-size: 14px;
+        }
+        .error{
+            color: var(--danger);
+            background: #fff;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin: 14px 16px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="admin-layout">
+    {{> admin/layout/nav}}
+
+    <main class="admin-main">
+        <div class="page-head">
+            <div class="title-wrap">
+                <h1>리뷰 관리</h1>
+                <p>전체 리뷰 리스트 조회 및 관리자 권한 삭제</p>
+            </div>
+        </div>
+
+        <section class="card">
+            <div class="card-top">
+                <div class="search">
+                    <input id="keyword" type="text" placeholder="검색 (유저명/룸명/주문코드)" />
+                    <button id="btnSearch" class="btn btn-primary">검색</button>
+                    <button id="btnReset" class="btn">초기화</button>
+                </div>
+
+                <div class="meta">
+          <span class="chip">
+            총 <b id="totalCount">0</b>건
+          </span>
+                    <button id="btnReload" class="btn">새로고침</button>
+                </div>
+            </div>
+
+            <div id="errorBox" class="error" style="display:none;"></div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="col-id">리뷰ID</th>
+                        <th class="col-rating">별점</th>
+                        <th>내용</th>
+                        <th class="col-user">작성자</th>
+                        <th class="col-room">룸/플레이스</th>
+                        <th class="col-payment">결제/주문코드</th>
+                        <th class="col-amount">금액</th>
+                        <th class="col-date">작성일</th>
+                        <th class="col-actions">관리</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="tbody">
+                    <tr>
+                        <td colspan="9" class="state">불러오는 중...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    const API_LIST = '/api/admin/reviews';
+    const API_DELETE = (id) => `/api/admin/reviews/${id}`;
+
+    const els = {
+        keyword: document.getElementById('keyword'),
+        btnSearch: document.getElementById('btnSearch'),
+        btnReset: document.getElementById('btnReset'),
+        btnReload: document.getElementById('btnReload'),
+        tbody: document.getElementById('tbody'),
+        totalCount: document.getElementById('totalCount'),
+        errorBox: document.getElementById('errorBox'),
+    };
+
+    function getCsrf() {
+        const token = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
+        const header = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
+        if (!token || !header) return null;
+        return { token, header };
+    }
+
+    function showError(msg) {
+        els.errorBox.style.display = 'block';
+        els.errorBox.textContent = msg;
+    }
+    function clearError() {
+        els.errorBox.style.display = 'none';
+        els.errorBox.textContent = '';
+    }
+
+    function escapeHtml(str) {
+        return String(str ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+    }
+
+    function formatDate(isoLike) {
+        if (!isoLike) return '-';
+        const d = new Date(isoLike);
+        if (isNaN(d.getTime())) return String(isoLike);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2,'0');
+        const dd = String(d.getDate()).padStart(2,'0');
+        const hh = String(d.getHours()).padStart(2,'0');
+        const mi = String(d.getMinutes()).padStart(2,'0');
+        return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+    }
+
+    function renderStars(rating) {
+        const r = Number(rating || 0);
+        let html = '<span class="stars">';
+        for (let i = 1; i <= 5; i++) {
+            html += `<span class="${i <= r ? 'star-on' : 'star-off'}">★</span>`;
+        }
+        html += '</span>';
+        return html;
+    }
+
+    function rowHtml(item) {
+        const reviewId = item.reviewId ?? item.id ?? '-';
+        const rating = item.rating ?? 0;
+
+        const userName = item.userName ?? item.name ?? '-';
+        const userId = item.userId ?? '-';
+
+        const roomName = item.roomName ?? item.roomName ?? '-';
+        const roomId = item.roomId ?? '-';
+        const placeId = item.placeId ?? '-';
+
+        const paymentId = item.paymentId ?? '-';
+        const bookingCode = item.bookingCode ?? item.orderId ?? '-';
+        const amount = item.amount ?? '-';
+
+        const content = item.content ?? '';
+        const createdAt = item.createdAt ?? item.created_at ?? null;
+
+        return `
+      <tr>
+        <td class="col-id"><b>${escapeHtml(reviewId)}</b></td>
+        <td class="col-rating">
+          ${renderStars(rating)}
+          <div class="muted">${escapeHtml(rating)}</div>
+        </td>
+        <td>
+          <div class="content">${escapeHtml(content)}</div>
+        </td>
+        <td class="col-user">
+          <div><b>${escapeHtml(userName)}</b></div>
+          <div class="muted">userId: ${escapeHtml(userId)}</div>
+        </td>
+        <td class="col-room">
+          <div><b>${escapeHtml(roomName)}</b></div>
+          <div class="muted">roomId: ${escapeHtml(roomId)} / placeId: ${escapeHtml(placeId)}</div>
+        </td>
+        <td class="col-payment">
+          <div><b>${escapeHtml(bookingCode)}</b></div>
+          <div class="muted">paymentId: ${escapeHtml(paymentId)}</div>
+        </td>
+        <td class="col-amount">
+          <b>${escapeHtml(amount)}</b>
+        </td>
+        <td class="col-date">
+          ${escapeHtml(formatDate(createdAt))}
+        </td>
+        <td class="col-actions">
+          <button class="danger-btn" data-id="${escapeHtml(reviewId)}">삭제</button>
+        </td>
+      </tr>
+    `;
+    }
+
+    function renderEmpty(message) {
+        els.tbody.innerHTML = `
+      <tr>
+        <td colspan="9" class="state">${escapeHtml(message)}</td>
+      </tr>
+    `;
+    }
+
+    async function fetchList() {
+        clearError();
+        els.btnSearch.disabled = true;
+        els.btnReload.disabled = true;
+
+        const keyword = (els.keyword.value || '').trim();
+        const url = keyword ? `${API_LIST}?keyword=${encodeURIComponent(keyword)}` : API_LIST;
+
+        try {
+            const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+            if (!res.ok) {
+                // 401/403/409 같은 상황 메시지
+                const text = await res.text().catch(() => '');
+                throw new Error(`리스트 조회 실패 (${res.status}) ${text}`);
+            }
+            const data = await res.json();
+
+            els.totalCount.textContent = Array.isArray(data) ? data.length : 0;
+
+            if (!data || data.length === 0) {
+                renderEmpty('리뷰가 없습니다.');
+                return;
+            }
+
+            els.tbody.innerHTML = data.map(rowHtml).join('');
+
+        } catch (e) {
+            showError(e.message || '알 수 없는 오류가 발생했습니다.');
+            renderEmpty('불러오기에 실패했습니다.');
+        } finally {
+            els.btnSearch.disabled = false;
+            els.btnReload.disabled = false;
+        }
+    }
+
+    async function deleteReview(reviewId) {
+        clearError();
+
+        if (!reviewId) return;
+        const ok = confirm(`리뷰(${reviewId})를 삭제할까요?\n삭제하면 되돌릴 수 없습니다.`);
+        if (!ok) return;
+
+        const csrf = getCsrf();
+        const headers = { 'Accept': 'application/json' };
+        if (csrf) headers[csrf.header] = csrf.token;
+
+        try {
+            const res = await fetch(API_DELETE(reviewId), {
+                method: 'DELETE',
+                headers
+            });
+
+            if (!res.ok) {
+                const text = await res.text().catch(() => '');
+                throw new Error(`삭제 실패 (${res.status}) ${text}`);
+            }
+
+            await fetchList();
+
+        } catch (e) {
+            showError(e.message || '삭제 중 오류가 발생했습니다.');
+        }
+    }
+
+    // 이벤트
+    els.btnSearch.addEventListener('click', fetchList);
+    els.btnReload.addEventListener('click', fetchList);
+    els.btnReset.addEventListener('click', () => {
+        els.keyword.value = '';
+        fetchList();
+    });
+    els.keyword.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') fetchList();
+    });
+
+    els.tbody.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-id]');
+        if (!btn) return;
+        deleteReview(btn.getAttribute('data-id'));
+    });
+
+    fetchList();
+</script>
+</body>
+</html>

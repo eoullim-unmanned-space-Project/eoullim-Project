@@ -1,5 +1,6 @@
 package org.example.eoullimback.review;
 
+import org.example.eoullimback.review.admin.AdminReviewListDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -51,4 +52,36 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         """)
     List<ReviewListItemDTO> findMyReviewList(@Param("userId") Long userId,
                                              @Param("code") String code);
+
+    @Query("""
+    SELECT new org.example.eoullimback.review.admin.AdminReviewListDTO(
+        r.id,
+        r.rating,
+        r.content,
+        u.id,
+        u.name,
+        rm.id,
+        rm.name,
+        pl.id,
+        p.id,
+        p.orderId,
+        p.amount,
+        r.createdAt
+    )
+    FROM Review r
+    JOIN r.user u
+    JOIN r.room rm
+    JOIN rm.place pl
+    JOIN r.payment p
+    WHERE (:keyword = '' 
+           OR u.name LIKE %:keyword%
+           OR rm.name LIKE %:keyword%
+           OR p.orderId LIKE %:keyword%)
+    ORDER BY r.createdAt DESC
+""")
+    List<AdminReviewListDTO> findAllForAdmin(@Param("keyword") String keyword);
+
+    // 관리자 평균 별점
+    @Query("select avg(r.rating) from Review r")
+    Double findAverageRating();
 }

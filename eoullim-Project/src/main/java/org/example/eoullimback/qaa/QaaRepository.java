@@ -38,4 +38,13 @@ public interface QaaRepository extends JpaRepository<Qaa, Long> {
             countQuery = "SELECT COUNT(q) FROM Qaa q WHERE q.user.id = :userId"
     )
     Page<Qaa> findMyQaaList(@Param("userId") Long userId, Pageable pageable);
+
+    @Query("""
+    SELECT COUNT(q)
+    FROM Qaa q
+    WHERE q.createdAt >= :start
+      AND q.createdAt < :end
+""")
+    long countToday(@Param("start") java.time.LocalDateTime start,
+                    @Param("end") java.time.LocalDateTime end);
 }
