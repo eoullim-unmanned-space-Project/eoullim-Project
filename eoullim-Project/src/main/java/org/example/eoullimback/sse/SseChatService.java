@@ -1,6 +1,13 @@
 package org.example.eoullimback.sse;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-public interface SseChatService extends JpaRepository<SseChat, Long> {
+import java.util.List;
+
+public interface SseChatService{
+    SseEmitter createConnection(String clientId);
+
+    void addMessage(String message, String sender);
+
+    List<SseChat> findAll();
 }
