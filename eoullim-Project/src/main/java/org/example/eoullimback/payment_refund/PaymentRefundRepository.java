@@ -51,4 +51,16 @@ public interface PaymentRefundRepository extends JpaRepository<PaymentRefund, Lo
         WHERE pr.status = 'REQUESTED'
         """)
     Long countPaymentsInRefundRequested();
+
+    @Query("""
+    SELECT pl.category, COUNT(pr)
+    FROM PaymentRefund pr
+    JOIN pr.payment p
+    JOIN p.booking b
+    JOIN b.room r
+    JOIN r.place pl
+    WHERE pr.status = 'REFUNDED'
+    GROUP BY pl.category
+""")
+    List<Object[]> countRefundByCategory();
 }

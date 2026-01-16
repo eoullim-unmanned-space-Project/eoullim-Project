@@ -232,4 +232,20 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
     public Long countPaymentsInRefundRequested() {
         return paymentRefundRepository.countPaymentsInRefundRequested();
     }
+
+    // 환불 카테고리 카운트
+    public List<PaymentRefundResponse.RefundCategoryCountDTO> getRefundCategoryCounts() {
+        List<Object[]> rawResults = paymentRefundRepository.countRefundByCategory();
+
+        // Object[] -> DTO 변환
+        List<PaymentRefundResponse.RefundCategoryCountDTO> result = rawResults.stream()
+                .map(row -> {
+                    String category = (String) row[0];
+                    Long count = (Long) row[1];
+                    return new PaymentRefundResponse.RefundCategoryCountDTO(category, count);
+                })
+                .collect(Collectors.toList());
+
+        return result;
+    }
 }

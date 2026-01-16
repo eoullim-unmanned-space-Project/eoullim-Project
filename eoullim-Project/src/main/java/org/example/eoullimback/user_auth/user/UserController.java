@@ -30,7 +30,8 @@ public class UserController {
             throw new Exception401(ErrorCode.USER_NOT_FOUND);
         }
 
-        return "redirect:/";
+//        return "redirect:/";
+        return "redirect:/admin/dashboard";
     }
 
     // // http://localhost:8080/users/profile/1

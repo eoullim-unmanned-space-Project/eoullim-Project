@@ -24,7 +24,8 @@
     }
 
     body {
-        margin: 0; padding: 0;
+        margin: 0;
+        padding: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
         background-color: var(--bg-canvas);
         color: var(--text-primary);
@@ -83,14 +84,19 @@
         padding-left: 8px;
     }
 
-    header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0; }
+    header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.6px;
+        margin: 0;
+    }
 
     /* 섹션 카드 (가로로 가득 참) */
     .content-surface {
         background: var(--bg-surface);
         border-radius: 24px;
         padding: 32px 40px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
         width: 100%;
     }
 
@@ -101,7 +107,11 @@
         margin-bottom: 24px;
     }
 
-    .section-header h2 { font-size: 20px; font-weight: 700; margin: 0; }
+    .section-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+    }
 
     /* 데이터 테이블 (유연한 너비) */
     .data-table {
@@ -126,8 +136,14 @@
         color: var(--text-secondary);
     }
 
-    .data-table tr:last-child td { border-bottom: none; }
-    .data-table td strong { color: var(--text-primary); font-weight: 600; }
+    .data-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .data-table td strong {
+        color: var(--text-primary);
+        font-weight: 600;
+    }
 
     /* 공용 컴포넌트 */
     .status-badge {
@@ -161,7 +177,8 @@
     }
 
     .text-link-btn {
-        background: none; border: none;
+        background: none;
+        border: none;
         color: var(--point-color);
         font-size: 15px;
         font-weight: 600;
@@ -212,132 +229,174 @@
     }
 
 
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(10px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+    }
 
-.modal-card {
-    background: var(--bg-surface);
-    width: 100%;
-    max-width: 420px;
-    border-radius: 32px;
-    padding: 32px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    animation: modal-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
+    .modal-card {
+        background: var(--bg-surface);
+        width: 100%;
+        max-width: 420px;
+        border-radius: 32px;
+        padding: 32px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        animation: modal-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
-@keyframes modal-pop {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
+    @keyframes modal-pop {
+        0% {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 
-.modal-header {
-    text-align: center;
-    margin-bottom: 24px;
-}
+    .modal-header {
+        text-align: center;
+        margin-bottom: 24px;
+    }
 
-.modal-header h2 {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.8px;
-    margin-bottom: 8px;
-}
+    .modal-header h2 {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.8px;
+        margin-bottom: 8px;
+    }
 
-.modal-header p {
-    color: var(--text-tertiary);
-    font-size: 14px;
-    margin: 0;
-}
+    .modal-header p {
+        color: var(--text-tertiary);
+        font-size: 14px;
+        margin: 0;
+    }
 
-.modal-data-box {
-    background-color: var(--bg-canvas);
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 24px;
-}
+    .modal-data-box {
+        background-color: var(--bg-canvas);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 24px;
+    }
 
-.data-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-}
+    .data-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
 
-.data-row:last-child { margin-bottom: 0; }
+    .data-row:last-child {
+        margin-bottom: 0;
+    }
 
-.data-label { color: black; font-size: 13px; font-weight: 600; }
-.data-value { color: black; font-size: 14px; font-weight: 700; }
+    .data-label {
+        color: black;
+        font-size: 13px;
+        font-weight: 600;
+    }
 
-.modal-textarea {
-    width: 100%;
-    height: 130px;
-    background: var(--bg-canvas);
-    border: 2px solid transparent;
-    border-radius: 18px;
-    padding: 16px;
-    font-size: 15px;
-    font-family: inherit;
-    resize: none;
-    outline: none;
-    transition: all 0.2s ease;
-    margin-bottom: 24px;
-    align-items: center;
-}
+    .data-value {
+        color: black;
+        font-size: 14px;
+        font-weight: 700;
+    }
 
-.modal-textarea:focus {
-    background: white;
-    border-color: var(--point-color);
-    box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.1);
-}
+    .modal-textarea {
+        width: 100%;
+        height: 130px;
+        background: var(--bg-canvas);
+        border: 2px solid transparent;
+        border-radius: 18px;
+        padding: 16px;
+        font-size: 15px;
+        font-family: inherit;
+        resize: none;
+        outline: none;
+        transition: all 0.2s ease;
+        margin-bottom: 24px;
+        align-items: center;
+    }
 
-.modal-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+    .modal-textarea:focus {
+        background: white;
+        border-color: var(--point-color);
+        box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.1);
+    }
 
-.btn-confirm {
-    width: 100%;
-    padding: 18px;
-    border-radius: 18px;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
-}
+    .modal-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-.btn-blue { background-color: var(--point-color); color: white; }
-.btn-blue:hover { background-color: #1b64da; transform: translateY(-2px); }
+    .btn-confirm {
+        width: 100%;
+        padding: 18px;
+        border-radius: 18px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+    }
 
-.btn-red { background-color: #FEECEF; color: #F04452; }
-.btn-red:hover { background-color: #FCD6DB; }
+    .btn-blue {
+        background-color: var(--point-color);
+        color: white;
+    }
 
-.btn-ghost {
-    background: none;
-    color: var(--text-tertiary);
-    font-weight: 600;
-    font-size: 14px;
-    padding: 12px;
-}
-.btn-ghost:hover { color: var(--text-secondary); }
+    .btn-blue:hover {
+        background-color: #1b64da;
+        transform: translateY(-2px);
+    }
+
+    .btn-red {
+        background-color: #FEECEF;
+        color: #F04452;
+    }
+
+    .btn-red:hover {
+        background-color: #FCD6DB;
+    }
+
+    .btn-ghost {
+        background: none;
+        color: var(--text-tertiary);
+        font-weight: 600;
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .btn-ghost:hover {
+        color: var(--text-secondary);
+    }
+
+    .nav-a {
+        text-decoration: none;
+        color: inherit;
+    }
 
 </style>
 <body>
 <nav>
     <div class="nav-brand">Console</div>
     <ul class="nav-menu">
-        <li class="nav-item active">📊 대시보드</li>
+        <li class="nav-item active">
+            <a href="/admin/dashboard" class="nav-a">📊 대시보드</a>
+        </li>
         <li class="nav-item">
-            <a href="/admin/place">🏠 장소/방 관리</a>
+            <a href="/admin/place" class="nav-a">🏠 장소/방 관리</a>
         </li>
         <li class="nav-item">🫥 회원 관리</li>
         <li class="nav-item">🧾 결제 내역</li>
@@ -372,24 +431,24 @@
             </tr>
             </thead>
             {{#refundList}}
-            <tbody>
-            <tr class="tr-list">
-                <td data-id="{{id}}">{{id}}</td>
-                <td><span class="status-badge" data-status="{{displayStatus}}">{{displayStatus}}</span></td>
-                <td>{{roomName}}</td>
-                <td><strong>{{username}}</strong></td>
-                <td>{{paymentKey}}</td>
-                <td>{{amount}}원</td>
-                <td>{{displayTime}}</td>
-                <td>{{createdAt}}</td>
-                <td><span class="channel-kakao">{{paymentMethod}}</span></td>
-                <td style="display: flex; justify-content: center; gap: 12px;">
-                    <button class="action-button detail approve-btn" data-id="{{id}}">승인</button>
-                    <button class="action-button delete rejection-btn" data-id="{{id}}">거절</button>
-                    <button class="action-button update detail-btn" data-id="{{id}}">상세보기</button>
-                </td>
-            </tr>
-            </tbody>
+                <tbody>
+                <tr class="tr-list">
+                    <td data-id="{{id}}">{{id}}</td>
+                    <td><span class="status-badge" data-status="{{displayStatus}}">{{displayStatus}}</span></td>
+                    <td>{{roomName}}</td>
+                    <td><strong>{{username}}</strong></td>
+                    <td>{{paymentKey}}</td>
+                    <td>{{amount}}원</td>
+                    <td>{{displayTime}}</td>
+                    <td>{{createdAt}}</td>
+                    <td><span class="channel-kakao">{{paymentMethod}}</span></td>
+                    <td style="display: flex; justify-content: center; gap: 12px;">
+                        <button class="action-button detail approve-btn" data-id="{{id}}">승인</button>
+                        <button class="action-button delete rejection-btn" data-id="{{id}}">거절</button>
+                        <button class="action-button update detail-btn" data-id="{{id}}">상세보기</button>
+                    </td>
+                </tr>
+                </tbody>
             {{/refundList}}
         </table>
     </div>
@@ -478,35 +537,35 @@
         const trList = document.querySelectorAll('.tr-list');
 
         trList.forEach(tr => {
-           const statusBadge = tr.querySelector('.status-badge');
-           const status = statusBadge.textContent.trim();
+            const statusBadge = tr.querySelector('.status-badge');
+            const status = statusBadge.textContent.trim();
 
-           const approveBtn = tr.querySelector('.approve-btn');
-           const rejectionBtn = tr.querySelector('.rejection-btn');
+            const approveBtn = tr.querySelector('.approve-btn');
+            const rejectionBtn = tr.querySelector('.rejection-btn');
 
-           statusBadge.classList.remove('request', 'detail', 'delete');
+            statusBadge.classList.remove('request', 'detail', 'delete');
 
-           if (status == '환불요청') {
+            if (status == '환불요청') {
                 statusBadge.classList.add('request');
-           } else if (status == '환불완료') {
+            } else if (status == '환불완료') {
                 statusBadge.classList.add('detail');
                 if (rejectionBtn) rejectionBtn.style.display = 'none';
                 if (approveBtn) approveBtn.style.display = 'none';
-           } else {
-              statusBadge.classList.add('delete');
-              rejectionBtn.style.display = 'none';
-              if (rejectionBtn) rejectionBtn.style.display = 'none';
-              if (approveBtn) approveBtn.style.display = 'none';
-           }
+            } else {
+                statusBadge.classList.add('delete');
+                rejectionBtn.style.display = 'none';
+                if (rejectionBtn) rejectionBtn.style.display = 'none';
+                if (approveBtn) approveBtn.style.display = 'none';
+            }
         });
 
         approveBtn.forEach(btn => {
-            btn.addEventListener('click', async() => {
+            btn.addEventListener('click', async () => {
                 alert('승인 아이디: ' + btn.dataset.id);
 
                 let id = btn.dataset.id;
 
-                if(!confirm("결제환불 승인 요청을 하시겠습니까?")) {
+                if (!confirm("결제환불 승인 요청을 하시겠습니까?")) {
                     return;
                 }
 
@@ -516,15 +575,15 @@
                     });
 
                     if (response.ok) {
-                    alert('환불 처리가 완료되었습니다.');
-                    location.reload();
+                        alert('환불 처리가 완료되었습니다.');
+                        location.reload();
 
                     } else {
                         const errorMsg = await response.text();
                         alert('실패: ' + errorMsg);
                     }
 
-                } catch(error) {
+                } catch (error) {
                     console.error(error);
                     alert("환불을 승인하는 도중 오류가 발생했습니다.");
                 }
@@ -587,50 +646,49 @@
     }
 
     function closeRejectModal() {
-         const modal = document.getElementById('modal-reject');
+        const modal = document.getElementById('modal-reject');
 
-         modal.style.display = 'none';
+        modal.style.display = 'none';
     }
 
     async function openDetailModal(id) {
-            const modal = document.getElementById('modal-detail');
-            const statusEl = document.getElementById('refund-status');
+        const modal = document.getElementById('modal-detail');
+        const statusEl = document.getElementById('refund-status');
 
-            modal.style.display = 'flex';
+        modal.style.display = 'flex';
 
-            try {
-                const response = await fetch(`/admin/refund/detail/${id}`);
+        try {
+            const response = await fetch(`/admin/refund/detail/${id}`);
 
-                if(!response.ok) {
-                    alert('상세 정보를 불러오지 못했습니다.');
-                    return;
-                }
-
-                const data = await response.json();
-
-                document.getElementById('refund-id').innerText = data.id;
-                document.getElementById('refund-status').innerText = data.displayStatus;
-                document.getElementById('refund-room-name').innerText = data.roomName;
-                document.getElementById('refund-user-name').innerText = data.username;
-                document.getElementById('refund-payment-key').innerText = data.paymentKey;
-                document.getElementById('refund-payment-amount').innerText = data.amount.toLocaleString();
-                document.getElementById('refund-display-time').innerText = data.displayTime;
-                document.getElementById('refund-created-at').innerText = data.createdAt;
-                document.getElementById('refund-payment-method').innerText = data.paymentMethod;
-                document.getElementById('refund-reason').innerText = data.reason;
-
-            } catch(error) {
-                console.error(error);
-                alert('상세 정보를 불러오는 중 오류가 발생했습니다.');
+            if (!response.ok) {
+                alert('상세 정보를 불러오지 못했습니다.');
+                return;
             }
-       }
 
-    function closeDetailModal() {
-         const modal = document.getElementById('modal-detail');
+            const data = await response.json();
 
-         modal.style.display = 'none';
+            document.getElementById('refund-id').innerText = data.id;
+            document.getElementById('refund-status').innerText = data.displayStatus;
+            document.getElementById('refund-room-name').innerText = data.roomName;
+            document.getElementById('refund-user-name').innerText = data.username;
+            document.getElementById('refund-payment-key').innerText = data.paymentKey;
+            document.getElementById('refund-payment-amount').innerText = data.amount.toLocaleString();
+            document.getElementById('refund-display-time').innerText = data.displayTime;
+            document.getElementById('refund-created-at').innerText = data.createdAt;
+            document.getElementById('refund-payment-method').innerText = data.paymentMethod;
+            document.getElementById('refund-reason').innerText = data.reason;
+
+        } catch (error) {
+            console.error(error);
+            alert('상세 정보를 불러오는 중 오류가 발생했습니다.');
+        }
     }
 
+    function closeDetailModal() {
+        const modal = document.getElementById('modal-detail');
+
+        modal.style.display = 'none';
+    }
 
 
 </script>
