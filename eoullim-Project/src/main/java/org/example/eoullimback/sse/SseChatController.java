@@ -18,27 +18,26 @@ public class SseChatController {
 
     private final SseChatService sseChatService;
 
-    @GetMapping("/sse/chat")
+    @GetMapping("/chat")
     public String index(Model model) {
 
         model.addAttribute("chatList", sseChatService.findAll());
 
-        return "sse/chat";
+        return "main/main";
     }
 
-    @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(value = "/chat/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseBody
     public SseEmitter connect() {
 
         return sseChatService.createConnection(UUID.randomUUID().toString());
     }
 
-    @PostMapping("/sse/send")
-    public String sendMessage(@RequestParam(name = "message") String message,
+    @PostMapping("/chat/send")
+    @ResponseBody
+    public void sendMessage(@RequestParam(name = "message") String message,
                               @RequestParam(name = "sender") String sender
     ) {
         sseChatService.addMessage(message, sender);
-
-        return "redirect:/sse/chat";
     }
 }

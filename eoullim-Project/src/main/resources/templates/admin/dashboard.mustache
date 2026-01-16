@@ -211,7 +211,7 @@
     <ul class="nav-menu">
         <li class="nav-item active">📊 대시보드</li>
         <li class="nav-item">🏠 장소/방 관리</li>
-        <li class="nav-item">🫥 회원 관리</li>
+        <li class="nav-item" onclick="location.href='/admin/users'">🫥 회원 관리</li>
         <li class="nav-item">🧾 결제 내역</li>
         <li class="nav-item">📫 Q&A</li>
         <li class="nav-item">⭐ 리뷰 내역</li>
@@ -242,8 +242,13 @@
         </div>
         <div class="stat-card">
             <div class="stat-label">가입자 수</div>
-            <div class="stat-value">1,204명</div>
-            <div class="stat-change up">▲ 8.2%</div>
+            <div class="stat-value">{{totalUserComma}}명</div>
+            {{#isIncrease}}
+            <div class="stat-change up">▲ {{increaseRate}}%</div>
+            {{/isIncrease}}
+            {{^isIncrease}}
+            <div class="stat-change down">▼ {{increaseRate}}%</div>
+            {{/isIncrease}}
         </div>
     </div>
 
@@ -270,7 +275,7 @@
                 <div class="menu-icon user-bg">🫥</div>
                 <div class="menu-info">
                     <span class="menu-title">회원 관리</span>
-                    <span class="menu-desc">누적 회원 1.2k</span>
+                    <span class="menu-desc">누적 회원 {{totalUserK}}</span>
                 </div>
             </div>
 
