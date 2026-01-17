@@ -4,6 +4,8 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
+SELECT * FROM events;
+
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;
 DROP TABLE IF EXISTS reviews;
@@ -64,6 +66,25 @@ UNIQUE KEY `uk_user_role` (user_id, role_name)
 
 INSERT INTO user_roles (user_id, role_name)
 VALUES (1, 'ADMIN');
+
+
+CREATE TABLE events (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    user_id BIGINT NOT NULL COMMENT '사용자 식별자',
+	
+    lucky_score INT NOT NULL COMMENT '행운 점수', 
+    lucky_item VARCHAR(100) NOT NULL COMMENT '행운 아이템',
+    content TEXT NOT NULL COMMENT '운세 내용',
+    fortune_date DATE NOT NULL COMMENT '운세 날짜 (YYYY-MM-DD)',
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
+    
+    UNIQUE KEY `uk_user_date` (user_id, fortune_date),
+
+   CONSTRAINT `fk_user_event` FOREIGN KEY (user_id) REFERENCES users(id),
+
+    INDEX idx_user_created (user_id, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='이벤트 테이블';
 
 
 CREATE TABLE file_infos (
