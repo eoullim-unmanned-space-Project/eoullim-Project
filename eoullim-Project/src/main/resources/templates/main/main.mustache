@@ -93,10 +93,26 @@
                 </div>
                 <div class="fab-item">
                     <span class="fab-tooltip">오늘의 운세</span>
-                    <button class="sub-btn fortune" onclick="openFortune()">
+                    <button class="sub-btn fortune">
                         <span class="emoji">🔮</span>
                     </button>
                 </div>
+
+                <div id="fortuneEntryModal" class="modal-overlay">
+                    <div class="fortune-card">
+                        <div class="card-header">
+                            <h2>🍀 오늘의 나의 운세는 어떨까?</h2>
+                            <p>AI 제미나이가 분석한 행운을 확인하세요</p>
+                        </div>
+
+                        <div class="card-body">
+                            <button type="button" class="draw-btn">
+                                ✨ 오늘의 운세 뽑기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="fab-item">
                     <span class="fab-tooltip">1:1 채팅</span>
                     <button class="sub-btn chat" id="chat-fab">
@@ -253,192 +269,75 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
+
+        const fortuneEl = document.querySelector('.fortune');
+
+        fortuneEl.addEventListener('click', () => {
+            eventModal();
+        });
+
+
     });
+
+    function eventModal() {
+      const modalOverlayEl = document.querySelector('.modal-overlay');
+      const drawBtn = document.querySelector('.draw-btn');
+
+      modalOverlayEl.style.display = 'flex';
+
+
+      drawBtn.addEventListener('click', () => {
+        if(!confirm("오늘의 운세를 보실건가요? 이벤트는 하루에 한번 만 참여가 가능합니다 !")) {
+           return;
+        }
+
+        userClickEvent();
+      })
+    }
+
+    async function userClickEvent() {
+        const response = await fetch('/api/events/today', {
+            method: 'POST'
+        });
+
+        if(response.ok) {
+
+          const data = await response.json();
+
+          const modalOverlayEl = document.getElementById('fortuneEntryModal');
+
+          modalOverlayEl.innerHTML = '';
+
+          modalOverlayEl.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="fortuneDate">${data.fortuneDate}</h3>
+                    <p class="score-label">오늘의 행운 점수${data.luckyScore}</p>
+                    <div class="score-circle">
+                        <span id="luckyScore">85</span>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="lucky-item-box">
+                        <span class="emoji" style="font-size: 1.5rem;">🍀</span>
+                        <div class="item-info">
+                            <p class="item-title">행운의 아이템</p>
+                            <p id="luckyItem" class="item-name">${data.luckyItem}</p>
+                        </div>
+                    </div>
+
+                    <div class="content-wrapper">
+                        <p id="fortuneContent" class="fortune-text">${data.content}</p>
+                    </div>
+
+                    <button type="button" class="close-btn" onclick="document.getElementById('fortuneModal').style.display='none'">확인했어요</button>
+                </div>
+            </div>
+          `;
+        } else {
+           alert("데이터를 불러오는데 실패했습니다.");
+        }
+    }
 </script>
-
-<!--<script>-->
-<!--    // document.addEventListener('DOMContentLoaded', function () {-->
-<!--    //     const fabWrapper = document.getElementById('fabContainer');-->
-<!--    //     const mainBtn = document.getElementById('mainFab');-->
-<!--    //-->
-<!--    //     mainBtn.addEventListener('click', function(e) {-->
-<!--    //-->
-<!--    //         if (mainBtn.contains(e.target)) {-->
-<!--    //             fabWrapper.classList.toggle('active');-->
-<!--    //         } else if (!fabWrapper.contains(e.target)) {-->
-<!--    //             fabWrapper.classList.remove('active');-->
-<!--    //         }-->
-<!--    //-->
-<!--    //     });-->
-<!--    // })-->
-
-<!--    document.addEventListener("DOMContentLoaded", () => {-->
-<!--        const fabWrapper = document.getElementById("fabContainer");-->
-<!--        const mainFab = document.getElementById("mainFab");-->
-<!--        const chatFab = document.getElementById("chat-fab");-->
-
-<!--        const popup = document.getElementById("chat-popup");-->
-<!--        const btnClose = document.getElementById("btn-close");-->
-
-<!--        mainFab.addEventListener("click", () => {-->
-<!--            fabWrapper.classList.toggle("active");-->
-<!--        });-->
-
-<!--        chatFab.addEventListener("click", (e) => {-->
-<!--            e.stopPropagation();-->
-<!--            popup.classList.toggle("open");-->
-<!--        });-->
-
-<!--        btnClose.addEventListener("click", () => {-->
-<!--            popup.classList.remove("open");-->
-<!--        });-->
-<!--    });-->
-
-
-<!--</script>-->
-
-<!--<script>-->
-<!--    // 배너 슬라이드 스크립트-->
-<!--    const track = document.querySelector('.banner-track');-->
-<!--    const slides = document.querySelectorAll('.banner-slide');-->
-<!--    let currentIndex = 0;-->
-
-<!--    if (track && slides.length > 0) {-->
-<!--        function moveSlide(index) {-->
-<!--            track.style.transform = `translateX(-${index * 100}%)`;-->
-<!--        }-->
-
-<!--        document.querySelector('.banner-btn.next').addEventListener('click', () => {-->
-<!--            currentIndex = (currentIndex + 1) % slides.length;-->
-<!--            moveSlide(currentIndex);-->
-<!--        });-->
-
-<!--        document.querySelector('.banner-btn.prev').addEventListener('click', () => {-->
-<!--            currentIndex = (currentIndex - 1 + slides.length) % slides.length;-->
-<!--            moveSlide(currentIndex);-->
-<!--        });-->
-<!--    }-->
-
-<!--    // ---------------chatBot-------------------->
-<!--    const popup = document.getElementById("chat-popup");-->
-<!--    const fab = document.getElementById("chat-fab");-->
-<!--    const btnClose = document.getElementById("btn-close");-->
-<!--    const form = document.getElementById("chat-form");-->
-<!--    const input = document.getElementById("chat-input");-->
-<!--    const chatBox = document.getElementById("chat-box");-->
-<!--    const btnSend = document.getElementById("btn-send");-->
-<!--    const INIT_MESSAGE = `질문을 입력해주세요.\n예) 문의방법/공간안내/운영시간/위치/가격/예약/환불`;-->
-<!--    let hasInitMessage = false;-->
-
-<!--    function openChat() {-->
-<!--        popup.classList.add("open");-->
-<!--        popup.setAttribute("aria-hidden", "false");-->
-
-<!--        // 챗봇 처음 메세지-->
-<!--        if (!hasInitMessage) {-->
-<!--            appendMessage("Bot", INIT_MESSAGE);-->
-<!--            hasInitMessage = true;-->
-<!--        }-->
-
-<!--        setTimeout(() => input.focus(), 0);-->
-<!--    }-->
-
-<!--    function closeChat() {-->
-<!--        popup.classList.remove("open");-->
-<!--        popup.setAttribute("aria-hidden", "true");-->
-<!--    }-->
-
-
-<!--    function toggleChat() {-->
-<!--        if (popup.classList.contains("open")) closeChat();-->
-<!--        else openChat();-->
-<!--    }-->
-
-<!--    // fab.addEventListener("click", (e) => {-->
-<!--    //     e.stopPropagation();-->
-<!--    //     popup.classList.add("open");-->
-<!--    //     popup.setAttribute("aria-hidden", "false");-->
-<!--    //-->
-<!--    //     if (!hasInitMessage) {-->
-<!--    //         appendMessage("Bot", INIT_MESSAGE);-->
-<!--    //         hasInitMessage = true;-->
-<!--    //     }-->
-
-<!--        input.focus();-->
-<!--    });-->
-
-<!--    btnClose.addEventListener("click", (e) => {-->
-<!--        e.stopPropagation();-->
-<!--        popup.classList.remove("open");-->
-<!--        popup.setAttribute("aria-hidden", "true");-->
-<!--    });-->
-
-<!--    // (x) 닫기-->
-<!--    // document.addEventListener("keydown", (e) => {-->
-<!--    //     if (e.key === "Escape" && popup.classList.contains("open")) closeChat();-->
-<!--    // });-->
-
-<!--    form.addEventListener("submit", async (e) => {-->
-<!--        e.preventDefault();-->
-<!--        e.stopPropagation();-->
-
-<!--        const userMsg = input.value.trim();-->
-<!--        if (!userMsg) return;-->
-
-<!--        appendMessage("나", userMsg);-->
-<!--        input.value = "";-->
-
-<!--        try {-->
-<!--            btnSend.disabled = true;-->
-
-<!--            const res = await fetch("/chat/send", {-->
-<!--                method: "POST",-->
-<!--                headers: { "Content-Type": "application/json" },-->
-<!--                body: JSON.stringify({ text: userMsg })-->
-<!--            });-->
-
-<!--            const reply = await res.text();-->
-<!--            appendMessage("Bot", reply);-->
-<!--        } catch (err) {-->
-<!--            appendMessage("Bot", "(에러 발생: " + err.message + ")");-->
-<!--        } finally {-->
-<!--            btnSend.disabled = false;-->
-<!--            input.focus();-->
-<!--        }-->
-<!--    });-->
-
-<!--    document.addEventListener("keydown", (e) => {-->
-<!--        if (e.key === "Escape" && popup.classList.contains("open")) {-->
-<!--            popup.classList.remove("open");-->
-<!--            popup.setAttribute("aria-hidden", true);-->
-<!--        }-->
-<!--    });-->
-
-<!--    function appendMessage(sender, message) {-->
-<!--        const isMe = sender === "나";-->
-
-<!--        const wrap = document.createElement("div");-->
-<!--        wrap.className = "msg-box" + (isMe ? " me" : "");-->
-
-<!--        const name = document.createElement("span");-->
-<!--        name.className = "name";-->
-<!--        name.textContent = sender;-->
-
-<!--        const msg = document.createElement("span");-->
-<!--        msg.className = "msg" + (isMe ? " me" : "");-->
-<!--        msg.textContent = message;-->
-
-<!--        wrap.appendChild(name);-->
-<!--        wrap.appendChild(msg);-->
-
-<!--        chatBox.appendChild(wrap);-->
-<!--        chatBox.scrollTop = chatBox.scrollHeight;-->
-<!--        // chatContainer.appendChild(wrap);-->
-<!--        // chatContainer.scrollTop = chatContainer.scrollHeight;-->
-<!--        //-->
-<!--        // wrap.appendChild(name);-->
-<!--        // wrap.appendChild(msg);-->
-<!--    }-->
-<!--</script>-->
 
 {{> layout/footer}}
