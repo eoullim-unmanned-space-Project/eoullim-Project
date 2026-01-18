@@ -4,7 +4,6 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
-SELECT * FROM events;
 
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS notices;

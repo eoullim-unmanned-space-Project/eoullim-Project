@@ -24,6 +24,11 @@ public class EventResponse {
        private String luckyItem;
        private String content;
        private Date fortuneDate;
+       private Boolean alreadyExists = false;
+
+        public DetailDTO(boolean alreadyExists) {
+            this.alreadyExists = alreadyExists;
+        }
 
         public DetailDTO(Event event) {
             this.userName = event.getUser().getName();
@@ -31,6 +36,7 @@ public class EventResponse {
             this.luckyItem = event.getLuckyItem();
             this.content = event.getContent();
             this.fortuneDate = event.getFortuneDate();
+            this.alreadyExists = true;
         }
 
     }

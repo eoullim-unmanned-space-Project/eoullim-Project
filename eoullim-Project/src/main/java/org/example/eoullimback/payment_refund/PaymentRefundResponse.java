@@ -53,10 +53,6 @@ public class PaymentRefundResponse {
                 case FAILED -> "환불실패";
                 case REJECTED -> "환불거절";
             };
-
-            if (!timeSlots.isEmpty()) {
-                TimeSlotResponse.DetailDTO first = timeSlots.get(0);
-            }
         }
     }
 
