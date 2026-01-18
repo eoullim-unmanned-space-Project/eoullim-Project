@@ -269,73 +269,91 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-
         const fortuneEl = document.querySelector('.fortune');
+        const modalOverlayEl = document.getElementById('fortuneEntryModal');
 
-        fortuneEl.addEventListener('click', () => {
-            eventModal();
+          fortuneEl.addEventListener('click', () => {
+            openEventModal();
+
+            const drawBtn = document.querySelector('.draw-btn');
+            drawBtn.onclick = async () => {
+                if (!confirm("오늘의 운세를 보실건가요? 이벤트는 하루에 한번 만 참여가 가능합니다!")) {
+                    return;
+                }
+
+                const response = await fetch('/api/events/today', { method: 'GET' });
+                const resData = await response.json();
+                const data = resData.response || resData;
+
+                if (data.alreadyExists) {
+                    renderFortune(data);
+                } else {
+                    alert("오늘의 운세를 생성 하는 중입니다. 조금만 기다려주세요...");
+                    initCreateEvent();
+                }
+            };
         });
 
+        fortuneEl.addEventListener('click', () => {
+            openEventModal();
+        });
+
+        modalOverlayEl.addEventListener('click', () => {
+            closeEventModal();
+        })
 
     });
 
-    function eventModal() {
-      const modalOverlayEl = document.querySelector('.modal-overlay');
-      const drawBtn = document.querySelector('.draw-btn');
-
-      modalOverlayEl.style.display = 'flex';
-
-
-      drawBtn.addEventListener('click', () => {
-        if(!confirm("오늘의 운세를 보실건가요? 이벤트는 하루에 한번 만 참여가 가능합니다 !")) {
-           return;
-        }
-
-        userClickEvent();
-      })
+    function closeEventModal() {
+        const modalOverlayEl = document.querySelector('.modal-overlay');
+        modalOverlayEl.style.display = "none";
     }
 
-    async function userClickEvent() {
-        const response = await fetch('/api/events/today', {
-            method: 'POST'
-        });
+    async function openEventModal() {
+      const modalOverlayEl = document.querySelector('.modal-overlay');
+        modalOverlayEl.style.display = 'flex';
+    }
 
-        if(response.ok) {
+   function renderFortune(data) {
+    const modalOverlayEl = document.getElementById('fortuneEntryModal');
 
-          const data = await response.json();
+    const fortune = data.response || data;
 
-          const modalOverlayEl = document.getElementById('fortuneEntryModal');
-
-          modalOverlayEl.innerHTML = '';
-
-          modalOverlayEl.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="fortuneDate">${data.fortuneDate}</h3>
-                    <p class="score-label">오늘의 행운 점수${data.luckyScore}</p>
-                    <div class="score-circle">
-                        <span id="luckyScore">85</span>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div class="lucky-item-box">
-                        <span class="emoji" style="font-size: 1.5rem;">🍀</span>
-                        <div class="item-info">
-                            <p class="item-title">행운의 아이템</p>
-                            <p id="luckyItem" class="item-name">${data.luckyItem}</p>
-                        </div>
-                    </div>
-
-                    <div class="content-wrapper">
-                        <p id="fortuneContent" class="fortune-text">${data.content}</p>
-                    </div>
-
-                    <button type="button" class="close-btn" onclick="document.getElementById('fortuneModal').style.display='none'">확인했어요</button>
+    modalOverlayEl.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="fortuneDate">${fortune.fortuneDate}</h3>
+                <p class="score-label">오늘의 행운 점수</p>
+                <div class="score-circle">
+                    <span id="luckyScore">${fortune.luckyScore}</span>
                 </div>
             </div>
-          `;
+            <div class="modal-body">
+                <div class="lucky-item-box">
+                    <span class="emoji" style="font-size: 1.5rem;">🍀</span>
+                    <div class="item-info">
+                        <p class="item-title">행운의 아이템</p>
+                        <p id="luckyItem" class="item-name">${fortune.luckyItem}</p>
+                    </div>
+                </div>
+                <div class="content-wrapper">
+                    <p id="fortuneContent" class="fortune-text">${fortune.content}</p>
+                </div>
+                <button type="button" class="close-btn" onclick="closeEventModal()">확인했어요</button>
+            </div>
+        </div>
+        `;
+    }
+
+
+    async function initCreateEvent() {
+        const response = await fetch('/api/events/today', { method: 'POST' });
+
+        if (response.ok) {
+            const resData = await response.json();
+            renderFortune(resData.response || resData);
         } else {
-           alert("데이터를 불러오는데 실패했습니다.");
+            alert("운세 생성에 실패했습니다. 잠시 후 다시 시도해주세요.");
         }
     }
 </script>

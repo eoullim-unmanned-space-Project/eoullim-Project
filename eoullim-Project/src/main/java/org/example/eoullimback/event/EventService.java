@@ -1,5 +1,8 @@
 package org.example.eoullimback.event;
 
 public interface EventService {
-    EventResponse.DetailDTO createFortune(Long id);
+
+    EventResponse.DetailDTO createEvent(Long id);
+
+    EventResponse.DetailDTO getDetailEvent(Long id);
 }

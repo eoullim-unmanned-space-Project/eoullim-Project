@@ -42,6 +42,8 @@ public enum ErrorCode {
     BOOKING_ALREADY_REFUNDED("이미 환불 처리된 예약입니다."),
     BOOKING_ALREADY_CANCELED("이미 취소 처리된 예약입니다."),
     BAD_CONTENT("욕설이 섞여있는 댓글은 금지입니다."),
+    EVENT_ALREADY_CREATED("이미 생성된 이벤트 입니다. 이벤트는 하루에 한 번 가능합니다."),
+
     // ====
     // 401 Unauthorized
     // ====
@@ -79,7 +81,6 @@ public enum ErrorCode {
     PAYMENT_DATA_NOT_FOUND("결제 데이터가 존재하지 않습니다."),
     NOTIFICATION_NOT_FOUND("알림을 찾을 수 없습니다."),
     PAYMENT_REFUND_NOT_FOUND("환불 결과가 존재하지 않습니다"),
-
 
     // ====
     // 409 Conflict
