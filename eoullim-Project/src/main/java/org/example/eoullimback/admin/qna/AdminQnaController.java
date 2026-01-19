@@ -86,7 +86,7 @@ public class AdminQnaController {
 
         qnaService.deleteAsAdmin(qnaId, sessionUser);
 
-        return "redirect:/admin/qna";
+        return "redirect:/admin/qnas";
     }
 
     // 관리자 대시보드 문의 개수
