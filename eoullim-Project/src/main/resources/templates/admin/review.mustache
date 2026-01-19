@@ -173,6 +173,7 @@
 
         .col-id{ width: 90px; }
         .col-rating{ width: 90px; }
+        .col-content{ min-width: 300px; }
         .col-user{ width: 180px; }
         .col-room{ width: 220px; }
         .col-payment{ width: 220px; }
@@ -183,7 +184,7 @@
         .muted{ color: var(--text-sub); font-size: 12px; }
         .content{
             display:-webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 5;
             -webkit-box-orient: vertical;
             overflow: hidden;
             line-height: 1.45;
@@ -268,7 +269,7 @@
                     <tr>
                         <th class="col-id">리뷰ID</th>
                         <th class="col-rating">별점</th>
-                        <th>내용</th>
+                        <th class="col-content">내용</th>
                         <th class="col-user">작성자</th>
                         <th class="col-room">룸/플레이스</th>
                         <th class="col-payment">결제/주문코드</th>

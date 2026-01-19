@@ -10,6 +10,10 @@ import org.example.eoullimback._common.error.exception.Exception409;
 import org.example.eoullimback.geminichatbot.GeminiService;
 import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.payment.PaymentRepository;
+import org.example.eoullimback.review.dto.AdminReviewListResponse;
+import org.example.eoullimback.review.dto.ReviewListItemResponse;
+import org.example.eoullimback.review.dto.ReviewRequest;
+import org.example.eoullimback.review.dto.ReviewResponse;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
@@ -124,5 +128,17 @@ public class ReviewServiceImpl implements ReviewService{
                 .orElseThrow(() -> new Exception404(ErrorCode.REVIEW_NOT_FOUND));
 
         reviewRepository.delete(review);
+    }
+
+    // 마이페이지
+    public List<ReviewListItemResponse> findList(Long userId, String code) {
+        String safeCode = (code == null) ? "" : code.trim();
+        return reviewRepository.findMyReviewList(userId, safeCode);
+    }
+
+    // 관리자
+    public List<AdminReviewListResponse> findAll(String keyword) {
+        String safe = (keyword == null) ? "" : keyword.trim();
+        return reviewRepository.findAllForAdmin(safe);
     }
 }
