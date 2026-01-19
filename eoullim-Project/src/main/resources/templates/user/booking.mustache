@@ -170,7 +170,7 @@
                         const status = e.target.dataset.status;
 
                         if(confirm("다시 결제를 진행하시겠습니까?")) {
-                            location.href = `/booking/detail?code=${bookingCode}`;
+                            location.href = `/user/bookings/detail?code=${bookingCode}`;
                         } else {
                             return;
                         }
