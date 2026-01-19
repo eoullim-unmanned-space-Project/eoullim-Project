@@ -1,11 +1,11 @@
-package org.example.eoullimback.qaa;
+package org.example.eoullimback.qna;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.example.eoullimback.user_auth.user.User;
 
-public class QaaRequest {
+public class QnaRequest {
 
     @Data
     public static class CreateDTO {
@@ -17,8 +17,8 @@ public class QaaRequest {
         @NotBlank(message = "내용은 필수입니다.")
         private String content;
 
-        public Qaa toEntity(User user) {
-            return new Qaa(
+        public Qna toEntity(User user) {
+            return new Qna(
                     title,
                     content,
                     user
@@ -35,7 +35,7 @@ public class QaaRequest {
         @NotBlank(message = "내용은 필수입니다.")
         private String content;
 
-        public void updateEntity(Qaa qaa) {
+        public void updateEntity(Qna qaa) {
             qaa.update(title, content);
         }
     }

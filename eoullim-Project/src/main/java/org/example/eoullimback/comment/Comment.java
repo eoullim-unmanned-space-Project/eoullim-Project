@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.eoullimback._common.base.BaseTimeEntity;
-import org.example.eoullimback.qaa.Qaa;
+import org.example.eoullimback.qna.Qna;
 import org.example.eoullimback.user_auth.user.User;
 
 @Entity
@@ -14,7 +14,7 @@ import org.example.eoullimback.user_auth.user.User;
         name = "comments",
         indexes = {
                 @Index(name = "idx_comments_user", columnList = "user_id"),
-                @Index(name = "idx_comments_qaa", columnList = "qaa_id")
+                @Index(name = "idx_comments_qna", columnList = "qna_id")
         }
 )
 @Getter
@@ -33,18 +33,18 @@ public class Comment extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "qaa_id", foreignKey = @ForeignKey(name = "fk_comments_qaa_id"))
-    private Qaa qaa;
+    @JoinColumn(name = "qna_id", foreignKey = @ForeignKey(name = "fk_comments_qna_id"))
+    private Qna qna;
 
     @Builder
     public Comment(
             String content,
             User user,
-            Qaa qaa
+            Qna qna
     ) {
         this.content = content;
         this.user = user;
-        this.qaa = qaa;
+        this.qna = qna;
     }
 
     public boolean isOwner(Long userId) {

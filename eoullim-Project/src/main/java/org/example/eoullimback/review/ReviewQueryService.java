@@ -1,7 +1,6 @@
 package org.example.eoullimback.review;
 
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback.review.admin.AdminReviewListDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
