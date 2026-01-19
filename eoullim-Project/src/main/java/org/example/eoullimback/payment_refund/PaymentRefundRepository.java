@@ -1,7 +1,5 @@
 package org.example.eoullimback.payment_refund;
 
-import org.example.eoullimback._common.enums.payment.PaymentStatus;
-import org.example.eoullimback._common.enums.payment.RefundStatus;
 import org.example.eoullimback.payment.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

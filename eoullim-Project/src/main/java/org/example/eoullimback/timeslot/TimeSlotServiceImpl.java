@@ -100,5 +100,4 @@ public class TimeSlotServiceImpl {
     private boolean isWeekend(LocalDate date) {
         return date.getDayOfWeek().getValue() >= 5;
     }
-
 }

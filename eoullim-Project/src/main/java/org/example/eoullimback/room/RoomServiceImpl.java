@@ -1,6 +1,5 @@
 package org.example.eoullimback.room;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
@@ -9,9 +8,6 @@ import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.FileUtil;
 import org.example.eoullimback.place.Place;
 import org.example.eoullimback.place.PlaceRepository;
-import org.example.eoullimback.room_image.RoomImage;
-import org.example.eoullimback.room_image.RoomImageRepository;
-import org.example.eoullimback.room_image.RoomImageResponse;
 import org.example.eoullimback.timeslot.TimeSlotRepository;
 import org.example.eoullimback.timeslot.TimeSlotServiceImpl;
 import org.springframework.stereotype.Service;
@@ -81,14 +77,6 @@ public class RoomServiceImpl implements RoomService{
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
 
         return new RoomResponse.DetailDTO(room);
-    }
-
-    @Override
-    public Room roomUpdateForm(Long roomId) {
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
-
-        return room;
     }
 
     @Override

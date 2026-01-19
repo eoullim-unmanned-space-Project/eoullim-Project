@@ -1,6 +1,5 @@
 package org.example.eoullimback.place;
 
-import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.example.eoullimback._common.enums.place.Category;
 import org.springframework.web.multipart.MultipartFile;

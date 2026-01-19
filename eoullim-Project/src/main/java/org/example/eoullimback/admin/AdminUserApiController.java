@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
-public class AdminUserApiController {
+public class    AdminUserApiController {
 
     private final UserService userService;
 

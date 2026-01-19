@@ -1,6 +1,5 @@
 package org.example.eoullimback.timeslot;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.example.eoullimback._common.enums.time_slot.SlotStatus;
 import org.example.eoullimback._common.util.DateTimeUtil;

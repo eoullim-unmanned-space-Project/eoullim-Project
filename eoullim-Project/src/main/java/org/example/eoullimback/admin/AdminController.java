@@ -107,4 +107,10 @@ public class AdminController {
         return ResponseEntity.ok(new UserResponse.AdminUserDetailDTO(user));
     }
 
+    @GetMapping("/admin/user/chart")
+    public String getUserChart() {
+
+        return "admin/user-chart";
+    }
+
 }

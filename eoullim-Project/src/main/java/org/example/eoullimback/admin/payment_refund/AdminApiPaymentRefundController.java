@@ -2,10 +2,8 @@ package org.example.eoullimback.admin.payment_refund;
 
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.payment_refund.PaymentRefundRequest;
-import org.example.eoullimback.payment_refund.PaymentRefundResponse;
 import org.example.eoullimback.payment_refund.PaymentRefundService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

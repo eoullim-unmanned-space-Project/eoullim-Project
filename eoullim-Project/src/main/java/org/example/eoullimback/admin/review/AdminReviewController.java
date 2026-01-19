@@ -16,7 +16,6 @@ public class AdminReviewController {
     public String page(HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
-//        if (!sessionUser.isAdmin()) throw new Exception409(ErrorCode.FORBIDDEN);
 
         return "admin/review";
     }

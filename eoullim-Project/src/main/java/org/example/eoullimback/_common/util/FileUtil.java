@@ -1,11 +1,7 @@
 package org.example.eoullimback._common.util;
 
-import org.example.eoullimback.file.FileInfo;
-import org.example.eoullimback.room.Room;
-import org.example.eoullimback.room_image.RoomImage;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

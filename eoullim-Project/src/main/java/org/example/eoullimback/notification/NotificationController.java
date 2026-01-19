@@ -2,8 +2,6 @@ package org.example.eoullimback.notification;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback._common.enums.errors.ErrorCode;
-import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
 import org.springframework.stereotype.Controller;
@@ -25,7 +23,6 @@ public class NotificationController {
     public String notificationList(HttpSession session, Model model) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
-//        User sessionUser = getLoginUserId(session);
 
         List<NotificationResponse.NotificationResponseDTO> notifications = notificationService.notificationList(sessionUser.getId());
 
@@ -48,22 +45,4 @@ public class NotificationController {
 
         return "notification/qr";
     }
-
-//     TODO : 유저 더미 (삭제 예정)
-    private User getLoginUserId(HttpSession session) {
-
-        Long userId = (Long) session.getAttribute("sessionUser");
-
-        if (userId == null) {
-            userId = 1L;
-            session.setAttribute("sessionUser", userId);
-        }
-
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
-    }
-
-
-
-
 }

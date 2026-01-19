@@ -29,7 +29,6 @@ public class AdminApiReviewController {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
-//        if (!sessionUser.isAdmin()) throw new Exception409(ErrorCode.FORBIDDEN);
 
         return reviewQueryService.findAll(keyword);
     }
@@ -39,7 +38,6 @@ public class AdminApiReviewController {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
-//        if (!sessionUser.isAdmin()) throw new Exception409(ErrorCode.FORBIDDEN);
 
         reviewService.adminDelete(sessionUser.getId(), reviewId);
         return ResponseEntity.ok().build();

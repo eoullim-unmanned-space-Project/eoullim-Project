@@ -3,17 +3,9 @@ package org.example.eoullimback.payment_refund;
 import lombok.Data;
 import org.example.eoullimback._common.enums.payment.PaymentMethod;
 import org.example.eoullimback._common.enums.payment.RefundStatus;
-
 import org.example.eoullimback._common.util.DateTimeUtil;
-
-import org.example.eoullimback._common.enums.place.Category;
-import org.example.eoullimback.place.Place;
-
-import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
-
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PaymentRefundResponse {

@@ -13,7 +13,7 @@ public class RoomApiController {
 
     private final RoomService roomService;
 
-    @PostMapping("/api/rooms/{roomId}")
+    @PostMapping("/api/public/rooms/{roomId}")
     public ResponseEntity<?> DetailRoom(@PathVariable Long roomId, Model model) {
 
         RoomResponse.DetailDTO room = roomService.detailRoom(roomId);
