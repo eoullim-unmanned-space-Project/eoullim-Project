@@ -12,15 +12,12 @@ import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
 import org.example.eoullimback.user_auth.user.DashboardUserService;
 import org.example.eoullimback.user_auth.user.User;
-import org.example.eoullimback.user_auth.user.UserService;
 import org.example.eoullimback.user_auth.user.dto.response.UserCountResult;
-import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -28,16 +25,16 @@ import static org.example.eoullimback._common.util.NumberFormatUtils.*;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/admin")
 public class AdminController {
 
     private final PaymentRefundService paymentRefundService;
     private final PlaceService placeService;
-    private final UserService userService;
     private final RoomService roomService;
     private final DashboardUserService dashboardUserService;
 
     // http://localhost:8080/admin/dashboard
-    @GetMapping("/admin/dashboard")
+    @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
@@ -57,7 +54,7 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    @GetMapping("/admin/refund")
+    @GetMapping("/refund")
     public String payment(HttpSession session, Model model) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -69,7 +66,7 @@ public class AdminController {
         return "admin/refund";
     }
 
-    @GetMapping("/admin/place")
+    @GetMapping("/place")
     public String place(Model model,
                         HttpSession session,
                         @RequestParam(defaultValue = "1") int page,
@@ -88,29 +85,4 @@ public class AdminController {
 
         return "/admin/place";
     }
-
-    @GetMapping("/admin/users")
-    public String users(HttpSession session,Model model) {
-
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        List<UserResponse.AdminListDTO> userList = userService.getUserList();
-        model.addAttribute("adminUserList", userList);
-
-        return "admin/user";
-    }
-
-    @GetMapping("/admin/users/{userId}")
-    public ResponseEntity<UserResponse.AdminUserDetailDTO> getUserDetail(@PathVariable Long userId) {
-        User user = userService.findById(userId);
-
-        return ResponseEntity.ok(new UserResponse.AdminUserDetailDTO(user));
-    }
-
-    @GetMapping("/admin/user/chart")
-    public String getUserChart() {
-
-        return "admin/user-chart";
-    }
-
 }

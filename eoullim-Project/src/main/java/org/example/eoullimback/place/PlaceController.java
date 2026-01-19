@@ -3,7 +3,7 @@ package org.example.eoullimback.place;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
-import org.example.eoullimback.review.ReviewResponse;
+import org.example.eoullimback.review.dto.ReviewResponse;
 import org.example.eoullimback.review.ReviewService;
 import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;

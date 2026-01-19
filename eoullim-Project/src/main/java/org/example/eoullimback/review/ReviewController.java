@@ -5,6 +5,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception409;
+import org.example.eoullimback.review.dto.ReviewRequest;
+import org.example.eoullimback.review.dto.ReviewResponse;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

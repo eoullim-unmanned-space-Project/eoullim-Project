@@ -40,6 +40,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/css/**",
                         "/js/**",
                         "/img/**",
+                        "/error/**",
                         "/favicon.ico"
                 );
 

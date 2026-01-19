@@ -147,6 +147,7 @@ public class User extends BaseTimeEntity {
     public boolean isLocalUser() {
         return this.provider == OAuthProvider.LOCAL;
     }
+
     public boolean isSocialUser() {
         return this.provider != OAuthProvider.LOCAL;
     }

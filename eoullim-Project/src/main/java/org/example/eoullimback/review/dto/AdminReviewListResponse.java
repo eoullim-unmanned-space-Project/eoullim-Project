@@ -1,11 +1,11 @@
-package org.example.eoullimback.review;
+package org.example.eoullimback.review.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class AdminReviewListDTO {
+public class AdminReviewListResponse {
     private Long reviewId;
     private Byte rating;
     private String content;

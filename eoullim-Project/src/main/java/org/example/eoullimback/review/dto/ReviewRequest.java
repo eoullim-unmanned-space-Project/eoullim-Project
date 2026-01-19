@@ -1,10 +1,11 @@
-package org.example.eoullimback.review;
+package org.example.eoullimback.review.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.example.eoullimback.payment.Payment;
+import org.example.eoullimback.review.Review;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.user_auth.user.User;
 

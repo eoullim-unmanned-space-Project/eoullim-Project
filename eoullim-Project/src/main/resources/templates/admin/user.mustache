@@ -152,7 +152,7 @@
     }
 
     function userDetailModal(userId) {
-        fetch(`/admin/users/${userId}`)
+        fetch(`/api/admin/users/${userId}`)
                 .then(res => res.json())
                 .then(data => {
                     console.log("데이터 표시 " + data);
@@ -234,7 +234,7 @@
 
         if (!confirm("정지 처리하시겠습니까?")) return;
 
-        fetch(`/admin/user/${userId}/suspend`, {
+        fetch(`/api/admin/users/${userId}/suspend`, {
             method: "PATCH",
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({reason})
@@ -248,7 +248,7 @@
         const userId = this.dataset.userId;
         if (!confirm("복구 처리하시겠습니까?")) return;
 
-        fetch(`/admin/user/${userId}/restore`, {method: 'PATCH'})
+        fetch(`/api/admin/users/${userId}/restore`, {method: 'PATCH'})
                 .then(res => {
                     if (res.ok) location.reload();
                     else alert("복구 처리 실패");
