@@ -486,7 +486,7 @@
                 if (!confirmDelete) return;
 
                 try {
-                    const response = await fetch(`/place/${id}`, {
+                    const response = await fetch(`/api/admin/places/${id}`, {
                         method: 'DELETE',
                     });
 
@@ -517,7 +517,7 @@
             formData.append("profileImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/place/create`, {
+        const response = await fetch(`/api/admin/places`, {
             method: "POST",
             body: formData
         });
@@ -544,7 +544,7 @@
             formData.append("profileImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/place/${id}`, {
+        const response = await fetch(`/api/admin/places/${id}`, {
             method: "PUT",
             body: formData
         });
@@ -641,7 +641,7 @@
                 if (!confirmDelete) return;
 
                 try {
-                    const response = await fetch(`/room/${roomId}`, {
+                    const response = await fetch(`/api/admin/rooms/${roomId}`, {
                         method: 'DELETE',
                     });
 
@@ -675,7 +675,7 @@
             formData.append("roomImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/room/create`, {
+        const response = await fetch(`/api/admin/rooms`, {
             method: "POST",
             body: formData
         });
@@ -705,7 +705,7 @@
             formData.append("roomImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/room/${roomId}`, {
+        const response = await fetch(`/api/admin/rooms/${roomId}`, {
             method: "PUT",
             body: formData
         });

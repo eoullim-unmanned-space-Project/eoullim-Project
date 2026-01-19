@@ -9,4 +9,6 @@ public interface PaymentRefundService {
     void rejection(Long id, String reason);
     void approve(Long id);
     Long countPaymentsInRefundRequested();
+
+    List<PaymentRefundResponse.RefundCategoryCountDTO> getRefundCategoryCounts();
 }

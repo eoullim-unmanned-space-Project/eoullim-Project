@@ -3,6 +3,8 @@ package org.example.eoullimback.payment_refund;
 import lombok.Data;
 import org.example.eoullimback._common.enums.payment.PaymentMethod;
 import org.example.eoullimback._common.enums.payment.RefundStatus;
+import org.example.eoullimback._common.enums.place.Category;
+import org.example.eoullimback.place.Place;
 import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 
@@ -95,11 +97,6 @@ public class PaymentRefundResponse {
 
             if (!timeSlots.isEmpty()) {
                 TimeSlotResponse.DetailDTO first = timeSlots.get(0);
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm -");
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(" HH:mm까지");
-
-//                this.displayTime = first.getStartTime().format(dateTimeFormatter)
-//                        + first.getEndTime().format(timeFormatter);
 
                 this.displayTime = first.getStartTime()
                         + first.getEndTime();
@@ -107,4 +104,14 @@ public class PaymentRefundResponse {
         }
     }
 
+    @Data
+    public static class RefundCategoryCountDTO  {
+        private String category;
+        private long count;
+
+        public RefundCategoryCountDTO(String category, long count) {
+            this.category = category;
+            this.count = count;
+        }
+    }
 }

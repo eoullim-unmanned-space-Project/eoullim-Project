@@ -9,6 +9,7 @@
         <div class="place-header-img"
              style="background-image: url('{{#place.profilePath}}{{place.profilePath}}{{/place.profilePath}}')"></div>
         <div class="place-header-body">
+            <div class="category-badge">예약상태: {{place.category}}</div>
             <h1>{{place.name}}</h1>
             <p><img src="/img/room/주소.png" alt="주소이미지">  {{place.address}}</p>
         </div>
@@ -159,7 +160,7 @@
                 let roomRoot = card.dataset.roomId;
                 let roomId = Number(roomRoot);
 
-                const response = await fetch(`/api/room/${roomId}`, {
+                const response = await fetch(`/api/rooms/${roomId}`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
