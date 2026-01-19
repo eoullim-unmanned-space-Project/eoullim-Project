@@ -1,28 +1,5 @@
 <link rel="stylesheet" href="/css/admin/user/user.css">
-
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Management Console</title>
-</head>
-<style>
-
-</style>
-<body>
-<nav>
-    <div class="nav-brand">Console</div>
-    <ul class="nav-menu">
-        <li class="nav-item" onclick="location.href='/admin/dashboard'">📊 대시보드</li>
-        <li class="nav-item">🏠 장소/방 관리</li>
-        <li class="nav-item active" onclick="location.href='/admin/users'">🫥 회원 관리</li>
-        <li class="nav-item">🧾 결제 내역</li>
-        <li class="nav-item">📫 Q&A</li>
-        <li class="nav-item">⭐ 리뷰 내역</li>
-        <li class="nav-item">🎧 고객 지원</li>
-    </ul>
-</nav>
+{{> admin/layout/nav}}
 <main>
     <header>
         <h1>관리</h1>

@@ -4,26 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management Console</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="/css/admin/layout/nav.css"/>
     <link rel="stylesheet" href="/css/admin/user/user.css">
     <link rel="stylesheet" href="/css/admin/place/place.css">
 
 </head>
-
+<body>
 <nav>
-    <div class="nav-brand">Console</div>
+    <div class="nav-brand">어울림</div>
     <ul class="nav-menu">
-        <li class="nav-item active">
-            <a href="/admin/dashboard" class="nav-a">📊 대시보드</a>
+        <li class="nav-item active" onclick="location.href='/admin/dashboard'">📊 대시보드
         </li>
-        <li class="nav-item">
-            <a href="/admin/place" class="nav-a">🏠 장소/방 관리</a>
+        <li class="nav-item" onclick="location.href='/admin/place'">🏠 장소/방 관리
         </li>
-        <li class="nav-item">🫥 회원 관리</li>
-        <li class="nav-item">🧾 결제 내역</li>
-        <li class="nav-item">📫 Q&A</li>
-        <li class="nav-item">⭐ 리뷰 내역</li>
-        <li class="nav-item">🎧 고객 지원</li>
+        <li class="nav-item" onclick="location.href='/admin/user'">🫥 회원 관리</li>
+        <li class="nav-item" onclick="location.href='/admin/refund'">🧾 결제 내역</li>
+        <li class="nav-item" onclick="location.href='/admin/qnas'">📫 Q&A</li>
+        <li class="nav-item" onclick="location.href='/admin/reviews'">⭐ 리뷰 내역</li>
+        <li class="nav-item" onclick="location.href='/admin/notices'">🎧 고객 지원</li>
     </ul>
 </nav>
