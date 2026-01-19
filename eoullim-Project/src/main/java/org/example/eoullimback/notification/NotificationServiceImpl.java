@@ -10,7 +10,6 @@ import org.example.eoullimback._common.enums.notification.NotificationType;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.payment.Payment;
-import org.example.eoullimback.user_auth.user.MailService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +22,6 @@ import java.util.List;
 public class NotificationServiceImpl implements NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final MailService mailService;
-    private final QrCodeGenerator qrCodeGenerator;
     private final SolapiApiService solapiApiService;
 
     @Override
@@ -42,7 +39,6 @@ public class NotificationServiceImpl implements NotificationService {
     public void notifyPaymentSuccess(Payment payment) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException {
 
         String qrPayload = "ENTRY_" + payment.getOrderId();
-//        byte[] qrImage = qrCodeGenerator.generate(qrPayload);
 
         Notification notification = Notification.builder()
                 .type(NotificationType.PAYMENT)

@@ -9,6 +9,7 @@ import com.solapi.sdk.message.model.StorageType;
 import com.solapi.sdk.message.service.DefaultMessageService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.eoullimback.payment.Payment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,54 +20,66 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SolapiApiService {
 
     @Value("${SOLAPI_API_KEY}")
-    String apiKey;
+    private String apiKey;
 
     @Value("${SOLAPI_API_SECRET}")
-    String apiSecret;
+    private String apiSecret;
 
     @Value("${SOLAPI_FROM}")
-    String from;
+    private String from;
 
-    String baseUrl = "https://Eoullim.com/notifications/qr";
+    // 운영 도메인으로 바꿔서 사용 (현재 값 유지)
+    private final String baseUrl = "https://Eoullim.com/notifications/qr";
 
     private final QrCodeGenerator qrCodeGenerator;
     private DefaultMessageService messageService;
 
     @PostConstruct
     public void init() {
-        messageService =
-                SolapiClient.INSTANCE.createInstance(apiKey, apiSecret);
+        messageService = SolapiClient.INSTANCE.createInstance(apiKey, apiSecret);
+
+        // 혹시 값이 비어있으면 바로 알 수 있게 로그
+        log.info("[SOLAPI] init. apiKey={}, from={}", mask(apiKey), from);
     }
 
     public void sendPaymentSuccessSms(
             String phone,
             Payment payment,
             String qrPayload
-    ) throws SolapiEmptyResponseException,
-            SolapiUnknownException,
-            SolapiMessageNotReceivedException {
+    ) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException {
 
-        String qrUrl = baseUrl + "?code=" + URLEncoder.encode(qrPayload, StandardCharsets.UTF_8);;
+        // 1) 번호 정규화 (숫자만)
+        String normFrom = normalizePhone(from);
+        String normTo = normalizePhone(phone);
 
+        if (normFrom == null || normFrom.isBlank() || normTo == null || normTo.isBlank()) {
+            throw new IllegalArgumentException("SOLAPI from/to phone number is blank. from=" + from + ", to=" + phone);
+        }
+
+        // 2) QR URL
+        String qrUrl = baseUrl + "?code=" + URLEncoder.encode(qrPayload, StandardCharsets.UTF_8);
+
+        // 3) QR 이미지 생성 (대부분 PNG가 안전)
         byte[] qrImageBytes = qrCodeGenerator.generate(qrUrl);
 
+        // 4) 임시 파일 생성 (확장자 PNG로)
         File qrFile = createTempQrFile(qrImageBytes);
 
         try {
-            String imageId = messageService.uploadFile(
-                    qrFile,
-                    StorageType.MMS
-            );
+            // 5) MMS 스토리지로 업로드
+            String imageId = messageService.uploadFile(qrFile, StorageType.MMS);
 
-            if (imageId == null) {
-                throw new IllegalStateException("Solapi 이미지 업로드 실패");
+            if (imageId == null || imageId.isBlank()) {
+                throw new IllegalStateException("Solapi 이미지 업로드 실패 (imageId is null/blank)");
             }
 
+            // 6) 문자 내용
             String text = """
                     [Eoullim 결제 완료]
 
@@ -88,22 +101,38 @@ public class SolapiApiService {
                     qrUrl
             );
 
+            // 7) 메시지 생성
             Message message = new Message();
-            message.setFrom(from);
-            message.setTo(phone);
+            message.setFrom(normFrom);
+            message.setTo(normTo);
             message.setText(text);
             message.setImageId(imageId);
 
-            messageService.send(message);
+            // 8) 전송 + 실패 원인 로그
+            try {
+                messageService.send(message);
+                log.info("[SOLAPI] send success. to={}, orderId={}", normTo, payment.getOrderId());
+            } catch (SolapiMessageNotReceivedException e) {
+                // ⭐ 핵심: 왜 실패했는지 리스트 출력
+                log.error("[SOLAPI] send failed. failedMessageList={}, to={}, from={}",
+                        e.getFailedMessageList(), normTo, normFrom, e);
+                throw e; // 필요하면 호출부에서 잡아서 결제 흐름 안 깨지게 처리
+            }
 
         } finally {
-            qrFile.delete();
+            if (qrFile != null && qrFile.exists()) {
+                boolean deleted = qrFile.delete();
+                if (!deleted) {
+                    log.warn("[SOLAPI] temp qr file delete failed: {}", qrFile.getAbsolutePath());
+                }
+            }
         }
     }
 
     private File createTempQrFile(byte[] qrImageBytes) {
         try {
-            File tempFile = File.createTempFile("qr_", ".jpg");
+            // PNG로 생성 (generate가 PNG 바이트일 가능성이 커서 안전)
+            File tempFile = File.createTempFile("qr_", ".png");
             try (FileOutputStream fos = new FileOutputStream(tempFile)) {
                 fos.write(qrImageBytes);
             }
@@ -111,5 +140,16 @@ public class SolapiApiService {
         } catch (IOException e) {
             throw new RuntimeException("QR 이미지 파일 생성 실패", e);
         }
+    }
+
+    private String normalizePhone(String raw) {
+        if (raw == null) return null;
+        return raw.replaceAll("\\D", ""); // 숫자만 남김
+    }
+
+    private String mask(String value) {
+        if (value == null) return null;
+        if (value.length() <= 4) return "****";
+        return value.substring(0, 2) + "****" + value.substring(value.length() - 2);
     }
 }

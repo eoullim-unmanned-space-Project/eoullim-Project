@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Management Console</title>
-</head>
-
 <style>
     :root {
         --point-color: #3182f6;
@@ -331,23 +323,7 @@
 .btn-ghost:hover { color: var(--text-secondary); }
 
 </style>
-<body>
-<nav>
-    <div class="nav-brand">Console</div>
-    <ul class="nav-menu">
-        <li class="nav-item active">
-            <a href="/admin/dashboard" class="nav-a">📊 대시보드</a>
-        </li>
-        <li class="nav-item">
-            <a href="/admin/place" class="nav-a">🏠 장소/방 관리</a>
-        </li>
-        <li class="nav-item">🫥 회원 관리</li>
-        <li class="nav-item">🧾 결제 내역</li>
-        <li class="nav-item">📫 Q&A</li>
-        <li class="nav-item">⭐ 리뷰 내역</li>
-        <li class="nav-item">🎧 고객 지원</li>
-    </ul>
-</nav>
+{{> admin/layout/nav}}
 <main>
     <header>
         <h1>환불관리</h1>

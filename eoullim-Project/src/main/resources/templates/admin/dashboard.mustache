@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Management Console - Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-
 <style>
     :root {
         --point-color: #3182f6;
@@ -209,20 +200,7 @@
         color: var(--point-color);
     }
 </style>
-
-<body>
-<nav>
-    <div class="nav-brand">어울림</div>
-    <ul class="nav-menu">
-        <li class="nav-item active">📊 대시보드</li>
-        <li class="nav-item">🏠 장소/방 관리</li>
-        <li class="nav-item" onclick="location.href='/admin/users'">🫥 회원 관리</li>
-        <li class="nav-item">🧾 결제 내역</li>
-        <li class="nav-item">📫 Q&A</li>
-        <li class="nav-item">⭐ 리뷰 내역</li>
-        <li class="nav-item">🎧 고객 지원</li>
-    </ul>
-</nav>
+{{> admin/layout/nav}}
 
 <main>
     <header>
@@ -271,7 +249,7 @@
                 </div>
             </div>
 
-            <div class="menu-card" onclick="location.href='/admin/users'">
+            <div class="menu-card" onclick="location.href='/admin/user'">
                 <div class="menu-icon user-bg">🫥</div>
                 <div class="menu-info">
                     <span class="menu-title">회원 관리</span>
@@ -381,7 +359,7 @@
         const statChangeEl = statCard.querySelector(".stat-change");
 
         try {
-            const res = await fetch("/api/admin/users/count");
+            const res = await fetch("/api/admin/users");
             const data = await res.json();
 
             const today = data.todayCount || 0;

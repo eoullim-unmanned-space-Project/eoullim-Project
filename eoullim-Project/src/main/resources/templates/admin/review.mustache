@@ -1,241 +1,288 @@
-<!doctype html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8" />
-    <title>관리자 - 리뷰 관리</title>
+<style>
+    :root {
+        --sidebar-width: 280px;
 
-    <style>
-        :root{
-            --sidebar-width: 280px;
+        --text-main: #111827;
+        --text-sub: #6b7280;
 
-            --text-main:#111827;
-            --text-sub:#6b7280;
+        --bg: #f8fafc;
+        --card: #ffffff;
 
-            --bg:#f8fafc;
-            --card:#ffffff;
+        --border: #e5e7eb;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 
-            --border:#e5e7eb;
-            --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --primary: gray;
+        --danger: #ef4444;
+        --danger-bg: #fee2e2;
 
-            --primary: gray;
-            --danger:#ef4444;
-            --danger-bg:#fee2e2;
+        --btn-black: #111827;
+        --btn-white: #ffffff;
+    }
 
-            --btn-black:#111827;
-            --btn-white:#ffffff;
-        }
+    * {
+        box-sizing: border-box;
+    }
 
-        * { box-sizing: border-box; }
-        body{
-            margin:0;
-            font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
-            background: var(--bg);
-            color: var(--text-main);
-        }
+    body {
+        margin: 0;
+        font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
+        background: var(--bg);
+        color: var(--text-main);
+    }
 
-        /* ====== Admin Layout ====== */
-        .admin-layout{
-            display:flex;
-            min-height: 100vh;
-        }
-        .admin-main{
-            flex: 1;
-            padding: 28px 28px 40px;
-            min-width: 0;
-        }
+    /* ====== Admin Layout ====== */
+    .admin-layout {
+        display: flex;
+        min-height: 100vh;
+    }
 
-        /* ====== Page Header ====== */
-        .page-head{
-            display:flex;
-            align-items:flex-end;
-            justify-content:space-between;
-            gap: 16px;
-            margin-bottom: 18px;
-        }
-        .title-wrap h1{
-            margin:0;
-            font-size: 22px;
-            letter-spacing: -0.2px;
-        }
-        .title-wrap p{
-            margin: 6px 0 0;
-            color: var(--text-sub);
-            font-size: 13px;
-        }
+    .admin-main {
+        flex: 1;
+        padding: 28px 28px 40px;
+        min-width: 0;
+    }
 
-        /* ====== Card ====== */
-        .card{
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-        .card-top{
-            padding: 16px 16px 12px;
-            border-bottom: 1px solid var(--border);
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+    /* ====== Page Header ====== */
+    .page-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
 
-        /* ====== Search ====== */
-        .search{
-            display:flex;
-            gap: 10px;
-            align-items:center;
-            flex-wrap: wrap;
-        }
-        .search input{
-            width: min(420px, 70vw);
-            height: 40px;
-            padding: 0 12px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            outline: none;
-            background: #fff;
-        }
-        .search input:focus{
-            border-color: rgba(245, 141, 5, 0.5);
-            box-shadow: 0 0 0 4px rgba(245, 141, 5, 0.14);
-        }
-        .btn{
-            height: 40px;
-            padding: 0 14px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            cursor:pointer;
-            background: #fff;
-            color: var(--text-main);
-            font-weight: 600;
-        }
-        .btn-primary{
-            background: var(--primary);
-            border-color: var(--primary);
-            color: var(--btn-white);
-        }
-        .btn:disabled{
-            opacity: .6;
-            cursor: not-allowed;
-        }
+    .title-wrap h1 {
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: -0.2px;
+    }
 
-        .meta{
-            display:flex;
-            align-items:center;
-            gap: 10px;
-            color: var(--text-sub);
-            font-size: 13px;
-            white-space: nowrap;
-        }
-        .chip{
-            display:inline-flex;
-            align-items:center;
-            padding: 6px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: #fff;
-            color: var(--text-sub);
-            font-size: 12px;
-            gap: 6px;
-        }
+    .title-wrap p {
+        margin: 6px 0 0;
+        color: var(--text-sub);
+        font-size: 13px;
+    }
 
-        /* ====== Table ====== */
-        .table-wrap{
-            overflow-x:auto;
-        }
-        table{
-            width:100%;
-            border-collapse: collapse;
-            min-width: 1100px;
-        }
-        thead th{
-            text-align:left;
-            font-size: 12px;
-            color: var(--text-sub);
-            padding: 12px 14px;
-            background: #fafafa;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        tbody td{
-            padding: 14px;
-            border-bottom: 1px solid var(--border);
-            vertical-align: top;
-            font-size: 13px;
-        }
-        tbody tr:hover{
-            background: #fcfcfd;
-        }
+    /* ====== Card ====== */
+    .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
 
-        .col-id{ width: 90px; }
-        .col-rating{ width: 90px; }
-        .col-content{ min-width: 300px; }
-        .col-user{ width: 180px; }
-        .col-room{ width: 220px; }
-        .col-payment{ width: 220px; }
-        .col-amount{ width: 120px; }
-        .col-date{ width: 180px; }
-        .col-actions{ width: 140px; text-align: right; }
+    .card-top {
+        padding: 16px 16px 12px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
 
-        .muted{ color: var(--text-sub); font-size: 12px; }
-        .content{
-            display:-webkit-box;
-            -webkit-line-clamp: 5;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.45;
-            word-break: break-word;
-            white-space: pre-wrap;
-        }
+    /* ====== Search ====== */
+    .search {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 
-        .stars{
-            display:inline-flex;
-            gap: 2px;
-            font-size: 14px;
-            letter-spacing: -1px;
-        }
-        .star-on{ color: #f59e0b; }
-        .star-off{ color: #d1d5db; }
+    .search input {
+        width: min(420px, 70vw);
+        height: 40px;
+        padding: 0 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        outline: none;
+        background: #fff;
+    }
 
-        .danger-btn{
-            height: 34px;
-            padding: 0 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(239, 68, 68, 0.35);
-            background: var(--danger-bg);
-            color: var(--danger);
-            font-weight: 700;
-            cursor: pointer;
-        }
-        .danger-btn:hover{
-            filter: brightness(0.98);
-        }
+    .search input:focus {
+        border-color: rgba(245, 141, 5, 0.5);
+        box-shadow: 0 0 0 4px rgba(245, 141, 5, 0.14);
+    }
 
-        /* ====== States ====== */
-        .state{
-            padding: 18px;
-            text-align:center;
-            color: var(--text-sub);
-            font-size: 14px;
-        }
-        .error{
-            color: var(--danger);
-            background: #fff;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            padding: 12px 14px;
-            margin: 14px 16px;
-        }
-    </style>
-</head>
+    .btn {
+        height: 40px;
+        padding: 0 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        cursor: pointer;
+        background: #fff;
+        color: var(--text-main);
+        font-weight: 600;
+    }
 
-<body>
+    .btn-primary {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--btn-white);
+    }
+
+    .btn:disabled {
+        opacity: .6;
+        cursor: not-allowed;
+    }
+
+    .meta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-sub);
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--text-sub);
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    /* ====== Table ====== */
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1100px;
+    }
+
+    thead th {
+        text-align: left;
+        font-size: 12px;
+        color: var(--text-sub);
+        padding: 12px 14px;
+        background: #fafafa;
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    tbody td {
+        padding: 14px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+        font-size: 13px;
+    }
+
+    tbody tr:hover {
+        background: #fcfcfd;
+    }
+
+    .col-id {
+        width: 90px;
+    }
+
+    .col-rating {
+        width: 90px;
+    }
+
+    .col-content {
+        min-width: 300px;
+    }
+
+    .col-user {
+        width: 180px;
+    }
+
+    .col-room {
+        width: 220px;
+    }
+
+    .col-payment {
+        width: 220px;
+    }
+
+    .col-amount {
+        width: 120px;
+    }
+
+    .col-date {
+        width: 180px;
+    }
+
+    .col-actions {
+        width: 140px;
+        text-align: right;
+    }
+
+    .muted {
+        color: var(--text-sub);
+        font-size: 12px;
+    }
+
+    .content {
+        display: -webkit-box;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.45;
+        word-break: break-word;
+        white-space: pre-wrap;
+    }
+
+    .stars {
+        display: inline-flex;
+        gap: 2px;
+        font-size: 14px;
+        letter-spacing: -1px;
+    }
+
+    .star-on {
+        color: #f59e0b;
+    }
+
+    .star-off {
+        color: #d1d5db;
+    }
+
+    .danger-btn {
+        height: 34px;
+        padding: 0 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(239, 68, 68, 0.35);
+        background: var(--danger-bg);
+        color: var(--danger);
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .danger-btn:hover {
+        filter: brightness(0.98);
+    }
+
+    /* ====== States ====== */
+    .state {
+        padding: 18px;
+        text-align: center;
+        color: var(--text-sub);
+        font-size: 14px;
+    }
+
+    .error {
+        color: var(--danger);
+        background: #fff;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin: 14px 16px;
+    }
+</style>
+{{> admin/layout/nav}}
 <div class="admin-layout">
-    {{> admin/layout/nav}}
 
     <main class="admin-main">
         <div class="page-head">
@@ -248,7 +295,7 @@
         <section class="card">
             <div class="card-top">
                 <div class="search">
-                    <input id="keyword" type="text" placeholder="검색 (유저명/룸명/주문코드)" />
+                    <input id="keyword" type="text" placeholder="검색 (유저명/룸명/주문코드)"/>
                     <button id="btnSearch" class="btn btn-primary">검색</button>
                     <button id="btnReset" class="btn">초기화</button>
                 </div>
@@ -308,13 +355,14 @@
         const token = document.querySelector('meta[name="_csrf"]')?.getAttribute('content');
         const header = document.querySelector('meta[name="_csrf_header"]')?.getAttribute('content');
         if (!token || !header) return null;
-        return { token, header };
+        return {token, header};
     }
 
     function showError(msg) {
         els.errorBox.style.display = 'block';
         els.errorBox.textContent = msg;
     }
+
     function clearError() {
         els.errorBox.style.display = 'none';
         els.errorBox.textContent = '';
@@ -334,10 +382,10 @@
         const d = new Date(isoLike);
         if (isNaN(d.getTime())) return String(isoLike);
         const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2,'0');
-        const dd = String(d.getDate()).padStart(2,'0');
-        const hh = String(d.getHours()).padStart(2,'0');
-        const mi = String(d.getMinutes()).padStart(2,'0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mi = String(d.getMinutes()).padStart(2, '0');
         return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
     }
 
@@ -421,7 +469,7 @@
         const url = keyword ? `${API_LIST}?keyword=${encodeURIComponent(keyword)}` : API_LIST;
 
         try {
-            const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+            const res = await fetch(url, {headers: {'Accept': 'application/json'}});
             if (!res.ok) {
                 // 401/403/409 같은 상황 메시지
                 const text = await res.text().catch(() => '');
@@ -455,7 +503,7 @@
         if (!ok) return;
 
         const csrf = getCsrf();
-        const headers = { 'Accept': 'application/json' };
+        const headers = {'Accept': 'application/json'};
         if (csrf) headers[csrf.header] = csrf.token;
 
         try {
