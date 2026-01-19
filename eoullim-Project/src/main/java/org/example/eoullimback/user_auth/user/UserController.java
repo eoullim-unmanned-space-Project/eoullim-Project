@@ -7,6 +7,8 @@ import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.user.OAuthProvider;
 import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +39,13 @@ public class UserController {
     // // http://localhost:8080/users/profile/1
     // 유저 컨트롤러 , @PathVariable Long id,
     @GetMapping("/my-profile")
-    public String myProfile(HttpSession session, Model model) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public String myProfile(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            Model model
+    ) {
+        User sessionUser = userDetails.getUser();
+
         User user = userService.getMyProfile(sessionUser.getId());
 
         boolean isKakaoUser = user.getProvider().equals(OAuthProvider.KAKAO);
@@ -51,8 +58,11 @@ public class UserController {
     }
 
     @GetMapping("/my-profile/edit")
-    public String editProfile(HttpSession session, Model model) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+    public String editProfile(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            Model model) {
+
+        User sessionUser = userDetails.getUser();
         User user = userService.getMyProfile(sessionUser.getId());
 
         model.addAttribute("sessionUser", sessionUser);
@@ -66,13 +76,16 @@ public class UserController {
      */
     // // http://localhost:8080/users/profile/1
     @PostMapping("/my-profile")
-    public String updateProfile(HttpSession session,
-                                @ModelAttribute UserRequest.UpDateDTO update
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public String updateProfile(
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        @ModelAttribute UserRequest.UpDateDTO update,
+        HttpSession session
     ) {
         update.validate();
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        User updateUser = userService.updateProfile(sessionUser.getId(), update);
+        User user = userDetails.getUser();
+        User updateUser = userService.updateProfile(user.getId(), update);
 
         session.setAttribute("sessionUser", updateUser);
 
@@ -84,11 +97,15 @@ public class UserController {
      */
     // // http://localhost:8080/users/profile-delete/1
     @PostMapping("/my-profile/image")
-    public String deleteProfileImage(HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        userService.deleteProfileImage(sessionUser.getId());
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public String deleteProfileImage(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            HttpSession session
+    ) {
+        User user = userDetails.getUser();
+        userService.deleteProfileImage(user.getId());
 
-        User updateUser = userService.getMyProfile(sessionUser.getId());
+        User updateUser = userService.getMyProfile(user.getId());
         session.setAttribute("sessionUser", updateUser);
 
         return "redirect:/user/profile";
@@ -99,9 +116,13 @@ public class UserController {
      */
     // // http://localhost:8080/users/leave/1
     @PostMapping("/leave")
-    public String leaveUser(HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        userService.leaveUser(sessionUser.getId());
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public String leaveUser(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            HttpSession session
+            ) {
+        User user = userDetails.getUser();
+        userService.leaveUser(user.getId());
 
         session.invalidate();
 
@@ -112,25 +133,30 @@ public class UserController {
      * 화면 : 사용자 비밀번호 체크
      */
     @GetMapping("/verify-password")
-    public String verifyPassword(HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public String verifyPassword(
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
+        User user = userDetails.getUser();
 
-        if (sessionUser.getProvider() == OAuthProvider.KAKAO) {
+        if (user.getProvider() == OAuthProvider.KAKAO) {
             return "redirect:/user/profile";
         }
 
-        return "/user/verify-password";
+        return "user/verify-password";
     }
 
     @GetMapping("/bookings")
-    public String bookings(HttpSession session, Model model) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public String bookings(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            Model model) {
+        User user = userDetails.getUser();
 
-        if (sessionUser != null) {
-            model.addAttribute("user", sessionUser);
+        if (user != null) {
+            model.addAttribute("user", user);
         }
 
-        return "/user/booking";
+        return "user/booking";
     }
-
 }

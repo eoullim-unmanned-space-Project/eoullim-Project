@@ -356,7 +356,8 @@
                                        const response = await fetch("/api/user/refund", {
                                            method: "POST",
                                            headers: {
-                                               "Content-Type" : "application/json"
+                                               "Content-Type" : "application/json",
+                                               ...getCsrfHeaders()
                                            },
                                            body: JSON.stringify({
                                                paymentKey: paymentKey,

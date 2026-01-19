@@ -17,16 +17,16 @@
     <div class="header-inner">
         <div class="header-left">
             <div class="logo">
-                <a href="/"><span>E</span>oullim</a>
+                <a href="/public"><span>E</span>oullim</a>
             </div>
             <div class="mode-toggle">
-                <a href="/" class="toggle-btn active">홈페이지</a>
-                <a href="/map" class="toggle-btn">지도</a>
+                <a href="/public" class="toggle-btn active">홈페이지</a>
+                <a href="/public/map" class="toggle-btn">지도</a>
             </div>
         </div>
 
         <nav class="nav">
-            <a href="#">지도</a>
+            <a href="/public/map">지도</a>
             <a href="#">공간대여</a>
             <a href="#">이벤트</a>
             <a href="#">문의</a>
@@ -40,9 +40,9 @@
                 <a href="/auth/signup">회원가입</a>
             {{/sessionUser}}
             {{#sessionUser}}
-                <a href="/user/my-profile">회원정보</a>
+                <a href="/user/verify-password">회원정보</a>
                 <span class="divider">|</span>
-                <a href="/auth/logout">로그아웃</a>
+                <a href="/auth/logout" id="logoutLink">로그아웃</a>
             {{/sessionUser}}
         </div>
     </div>
@@ -52,10 +52,23 @@
             const token = document.querySelector('meta[name="_csrf"]').content;
             const header = document.querySelector('meta[name="_csrf_header"]').content;
 
-
             return {
                 [header]: token
             };
+        }
+
+      const logoutLink = document.getElementById('logoutLink');
+        if(logoutLink) {
+            logoutLink.addEventListener('click', function(e){
+                e.preventDefault();
+
+                fetch('/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        ...getCsrfHeaders()
+                    }
+                }).then(() => window.location.href = '/public');
+            });
         }
     </script>
 
