@@ -3,7 +3,7 @@ package org.example.eoullimback.comment;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.example.eoullimback.qaa.Qaa;
+import org.example.eoullimback.qna.Qna;
 import org.example.eoullimback.user_auth.user.User;
 
 public class CommentRequest {
@@ -15,13 +15,13 @@ public class CommentRequest {
         private String content;
 
         @NotNull(message = "Q&A ID는 필수입니다.")
-        private Long qaaId;
+        private Long qnaId;
 
-        public Comment toEntity(User user, Qaa qaa) {
+        public Comment toEntity(User user, Qna qna) {
             return Comment.builder()
                     .content(content)
                     .user(user)
-                    .qaa(qaa)
+                    .qna(qna)
                     .build();
         }
     }

@@ -10,7 +10,7 @@
 
         <div class="qna-form">
             <h3>질문 작성</h3>
-            <form action="/user/qna" method="post">
+            <form action="/my/qna" method="post">
                 <div class="info-row">
                     <label>제목</label>
                     <input type="text" name="title" placeholder="질문 제목을 입력하세요" required>
@@ -26,19 +26,19 @@
         <div class="qna-box">
             <h3>내 질문 목록</h3>
 
-            {{#qaaPage.list}}
+            {{#qnaPage.list}}
                 <div class="qna-item">
                     <div class="qna-question">
                         <span>Q.</span>
-                        <a href="/user/qna/{{id}}">{{title}}</a>
+                        <a href="/my/qna/{{id}}">{{title}}</a>
                         <span class="qna-meta">조회수 {{viewCount}} · {{createdAt}}</span>
                     </div>
                 </div>
-            {{/qaaPage.list}}
+            {{/qnaPage.list}}
 
-            {{^qaaPage.list}}
+            {{^qnaPage.list}}
                 <div class="empty-text">아직 작성한 질문이 없습니다.</div>
-            {{/qaaPage.list}}
+            {{/qnaPage.list}}
         </div>
     </section>
 </div>

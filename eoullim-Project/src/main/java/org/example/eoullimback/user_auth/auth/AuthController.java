@@ -86,7 +86,9 @@ public class AuthController {
 
             session.setAttribute("sessionUser", sessionUser);
 
-            return "redirect:/";
+//            return "redirect:/";
+            return "redirect:/admin/dashboard";
+
 
         } catch (Exception403 e) {
             String defaultMsg = e.getMessage();

@@ -6,6 +6,7 @@ import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.enums.payment.PaymentStatus;
 import org.example.eoullimback._common.enums.payment.RefundStatus;
+import org.example.eoullimback._common.enums.place.Category;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception500;
@@ -228,8 +229,28 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
     }
 
 
-    @Override
-    public Long countPaymentsInRefundRequested() {
-        return paymentRefundRepository.countPaymentsInRefundRequested();
-    }
+        @Override
+        public Long countPaymentsInRefundRequested() {
+            return paymentRefundRepository.countPaymentsInRefundRequested();
+        }
+
+        // 환불 카테고리 카운트
+        public List<PaymentRefundResponse.RefundCategoryCountDTO> getRefundCategoryCounts() {
+            List<Object[]> rawResults = paymentRefundRepository.countRefundByCategory();
+            System.out.println("==================================================================");
+            System.out.println("rawResults size = " + rawResults.size());
+            for(Object[] row: rawResults) {
+                System.out.println("category = " + row[0] + ", count = " + row[1]);
+            }
+
+
+            List<PaymentRefundResponse.RefundCategoryCountDTO> result = rawResults.stream()
+                    .map(row -> new PaymentRefundResponse.RefundCategoryCountDTO(
+                            row[0] != null ? row[0].toString() : "UNKNOWN",
+                            ((Number) row[1]).longValue()
+                    ))
+                    .collect(Collectors.toList());
+
+            return result;
+        }
 }

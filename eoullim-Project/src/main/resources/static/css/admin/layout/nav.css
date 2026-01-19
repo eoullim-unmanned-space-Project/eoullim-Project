@@ -61,6 +61,11 @@ nav {
     color: var(--toss-blue);
 }
 
+.nav-a {
+    text-decoration: none;
+    color: inherit;
+}
+
 main {
     margin-left: 280px;
     padding: 40px 20px;

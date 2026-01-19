@@ -1,4 +1,4 @@
-package org.example.eoullimback.review.admin;
+package org.example.eoullimback.review;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package org.example.eoullimback.review.admin;
+package org.example.eoullimback.admin.review;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequiredArgsConstructor
-public class AdminReviewPageController {
+public class AdminReviewController {
 
     @GetMapping("/admin/reviews")
     public String page(HttpSession session) {

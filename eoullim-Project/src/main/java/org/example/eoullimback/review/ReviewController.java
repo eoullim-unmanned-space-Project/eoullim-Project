@@ -99,4 +99,15 @@ public class ReviewController {
 
         return "redirect:/place/" + placeId + "/room";
     }
+
+    // 마이페이지 내 리뷰 리스트 확인
+    @GetMapping("/my/reviews")
+    public String page(HttpSession session, Model model) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
+        model.addAttribute("user", sessionUser);
+
+        return "user/review";
+    }
 }

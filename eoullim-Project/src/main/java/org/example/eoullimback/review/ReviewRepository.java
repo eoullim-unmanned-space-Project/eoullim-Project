@@ -1,6 +1,5 @@
 package org.example.eoullimback.review;
 
-import org.example.eoullimback.review.admin.AdminReviewListDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -54,7 +53,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                                              @Param("code") String code);
 
     @Query("""
-    SELECT new org.example.eoullimback.review.admin.AdminReviewListDTO(
+    SELECT new org.example.eoullimback.review.AdminReviewListDTO(
         r.id,
         r.rating,
         r.content,

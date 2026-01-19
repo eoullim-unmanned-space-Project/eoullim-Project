@@ -19,11 +19,11 @@ public class EventApiController {
     ResponseEntity<EventResponse.DetailDTO> getDetailEvent (HttpSession session) {
         User user = (User) session.getAttribute("sessionUser");
 
+
         EventResponse.DetailDTO event = eventService.getDetailEvent(user.getId());
 
         return ResponseEntity.ok().body(event);
     }
-
 
     @PostMapping("/api/user/events")
     ResponseEntity<EventResponse.DetailDTO> createEvent(HttpSession session) {

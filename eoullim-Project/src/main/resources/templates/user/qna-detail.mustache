@@ -10,16 +10,16 @@
 
         <div class="qna-item">
             <div class="qna-question">
-                <span>Q.</span> {{qaa.title}}
-                <span class="qna-meta">조회수 {{qaa.viewCount}} · {{qaa.createdAt}}</span>
+                <span>Q.</span> {{qna.title}}
+                <span class="qna-meta">조회수 {{qna.viewCount}} · {{qna.createdAt}}</span>
             </div>
 
-            <div class="qna-content">{{qaa.content}}</div>
+            <div class="qna-content">{{qna.content}}</div>
 
             <div class="qna-actions">
-                <a href="/user/qna" class="edit-btn">목록</a>
-                <a href="/user/qna/{{qaa.id}}/edit" class="edit-btn">수정</a>
-                <form action="/user/qna/{{qaa.id}}/delete" method="post">
+                <a href="/my/qna" class="edit-btn">목록</a>
+                <a href="/my/qna/{{qna.id}}/edit" class="edit-btn">수정</a>
+                <form action="/my/qna/{{qna.id}}/delete" method="post">
                     <button class="delete-btn">삭제</button>
                 </form>
             </div>

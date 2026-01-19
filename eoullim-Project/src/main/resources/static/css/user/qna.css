@@ -179,8 +179,13 @@ hr {
 }
 
 .qna-question span {
-  color: #4f46e5;
+  color: black;
   font-weight: bold;
+}
+
+.qna-question a {
+  color: black;
+  text-decoration: none;
 }
 
 /* 조회수/날짜 */

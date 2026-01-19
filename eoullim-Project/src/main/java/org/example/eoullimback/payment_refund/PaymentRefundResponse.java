@@ -3,6 +3,12 @@ package org.example.eoullimback.payment_refund;
 import lombok.Data;
 import org.example.eoullimback._common.enums.payment.PaymentMethod;
 import org.example.eoullimback._common.enums.payment.RefundStatus;
+
+import org.example.eoullimback._common.util.DateTimeUtil;
+
+import org.example.eoullimback._common.enums.place.Category;
+import org.example.eoullimback.place.Place;
+
 import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 
@@ -30,7 +36,7 @@ public class PaymentRefundResponse {
         private String paymentKey;
         private Long amount;
         private List<TimeSlotResponse.DetailDTO> timeSlots;
-        private LocalDateTime createdAt;
+        private String createdAt;
         private String displayTime;
         private String displayStatus;
         private PaymentMethod paymentMethod;
@@ -43,7 +49,7 @@ public class PaymentRefundResponse {
             this.paymentKey = paymentRefund.getPayment().getPaymentKey();
             this.amount = paymentRefund.getPayment().getAmount();
             this.paymentMethod = paymentRefund.getPayment().getMethod();
-            this.createdAt = paymentRefund.getCreatedAt();
+            this.createdAt = DateTimeUtil.toKstWithMinutesString(paymentRefund.getCreatedAt());
 
             this.timeSlots = timeSlots;
 
@@ -95,11 +101,6 @@ public class PaymentRefundResponse {
 
             if (!timeSlots.isEmpty()) {
                 TimeSlotResponse.DetailDTO first = timeSlots.get(0);
-                DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm -");
-                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(" HH:mm까지");
-
-//                this.displayTime = first.getStartTime().format(dateTimeFormatter)
-//                        + first.getEndTime().format(timeFormatter);
 
                 this.displayTime = first.getStartTime()
                         + first.getEndTime();
@@ -107,4 +108,14 @@ public class PaymentRefundResponse {
         }
     }
 
+    @Data
+    public static class RefundCategoryCountDTO  {
+        private String category;
+        private long count;
+
+        public RefundCategoryCountDTO(String category, long count) {
+            this.category = category;
+            this.count = count;
+        }
+    }
 }

@@ -6,6 +6,7 @@ USE eoullim_db;
 
 
 SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS sse_chat;
 DROP TABLE IF EXISTS notices;
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS notifications;
@@ -21,6 +22,7 @@ DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS qaas;
 DROP TABLE IF EXISTS file_infos;
+DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -98,7 +100,7 @@ CREATE TABLE file_infos (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='파일 정보 테이블';
 
-CREATE TABLE qaas (
+CREATE TABLE qnas (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
   user_id BIGINT NOT NULL COMMENT '작성자',
@@ -110,15 +112,15 @@ CREATE TABLE qaas (
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일',
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
-  INDEX `idx_qaas_user` (user_id),
-  CONSTRAINT `fk_qaas_user_id` FOREIGN KEY (user_id) REFERENCES users(id)
+  INDEX `idx_qnas_user` (user_id),
+  CONSTRAINT `fk_qnas_user_id` FOREIGN KEY (user_id) REFERENCES users(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Q&A 테이블';
 
 CREATE TABLE comments (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   
   user_id BIGINT NOT NULL COMMENT '댓글 작성자(관리자)',
-  qaa_id BIGINT NOT NULL COMMENT 'Q&A',
+  qna_id BIGINT NOT NULL COMMENT 'Q&A',
   
   content TEXT NOT NULL COMMENT '댓글',
 
@@ -126,9 +128,9 @@ CREATE TABLE comments (
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT '수정일',
   
   INDEX `idx_comments_user` (user_id),
-  INDEX `idx_comments_qaa` (qaa_id),
+  INDEX `idx_comments_qna` (qna_id),
   CONSTRAINT `fk_comments_user_id` FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT `fk_comments_qaa_id` FOREIGN KEY (qaa_id) REFERENCES qaas(id) ON DELETE CASCADE
+  CONSTRAINT `fk_comments_qna_id` FOREIGN KEY (qna_id) REFERENCES qnas(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Q&A 댓글 테이블';
 
 CREATE TABLE places (

@@ -3,47 +3,47 @@
 <div class="admin-layout">
     {{> admin/layout/nav}}
     <main class="admin-main">
-        <div class="qaa-container">
+        <div class="qna-container">
             <header>
                 <h1>QnA 관리 및 답글 작성</h1>
             </header>
-            {{#qaaPage.content}}
-                <div class="qaa-list-item">
-                    <h4><a href="/admin/qna/{{id}}">{{title}}</a></h4>
+            {{#qnaPage.content}}
+                <div class="qna-list-item">
+                    <h4><a href="/admin/qnas/{{id}}">{{title}}</a></h4>
                     <p>
                         작성자 : {{name}}
                         | 작성일 : {{createdAt}}
                         | 조회수 : {{viewCount}}
                     </p>
                 </div>
-            {{/qaaPage.content}}
-            <div class="qaa-card">
-                <form class="qaa-form" action="/admin/qna" method="get">
+            {{/qnaPage.content}}
+            <div class="qna-card">
+                <form class="qna-form" action="/admin/qnas" method="get">
                     <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{keyword}}">
                     <input type="hidden" name="page" value="1">
-                    <input type="hidden" name="size" value="{{qaaPage.size}}">
-                    <div class="qaa-btn-group" style="justify-content: flex-end">
-                        <button class="qaa-btn qaa-btn-primary" type="submit">검색</button>
-                        <a href="/admin/qna" class="qaa-btn qaa-btn-secondary">초기화</a>
+                    <input type="hidden" name="size" value="{{qnaPage.size}}">
+                    <div class="qna-btn-group" style="justify-content: flex-end">
+                        <button class="qna-btn qna-btn-primary" type="submit">검색</button>
+                        <a href="/admin/qnas" class="qna-btn qna-btn-secondary">초기화</a>
                     </div>
                 </form>
             </div>
             <div class="pagination">
-                {{#qaaPage.previousPageNumber}}
-                    <a href="/admin/qna?page={{qaaPage.previousPageNumber}}&size={{qaaPage.size}}">Previous</a>
-                {{/qaaPage.previousPageNumber}}
-                {{^qaaPage.previousPageNumber}}
+                {{#qnaPage.previousPageNumber}}
+                    <a href="/admin/qnas?page={{qnaPage.previousPageNumber}}&size={{qnaPage.size}}">Previous</a>
+                {{/qnaPage.previousPageNumber}}
+                {{^qnaPage.previousPageNumber}}
                     <a href="#">Previous</a>
-                {{/qaaPage.previousPageNumber}}
-                {{#qaaPage.pageLinks}}
-                    <a href="/admin/qna?page={{displayNumber}}&size={{qaaPage.size}}">{{displayNumber}}</a>
-                {{/qaaPage.pageLinks}}
-                {{#qaaPage.nextPageNumber}}
-                    <a href="/admin/qna?page={{qaaPage.nextPageNumber}}&size={{qaaPage.size}}">Next</a>
-                {{/qaaPage.nextPageNumber}}
-                {{^qaaPage.nextPageNumber}}
+                {{/qnaPage.previousPageNumber}}
+                {{#qnaPage.pageLinks}}
+                    <a href="/admin/qnas?page={{displayNumber}}&size={{qnaPage.size}}">{{displayNumber}}</a>
+                {{/qnaPage.pageLinks}}
+                {{#qnaPage.nextPageNumber}}
+                    <a href="/admin/qnas?page={{qnaPage.nextPageNumber}}&size={{qnaPage.size}}">Next</a>
+                {{/qnaPage.nextPageNumber}}
+                {{^qnaPage.nextPageNumber}}
                     <a href="#">Next</a>
-                {{/qaaPage.nextPageNumber}}
+                {{/qnaPage.nextPageNumber}}
             </div>
         </div>
     </main>

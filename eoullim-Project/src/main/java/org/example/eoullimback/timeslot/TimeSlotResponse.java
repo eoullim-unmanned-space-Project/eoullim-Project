@@ -25,9 +25,7 @@ public class TimeSlotResponse {
     @Data
     public static class DetailDTO {
         private Long timeSlotId;
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         private String startTime;
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         private String endTime;
         private SlotStatus status;
         private LocalDateTime holdExpiredAt;

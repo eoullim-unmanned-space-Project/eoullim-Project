@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.example.eoullimback._common.util.NumberFormatUtils.*;
@@ -32,17 +33,49 @@ public class AdminApiController {
     private final UserService userService;
     private final DashboardUserService dashboardUserService;
 
+    @GetMapping("/admin/refund/detail/{id}")
+    public ResponseEntity<PaymentRefundResponse.AdminDetailDTO> detail(@PathVariable Long id) {
+
+        PaymentRefundResponse.AdminDetailDTO detailDTO = paymentRefundService.detail(id);
+
+        return ResponseEntity.ok().body(detailDTO);
+    }
+
+    @PostMapping("/api/refund/rejection/{id}")
+    public ResponseEntity<Void> rejection(@PathVariable Long id, @RequestBody PaymentRefundRequest.RejectionDTO rejectionDTO) {
+
+        paymentRefundService.rejection(id, rejectionDTO.getReason());
+
+        return ResponseEntity.ok().body(null);
+    }
+
+    @PostMapping("/api/refund/approve/{id}")
+    public ResponseEntity<Void> approve(@PathVariable Long id) {
+
+        paymentRefundService.approve(id);
+
+        return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping("/api/admin/category")
+    public ResponseEntity<List<PaymentRefundResponse.RefundCategoryCountDTO>> getCategory() {
+
+        List<PaymentRefundResponse.RefundCategoryCountDTO> categoryCountList = paymentRefundService.getRefundCategoryCounts();
+
+        return ResponseEntity.ok().body(categoryCountList);
+    }
 
     @GetMapping("/users/chart")
     public String getUserChart() {
 
         return "admin/user-chart";
     }
+
     // =====
     // 장소(place)
     // ====
 
-    @PostMapping("/place/create")
+    @PostMapping("/api/admin/places")
     public ResponseEntity<Place> createProc(PlaceRequest.CreateDTO request) {
 
         request.validate();
@@ -51,7 +84,7 @@ public class AdminApiController {
         return ResponseEntity.ok().body(place);
     }
 
-    @PutMapping("/place/{placeId}")
+    @PutMapping("/api/admin/places/{placeId}")
     public ResponseEntity<Map<String, Place>> UpdateProc(@PathVariable Long placeId,
                                                          PlaceRequest.UpdateDTO request
     ) {
@@ -62,7 +95,7 @@ public class AdminApiController {
         return ResponseEntity.ok().body(Map.of("place", place));
     }
 
-    @DeleteMapping("/place/{id}")
+    @DeleteMapping("/api/admin/places/{id}")
     public ResponseEntity<Void> deleteProc(@PathVariable(name = "id") Long placeId) {
 
         placeService.placeDelete(placeId);
@@ -75,7 +108,7 @@ public class AdminApiController {
     // 방(room)
     // ====
 
-    @PostMapping("/room/create")
+    @PostMapping("/api/admin/rooms")
     public ResponseEntity<Room> createRoom(Model model,
                                            RoomRequest.CreateDTO createDTO
     ) {
@@ -87,7 +120,7 @@ public class AdminApiController {
         return ResponseEntity.ok().body(room);
     }
 
-    @PutMapping("/room/{roomId}")
+    @PutMapping("/api/admin/rooms/{roomId}")
     public ResponseEntity<Map<String, Room>> updateRoom(@PathVariable Long roomId,
                                                         RoomRequest.UpdateDTO updateDTO
     ) {
@@ -99,7 +132,8 @@ public class AdminApiController {
         return ResponseEntity.ok().body(Map.of("room", room));
     }
 
-    @DeleteMapping("/room/{roomId}")
+
+    @DeleteMapping("/api/admin/rooms/{roomId}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
 
         roomService.deleteRoom(roomId);
