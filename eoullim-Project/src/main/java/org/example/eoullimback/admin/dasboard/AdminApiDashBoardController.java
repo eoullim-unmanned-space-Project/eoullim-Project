@@ -29,19 +29,19 @@ public class AdminApiDashBoardController {
         return ResponseEntity.ok().body(payments);
     }
 
-    @GetMapping("/api/admin/today-sales")
+    @GetMapping("/api/admin/sales/today")
     ResponseEntity<PaymentResponse.SalesResponseDto> getTodaySales() {
         PaymentResponse.SalesResponseDto sales = paymentService.getTodaySales();
         return ResponseEntity.ok().body(sales);
     }
 
-    @GetMapping("/api/admin/new-bookings")
+    @GetMapping("/api/admin/bookings/new/count")
     ResponseEntity<BookingResponse.CountDTO> getNewBookings() {
         BookingResponse.CountDTO todayBookingCount = bookingService.countTodayBookings();
         return ResponseEntity.ok().body(todayBookingCount);
     }
 
-    @GetMapping("/api/admin/refunds/pending")
+    @GetMapping("/api/admin/refunds/pending/count")
     ResponseEntity<Map<String, Long>> getRefundsPending() {
        return ResponseEntity.ok().body(Map.of("refundCounts", paymentRefundService.countPaymentsInRefundRequested()));
     }

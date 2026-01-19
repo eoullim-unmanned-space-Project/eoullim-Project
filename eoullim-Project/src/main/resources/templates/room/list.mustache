@@ -473,7 +473,7 @@
             let timeSlotIds = selectedSlots.map(slot => slot.timeSlotId);
 
             try {
-                const response = await fetch("/api/calculate-amount", {
+                const response = await fetch("/api/user/bookings/amount", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -548,7 +548,7 @@
                 const totalAmount = await calculateAmount();
 
                 // 예약 API 호출
-                const response = await fetch("/api/bookings", {
+                const response = await fetch("/api/user/bookings", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
@@ -566,7 +566,7 @@
 
                 const data = await response.json();
                 alert("예약이 완료되었습니다. 결제페이지로 넘어갑니다.");
-                location.href = `/booking/detail?code=${data.bookingCode}`;
+                location.href = `/user/bookings/detail?code=${data.bookingCode}`;
 
             } catch (error) {
                 alert(error.message);

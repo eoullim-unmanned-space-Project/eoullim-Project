@@ -20,7 +20,7 @@ public class BookingApiController {
     /**
      * 기능: amount 요금계산
      */
-    @PostMapping("/api/calculate-amount")
+    @PostMapping("/api/user/bookings/amount")
     public ResponseEntity<?> calculateAmount(Model model, @RequestBody BookingRequest.CalculateAmountDTO calculateAmountDTO, HttpSession session) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -37,7 +37,7 @@ public class BookingApiController {
     /**
      * 기능 - 부킹 생성
      */
-    @PostMapping("/api/bookings")
+    @PostMapping("/api/user/bookings")
     public ResponseEntity<?> saveBooking(
             HttpSession session,
             @RequestBody BookingRequest.createDTO createDTO
@@ -54,7 +54,7 @@ public class BookingApiController {
         return ResponseEntity.ok().body(Map.of("bookingCode", bookingCode));
     }
 
-    @PostMapping("/api/booking/cancel/{bookingCode}")
+    @PostMapping("/api/user/bookings/cancel/{bookingCode}")
     public ResponseEntity<?> cancelBooking (
             @PathVariable String bookingCode,
             HttpSession session
