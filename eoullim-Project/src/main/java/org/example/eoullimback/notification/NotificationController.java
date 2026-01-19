@@ -16,7 +16,6 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
-    private final UserRepository userRepository;
 
     // http://localhost:8080/notifications
     @GetMapping("/notifications")
