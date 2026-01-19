@@ -4,26 +4,16 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
-import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception401;
 import org.example.eoullimback.booking.BookingService;
 import org.example.eoullimback.notification.NotificationService;
-import org.example.eoullimback.payment.Payment;
-import org.example.eoullimback.payment.PaymentResponse;
 import org.example.eoullimback.payment.PaymentService;
 import org.example.eoullimback.payment_refund.PaymentRefundRequest;
-import org.example.eoullimback.payment_refund.PaymentRefundResponse;
 import org.example.eoullimback.payment_refund.PaymentRefundService;
 import org.example.eoullimback.user_auth.auth.AuthService;
-import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -139,7 +129,6 @@ public class UserApiController {
         }
 
         User user = userService.findByEmail(email);
-
 
         session.removeAttribute("findIdVerified");
         session.removeAttribute("findIdEmail");

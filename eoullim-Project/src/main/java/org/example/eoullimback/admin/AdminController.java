@@ -34,7 +34,6 @@ public class AdminController {
 
     private final PaymentRefundService paymentRefundService;
     private final PlaceService placeService;
-    private final UserService userService;
     private final RoomService roomService;
     private final DashboardUserService dashboardUserService;
 
@@ -90,23 +89,4 @@ public class AdminController {
 
         return "/admin/place";
     }
-
-    @GetMapping("/users")
-    public String users(HttpSession session,Model model) {
-
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        List<UserResponse.AdminListDTO> userList = userService.getUserList();
-        model.addAttribute("adminUserList", userList);
-
-        return "admin/user";
-    }
-
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<UserResponse.AdminUserDetailDTO> getUserDetail(@PathVariable Long userId) {
-        User user = userService.findById(userId);
-
-        return ResponseEntity.ok(new UserResponse.AdminUserDetailDTO(user));
-    }
-
 }
