@@ -50,12 +50,14 @@ public class SecurityConfig  {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/favicon.icon").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
+                        .requestMatchers("/auth/signup", "/auth/login").permitAll()
 
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/user/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/public/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
 
@@ -69,7 +71,9 @@ public class SecurityConfig  {
                                 .maxSessionsPreventsLogin(false)
                         )
                 .formLogin(form -> form.disable())
+                .logout(logout -> logout.disable())
                 .httpBasic(basic -> basic.disable());
+
 
         return http.build();
     }
