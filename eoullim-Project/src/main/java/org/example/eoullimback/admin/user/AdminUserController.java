@@ -22,7 +22,7 @@ public class AdminUserController {
 
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping("/user")
     public String users(HttpSession session, Model model) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
