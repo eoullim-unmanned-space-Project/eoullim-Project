@@ -210,7 +210,7 @@
     <ul class="nav-menu">
         <li class="nav-item active">📊 대시보드</li>
         <li class="nav-item">🏠 장소/방 관리</li>
-        <li class="nav-item">🫥 회원 관리</li>
+        <li class="nav-item" onclick="location.href='/admin/users'">🫥 회원 관리</li>
         <li class="nav-item">🧾 결제 내역</li>
         <li class="nav-item">📫 Q&A</li>
         <li class="nav-item">⭐ 리뷰 내역</li>
@@ -241,8 +241,13 @@
         </div>
         <div class="stat-card">
             <div class="stat-label">가입자 수</div>
-            <div class="stat-value">1,204명</div>
-            <div class="stat-change up">▲ 8.2%</div>
+            <div class="stat-value">{{totalUserComma}}명</div>
+            {{#isIncrease}}
+            <div class="stat-change up">▲ {{increaseRate}}%</div>
+            {{/isIncrease}}
+            {{^isIncrease}}
+            <div class="stat-change down">▼ {{increaseRate}}%</div>
+            {{/isIncrease}}
         </div>
     </div>
 
@@ -253,7 +258,7 @@
                 <div class="menu-icon qna-bg">📫</div>
                 <div class="menu-info">
                     <span class="menu-title">Q&A 관리</span>
-                    <span class="menu-desc">새로운 문의 5건</span>
+                    <span class="menu-desc" id="qnaText">새로운 문의 -건</span>
                 </div>
             </div>
 
@@ -261,7 +266,7 @@
                 <div class="menu-icon review-bg">⭐</div>
                 <div class="menu-info">
                     <span class="menu-title">리뷰 내역</span>
-                    <span class="menu-desc">평균 별점 4.8</span>
+                    <span class="menu-desc" id="avgRatingText">평균 별점 -</span>
                 </div>
             </div>
 
@@ -269,7 +274,7 @@
                 <div class="menu-icon user-bg">🫥</div>
                 <div class="menu-info">
                     <span class="menu-title">회원 관리</span>
-                    <span class="menu-desc">누적 회원 1.2k</span>
+                    <span class="menu-desc">누적 회원 {{totalUserK}}</span>
                 </div>
             </div>
 
@@ -320,10 +325,14 @@
         fetchTodaySales();
         fetchTodayBookingCounts()
         fetchRefundStatusInRequests()
+        fetchAvgRating();
+        fetchQnaCount();
 
         setInterval(fetchTodaySales, 30000);
         setInterval(fetchTodayBookingCounts, 30000);
         setInterval(fetchRefundStatusInRequests, 30000);
+        setInterval(fetchAvgRating, 30000);
+        setInterval(fetchQnaCount, 30000);
     });
 
     async function fetchPaymentList() {
@@ -474,6 +483,43 @@
         } catch (error) {
             console.error("데이터를 불러오는데 실패했습니다.", error);
             alert("값을 불러오지 못했습니다.");
+        }
+    }
+
+    async function fetchAvgRating() {
+        const el = document.getElementById('avgRatingText');
+        if (!el) return;
+
+        try {
+            const res = await fetch('/api/admin/reviews/avg-rating');
+            if (!res.ok) throw new Error('평균 별점 조회 실패');
+
+            const data = await res.json();
+            const avg = Number(data.avgRating || 0);
+
+            el.innerText = `평균 별점 ${avg.toFixed(1)}`;
+
+        } catch (e) {
+            console.error(e);
+            el.innerText = '평균 별점 -';
+        }
+    }
+
+    async function fetchQnaCount() {
+        const el = document.getElementById('qnaText');
+        if (!el) return;
+
+        try {
+            const res = await fetch('/api/admin/qna/count');
+            if (!res.ok) throw new Error('QnA 수 조회 실패');
+
+            const data = await res.json();
+            const n = Number(data.todayCount || 0);
+
+            el.innerText = `새로운 문의 ${n}건`;
+        } catch (e) {
+            console.error(e);
+            el.innerText = '새로운 문의 -건';
         }
     }
 

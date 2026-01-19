@@ -55,6 +55,13 @@ nav {
     transition: 0.2s;
 }
 
+.nav-item a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    padding: 10px;
+}
+
 .nav-item:hover,
 .nav-item.active {
     background-color: #f9fafb;

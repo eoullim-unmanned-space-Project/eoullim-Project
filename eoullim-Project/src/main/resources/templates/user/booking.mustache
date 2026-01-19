@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/css/layout/header.css">
+<link rel="stylesheet" href="/css/layout/header.css">
 <link rel="stylesheet" href="/css/user/booking.css">
 {{> layout/header}}
 <body>
@@ -164,13 +165,9 @@
             });
 
                 bookingList.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('booking-detail-btn')) {
+                    if(e.target.classList.contains('booking-retry-btn')) {
                         const bookingCode = e.target.dataset.code;
-                        location.href = `/booking/${bookingCode}`;
-                    }
-
-                    if (e.target.classList.contains('booking-retry-btn')) {
-                        const bookingCode = e.target.dataset.code;
+                        const status = e.target.dataset.status;
 
                         if(confirm("다시 결제를 진행하시겠습니까?")) {
                             location.href = `/booking/detail?code=${bookingCode}`;

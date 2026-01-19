@@ -11,12 +11,13 @@ import org.example.eoullimback.comment.CommentService;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -24,6 +25,7 @@ public class QaaController {
 
     private final QaaService qaaService;
     private final CommentService commentService;
+    private final QaaRepository qaaRepository;
 
     // Q&A 작성 화면 요청
     // http://localhost:8080/qaas/new
@@ -266,5 +268,22 @@ public class QaaController {
         qaaService.deleteAsAdmin(qaaId, sessionUser);
 
         return "redirect:/admin/qna";
+    }
+
+    // 관리자 대시보드 문의 개수
+    @GetMapping("/api/admin/qna/count")
+    @ResponseBody
+    public Map<String, Object> todayQnaCount(HttpSession session) {
+
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) throw new Exception403(ErrorCode.LOGIN_ONLY);
+
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay();
+
+        long count = qaaRepository.countToday(start, end);
+
+        return Map.of("todayCount", count);
     }
 }

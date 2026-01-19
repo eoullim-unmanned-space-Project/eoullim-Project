@@ -11,7 +11,6 @@ import org.example.eoullimback.geminichatbot.GeminiService;
 import org.example.eoullimback.payment.Payment;
 import org.example.eoullimback.payment.PaymentRepository;
 import org.example.eoullimback.room.Room;
-import org.example.eoullimback.room.RoomRepository;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +27,6 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
-    private final RoomRepository roomRepository;
     private final PaymentRepository paymentRepository;
     private final GeminiService geminiService;
 
@@ -116,6 +114,14 @@ public class ReviewServiceImpl implements ReviewService{
         if (!review.getUser().getId().equals(userId)) {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
+
+        reviewRepository.delete(review);
+    }
+
+    @Transactional
+    public void adminDelete(Long adminUserId, Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new Exception404(ErrorCode.REVIEW_NOT_FOUND));
 
         reviewRepository.delete(review);
     }

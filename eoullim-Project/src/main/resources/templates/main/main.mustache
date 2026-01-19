@@ -70,19 +70,19 @@
 
     <section>
     <!-- chatBot -->
-<!--        <div class="chat-popup" id="chat-popup" aria-hidden="true">-->
-<!--            <div class="header">-->
-<!--                <h1>ChatBot</h1>-->
-<!--                <button class="btn-close" id="btn-close" type="button" aria-label="닫기">✕</button>-->
-<!--            </div>-->
+        <div class="chat-popup" id="chat-popup" aria-hidden="true">
+            <div class="header">
+                <h1>ChatBot</h1>
+                <button class="btn-close" id="btn-close" type="button" aria-label="닫기">✕</button>
+            </div>
 
-<!--            <div class="chat-box" id="chat-box"></div>-->
+            <div class="chat-box" id="chat-box"></div>
 
-<!--            <form class="input-area" id="chat-form">-->
-<!--                <input type="text" class="input-msg" id="chat-input" placeholder="내용을 입력해주세요..." required>-->
-<!--                <button type="submit" class="btn-send" id="btn-send">보내기</button>-->
-<!--            </form>-->
-<!--        </div>-->
+            <form class="input-area" id="chat-form">
+                <input type="text" class="input-msg" id="chat-input" placeholder="내용을 입력해주세요..." required>
+                <button type="submit" class="btn-send" id="btn-send">보내기</button>
+            </form>
+        </div>
         <div class="fab-wrapper" id="fabContainer">
             <div class="fab-menu">
                 <div class="fab-item">
@@ -93,13 +93,29 @@
                 </div>
                 <div class="fab-item">
                     <span class="fab-tooltip">오늘의 운세</span>
-                    <button class="sub-btn fortune" onclick="openFortune()">
+                    <button class="sub-btn fortune">
                         <span class="emoji">🔮</span>
                     </button>
                 </div>
+
+                <div id="fortuneEntryModal" class="modal-overlay">
+                    <div class="fortune-card">
+                        <div class="card-header">
+                            <h2>🍀 오늘의 나의 운세는 어떨까?</h2>
+                            <p>AI 제미나이가 분석한 행운을 확인하세요</p>
+                        </div>
+
+                        <div class="card-body">
+                            <button type="button" class="draw-btn">
+                                ✨ 오늘의 운세 뽑기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="fab-item">
                     <span class="fab-tooltip">1:1 채팅</span>
-                    <button class="sub-btn chat" onclick="openChat()">
+                    <button class="sub-btn chat" id="chat-fab">
                         <span class="emoji">💬</span>
                     </button>
                 </div>
@@ -111,142 +127,235 @@
         </div>
     </section>
 </main>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const fabWrapper = document.getElementById('fabContainer');
-        const mainBtn = document.getElementById('mainFab');
+    document.addEventListener("DOMContentLoaded", () => {
 
-        mainBtn.addEventListener('click', function(e) {
+        // ------------- 배너 슬라이드 ----------------
+        const track = document.querySelector('.banner-track');
+        const slides = document.querySelectorAll('.banner-slide');
+        let currentIndex = 0;
 
-            if (mainBtn.contains(e.target)) {
-                fabWrapper.classList.toggle('active');
-            } else if (!fabWrapper.contains(e.target)) {
-                fabWrapper.classList.remove('active');
+        if (track && slides.length > 0) {
+            function moveSlide(index) {
+                track.style.transform = `translateX(-${index * 100}%)`;
             }
 
-        });
+            document.querySelector('.banner-btn.next').addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % slides.length;
+                moveSlide(currentIndex);
+            });
 
-
-    })
-
-</script>
-
-<script>
-    // 배너 슬라이드 스크립트
-    const track = document.querySelector('.banner-track');
-    const slides = document.querySelectorAll('.banner-slide');
-    let currentIndex = 0;
-
-<!--    // ---------------chatBot------------------ //-->
-<!--    const popup = document.getElementById("chat-popup");-->
-<!--    const fab = document.getElementById("chat-fab");-->
-<!--    const btnClose = document.getElementById("btn-close");-->
-<!--    const form = document.getElementById("chat-form");-->
-<!--    const input = document.getElementById("chat-input");-->
-<!--    const chatBox = document.getElementById("chat-box");-->
-<!--    const btnSend = document.getElementById("btn-send");-->
-<!--    const INIT_MESSAGE = `질문을 입력해주세요.\n예) 문의방법/공간안내/운영시간/위치/가격/예약/환불`;-->
-<!--    let hasInitMessage = false;-->
-
-    // 배너 슬라이드 스크립트
-    if (track && slides.length > 0) {
-        function moveSlide(index) {
-            track.style.transform = `translateX(-${index * 100}%)`;
+            document.querySelector('.banner-btn.prev').addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+                moveSlide(currentIndex);
+            });
         }
 
-        document.querySelector('.banner-btn.next').addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % slides.length;
-            moveSlide(currentIndex);
+        // ------------- FAB 및 챗봇 ----------------
+        const fabWrapper = document.getElementById("fabContainer");
+        const mainFab = document.getElementById("mainFab");
+        const chatFab = document.getElementById("chat-fab");
+
+        const popup = document.getElementById("chat-popup");
+        const btnClose = document.getElementById("btn-close");
+        const form = document.getElementById("chat-form");
+        const input = document.getElementById("chat-input");
+        const chatBox = document.getElementById("chat-box");
+        const btnSend = document.getElementById("btn-send");
+
+        const INIT_MESSAGE = `질문을 입력해주세요.\n예) 문의방법/공간안내/운영시간/위치/가격/예약/환불`;
+        let hasInitMessage = false;
+
+        // FAB 메뉴 토글
+        mainFab.addEventListener("click", () => {
+            fabWrapper.classList.toggle("active");
         });
 
-        document.querySelector('.banner-btn.prev').addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-            moveSlide(currentIndex);
+        // 챗봇 열기/닫기 함수
+        function openChat() {
+            popup.classList.add("open");
+            popup.setAttribute("aria-hidden", "false");
+            if (!hasInitMessage) {
+                appendMessage("Bot", INIT_MESSAGE);
+                hasInitMessage = true;
+            }
+            input.focus();
+        }
+
+        function closeChat() {
+            popup.classList.remove("open");
+            popup.setAttribute("aria-hidden", "true");
+        }
+
+        function toggleChat() {
+            if (popup.classList.contains("open")) closeChat();
+            else openChat();
+        }
+
+        // 챗봇 FAB 클릭
+        chatFab.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleChat();
         });
+
+        // 닫기 버튼 클릭
+        btnClose.addEventListener("click", () => {
+            closeChat();
+        });
+
+        // ESC 키로 닫기
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && popup.classList.contains("open")) {
+                closeChat();
+            }
+        });
+
+        // 메시지 전송
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const userMsg = input.value.trim();
+            if (!userMsg) return;
+
+            appendMessage("나", userMsg);
+            input.value = "";
+
+            try {
+                btnSend.disabled = true;
+
+                const res = await fetch("/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        text: userMsg
+                    })
+                });
+
+                if (!res.ok) {
+                    appendMessage("Bot", "(서버 오류 발생)");
+                    return;
+                }
+
+                const reply = await res.text();
+                appendMessage("Bot", reply);
+
+            } catch (err) {
+                appendMessage("Bot", "(에러 발생: " + err.message + ")");
+            } finally {
+                btnSend.disabled = false;
+                input.focus();
+            }
+        });
+
+        // 메시지 추가 함수
+        function appendMessage(sender, message) {
+            const isMe = sender === "나";
+            const wrap = document.createElement("div");
+            wrap.className = "msg-box" + (isMe ? " me" : "");
+
+            const name = document.createElement("span");
+            name.className = "name";
+            name.textContent = sender;
+
+            const msg = document.createElement("span");
+            msg.className = "msg" + (isMe ? " me" : "");
+            msg.textContent = message;
+
+            wrap.appendChild(name);
+            wrap.appendChild(msg);
+
+            chatBox.appendChild(wrap);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        const fortuneEl = document.querySelector('.fortune');
+        const modalOverlayEl = document.getElementById('fortuneEntryModal');
+
+          fortuneEl.addEventListener('click', () => {
+            openEventModal();
+
+            const drawBtn = document.querySelector('.draw-btn');
+            drawBtn.onclick = async () => {
+                if (!confirm("오늘의 운세를 보실건가요? 이벤트는 하루에 한번 만 참여가 가능합니다!")) {
+                    return;
+                }
+
+                const response = await fetch('/api/events/today', { method: 'GET' });
+                const resData = await response.json();
+                const data = resData.response || resData;
+
+                if (data.alreadyExists) {
+                    renderFortune(data);
+                } else {
+                    alert("오늘의 운세를 생성 하는 중입니다. 조금만 기다려주세요...");
+                    initCreateEvent();
+                }
+            };
+        });
+
+        fortuneEl.addEventListener('click', () => {
+            openEventModal();
+        });
+
+        modalOverlayEl.addEventListener('click', () => {
+            closeEventModal();
+        })
+
+    });
+
+    function closeEventModal() {
+        const modalOverlayEl = document.querySelector('.modal-overlay');
+        modalOverlayEl.style.display = "none";
     }
 
-<!--    // ---------------chatBot------------------ //-->
-<!--    function openChat() {-->
-<!--        popup.classList.add("open");-->
-<!--        popup.setAttribute("aria-hidden", "false");-->
+    async function openEventModal() {
+      const modalOverlayEl = document.querySelector('.modal-overlay');
+        modalOverlayEl.style.display = 'flex';
+    }
 
-<!--        // 챗봇 처음 메세지-->
-<!--        if (!hasInitMessage) {-->
-<!--            appendMessage("Bot", INIT_MESSAGE);-->
-<!--            hasInitMessage = true;-->
-<!--        }-->
+   function renderFortune(data) {
+    const modalOverlayEl = document.getElementById('fortuneEntryModal');
 
-<!--        setTimeout(() => input.focus(), 0);-->
-<!--    }-->
+    const fortune = data.response || data;
+
+    modalOverlayEl.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="fortuneDate">${fortune.fortuneDate}</h3>
+                <p class="score-label">오늘의 행운 점수</p>
+                <div class="score-circle">
+                    <span id="luckyScore">${fortune.luckyScore}</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="lucky-item-box">
+                    <span class="emoji" style="font-size: 1.5rem;">🍀</span>
+                    <div class="item-info">
+                        <p class="item-title">행운의 아이템</p>
+                        <p id="luckyItem" class="item-name">${fortune.luckyItem}</p>
+                    </div>
+                </div>
+                <div class="content-wrapper">
+                    <p id="fortuneContent" class="fortune-text">${fortune.content}</p>
+                </div>
+                <button type="button" class="close-btn" onclick="closeEventModal()">확인했어요</button>
+            </div>
+        </div>
+        `;
+    }
 
 
-<!--    function closeChat() {-->
-<!--        popup.classList.remove("open");-->
-<!--        popup.setAttribute("aria-hidden", "true");-->
-<!--    }-->
+    async function initCreateEvent() {
+        const response = await fetch('/api/events/today', { method: 'POST' });
 
-<!--    // 토글-->
-<!--    function toggleChat() {-->
-<!--        if (popup.classList.contains("open")) closeChat();-->
-<!--        else openChat();-->
-<!--    }-->
-
-<!--    fab.addEventListener("click", toggleChat);-->
-<!--    btnClose.addEventListener("click", closeChat);-->
-
-<!--    // (x) 닫기-->
-<!--    document.addEventListener("keydown", (e) => {-->
-<!--        if (e.key === "Escape" && popup.classList.contains("open")) closeChat();-->
-<!--    });-->
-
-<!--    form.addEventListener("submit", async (e) => {-->
-<!--        e.preventDefault();-->
-
-<!--        const userMsg = input.value.trim();-->
-<!--        if (!userMsg) return;-->
-
-<!--        appendMessage("나", userMsg);-->
-<!--        input.value = "";-->
-
-<!--        try {-->
-<!--            btnSend.disabled = true;-->
-
-<!--            const res = await fetch("/chat", {-->
-<!--                method: "POST",-->
-<!--                headers: { "Content-Type": "application/json" },-->
-<!--                body: JSON.stringify({ text: userMsg })-->
-<!--            });-->
-
-<!--            const reply = await res.text();-->
-<!--            appendMessage("Bot", reply);-->
-<!--        } catch (err) {-->
-<!--            appendMessage("Bot", "(에러 발생: " + err.message + ")");-->
-<!--        } finally {-->
-<!--            btnSend.disabled = false;-->
-<!--            input.focus();-->
-<!--        }-->
-<!--    });-->
-
-<!--    function appendMessage(sender, message) {-->
-<!--        const isMe = sender === "나";-->
-
-<!--        const wrap = document.createElement("div");-->
-<!--        wrap.className = "msg-box" + (isMe ? " me" : "");-->
-
-<!--        const name = document.createElement("span");-->
-<!--        name.className = "name";-->
-<!--        name.textContent = sender;-->
-
-<!--        const msg = document.createElement("span");-->
-<!--        msg.className = "msg" + (isMe ? " me" : "");-->
-<!--        msg.textContent = message;-->
-
-<!--        wrap.appendChild(name);-->
-<!--        wrap.appendChild(msg);-->
-
-<!--        chatBox.appendChild(wrap);-->
-<!--        chatBox.scrollTop = chatBox.scrollHeight;-->
-<!--    }-->
+        if (response.ok) {
+            const resData = await response.json();
+            renderFortune(resData.response || resData);
+        } else {
+            alert("운세 생성에 실패했습니다. 잠시 후 다시 시도해주세요.");
+        }
+    }
+</script>
 
 {{> layout/footer}}
