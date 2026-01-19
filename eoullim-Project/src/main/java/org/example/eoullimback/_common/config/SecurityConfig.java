@@ -48,8 +48,7 @@ public class SecurityConfig  {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())) // 테스트를 위해 CSRF 보안 해제.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrf(csrf -> csrf.disable())// 테스트를 위해 CSRF 보안 해제.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 // 세션 관리 - 로그인 시 세션 ID 재생성
                 .sessionManagement(session -> session
                         .sessionFixation(sessionFixation ->
@@ -62,7 +61,7 @@ public class SecurityConfig  {
                         .requestMatchers("/**").permitAll() // 일단 모든 페이지 접근 허용 (테스트용)
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.disable()) // 기본 로그인 창 비활성화
+                .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
 
         return http.build();
