@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -41,19 +42,12 @@ public class AuthController {
      */
     @PostMapping("/signup")
     public String signup(@ModelAttribute AuthRequest.SignupRequestDTO request,
-                         HttpSession session, Model model
+                         HttpSession session, Model model,
+                         RedirectAttributes redirectAttributes
     ) {
         request.validate();
 
-        if (request.getVerificationCode() == null || request.getVerificationCode().trim().isEmpty()) {
-            model.addAttribute("signupError", ErrorCode.MISSING_VERIFICATION_CODE);
-            return "user/signup";
-        }
-
-        boolean isVerified = mailService.verifyVerificationCode(
-                request.getEmail(), request.getVerificationCode());
-
-        if (!isVerified) {
+        if (request.getIsEmailVerified() == null || !request.getIsEmailVerified()) {
             model.addAttribute("signupError", ErrorCode.INVALID_VERIFICATION_CODE);
             return "user/signup";
         }

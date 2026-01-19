@@ -17,7 +17,7 @@ public class AuthRequest {
         private String email;
         private String phone;
 
-        private String verificationCode;
+        private Boolean isEmailVerified;
 
        public User toEntity() {
            User user = User.builder()
@@ -59,7 +59,7 @@ public class AuthRequest {
                throw new Exception400(ErrorCode.PHONE_REQUIRED);
            }
 
-           if (verificationCode == null || verificationCode.trim().isEmpty()) {
+           if (!isEmailVerified) {
                throw new Exception400(ErrorCode.MISSING_VERIFICATION_CODE);
            }
        }

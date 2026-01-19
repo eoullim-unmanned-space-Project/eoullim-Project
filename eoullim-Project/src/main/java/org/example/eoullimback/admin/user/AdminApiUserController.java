@@ -1,4 +1,4 @@
-package org.example.eoullimback.admin;
+package org.example.eoullimback.admin.user;
 
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/users")
-public class AdminUserApiController {
+public class AdminApiUserController {
 
     private final UserService userService;
 
