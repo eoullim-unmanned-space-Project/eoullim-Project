@@ -67,14 +67,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void verifyPassword(User sessionUser, String password) {
-
-        User user = userRepository.findById(sessionUser.getId())
+    public boolean verifyPassword(Long id, String password) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
         }
 
+
+        return false;
     }
+
 }

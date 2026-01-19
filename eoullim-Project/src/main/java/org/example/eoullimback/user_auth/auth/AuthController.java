@@ -3,19 +3,16 @@ package org.example.eoullimback.user_auth.auth;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
-import org.example.eoullimback._common.error.exception.Exception400;
-import org.example.eoullimback._common.error.exception.Exception401;
-import org.example.eoullimback._common.error.exception.Exception403;
-import org.example.eoullimback._common.error.exception.Exception404;
+
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.MailService;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -40,9 +37,9 @@ public class AuthController {
      * @return
      */
     @PostMapping("/signup")
+    @PreAuthorize("permitAll()")
     public String signup(@ModelAttribute AuthRequest.SignupRequestDTO request,
-                         HttpSession session, Model model,
-                         RedirectAttributes redirectAttributes
+                         Model model
     ) {
         request.validate();
 
@@ -51,15 +48,14 @@ public class AuthController {
             return "user/signup";
         }
 
-        User newUser = authService.signup(request);
-
-        session.setAttribute("sessionUser", newUser);
+        authService.signup(request);
 
         return  "redirect:/auth/login";
     }
 
     @GetMapping("/signup-check-login-id")
     @ResponseBody
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Boolean> checkLoginId(@RequestParam String loginId) {
         boolean exists = userService.existsByLoginId(loginId);
         return ResponseEntity.ok(exists);
@@ -67,64 +63,19 @@ public class AuthController {
 
     // http://localhost:8080/auth/login
     @GetMapping("/login")
+    @PreAuthorize("permitAll()")
     public String loginForm() {
         return "user/login";
     }
 
-    /**
-     * 로그인 기능
-     */
-    @PostMapping("/login")
-    public String login(@ModelAttribute AuthRequest.LoginRequestDTO request,
-                        HttpSession session, Model model
-    ) {
-        request.validate();
-
-        try {
-            User sessionUser = authService.login(request);
-
-            session.setAttribute("sessionUser", sessionUser);
-
-            return "redirect:/public";
-
-
-        } catch (Exception403 e) {
-            String defaultMsg = e.getMessage();
-            String reason = e.getReason();
-
-            String loginErrorMsg;
-            if (reason != null && !reason.isEmpty()) {
-                loginErrorMsg = defaultMsg + "\n사유: " + reason;
-            } else {
-                loginErrorMsg = defaultMsg;
-            }
-
-            model.addAttribute("loginError", loginErrorMsg);
-
-            return "user/login";
-
-        } catch (Exception400 | Exception401 | Exception404 e) {
-            model.addAttribute("loginError", "아이디 또는 비밀번호가 일치하지 않습니다.");
-            return "user/login";
-        }
-    }
-
-    /**
-     * 로그아웃
-     */
-    @GetMapping("logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-
-        return "redirect:/auth/login";
-    }
-
     @GetMapping("/find-password")
+    @PreAuthorize("permitAll()")
     public String findPasswordForm() {
         return "user/find-password";
     }
 
     @PostMapping("/find-password/send-code")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> sendVerifiedCode(@RequestParam String userId,
                                @RequestParam String email
     ) {
@@ -140,6 +91,7 @@ public class AuthController {
 
     @PostMapping("/password/verify-code")
     @ResponseBody
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> verifyPasswordCode(@RequestParam String email,
                                      @RequestParam String code,
                                      @RequestParam String userId,
@@ -159,6 +111,7 @@ public class AuthController {
     }
 
     @GetMapping("/password/reset")
+    @PreAuthorize("permitAll()")
     public String resetPasswordForm(HttpSession session) {
 
         Boolean verified = (Boolean) session.getAttribute("passwordResetVerified");
@@ -169,6 +122,7 @@ public class AuthController {
     }
 
     @PostMapping("/password/reset")
+    @PreAuthorize("permitAll()")
     public String resetPassword(@RequestParam String newPassword,
                                 HttpSession session,
                                 Model model

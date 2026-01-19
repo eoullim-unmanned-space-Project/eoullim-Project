@@ -252,8 +252,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean verifyPassword(Long id, String password) {
 
+        System.out.println(id);
+        System.out.println(password);
+
         User userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new Exception400(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
