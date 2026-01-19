@@ -1,6 +1,7 @@
-package org.example.eoullimback.review;
+package org.example.eoullimback.review.dto;
 
 import lombok.Data;
+import org.example.eoullimback.review.Review;
 
 import java.time.LocalDateTime;
 import java.util.List;

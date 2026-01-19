@@ -1,5 +1,7 @@
 package org.example.eoullimback.review;
 
+import org.example.eoullimback.review.dto.AdminReviewListResponse;
+import org.example.eoullimback.review.dto.ReviewListItemResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,7 +32,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     boolean existsByPaymentId(Long paymentId);
 
     @Query("""
-        SELECT new org.example.eoullimback.review.ReviewListItemDTO(
+        SELECT new org.example.eoullimback.review.dto.ReviewListItemResponse(
             p.id,
             p.orderId,
             p.booking.room.id,
@@ -49,11 +51,11 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
           AND (:code = '' OR p.orderId LIKE %:code%)
         ORDER BY p.requestedAt DESC
         """)
-    List<ReviewListItemDTO> findMyReviewList(@Param("userId") Long userId,
-                                             @Param("code") String code);
+    List<ReviewListItemResponse> findMyReviewList(@Param("userId") Long userId,
+                                                  @Param("code") String code);
 
     @Query("""
-    SELECT new org.example.eoullimback.review.AdminReviewListDTO(
+    SELECT new org.example.eoullimback.review.dto.AdminReviewListResponse(
         r.id,
         r.rating,
         r.content,
@@ -78,7 +80,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
            OR p.orderId LIKE %:keyword%)
     ORDER BY r.createdAt DESC
 """)
-    List<AdminReviewListDTO> findAllForAdmin(@Param("keyword") String keyword);
+    List<AdminReviewListResponse> findAllForAdmin(@Param("keyword") String keyword);
 
     // 관리자 평균 별점
     @Query("select avg(r.rating) from Review r")
