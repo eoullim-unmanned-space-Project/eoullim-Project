@@ -63,8 +63,6 @@ public class AuthServiceImpl implements AuthService {
             throw new Exception403(ErrorCode.USER_STATUS_SUSPENDED, userEntity.getSuspendedReason());
         }
 
-
-
         return userEntity;
     }
 

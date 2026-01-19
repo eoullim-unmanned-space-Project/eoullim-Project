@@ -1,7 +1,5 @@
 package org.example.eoullimback.user_auth.auth;
 
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.example.eoullimback.user_auth.auth.dto.request.AuthRequest;
 import org.example.eoullimback.user_auth.user.User;
 

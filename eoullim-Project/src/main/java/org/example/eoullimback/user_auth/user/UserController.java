@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/oauth/kakao")
+    @GetMapping("/kakao")
     public String kakaoCallback(@RequestParam(name = "code") String code, HttpSession session) {
 
         try {
