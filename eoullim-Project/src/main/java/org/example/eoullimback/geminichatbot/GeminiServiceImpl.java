@@ -110,7 +110,7 @@ public class GeminiServiceImpl implements GeminiService{
 }
 
     @Override
-    public String checkQaaTitleAndContent(String title, String content) {
+    public String checkQnaTitleAndContent(String title, String content) {
         try {
             String formattedPrompt = titleAndContentFormatted(title, content);
 

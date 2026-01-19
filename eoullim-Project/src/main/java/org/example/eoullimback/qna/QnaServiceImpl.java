@@ -1,7 +1,6 @@
-package org.example.eoullimback.qaa;
+package org.example.eoullimback.qna;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
@@ -24,32 +23,32 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class QaaServiceImpl implements QaaService {
+public class QnaServiceImpl implements QnaService {
 
-    private final QaaRepository qaaRepository;
+    private final QnaRepository qnaRepository;
     private final CommentRepository commentRepository;
     private final GeminiService geminiService;
 
     @Transactional
     @Override
-    public Qaa createQaa(QaaRequest.CreateDTO request, User sessionUser) {
+    public Qna createQna(QnaRequest.CreateDTO request, User sessionUser) {
         if (sessionUser == null) {
             throw new Exception403(ErrorCode.LOGIN_ONLY);
         }
 
-        String checkRequest = geminiService.checkQaaTitleAndContent(request.getTitle(), request.getContent());
+        String checkRequest = geminiService.checkQnaTitleAndContent(request.getTitle(), request.getContent());
 
         if ("BAD".equals(checkRequest) || checkRequest.toUpperCase().contains("BAD")) {
             throw new Exception400(ErrorCode.BAD_CONTENT);
         }
 
-        Qaa qaa = request.toEntity(sessionUser);
-        qaaRepository.save(qaa);
-        return qaa;
+        Qna qna = request.toEntity(sessionUser);
+        qnaRepository.save(qna);
+        return qna;
     }
 
     @Override
-    public PageResponse.PageDTO<Qaa, QaaResponse.ListDTO> qaaListFindAll(int page, int size, String keyword) {
+    public PageResponse.PageDTO<Qna, QnaResponse.ListDTO> qnaListFindAll(int page, int size, String keyword) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(50, size)
         );
@@ -57,74 +56,74 @@ public class QaaServiceImpl implements QaaService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(validPage, validSize, sort);
 
-        Page<Qaa> qaaPage;
+        Page<Qna> qnaPage;
         if(keyword != null && !keyword.trim().isEmpty()) {
-            qaaPage = qaaRepository.findByTitleContainingOrContentContaining(keyword.trim(), pageable);
+            qnaPage = qnaRepository.findByTitleContainingOrContentContaining(keyword.trim(), pageable);
         } else {
-            qaaPage = qaaRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
+            qnaPage = qnaRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
         }
         return new PageResponse.PageDTO<>(
-                qaaPage,
-                QaaResponse.ListDTO::new
+                qnaPage,
+                QnaResponse.ListDTO::new
         );
     }
 
     @Override
-    public QaaResponse.DetailDTO qaaDetailResponse(Long qaaId) {
-        Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
+    public QnaResponse.DetailDTO qnaDetailResponse(Long qnaId) {
+        Qna qna = qnaRepository.findByIdWithUser(qnaId)
                 .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
 
-        return new QaaResponse.DetailDTO(qaa);
+        return new QnaResponse.DetailDTO(qna);
     }
 
     @Transactional
     @Override
     public void increaseViewCount(Long id) {
-        qaaRepository.increaseViewCount(id);
+        qnaRepository.increaseViewCount(id);
     }
 
-    public QaaResponse.UpdateFormDTO findUpdateForm(Long qaaId, Long sessionUserId) {
-        Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
+    public QnaResponse.UpdateFormDTO findUpdateForm(Long qnaId, Long sessionUserId) {
+        Qna qna = qnaRepository.findByIdWithUser(qnaId)
                 .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
 
-        if(!qaa.isOwner(sessionUserId)){
+        if(!qna.isOwner(sessionUserId)){
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
 
-        return new QaaResponse.UpdateFormDTO(qaa);
+        return new QnaResponse.UpdateFormDTO(qna);
     }
 
     @Transactional
     @Override
-    public QaaResponse.UpdateFormDTO update(Long qaaId, QaaRequest.UpdateDTO updateRequest, User sessionUser) {
+    public QnaResponse.UpdateFormDTO update(Long qnaId, QnaRequest.UpdateDTO updateRequest, User sessionUser) {
 
-        Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
+        Qna qna = qnaRepository.findByIdWithUser(qnaId)
                 .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
 
-        if (!qaa.getUser().getId().equals(sessionUser.getId())) {
+        if (!qna.getUser().getId().equals(sessionUser.getId())) {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
 
-        updateRequest.updateEntity(qaa);
-        return new QaaResponse.UpdateFormDTO(qaa);
+        updateRequest.updateEntity(qna);
+        return new QnaResponse.UpdateFormDTO(qna);
     }
 
     @Transactional
     @Override
-    public void delete(Long qaaId, User sessionUser) {
-        Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
+    public void delete(Long qnaId, User sessionUser) {
+        Qna qna = qnaRepository.findByIdWithUser(qnaId)
                 .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
 
-        if (!qaa.getUser().getId().equals(sessionUser.getId())) {
+        if (!qna.getUser().getId().equals(sessionUser.getId())) {
             throw new Exception403(ErrorCode.ACCESS_DENIED);
         }
 
-        commentRepository.deleteByQaaId(qaaId);
-        qaaRepository.delete(qaa);
+        commentRepository.deleteByQnaId(qnaId);
+        qnaRepository.delete(qna);
     }
 
     @Override
-    public QaaResponse.ListPageDTO myQaaList(Long userId, int page, int size) {
+    public QnaResponse.ListPageDTO myQnaList(Long userId, int page, int size) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(50, size));
 
@@ -134,17 +133,17 @@ public class QaaServiceImpl implements QaaService {
                 Sort.by(Sort.Direction.DESC, "createdAt")
         );
 
-        List<Qaa> qaaList = qaaRepository.findMyQaaList(userId, pageable).getContent();
+        List<Qna> qnaList = qnaRepository.findMyQnaList(userId, pageable).getContent();
 
-        List<QaaResponse.ListDTO> dtoList = qaaList.stream()
-                .map(QaaResponse.ListDTO::new)
+        List<QnaResponse.ListDTO> dtoList = qnaList.stream()
+                .map(QnaResponse.ListDTO::new)
                 .collect(Collectors.toList());
 
-        return new QaaResponse.ListPageDTO(dtoList);
+        return new QnaResponse.ListPageDTO(dtoList);
     }
 
     @Override
-    public PageResponse.PageDTO<Qaa, QaaResponse.ListDTO> adminQaaListFindAll(Long userId, int page, int size, String keyword) {
+    public PageResponse.PageDTO<Qna, QnaResponse.ListDTO> adminQnaListFindAll(Long userId, int page, int size, String keyword) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(50, size)
         );
@@ -152,29 +151,29 @@ public class QaaServiceImpl implements QaaService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(validPage, validSize, sort);
 
-        Page<Qaa> qaaPage;
+        Page<Qna> qnaPage;
         if(keyword != null && !keyword.trim().isEmpty()) {
-            qaaPage = qaaRepository.findByTitleContainingOrContentContaining(keyword.trim(), pageable);
+            qnaPage = qnaRepository.findByTitleContainingOrContentContaining(keyword.trim(), pageable);
         } else {
-            qaaPage = qaaRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
+            qnaPage = qnaRepository.findAllWithUserOrderByCreatedAtDesc(pageable);
         }
         return new PageResponse.PageDTO<>(
-                qaaPage,
-                QaaResponse.ListDTO::new
+                qnaPage,
+                QnaResponse.ListDTO::new
         );
     }
 
     @Transactional
     @Override
-    public void deleteAsAdmin(Long qaaId, User sessionUser) {
+    public void deleteAsAdmin(Long qnaId, User sessionUser) {
         if (sessionUser == null) {
             throw new Exception403(ErrorCode.LOGIN_ONLY);
         }
 
-        Qaa qaa = qaaRepository.findByIdWithUser(qaaId)
+        Qna qna = qnaRepository.findByIdWithUser(qnaId)
                 .orElseThrow(() -> new Exception404(ErrorCode.QAA_NOT_FOUND));
 
-        commentRepository.deleteByQaaId(qaaId);
-        qaaRepository.delete(qaa);
+        commentRepository.deleteByQnaId(qnaId);
+        qnaRepository.delete(qna);
     }
 }

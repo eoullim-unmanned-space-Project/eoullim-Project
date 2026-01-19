@@ -1,4 +1,4 @@
-package org.example.eoullimback.qaa;
+package org.example.eoullimback.qna;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,14 +10,14 @@ import org.example.eoullimback.user_auth.user.User;
 
 @Entity
 @Table(
-        name = "qaas",
+        name = "qnas",
         indexes = {
-                @Index(name = "idx_qaas_user", columnList = "user_id")
+                @Index(name = "idx_qnas_user", columnList = "user_id")
         }
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Qaa extends BaseTimeEntity {
+public class Qna extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class Qaa extends BaseTimeEntity {
     private User user;
 
     @Builder
-    public Qaa(
+    public Qna(
             String title,
             String content,
             User user
@@ -51,10 +51,6 @@ public class Qaa extends BaseTimeEntity {
     public void update(String title, String content) {
         this.title = title;
         this.content = content;
-    }
-
-    public void increaseViewCount() {
-        this.viewCount++;
     }
 
     public boolean isOwner(Long userId) {

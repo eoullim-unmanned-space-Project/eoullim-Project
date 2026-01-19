@@ -1,4 +1,4 @@
-package org.example.eoullimback.review.admin;
+package org.example.eoullimback.admin.review;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,7 @@ import org.example.eoullimback._common.error.exception.Exception409;
 import org.example.eoullimback.review.ReviewQueryService;
 import org.example.eoullimback.review.ReviewRepository;
 import org.example.eoullimback.review.ReviewService;
+import org.example.eoullimback.review.AdminReviewListDTO;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-public class AdminReviewApiController {
+public class AdminApiReviewController {
 
     private final ReviewQueryService reviewQueryService;
     private final ReviewService reviewService;

@@ -39,7 +39,7 @@ body {
     justify-content: center;
 }
 
-.qaa-container {
+.qna-container {
     width: 100%;
     max-width: 980px; /* 적당한 폭 */
     margin: 0 auto;
@@ -49,48 +49,48 @@ body {
    Card / List
 ========================= */
 
-.qaa-card,
-.qaa-list-item {
+.qna-card,
+.qna-list-item {
     background: var(--white);
     border-radius: 20px;
     box-shadow: var(--card-shadow);
 }
 
-.qaa-card {
+.qna-card {
     padding: 32px;
     margin-bottom: 24px;
 }
 
-.qaa-list-item {
+.qna-list-item {
     padding: 20px 24px;
     margin-bottom: 16px;
 }
 
-.qaa-list-item h4 {
+.qna-list-item h4 {
     margin: 0 0 8px 0;
     font-size: 18px;
     font-weight: 800;
 }
 
-.qaa-list-item p {
+.qna-list-item p {
     margin: 0;
     font-size: 14px;
     color: var(--text-sub);
     line-height: 1.5;
 }
 
-.qaa-list-item a {
+.qna-list-item a {
     color: var(--primary);
     text-decoration: none;
     font-weight: 800;
 }
 
-.qaa-list-item a:hover {
+.qna-list-item a:hover {
     text-decoration: underline;
 }
 
 /* detail 페이지 텍스트 줄바꿈 */
-.qaa-card div[style*="white-space"] {
+.qna-card div[style*="white-space"] {
     line-height: 1.6;
     color: var(--text-main);
 }
@@ -99,8 +99,8 @@ body {
    Form
 ========================= */
 
-.qaa-form input[type="text"],
-.qaa-form textarea {
+.qna-form input[type="text"],
+.qna-form textarea {
     width: 100%;
     padding: 14px 16px;
     border-radius: 14px;
@@ -110,28 +110,28 @@ body {
     box-sizing: border-box;
 }
 
-.qaa-form textarea {
+.qna-form textarea {
     min-height: 90px;
     resize: vertical;
 }
 
-.qaa-form input[type="text"]:focus,
-.qaa-form textarea:focus {
+.qna-form input[type="text"]:focus,
+.qna-form textarea:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
 /* form 간격 */
-.qaa-form {
+.qna-form {
     margin: 0;
 }
 
-.qaa-form input[type="text"] {
+.qna-form input[type="text"] {
     margin-bottom: 14px;
 }
 
-.qaa-form textarea {
+.qna-form textarea {
     margin-bottom: 14px;
 }
 
@@ -139,17 +139,17 @@ body {
    Buttons
 ========================= */
 
-.qaa-btn-group {
+.qna-btn-group {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.qaa-btn-group form {
+.qna-btn-group form {
     margin: 0;
 }
 
-.qaa-btn {
+.qna-btn {
     padding: 10px 14px;
     border-radius: 12px;
     font-size: 14px;
@@ -163,25 +163,25 @@ body {
     line-height: 1;
 }
 
-.qaa-btn-primary {
+.qna-btn-primary {
     background: var(--primary);
     color: #fff;
 }
 
-.qaa-btn-secondary {
+.qna-btn-secondary {
     background: #e5e7eb;
     color: var(--text-sub);
 }
 
-.qaa-btn-danger {
+.qna-btn-danger {
     background: #fee2e2;
     color: #b91c1c;
 }
 
 /* hover (애니메이션 없이 색만) */
-.qaa-btn-primary:hover { filter: brightness(0.95); }
-.qaa-btn-secondary:hover { filter: brightness(0.97); }
-.qaa-btn-danger:hover { filter: brightness(0.97); }
+.qna-btn-primary:hover { filter: brightness(0.95); }
+.qna-btn-secondary:hover { filter: brightness(0.97); }
+.qna-btn-danger:hover { filter: brightness(0.97); }
 
 /* =========================
    Pagination

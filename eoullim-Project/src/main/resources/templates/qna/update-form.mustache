@@ -1,29 +1,29 @@
-<link rel="stylesheet" href="/css/qaa/qaa.css">
+<link rel="stylesheet" href="/css/qna/qna.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div class="qaa-container">
-    <div class="qaa-card">
+<div class="qna-container">
+    <div class="qna-card">
         <div>
-            <div class="qaa-title">Q&A 수정</div>
+            <div class="qna-title">Q&A 수정</div>
             <div>
-                <form class="qaa-form" action="/qaas/{{qaa.id}}/update" method="post">
+                <form class="qna-form" action="/qnas/{{qna.id}}/update" method="post">
                     <div>
                         <input type="text"
                         placeholder="Enter name"
                         name="name"
-                        value="{{qaa.name}}" disabled>
+                        value="{{qna.name}}" disabled>
                     </div>
                     <div>
                         <input type="text"
                                placeholder="Enter title"
                                name="title"
-                               value="{{qaa.title}}">
+                               value="{{qna.title}}">
                     </div>
-                    <div class="qaa-content">
+                    <div class="qna-content">
                         <textarea rows="10" name="content"></textarea>
                     </div>
-                    <div class="qaa-btn-group">
-                        <button class="qaa-btn qaa-btn-primary">Q&A 수정 완료</button>
+                    <div class="qna-btn-group">
+                        <button class="qna-btn qna-btn-primary">Q&A 수정 완료</button>
                     </div>
                 </form>
             </div>
