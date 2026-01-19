@@ -31,6 +31,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class UserApiController {
 
     private final UserService userService;
@@ -41,18 +42,21 @@ public class UserApiController {
     private final PaymentRefundService paymentRefundService;
     private final NotificationService notificationService;
 
-    @PostMapping("/api/email/send")
-    public ResponseEntity<?> sendVerificationCode(@RequestBody UserRequest.EmailCheckDTO reqDTO) {
-
+    @PostMapping("/users/{userId}/email-verifications")
+    public ResponseEntity<?> sendVerificationCode(@PathVariable Long userId,
+                                                  @RequestBody UserRequest.EmailCheckDTO reqDTO
+    ) {
         reqDTO.validate();
 
+        User user = userService.findById(userId);
         mailService.sendVerificationCode(reqDTO.getEmail());
 
         return ResponseEntity.ok().body(Map.of("message", "인증번호가 발송되었습니다."));
     }
 
-    @PostMapping("/api/email/verify")
-    public ResponseEntity<?> verifyEmailVerificationCode(@RequestBody UserRequest.EmailCheckDTO reqDTO) {
+    @PostMapping("/users/{userId}/email-verifications/verify")
+    public ResponseEntity<?> verifyEmailVerificationCode(@PathVariable Long userId,
+                                                         @RequestBody UserRequest.EmailCheckDTO reqDTO) {
 
         reqDTO.validate();
 
@@ -62,6 +66,7 @@ public class UserApiController {
                     .body(Map.of("message", "인증번호를 입력해주세요."));
         }
 
+        User user = userService.findById(userId);
         boolean isVerified = mailService.verifyVerificationCode(reqDTO.getEmail(), reqDTO.getCode());
         if (isVerified) {
             return ResponseEntity
@@ -73,7 +78,7 @@ public class UserApiController {
         }
     }
 
-    @PostMapping("/api/verify-password")
+    @PostMapping("/users/{userId}/password-verify")
     public ResponseEntity<Boolean> verifyPassword(@RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO, HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
@@ -84,7 +89,7 @@ public class UserApiController {
         return ResponseEntity.ok().body(true);
     }
 
-    @PostMapping("/api/find/email/send")
+    @PostMapping("/users/email-find-verifications")
     public ResponseEntity<?> sendFindEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO
     ) {
@@ -93,11 +98,11 @@ public class UserApiController {
         mailService.sendVerificationCode(reqDTO.getEmail());
 
         return ResponseEntity.ok(
-                Map.of("message", "아이디 찾기 인증번호 발송")
+                Map.of("message", "인증번호 발송")
         );
     }
 
-    @PostMapping("/api/find/email/verify")
+    @PostMapping("/users/email-find-verifications/verify")
     public ResponseEntity<?> verifyFindIdEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO,
             HttpSession session
@@ -116,11 +121,11 @@ public class UserApiController {
         session.setAttribute("findIdEmail", reqDTO.getEmail());
 
         return ResponseEntity.ok(
-                Map.of("message", "아이디 찾기 이메일 인증 완료.")
+                Map.of("message", "이메일 인증 완료.")
         );
     }
 
-    @PostMapping("/api/find/login-id")
+    @PostMapping("/users/find-login-id")
     public ResponseEntity<String> findLoginId(HttpSession session
     ) {
         Boolean verified =

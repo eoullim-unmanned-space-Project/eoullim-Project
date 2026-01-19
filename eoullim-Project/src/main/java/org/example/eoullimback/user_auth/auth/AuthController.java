@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -41,19 +42,12 @@ public class AuthController {
      */
     @PostMapping("/signup")
     public String signup(@ModelAttribute AuthRequest.SignupRequestDTO request,
-                         HttpSession session, Model model
+                         HttpSession session, Model model,
+                         RedirectAttributes redirectAttributes
     ) {
         request.validate();
 
-        if (request.getVerificationCode() == null || request.getVerificationCode().trim().isEmpty()) {
-            model.addAttribute("signupError", ErrorCode.MISSING_VERIFICATION_CODE);
-            return "user/signup";
-        }
-
-        boolean isVerified = mailService.verifyVerificationCode(
-                request.getEmail(), request.getVerificationCode());
-
-        if (!isVerified) {
+        if (request.getIsEmailVerified() == null || !request.getIsEmailVerified()) {
             model.addAttribute("signupError", ErrorCode.INVALID_VERIFICATION_CODE);
             return "user/signup";
         }
@@ -132,7 +126,6 @@ public class AuthController {
         return "user/find-password";
     }
 
-
     @PostMapping("/find-password/send-code")
     public ResponseEntity<?> sendVerifiedCode(@RequestParam String userId,
                                @RequestParam String email
@@ -147,7 +140,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", "인증번호가 발송되었습니다."));
     }
 
-    @PostMapping("/verify-password-code")
+    @PostMapping("/password/verify-code")
     @ResponseBody
     public ResponseEntity<?> verifyPasswordCode(@RequestParam String email,
                                      @RequestParam String code,
@@ -167,7 +160,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", "인증이 완료되었습니다."));
     }
 
-    @GetMapping("/reset-password")
+    @GetMapping("/password/reset")
     public String resetPasswordForm(HttpSession session) {
 
         Boolean verified = (Boolean) session.getAttribute("passwordResetVerified");
@@ -177,16 +170,7 @@ public class AuthController {
         return "user/reset-password";
     }
 
-//    @GetMapping("/reset-password")
-//    public String resetPassword(HttpSession session) {
-//        Boolean verified = (Boolean) session.getAttribute("passwordResetVerified");
-//        if (verified == null || !verified) {
-//            return "redirect:/auth/find-password";
-//        }
-//        return "user/reset-password";
-//    }
-
-    @PostMapping("/reset-password")
+    @PostMapping("/password/reset")
     public String resetPassword(@RequestParam String newPassword,
                                 HttpSession session,
                                 Model model
@@ -208,10 +192,4 @@ public class AuthController {
 
         return "redirect:/auth/login";
     }
-
-
-
-
-
-
 }

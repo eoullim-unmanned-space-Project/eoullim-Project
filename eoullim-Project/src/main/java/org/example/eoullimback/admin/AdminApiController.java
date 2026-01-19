@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminApiController {
 
@@ -36,7 +37,7 @@ public class AdminApiController {
         return ResponseEntity.ok().body(categoryCountList);
     }
 
-    @GetMapping("/admin/user/chart")
+    @GetMapping("/users/chart")
     public String getUserChart() {
 
         return "admin/user-chart";
