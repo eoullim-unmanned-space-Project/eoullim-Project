@@ -277,7 +277,7 @@
 
             const drawBtn = document.querySelector('.draw-btn');
             drawBtn.onclick = async () => {
-                if (!confirm("오늘의 운세를 보실건가요? 이벤트는 하루에 한번 만 참여가 가능합니다!")) {
+                    if (!confirm("오늘의 운세를 보실건가요? \n 이벤트는 하루에 한번 만 참여가 가능합니다! ")) {
                     return;
                 }
 
@@ -288,8 +288,8 @@
                 if (data.alreadyExists) {
                     renderFortune(data);
                 } else {
-                    alert("오늘의 운세를 생성 하는 중입니다. 조금만 기다려주세요...");
-                    initCreateEvent();
+                    alert("오늘의 운세를 생성 하는 중입니다. 조금만 기다려주세요...\n 생성이 되면 다시 클릭해서 이벤트를 확인해주세요");
+                    await initCreateEvent();
                 }
             };
         });

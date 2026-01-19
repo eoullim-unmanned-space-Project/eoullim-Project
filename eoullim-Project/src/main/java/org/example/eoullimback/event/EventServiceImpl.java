@@ -32,9 +32,15 @@ public class EventServiceImpl implements EventService{
         User userEntity =  userRepository.findById(id)
                 .orElseThrow(() ->  new Exception404(ErrorCode.USER_NOT_FOUND));
 
+
         LocalDate today = LocalDate.now();
         LocalDateTime start = today.atStartOfDay();
         LocalDateTime end = today.plusDays(1).atStartOfDay();
+
+
+        System.out.println(today);
+        System.out.println(start);
+        System.out.println(end);
 
         Optional<Event> eventEntity = eventRepository.findByUserIdAndCreatedAtBetween(userEntity.getId(), start, end);
 
@@ -52,7 +58,7 @@ public class EventServiceImpl implements EventService{
         LocalDateTime start = today.atStartOfDay();
         LocalDateTime end = today.plusDays(1).atStartOfDay();
 
-        if(!eventRepository.existsByUserIdAndCreatedAtBetween(userEntity.getId(), start, end)){
+        if(eventRepository.existsByUserIdAndCreatedAtBetween(userEntity.getId(), start, end)){
            throw new Exception400(ErrorCode.EVENT_ALREADY_CREATED);
         }
             EventResponse.FortuneResultDTO resultDTO = geminiService.createForture(userEntity.getName());
