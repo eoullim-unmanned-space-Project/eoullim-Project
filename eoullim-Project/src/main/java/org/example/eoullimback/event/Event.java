@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.example.eoullimback.user_auth.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -43,7 +44,7 @@ public class Event {
     private String content;
 
     @Column(nullable = false)
-    private Date fortuneDate;
+    private LocalDate fortuneDate;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -55,6 +56,6 @@ public class Event {
         this.luckyScore = luckyScore;
         this.luckyItem = luckyItem;
         this.content = content;
-        this.fortuneDate = new Date();
+        this.fortuneDate = LocalDate.now();
     }
 }

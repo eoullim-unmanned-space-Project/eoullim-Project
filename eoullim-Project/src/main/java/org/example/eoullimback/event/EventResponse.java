@@ -5,6 +5,7 @@ import lombok.Data;
 import org.example.eoullimback.user_auth.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -23,7 +24,7 @@ public class EventResponse {
        private int luckyScore;
        private String luckyItem;
        private String content;
-       private Date fortuneDate;
+       private LocalDate fortuneDate;
        private Boolean alreadyExists = false;
 
         public DetailDTO(boolean alreadyExists) {
