@@ -335,9 +335,11 @@
 <nav>
     <div class="nav-brand">Console</div>
     <ul class="nav-menu">
-        <li class="nav-item active">📊 대시보드</li>
+        <li class="nav-item active">
+            <a href="/admin/dashboard" class="nav-a">📊 대시보드</a>
+        </li>
         <li class="nav-item">
-            <a href="/admin/place">🏠 장소/방 관리</a>
+            <a href="/admin/place" class="nav-a">🏠 장소/방 관리</a>
         </li>
         <li class="nav-item">🫥 회원 관리</li>
         <li class="nav-item">🧾 결제 내역</li>
@@ -365,6 +367,7 @@
                 <th>이용자</th>
                 <th>결제코드</th>
                 <th>결제금액</th>
+                <th>이용시간</th>
                 <th>환불일</th>
                 <th>결제경로</th>
                 <th>버튼</th>
@@ -476,35 +479,35 @@
         const trList = document.querySelectorAll('.tr-list');
 
         trList.forEach(tr => {
-           const statusBadge = tr.querySelector('.status-badge');
-           const status = statusBadge.textContent.trim();
+            const statusBadge = tr.querySelector('.status-badge');
+            const status = statusBadge.textContent.trim();
 
-           const approveBtn = tr.querySelector('.approve-btn');
-           const rejectionBtn = tr.querySelector('.rejection-btn');
+            const approveBtn = tr.querySelector('.approve-btn');
+            const rejectionBtn = tr.querySelector('.rejection-btn');
 
-           statusBadge.classList.remove('request', 'detail', 'delete');
+            statusBadge.classList.remove('request', 'detail', 'delete');
 
-           if (status == '환불요청') {
+            if (status == '환불요청') {
                 statusBadge.classList.add('request');
-           } else if (status == '환불완료') {
+            } else if (status == '환불완료') {
                 statusBadge.classList.add('detail');
                 if (rejectionBtn) rejectionBtn.style.display = 'none';
                 if (approveBtn) approveBtn.style.display = 'none';
-           } else {
-              statusBadge.classList.add('delete');
-              rejectionBtn.style.display = 'none';
-              if (rejectionBtn) rejectionBtn.style.display = 'none';
-              if (approveBtn) approveBtn.style.display = 'none';
-           }
+            } else {
+                statusBadge.classList.add('delete');
+                rejectionBtn.style.display = 'none';
+                if (rejectionBtn) rejectionBtn.style.display = 'none';
+                if (approveBtn) approveBtn.style.display = 'none';
+            }
         });
 
         approveBtn.forEach(btn => {
-            btn.addEventListener('click', async() => {
+            btn.addEventListener('click', async () => {
                 alert('승인 아이디: ' + btn.dataset.id);
 
                 let id = btn.dataset.id;
 
-                if(!confirm("결제환불 승인 요청을 하시겠습니까?")) {
+                if (!confirm("결제환불 승인 요청을 하시겠습니까?")) {
                     return;
                 }
 
