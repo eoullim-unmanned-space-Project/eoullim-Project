@@ -2,6 +2,7 @@ package org.example.eoullimback._common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
@@ -51,7 +52,7 @@ public class SecurityConfig  {
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/favicon.icon").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/auth/signup", "/auth/login").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "/chat").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")
