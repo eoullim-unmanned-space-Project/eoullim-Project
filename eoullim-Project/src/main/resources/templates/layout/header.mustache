@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="{{_csrf.token}}">
+    <meta name="_csrf_header" content="{{_csrf_headerName}}">
+
     <title>어울림 공간대여 서비스</title>
 
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
@@ -43,4 +46,17 @@
             {{/sessionUser}}
         </div>
     </div>
+
+    <script>
+        function getCsrfHeaders() {
+            const token = document.querySelector('meta[name="_csrf"]').content;
+            const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+
+            return {
+                [header]: token
+            };
+        }
+    </script>
+
 </header>
