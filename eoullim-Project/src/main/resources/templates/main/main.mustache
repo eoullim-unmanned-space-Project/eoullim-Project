@@ -281,7 +281,7 @@
                     return;
                 }
 
-                const response = await fetch('/api/events/today', { method: 'GET' });
+                const response = await fetch('/api/user/events/today', { method: 'GET' });
                 const resData = await response.json();
                 const data = resData.response || resData;
 
@@ -345,9 +345,8 @@
         `;
     }
 
-
     async function initCreateEvent() {
-        const response = await fetch('/api/events/today', { method: 'POST' });
+        const response = await fetch('/api/user/events', { method: 'POST' });
 
         if (response.ok) {
             const resData = await response.json();

@@ -21,7 +21,7 @@ public class PaymentApiController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/api/payment/prepare")
+    @PostMapping("/api/user/payments/prepare")
     public ResponseEntity<?> prepare( @RequestBody PaymentRequest.PrepareDTO requestDTO, HttpSession session) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -37,7 +37,7 @@ public class PaymentApiController {
     }
 
 
-    @PostMapping("/api/payment/complete")
+    @PostMapping("/api/user/payments/complete")
     public ResponseEntity<?> complete(@RequestBody PaymentRequest.CompleteDTO requestDTO, HttpSession session) throws SolapiEmptyResponseException, SolapiUnknownException, SolapiMessageNotReceivedException {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -58,7 +58,7 @@ public class PaymentApiController {
         }
     }
 
-    @PostMapping("/api/payment/cancel")
+    @PostMapping("/api/user/payments/cancel")
     public ResponseEntity<?> cancel(@RequestBody PaymentRequest.CancelDTO cancelDTO, HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 

@@ -509,7 +509,7 @@
                 }
 
                 try {
-                    const response = await fetch(`/api/refund/approve/${id}`, {
+                    const response = await fetch(`/api/refunds/${id}/approve`, {
                         method: 'POST'
                     });
 
@@ -559,7 +559,7 @@
             }
 
             try {
-                const response = await fetch(`/api/refund/rejection/${id}`, {
+                const response = await fetch(`/api/refunds/${id}/rejection`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -597,7 +597,7 @@
             modal.style.display = 'flex';
 
             try {
-                const response = await fetch(`/admin/refund/detail/${id}`);
+                const response = await fetch(`/admin/refunds/${id}/detail`);
 
                 if(!response.ok) {
                     alert('상세 정보를 불러오지 못했습니다.');
