@@ -32,7 +32,7 @@ public class UserApiController {
     private final PaymentRefundService paymentRefundService;
     private final NotificationService notificationService;
 
-    @PostMapping("/users/{userId}/email-verifications")
+    @PostMapping("/user/{userId}/email-verifications")
     public ResponseEntity<?> sendVerificationCode(@PathVariable Long userId,
                                                   @RequestBody UserRequest.EmailCheckDTO reqDTO
     ) {
@@ -44,7 +44,7 @@ public class UserApiController {
         return ResponseEntity.ok().body(Map.of("message", "인증번호가 발송되었습니다."));
     }
 
-    @PostMapping("/users/{userId}/email-verifications/verify")
+    @PostMapping("/user/{userId}/email-verifications/verify")
     public ResponseEntity<?> verifyEmailVerificationCode(@PathVariable Long userId,
                                                          @RequestBody UserRequest.EmailCheckDTO reqDTO) {
 
@@ -68,7 +68,7 @@ public class UserApiController {
         }
     }
 
-    @PostMapping("/users/{userId}/password-verify")
+    @PostMapping("/user/{userId}/password-verify")
     public ResponseEntity<Boolean> verifyPassword(@RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO, HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
@@ -79,7 +79,7 @@ public class UserApiController {
         return ResponseEntity.ok().body(true);
     }
 
-    @PostMapping("/users/email-find-verifications")
+    @PostMapping("/user/email-find-verifications")
     public ResponseEntity<?> sendFindEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO
     ) {
@@ -92,7 +92,7 @@ public class UserApiController {
         );
     }
 
-    @PostMapping("/users/email-find-verifications/verify")
+    @PostMapping("/user/email-find-verifications/verify")
     public ResponseEntity<?> verifyFindIdEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO,
             HttpSession session
@@ -115,7 +115,7 @@ public class UserApiController {
         );
     }
 
-    @PostMapping("/users/find-login-id")
+    @PostMapping("/user/find-login-id")
     public ResponseEntity<String> findLoginId(HttpSession session
     ) {
         Boolean verified =
@@ -136,7 +136,7 @@ public class UserApiController {
         return ResponseEntity.ok(user.getLoginId());
     }
 
-    @GetMapping("/api/user/search")
+    @GetMapping("/user/search")
     public ResponseEntity<List<UserResponse.UserBookingDTO>> searchBookings(
             @RequestParam(value = "code", required = false) String bookingCode,
             @RequestParam(value = "status", required = false) BookingStatus status,
@@ -153,7 +153,7 @@ public class UserApiController {
         return ResponseEntity.ok().body(searchBookings);
     }
 
-    @GetMapping("/api/user/payment")
+    @GetMapping("/user/payment")
     public ResponseEntity<UserResponse.UserPaymentDTO> paymentDetail(
             @RequestParam(value = "code") String bookingCode,
             HttpSession session
@@ -169,7 +169,7 @@ public class UserApiController {
         return ResponseEntity.ok().body(userPaymentDTO);
     }
 
-    @PostMapping("/api/user/refund")
+    @PostMapping("/user/refund")
     public ResponseEntity<Map<String, String>> createRefund(@RequestBody PaymentRefundRequest.CreateRefundDTO createRefundDTO, HttpSession session) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -179,7 +179,7 @@ public class UserApiController {
         return ResponseEntity.ok().body(Map.of("message", "환불요청을 접수했습니다."));
     }
 
-    @PostMapping("/api/user/use-qrCode/{id}")
+    @PostMapping("/user/use-qrCode/{id}")
     public ResponseEntity<?> useQrcode(HttpSession session, @PathVariable Long id) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
