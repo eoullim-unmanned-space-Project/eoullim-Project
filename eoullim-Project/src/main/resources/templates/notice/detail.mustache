@@ -16,6 +16,7 @@
             <button class="notice-btn notice-btn-secondary">수정</button>
         </form>
         <form action="/notices/{{notice.id}}/delete" method="post">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button class="notice-btn notice-btn-danger">삭제</button>
         </form>
     </div>

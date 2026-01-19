@@ -1,5 +1,7 @@
 package org.example.eoullimback.geminichatbot;
 
+import org.example.eoullimback._common.enums.geminichatbot.Intent;
+
 public class RuleEngine {
 
     public static Intent match(String text) {

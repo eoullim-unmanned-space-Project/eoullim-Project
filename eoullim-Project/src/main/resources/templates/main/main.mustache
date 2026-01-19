@@ -224,12 +224,12 @@
 
                 const res = await fetch("/chat", {
                     method: "POST",
+                    credentials: "same-origin",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        ...getCsrfHeaders()
                     },
-                    body: JSON.stringify({
-                        text: userMsg
-                    })
+                    body: JSON.stringify({ text: userMsg })
                 });
 
                 if (!res.ok) {
@@ -346,7 +346,12 @@
     }
 
     async function initCreateEvent() {
-        const response = await fetch('/api/user/events', { method: 'POST' });
+        const response = await fetch('/api/user/events', {
+            method: 'POST',
+            headers: {
+                ...getCsrfHeaders()
+            }
+        });
 
         if (response.ok) {
             const resData = await response.json();
