@@ -22,6 +22,7 @@ import java.util.Map;
 import static org.example.eoullimback._common.util.NumberFormatUtils.*;
 
 @RestController
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminApiController {
 
@@ -56,7 +57,7 @@ public class AdminApiController {
     }
 
 
-    @GetMapping("/admin/user/chart")
+    @GetMapping("/users/chart")
     public String getUserChart() {
 
         return "admin/user-chart";

@@ -208,7 +208,7 @@
         }
 
         try {
-            let response = await fetch("/api/email/send", {
+            let response = await fetch("/api/users/email-find-verifications", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -241,7 +241,7 @@
         }
 
         try {
-            let response = await fetch("/api/email/verify", {
+            let response = await fetch("/api/users/email-find-verifications/verify", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -19,7 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/kakao")
+    @GetMapping("/oauth/kakao")
     public String kakaoCallback(@RequestParam(name = "code") String code, HttpSession session) {
 
         try {
@@ -35,7 +35,7 @@ public class UserController {
 
     // // http://localhost:8080/users/profile/1
     // 유저 컨트롤러 , @PathVariable Long id,
-    @GetMapping("/profile")
+    @GetMapping("/my-profile")
     public String myProfile(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User user = userService.getMyProfile(sessionUser.getId());
@@ -49,7 +49,7 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("/profile/edit")
+    @GetMapping("/my-profile/edit")
     public String editProfile(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         User user = userService.getMyProfile(sessionUser.getId());
@@ -64,7 +64,7 @@ public class UserController {
      * 회원 수정(프로필)
      */
     // // http://localhost:8080/users/profile/1
-    @PostMapping("/profile")
+    @PostMapping("/my-profile")
     public String updateProfile(HttpSession session,
                                 @ModelAttribute UserRequest.UpDateDTO update
     ) {
@@ -82,7 +82,7 @@ public class UserController {
      * 회원 수정(프로필 이미지 삭제)
      */
     // // http://localhost:8080/users/profile-delete/1
-    @PostMapping("/profile-delete")
+    @PostMapping("/my-profile/image")
     public String deleteProfileImage(HttpSession session) {
         User sessionUser = (User) session.getAttribute("sessionUser");
         userService.deleteProfileImage(sessionUser.getId());

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -28,6 +29,7 @@ import static org.example.eoullimback._common.util.NumberFormatUtils.*;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/admin")
 public class AdminController {
 
     private final PaymentRefundService paymentRefundService;
@@ -37,7 +39,7 @@ public class AdminController {
     private final DashboardUserService dashboardUserService;
 
     // http://localhost:8080/admin/dashboard
-    @GetMapping("/admin/dashboard")
+    @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
@@ -86,7 +88,7 @@ public class AdminController {
         return "/admin/place";
     }
 
-    @GetMapping("/admin/users")
+    @GetMapping("/users")
     public String users(HttpSession session,Model model) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -97,7 +99,7 @@ public class AdminController {
         return "admin/user";
     }
 
-    @GetMapping("/admin/users/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<UserResponse.AdminUserDetailDTO> getUserDetail(@PathVariable Long userId) {
         User user = userService.findById(userId);
 
