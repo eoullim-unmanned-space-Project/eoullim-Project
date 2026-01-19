@@ -1,4 +1,4 @@
-package org.example.eoullimback.review;
+package org.example.eoullimback.review.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import org.example.eoullimback._common.enums.payment.PaymentStatus;
 
 @Getter
 @AllArgsConstructor
-public class ReviewListItemDTO {
+public class ReviewListItemResponse {
     private Long paymentId;
 
     private String bookingCode;

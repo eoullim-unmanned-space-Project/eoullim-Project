@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception409;
+import org.example.eoullimback.review.dto.ReviewListItemResponse;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewApiController {
 
-    private final ReviewQueryService reviewQueryService;
     private final ReviewService reviewService;
 
     @GetMapping("/api/user/reviews")
-    public List<ReviewListItemDTO> list(HttpSession session,
-                                        @RequestParam(defaultValue = "") String code) {
+    public List<ReviewListItemResponse> list(HttpSession session,
+                                             @RequestParam(defaultValue = "") String code) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
         if (sessionUser == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
 
-        return reviewQueryService.findList(sessionUser.getId(), code);
+        return reviewService.findList(sessionUser.getId(), code);
     }
 
     @DeleteMapping("/api/user/reviews/{reviewId}")
