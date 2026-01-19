@@ -32,4 +32,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             Status status,
             LocalDateTime createdAt
     );
+
+    long countByCreatedAtBetween(LocalDateTime localDateTime, LocalDateTime localDateTime1);
 }

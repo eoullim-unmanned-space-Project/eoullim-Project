@@ -22,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -342,5 +343,19 @@ public class UserServiceImpl implements UserService{
         }
 
         user.restore();
+    }
+
+    @Override
+    public long countTodayUsers() {
+        LocalDate today = LocalDate.now();
+
+        return userRepository.countByCreatedAtBetween(today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+    }
+
+    @Override
+    public long countYesterdayUser() {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+
+        return userRepository.countByCreatedAtBetween(yesterday.atStartOfDay(), yesterday.plusDays(1).atStartOfDay());
     }
 }
