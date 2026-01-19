@@ -1,15 +1,12 @@
 package org.example.eoullimback.booking;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.user_auth.user.User;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class BookingRequest {

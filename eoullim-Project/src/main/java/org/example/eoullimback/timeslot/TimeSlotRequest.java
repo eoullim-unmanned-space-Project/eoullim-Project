@@ -1,8 +1,6 @@
 package org.example.eoullimback.timeslot;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback._common.enums.time_slot.SlotStatus;
 import org.example.eoullimback.room.Room;
 

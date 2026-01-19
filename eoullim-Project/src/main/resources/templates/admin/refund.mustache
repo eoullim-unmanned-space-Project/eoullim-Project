@@ -512,7 +512,7 @@
                 }
 
                 try {
-                    const response = await fetch(`/api/refunds/${id}/approve`, {
+                    const response = await fetch(`/api/admin/refunds/${id}/approve`, {
                         method: 'POST'
                     });
 
@@ -562,7 +562,7 @@
             }
 
             try {
-                const response = await fetch(`/api/refunds/${id}/rejection`, {
+                const response = await fetch(`/api/admin/refunds/${id}/rejection`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

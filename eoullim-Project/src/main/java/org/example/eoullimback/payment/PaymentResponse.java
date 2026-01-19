@@ -9,7 +9,6 @@ import org.example.eoullimback.payment_refund.PaymentRefund;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PaymentResponse {

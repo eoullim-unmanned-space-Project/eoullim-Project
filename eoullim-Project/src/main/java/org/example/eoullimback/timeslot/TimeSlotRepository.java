@@ -17,8 +17,6 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
 
     void deleteAllByRoom(Room room);
 
-    // @Query("SELECT t FROM TimeSlot t WHERE t.id IN :timeSlotIds") 이 줄 row에 락을 걸기
-    // LockMode.Type.PESSIMISTIC_WRITE = 이 줄(row)을 사용중이면 만지지마 라고 경고 !
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT t FROM TimeSlot t WHERE t.id IN :timeSlotIds")
     List<TimeSlot> findAllByWithLock(@Param("timeSlotIds") List<Long> timeSlotIds);

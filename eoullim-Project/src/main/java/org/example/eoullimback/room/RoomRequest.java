@@ -1,15 +1,9 @@
 package org.example.eoullimback.room;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback.place.Place;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public class RoomRequest {
 

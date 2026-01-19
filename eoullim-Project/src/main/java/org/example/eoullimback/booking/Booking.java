@@ -5,11 +5,9 @@ import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
-import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.user_auth.user.User;
@@ -20,20 +18,20 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uk_room_date_slot", columnNames = {"room_id", "booking_date", "time_slot_id"})
-    },
-    indexes = {
-            @Index(
-                    name = "idx_bookings_user",
-                    columnList = "user_id, status"
-            ),
-            @Index(name = "idx_bookings_time_slot",
-                columnList = "time_slot_id"
-            ),
-            @Index(name = "idx_bookings_code",
-                    columnList = "bookingCode"),
-   }
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_room_date_slot", columnNames = {"room_id", "booking_date", "time_slot_id"})
+        },
+        indexes = {
+                @Index(
+                        name = "idx_bookings_user",
+                        columnList = "user_id, status"
+                ),
+                @Index(name = "idx_bookings_time_slot",
+                        columnList = "time_slot_id"
+                ),
+                @Index(name = "idx_bookings_code",
+                        columnList = "bookingCode"),
+        }
 )
 @NoArgsConstructor
 @Getter
@@ -83,7 +81,7 @@ public class Booking {
     private BookingStatus status = BookingStatus.PENDING;
 
     @Builder
-    public Booking (User user, TimeSlot timeSlot, Room room, String bookingCode, Long itemSnapshotPrice, int qty, Long amount, BookingStatus status, LocalDate bookingDate) {
+    public Booking(User user, TimeSlot timeSlot, Room room, String bookingCode, Long itemSnapshotPrice, int qty, Long amount, BookingStatus status, LocalDate bookingDate) {
 
         if (qty <= 0) {
             throw new IllegalArgumentException("예약 수량은 0보다 커야합니다.");

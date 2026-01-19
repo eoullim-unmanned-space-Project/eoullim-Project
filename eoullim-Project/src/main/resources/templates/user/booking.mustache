@@ -42,9 +42,8 @@
 
             const activeBtn = document.querySelector('.booking-filter-btn.active');
             let status = (activeBtn && activeBtn.dataset.status) ? activeBtn.dataset.status : '';
-
             try {
-                 const response = await fetch(`/api/user/search?code=${bookingCode}&status=${status}`, {
+                 const response = await fetch(`/api/user/search?code=${[bookingCode]}&status=${status}`, {
                     method: "GET",
                     headers: {
                         "Content-Type" : "application/json"
@@ -120,7 +119,7 @@
                 <div class="booking-content">
                     <div class="booking-card-header">
                         <span class="booking-place">🚩${booking.roomName}</span>
-                        <span class="booking-status confirmed" data-status="${[booking.status]}">${booking.status}</span>
+                        <span class="booking-status confirmed" data-status="${booking.status}">${booking.status}</span>
                     </div>
 
                     <div class="booking-card-body">

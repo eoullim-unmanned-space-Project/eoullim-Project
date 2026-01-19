@@ -1,7 +1,5 @@
 package org.example.eoullimback.event;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Lob;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
@@ -9,13 +7,11 @@ import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.geminichatbot.GeminiServiceImpl;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;
-import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
 @Service

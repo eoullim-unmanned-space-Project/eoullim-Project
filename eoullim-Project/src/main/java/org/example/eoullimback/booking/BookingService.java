@@ -1,7 +1,5 @@
 package org.example.eoullimback.booking;
 
-
-import jakarta.validation.Valid;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 

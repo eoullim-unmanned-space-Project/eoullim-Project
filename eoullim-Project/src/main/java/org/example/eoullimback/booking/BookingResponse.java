@@ -2,9 +2,7 @@ package org.example.eoullimback.booking;
 
 import lombok.Data;
 import org.example.eoullimback._common.enums.bookig.BookingStatus;
-import org.example.eoullimback._common.util.DateTimeUtil;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
-
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

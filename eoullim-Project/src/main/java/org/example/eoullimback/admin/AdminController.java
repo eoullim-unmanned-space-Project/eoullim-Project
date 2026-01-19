@@ -12,16 +12,12 @@ import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
 import org.example.eoullimback.user_auth.user.DashboardUserService;
 import org.example.eoullimback.user_auth.user.User;
-import org.example.eoullimback.user_auth.user.UserService;
 import org.example.eoullimback.user_auth.user.dto.response.UserCountResult;
-import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -58,7 +54,7 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    @GetMapping("/admin/refund")
+    @GetMapping("/refund")
     public String payment(HttpSession session, Model model) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -70,7 +66,7 @@ public class AdminController {
         return "admin/refund";
     }
 
-    @GetMapping("/admin/place")
+    @GetMapping("/place")
     public String place(Model model,
                         HttpSession session,
                         @RequestParam(defaultValue = "1") int page,

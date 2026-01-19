@@ -1,13 +1,7 @@
 package org.example.eoullimback.event;
 
-import jakarta.persistence.Column;
 import lombok.Data;
-import org.example.eoullimback.user_auth.user.User;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 public class EventResponse {
 

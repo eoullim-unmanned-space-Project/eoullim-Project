@@ -28,7 +28,7 @@ public class QnaController {
 
     // Q&A 전체 목록 화면 요청
     // http://localhost:8080/qnas
-    @GetMapping("/qnas")
+    @GetMapping("/public/qnas")
     public String listQna(Model model,
                           @RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "5") int size,
@@ -45,7 +45,7 @@ public class QnaController {
 
     // Q&A 상세 보기 화면 요청
     // http://localhost:8080/qnas/{id}
-    @GetMapping("/qnas/{id}")
+    @GetMapping("/public/qnas/{id}")
     public String detailQnaForm(@PathVariable Long id,
                                 Model model,
                                 HttpSession session) {

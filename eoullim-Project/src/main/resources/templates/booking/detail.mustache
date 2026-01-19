@@ -146,7 +146,6 @@
                  const { IMP } = window;
                  IMP.init('imp42133684');
 
-                 alert(data.paymentKey);
                  currentPaymentKey = data.paymentKey;
 
                  IMP.request_pay({
@@ -179,7 +178,7 @@
                              location.href  = `/user/bookings/complete?code=${resData.bookingCode}`;
                          } else {
                              alert("결제 실패 다시시도해주세요.");
-                             location.href  = `/place/${roomId}/room`
+                             location.href  = `/public/place/${roomId}/room`
                          }
                      } else {
                          alert(response.error_msg || "[결제취소] 결제가 취소되었습니다.\n다시시도해 주세요.");
@@ -205,7 +204,7 @@
                    })
                 });
 
-                location.href = `/place/${roomId}/room`;
+                location.href = `/public/place/${roomId}/room`;
 
             } catch (error) {
                 console.error("결제 취소 중 오류가 발생했습니다.", error);
@@ -226,7 +225,7 @@
 
             if(response.ok) {
                 alert("예약을 취소하셨습니다.");
-                location.href = `/place/${roomId}/room`;
+                location.href = `/public/place/${roomId}/room`;
             } else {
             const errorData = await response.json();
             alert(errorData.message || "예약 취소를 하지못했습니다.\n잠시 후 다시 시도해주세요.");

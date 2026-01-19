@@ -15,7 +15,6 @@ import org.example.eoullimback.booking.BookingRepository;
 import org.example.eoullimback.notification.NotificationService;
 import org.example.eoullimback.payment_refund.PaymentRefund;
 import org.example.eoullimback.payment_refund.PaymentRefundRepository;
-import org.example.eoullimback.timeslot.TimeSlot;
 import org.example.eoullimback.timeslot.TimeSlotResponse;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserRepository;

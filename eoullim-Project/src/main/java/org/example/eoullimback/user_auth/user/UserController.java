@@ -31,7 +31,7 @@ public class UserController {
         }
 
 //        return "redirect:/";
-        return "redirect:/admin/dashboard";
+        return "redirect:/public";
     }
 
     // // http://localhost:8080/users/profile/1

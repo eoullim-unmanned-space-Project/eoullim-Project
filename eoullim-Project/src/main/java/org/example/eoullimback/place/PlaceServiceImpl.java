@@ -1,6 +1,5 @@
 package org.example.eoullimback.place;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
@@ -9,8 +8,6 @@ import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.FileUtil;
 import org.example.eoullimback.room.*;
-import org.example.eoullimback.room_image.RoomImageRepository;
-import org.example.eoullimback.user_auth.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +24,6 @@ import java.util.List;
 public class PlaceServiceImpl implements PlaceService{
     private final PlaceRepository placeRepository;
     private final RoomRepository roomRepository;
-    private final RoomImageRepository roomImageRepository;
 
     @Override
     public PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placeList(int page, int size, String keyword) {

@@ -24,7 +24,7 @@ public class PlaceController {
 
 
     // 전체 조회
-    @GetMapping("/map")
+    @GetMapping("/public/map")
     public String ListPlace(Model model,
                             @RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "8") int size,
@@ -39,7 +39,7 @@ public class PlaceController {
     }
 
     // 새로운 장소 4개만 조회
-    @GetMapping("/")
+    @GetMapping("/public")
     public String newPlace(Model model
     ) {
         List<PlaceResponse.ListDTO> place = placeService.newPlace();
@@ -51,7 +51,7 @@ public class PlaceController {
         return "/main/main";
     }
 
-    @GetMapping("/place/{placeId}/room")
+    @GetMapping("/public/place/{placeId}/room")
     public String ListRoom(Model model,
                            @PathVariable Long placeId,
 //                           @RequestParam(required = false) Long roomId,

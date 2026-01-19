@@ -5,17 +5,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.eoullimback._common.base.BaseTimeEntity;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
-import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback._common.enums.time_slot.SlotStatus;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback.item.Item;
 import org.example.eoullimback.room.Room;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -16,12 +16,10 @@ DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS bookings;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS time_slots;
-DROP TABLE IF EXISTS room_images;
 DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS comments;
-DROP TABLE IF EXISTS qaas;
-DROP TABLE IF EXISTS file_infos;
+DROP TABLE IF EXISTS qans;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
@@ -86,19 +84,6 @@ CREATE TABLE events (
 
     INDEX idx_user_created (user_id, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='이벤트 테이블';
-
-
-CREATE TABLE file_infos (
-  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  
-  original_name VARCHAR(255) NOT NULL COMMENT '원본 파일명',
-  stored_name VARCHAR(255) NOT NULL COMMENT 'UUID가 적용된 파일명',
-  content_type VARCHAR(255) COMMENT '타입',
-  file_size BIGINT COMMENT '파일 사이즈',
-  file_path VARCHAR(255) NOT NULL COMMENT '서버 내 실제 경로',
-  
-  created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT '생성일'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='파일 정보 테이블';
 
 CREATE TABLE qnas (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -165,19 +150,6 @@ CREATE TABLE rooms (
   
   CONSTRAINT `fk_rooms_place` FOREIGN KEY(place_id) REFERENCES places(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='방 테이블';
-
-CREATE TABLE room_images (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    original_name VARCHAR(255) NOT NULL,
-    stored_name VARCHAR(255) NOT NULL,
-    content_type VARCHAR(100) NOT NULL,
-    file_size BIGINT NOT NULL,
-    file_path VARCHAR(500) NOT NULL,
-    display_order INT NOT NULL DEFAULT 0,
-    room_id BIGINT NOT NULL,
-    
-    CONSTRAINT fk_room_images_room FOREIGN KEY (room_id) REFERENCES rooms (id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE time_slots (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,

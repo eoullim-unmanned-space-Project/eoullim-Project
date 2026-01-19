@@ -85,8 +85,7 @@ public class AuthController {
 
             session.setAttribute("sessionUser", sessionUser);
 
-//            return "redirect:/";
-            return "redirect:/admin/dashboard";
+            return "redirect:/public";
 
 
         } catch (Exception403 e) {
