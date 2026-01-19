@@ -32,30 +32,6 @@ public class AdminApiController {
     private final UserService userService;
     private final DashboardUserService dashboardUserService;
 
-    @GetMapping("/admin/refund/detail/{id}")
-    public ResponseEntity<PaymentRefundResponse.AdminDetailDTO> detail(@PathVariable Long id) {
-
-        PaymentRefundResponse.AdminDetailDTO detailDTO = paymentRefundService.detail(id);
-
-        return ResponseEntity.ok().body(detailDTO);
-    }
-
-    @PostMapping("/api/refund/rejection/{id}")
-    public ResponseEntity<Void> rejection(@PathVariable Long id, @RequestBody PaymentRefundRequest.RejectionDTO rejectionDTO) {
-
-        paymentRefundService.rejection(id, rejectionDTO.getReason());
-
-        return ResponseEntity.ok().body(null);
-    }
-
-    @PostMapping("/api/refund/approve/{id}")
-    public ResponseEntity<Void> approve(@PathVariable Long id) {
-
-        paymentRefundService.approve(id);
-
-        return ResponseEntity.ok().body(null);
-    }
-
 
     @GetMapping("/users/chart")
     public String getUserChart() {
@@ -122,7 +98,6 @@ public class AdminApiController {
 
         return ResponseEntity.ok().body(Map.of("room", room));
     }
-
 
     @DeleteMapping("/room/{roomId}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {

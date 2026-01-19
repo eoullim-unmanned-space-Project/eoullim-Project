@@ -73,10 +73,13 @@ public class AdminController {
 
     @GetMapping("/admin/place")
     public String place(Model model,
+                        HttpSession session,
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "5") int size,
                         @RequestParam(required = false) String keyword
     ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
         int pageIndex = Math.max(0, page - 1);
         PageResponse.PageDTO<Place, PlaceResponse.DetailDTO> placePage = placeService.placeAdminList(pageIndex, size, keyword);
         model.addAttribute("placePage", placePage);

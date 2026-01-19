@@ -15,7 +15,7 @@ public class EventApiController {
 
     private final EventService eventService;
 
-    @GetMapping("/api/events/today")
+    @GetMapping("/api/user/events/today")
     ResponseEntity<EventResponse.DetailDTO> getDetailEvent (HttpSession session) {
         User user = (User) session.getAttribute("sessionUser");
 
@@ -25,7 +25,7 @@ public class EventApiController {
     }
 
 
-    @PostMapping("/api/events/today")
+    @PostMapping("/api/user/events")
     ResponseEntity<EventResponse.DetailDTO> createEvent(HttpSession session) {
         User user = (User) session.getAttribute("sessionUser");
 

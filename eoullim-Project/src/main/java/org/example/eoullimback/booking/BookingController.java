@@ -19,7 +19,7 @@ public class BookingController {
     /**
      * 화면 - 예약 화면
      */
-    @GetMapping("/booking/detail")
+    @GetMapping("/user/bookings/detail")
     public String detailBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -36,8 +36,7 @@ public class BookingController {
         return "booking/detail";
     }
 
-
-    @GetMapping("/booking/complete")
+    @GetMapping("/user/bookings/complete")
     public String completeBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
 
         User sessionUser = (User) session.getAttribute("sessionUser");

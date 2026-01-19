@@ -377,7 +377,7 @@
         const percentEl = document.querySelector(".todayPercent");
 
         try {
-            const response = await fetch("/api/admin/today-sales");
+            const response = await fetch("/api/admin/sales/today");
 
             const data = await response.json();
 
@@ -420,7 +420,7 @@
         const countEl = document.querySelector(".count");
         const todayCountEl = document.querySelector(".todayCount");
         try {
-            const response = await fetch("/api/admin/new-bookings");
+            const response = await fetch("/api/admin/bookings/new/count");
 
             console.log(response);
 
@@ -466,7 +466,7 @@
         const statChange = document.querySelector(".stat-change ");
 
         try {
-            const response = await fetch("/api/admin/refunds/pending")
+            const response = await fetch("/api/admin/refunds/pending/count")
 
             const data = await response.json();
 
