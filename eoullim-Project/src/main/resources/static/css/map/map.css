@@ -133,6 +133,10 @@ body {
     padding: 0 32px;
 }
 
+.map-image {
+    margin-bottom: 20px;
+}
+
 .map-container {
     display: flex;
     flex-direction: column;
@@ -156,6 +160,47 @@ body {
 .second {
     color: #6b7280;
     font-size: 12px;
+}
+
+.place-search {
+    display: flex;
+    justify-content: space-between;
+}
+
+.place-search-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+.place-input {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+.place-search-btn {
+    padding: 0 18px;
+    border-radius: 14px;
+    border: none;
+    background: #6366f1;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    height: 80%;
+}
+
+.place-search-btn.red{
+    padding: 0 18px;
+    border-radius: 14px;
+    border: none;
+    background: indianred;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    height: 80%;
 }
 
 /* 장소 CSS */
@@ -286,4 +331,49 @@ body {
 .pagination-container button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    gap: 4px; /* 페이지 버튼 사이 간격 */
+}
+
+.page-move {
+    display: inline-block;
+}
+
+.page-link {
+    display: block;
+    padding: 6px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    color: #6366f1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.page-link:hover {
+    background-color: #e0e7ff;
+    color: #000;
+}
+
+.page-move.active .page-link {
+    background-color: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+    pointer-events: none;
+}
+
+
+.page-move.disabled .page-link {
+    color: #adb5bd;
+    pointer-events: none;
+    cursor: default;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
 }
