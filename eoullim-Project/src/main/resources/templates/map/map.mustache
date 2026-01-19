@@ -3,8 +3,20 @@
 {{> layout/mapHeader}}
 <body>
 <section class="section">
-    <div id="map"></div>
-    <div class="section-title">새로운 공간</div>
+    <div id="map" class="map-image"></div>
+    <div class="place-search">
+        <div class="section-title">새로운 공간</div>
+        <div class="place-search-controls">
+            <form action="/map" method="get">
+                <input class="place-input" type="text" name="keyword" placeholder="장소를 입력해주세요."
+                       value="{{placeKeyword}}">
+                <button class="place-search-btn" type="submit">검색</button>
+            </form>
+            <form action="/map" method="get">
+                <button class="place-search-btn red" type="submit">초기화</button>
+            </form>
+        </div>
+    </div>
     <div class="space-list">
         {{#placePage.content}}
             <a href="/place/{{id}}/room" class="space-card">
@@ -20,94 +32,146 @@
         {{/placePage.content}}
     </div>
     <div class="img-wrapper">
-        <img src="./img/맵이벤트.png" alt="">
+<!--        <img src="./img/맵이벤트.png" alt="">-->
     </div>
-    <div class="pagination-container">
-        <button class="prev">&lt;</button>
-        <div class="pages"></div>
-        <button class="next">&gt;</button>
-    </div>
+
+    <ul class="pagination-container">
+        {{#placePage.previousPageNumber}}
+            <li class="page-move">
+                <a href="/map?page={{placePage.previousPageNumber}}" class="page-link"><</a>
+            </li>
+        {{/placePage.previousPageNumber}}
+        {{^placePage.previousPageNumber}}
+            <li class="page-move disabled">
+                <a href="#" class="page-link"><</a>
+            </li>
+        {{/placePage.previousPageNumber}}
+        {{#placePage.pageLinks}}
+            <li class="page-move {{#active}}active{{/active}}">
+                <a href="/map?page={{displayNumber}}&size={{placePage.size}}" class="page-link">{{displayNumber}}</a>
+            </li>
+        {{/placePage.pageLinks}}
+        {{#placePage.nextPageNumber}}
+            <li class="page-move">
+                <a href="/map?page={{placePage.nextPageNumber}}" class="page-link">></a>
+            </li>
+        {{/placePage.nextPageNumber}}
+        {{^placePage.nextPageNumber}}
+            <li class="page-move disabled">
+                <a href="#" class="page-link">></a>
+            </li>
+        {{/placePage.nextPageNumber}}
+    </ul>
 </section>
 
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cd663d21be538a20913843972ae7bf17&autoload=false"></script>
-
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let map = null;
-        kakao.maps.load(function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    // 위도
-                    const lat = position.coords.latitude;
-                    // 경도
-                    const lng = position.coords.longitude;
+    // controller에 있는 model을 들고 와서 places 배열에 담아줍니다.
+    const places = [
+        {{#placePage.content}}
+            {
+                id: {{id}},
+                name: "{{name}}",
+                latitude: {{latitude}},
+                longitude: {{longitude}}
+            },
+        {{/placePage.content}}
+    ];
 
-                    const mapContainer = document.getElementById('map');
-                    const mapOption = {
-                        center: new kakao.maps.LatLng(lat, lng),
-                        level: 6
-                    };
+    // HTML 문서가 완전히 로드된 후에 코드 실행
+        document.addEventListener("DOMContentLoaded", function () {
 
-                    // map에 Container와 center 위도 경도 담아준다
-                    map = new kakao.maps.Map(mapContainer, mapOption);
+            let map; // 카카오 지도를 담을 변수
+            let markers = []; // 마커를 저장하는 배열
 
-                    displayMarker();
-                }, function (error) {
-                    console.error("위치 정보를 가져올 수 없습니다.", error);
-                });
-            } else {
-                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
-            }
-        });
+            // 기본 값 부산 서면
+            const DEFAULT_LOCATION = {
+                latitude: 35.1595,
+                longitude: 129.0596
+            };
 
-        // async 비동기 처리
-        async function displayMarker() {
-            try {
-                // 배열로 되어 있는 객체 mockPlaces를 담아서 변수화
-                const places = mockPlaces;
+            // 카카오 지도 API 로딩 완료 후 실행
+            kakao.maps.load(function () {
 
-                // 장소를 forEach 반복문을 돌린다
-                places.forEach((place) => {
-                    // 객체에 담겨있는 장소의 위도, 경도를 maps.LatLng를 통해 position생성
+                // 위도와 경도를 받아 지도 중심을 설정
+                function createMap(latitude, longitude) {
+
+                    // id가 map인 태크에 지도 중심 설정
+                    map = new kakao.maps.Map(document.getElementById('map'), {
+                        center: new kakao.maps.LatLng(latitude, longitude), // 자동 중심 좌표
+                        level: 7 // 지도 크기
+                    });
+
+                    // 카카오 지도 SDK에서 제공하는 기존 방식
+                    // 아직 addEventListener가 없어서 옛방식 선언
+                    kakao.maps.event.addListener(map, 'bounds_changed', drawMarkers);
+                }
+
+                // 검색 결과가 있을 때 중심 이동
+                function setMapCenterBySearch() {
+                    if (places && places.length > 0) {
+                        const first = places[0];
+                        map.setCenter(new kakao.maps.LatLng(first.latitude, first.longitude));
+                    }
+                }
+
+                // 기본 지도 생성
+                createMap(DEFAULT_LOCATION.latitude, DEFAULT_LOCATION.longitude);
+
+                // 검색 결과가 있으면 중심 이동
+                if (places && places.length > 0) {
+                    setMapCenterBySearch(); // 필요하면
+                }
+            });
+
+            // 지도에 마커를 표시하는 함수
+            function drawMarkers() {
+                if (!map || !places || places.length === 0) return;
+
+                // 현재 지도에 보이는 영역 가져오기
+                const bounds = map.getBounds();
+                // 기존 마커 제거
+                markers.forEach(m => m.setMap(null));
+                markers = [];
+
+                // place 배열을 순회하며 마커 생성
+                places.forEach(place => {
                     const position = new kakao.maps.LatLng(place.latitude, place.longitude);
 
-                    var imageSrc = "/css/map/맵마커.png",
-                            imageSize = new kakao.maps.Size(32, 32),
-                            imageOption = {offset: new kakao.maps.Point(16, 32)};
-
-                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+                    // 마커가 현재 지도 범위 안에 있는지 확인
+                    if (!isInBounds(bounds, position)) return;
 
                     // 새로운 마커 생성
-                    var marker = new kakao.maps.Marker({
-                        // map : 지도
+                    const marker = new kakao.maps.Marker({
                         map: map,
-                        // position: 위도, 경도
                         position: position,
-                        // marker 이미지
-                        image: markerImage,
-                        // title: 제목
                         title: place.name
                     });
 
-                    // click했을 때 보여줄 정보
-                    const infowindow = new kakao.maps.InfoWindow({
-                        content: `<div style="padding:5px; color:black;">${place.name}</div>`
+                    // 마커 클릭 시 해당 장소 상세 페이지로 이동
+                    kakao.maps.event.addListener(marker, 'click', function() {
+                        window.location.href = `/place/${place.id}/room`;
                     });
 
-                    kakao.maps.event.addListener(marker, 'click', function () {
-                        infowindow.open(map, marker);
-                    });
-
+                    // markers 배열에 새로 생성한 마커 추가 (나중에 제거할 때 사용)
+                    markers.push(marker);
                 });
-
-            } catch (error) {
-                console.error("데이터를 불러오는 중 오류가 발생했습니다.", error);
             }
-        }
-    })
 
+            // 전역에 호출 가능하게 해주는 코딩
+            function isInBounds(bounds, latlng) {
+                const sw = bounds.getSouthWest();
+                const ne = bounds.getNorthEast();
+
+                return (
+                        latlng.getLat() >= sw.getLat() &&
+                        latlng.getLat() <= ne.getLat() &&
+                        latlng.getLng() >= sw.getLng() &&
+                        latlng.getLng() <= ne.getLng()
+                );
+            }
+        });
 </script>
-
 </body>
 {{> layout/footer}}

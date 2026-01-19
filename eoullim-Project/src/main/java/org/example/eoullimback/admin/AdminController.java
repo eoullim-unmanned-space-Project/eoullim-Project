@@ -10,8 +10,10 @@ import org.example.eoullimback.place.PlaceResponse;
 import org.example.eoullimback.place.PlaceService;
 import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
+import org.example.eoullimback.user_auth.user.DashboardUserService;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.UserService;
+import org.example.eoullimback.user_auth.user.dto.response.UserCountResult;
 import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
+import static org.example.eoullimback._common.util.NumberFormatUtils.*;
+
 @Controller
 @RequiredArgsConstructor
 public class AdminController {
@@ -30,13 +34,26 @@ public class AdminController {
     private final PlaceService placeService;
     private final UserService userService;
     private final RoomService roomService;
+    private final DashboardUserService dashboardUserService;
 
     // http://localhost:8080/admin/dashboard
     @GetMapping("/admin/dashboard")
     public String dashboard(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
+        UserCountResult result = dashboardUserService.getUserCount();
+
         model.addAttribute("user", sessionUser);
+
+        // User 통계
+        long today = result.getTodayCount();
+        long yesterday = result.getYesterdayCount();
+
+        model.addAttribute("totalUserComma", formatComma(today));
+        model.addAttribute("totalUserK", formatK(today));
+        model.addAttribute("increaseRate", calculateRate(today, yesterday));
+        model.addAttribute("isIncrease", today >= yesterday);
+
         return "admin/dashboard";
     }
 
@@ -54,10 +71,13 @@ public class AdminController {
 
     @GetMapping("/admin/place")
     public String place(Model model,
+                        HttpSession session,
                         @RequestParam(defaultValue = "1") int page,
                         @RequestParam(defaultValue = "5") int size,
                         @RequestParam(required = false) String keyword
     ) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+
         int pageIndex = Math.max(0, page - 1);
         PageResponse.PageDTO<Place, PlaceResponse.DetailDTO> placePage = placeService.placeAdminList(pageIndex, size, keyword);
         model.addAttribute("placePage", placePage);

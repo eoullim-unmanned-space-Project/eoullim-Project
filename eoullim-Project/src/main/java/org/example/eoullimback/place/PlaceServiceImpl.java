@@ -1,5 +1,6 @@
 package org.example.eoullimback.place;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
@@ -9,6 +10,7 @@ import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.FileUtil;
 import org.example.eoullimback.room.*;
 import org.example.eoullimback.room_image.RoomImageRepository;
+import org.example.eoullimback.user_auth.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

@@ -20,14 +20,9 @@
         --negative: #f04452;
     }
 
-    * {
-        box-sizing: border-box;
-        -webkit-font-smoothing: antialiased;
-    }
-
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
     body {
-        margin: 0;
-        padding: 0;
+        margin: 0; padding: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
         background-color: var(--bg-canvas);
         color: var(--text-primary);
@@ -36,56 +31,22 @@
     }
 
     nav {
-        width: 260px;
-        height: 100vh;
-        background: white;
-        padding: 40px 20px;
-        position: fixed;
-        border-right: 1px solid var(--line-default);
+        width: 260px; height: 100vh;
+        background: white; padding: 40px 20px;
+        position: fixed; border-right: 1px solid var(--line-default);
     }
-
-    .nav-brand {
-        font-size: 22px;
-        font-weight: 800;
-        margin-bottom: 40px;
-        padding-left: 12px;
-    }
-
-    .nav-menu {
-        list-style: none;
-        padding: 0;
-    }
-
+    .nav-brand { font-size: 22px; font-weight: 800; margin-bottom: 40px; padding-left: 12px; }
+    .nav-menu { list-style: none; padding: 0; }
     .nav-item {
-        padding: 14px 16px;
-        border-radius: 12px;
-        font-weight: 600;
-        color: var(--text-secondary);
-        cursor: pointer;
-        margin-bottom: 4px;
-        transition: 0.2s;
+        padding: 14px 16px; border-radius: 12px;
+        font-weight: 600; color: var(--text-secondary);
+        cursor: pointer; margin-bottom: 4px; transition: 0.2s;
     }
+    .nav-item.active { background-color: #f9fafb; color: var(--point-color); }
 
-    .nav-item.active {
-        background-color: #f9fafb;
-        color: var(--point-color);
-    }
-
-    main {
-        margin-left: 260px;
-        padding: 40px 48px;
-        width: 100%;
-    }
-
-    header {
-        margin-bottom: 32px;
-    }
-
-    header h1 {
-        font-size: 28px;
-        font-weight: 700;
-        margin: 0;
-    }
+    main { margin-left: 260px; padding: 40px 48px; width: 100%; }
+    header { margin-bottom: 32px; }
+    header h1 { font-size: 28px; font-weight: 700; margin: 0; }
 
     .stat-grid {
         display: grid;
@@ -98,133 +59,61 @@
         background: var(--bg-surface);
         padding: 24px;
         border-radius: 24px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.01);
     }
 
-    .stat-label {
-        color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
+    .stat-label { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
+    .stat-change { margin-top: 8px; font-size: 13px; font-weight: 600; }
+    .stat-change.up { color: var(--positive); }
+    .stat-change.down { color: var(--negative); }
 
-    .stat-value {
-        font-size: 24px;
-        font-weight: 700;
-        color: var(--text-primary);
-    }
+    .todayPercent { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    .todayPercent.up { color: var(--positive); }
+    .todayPercent.down { color: var(--negative); }
 
-    .stat-change {
-        margin-top: 8px;
-        font-size: 13px;
-        font-weight: 600;
-    }
+    .todayCount { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
 
-    .stat-change.up {
-        color: var(--positive);
-    }
-
-    .stat-change.down {
-        color: var(--negative);
-    }
-
-    .todayPercent {
-        color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-
-    .todayPercent.up {
-        color: var(--positive);
-    }
-
-    .todayPercent.down {
-        color: var(--negative);
-    }
-
-    .todayCount {
-        color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-
-    .todayCount.up {
-        color: var(--positive);
-    }
-
-    .todayCount.down {
-        color: var(--negative);
-    }
+    .todayCount.up { color: var(--positive); }
+    .todayCount.down { color: var(--negative); }
 
     .chart-section {
         display: grid;
         grid-template-columns: 2fr 1fr;
         gap: 20px;
-        margin-bottom: 40px;
+        margin-bottom: 32px;
     }
 
     .content-surface {
         background: var(--bg-surface);
         border-radius: 24px;
         padding: 28px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.01);
     }
 
     .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
+        display: flex; justify-content: space-between;
+        align-items: center; margin-bottom: 20px;
     }
 
-    .section-header h2 {
-        font-size: 18px;
-        font-weight: 700;
-        margin: 0;
-    }
+    .section-header h2 { font-size: 18px; font-weight: 700; margin: 0; }
 
-    .chart-container {
-        width: 350px;
-        height: 200px;
-    }
+    .chart-container { width: 300px; height: 150px;}
 
-    canvas {
-        width: 100%;
-        height: 100%;
-    }
+    .pie { width: 100%; height: 100%; }
 
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+    .data-table { width: 100%; border-collapse: collapse; }
 
     .data-table th {
-        text-align: left;
-        padding: 12px 16px;
-        color: var(--text-tertiary);
-        font-size: 13px;
+        text-align: left; padding: 12px 16px;
+        color: var(--text-tertiary); font-size: 13px;
         border-bottom: 1px solid var(--line-default);
     }
-
-    .data-table td {
-        padding: 16px;
-        font-size: 14px;
-        border-bottom: 1px solid var(--line-subs);
-    }
-
+    .data-table td { padding: 16px; font-size: 14px; border-bottom: 1px solid var(--line-subs); }
     .status-badge {
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-size: 12px;
-        font-weight: 600;
+        padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;
     }
-
-    .status-active {
-        background: #e8f8ee;
-        color: #32c35a;
-    }
+    .status-active { background: #e8f8ee; color: #32c35a; }
 
     .quick-menu-grid {
         display: grid;
@@ -264,21 +153,10 @@
         flex-shrink: 0;
     }
 
-    .qna-bg {
-        background-color: #e8f3ff;
-    }
-
-    .review-bg {
-        background-color: #fff9e5;
-    }
-
-    .user-bg {
-        background-color: #f2f4f6;
-    }
-
-    .support-bg {
-        background-color: #e8f8ee;
-    }
+    .qna-bg { background-color: #e8f3ff; }
+    .review-bg { background-color: #fff9e5; }
+    .user-bg { background-color: #f2f4f6; }
+    .support-bg { background-color: #e8f8ee; }
 
     .menu-info {
         display: flex;
@@ -305,11 +183,11 @@
         }
     }
 
-    .thead-box > tr > th {
+    .thead-box>tr>th {
         text-align: center;
     }
 
-    .tr-box > td {
+    .tr-box>td {
         text-align: center;
     }
 
@@ -323,16 +201,13 @@
     }
 
     .paymentBtn {
-        border: none;
-        background: none;
-        color: var(--point-color);
-        font-weight: 600;
-        cursor: pointer;
+        border:none;
+        background:none;
+        color:var(--point-color);
+        font-weight:600;
+        cursor:pointer;
         color: var(--point-color);
     }
-
-
-
 </style>
 
 <body>
@@ -341,7 +216,7 @@
     <ul class="nav-menu">
         <li class="nav-item active">📊 대시보드</li>
         <li class="nav-item">🏠 장소/방 관리</li>
-        <li class="nav-item">🫥 회원 관리</li>
+        <li class="nav-item" onclick="location.href='/admin/users'">🫥 회원 관리</li>
         <li class="nav-item">🧾 결제 내역</li>
         <li class="nav-item">📫 Q&A</li>
         <li class="nav-item">⭐ 리뷰 내역</li>
@@ -368,12 +243,17 @@
         <div class="stat-card">
             <div class="stat-label">대기 중인 환불</div>
             <div class="stat-value refund-count">5건</div>
-            <div class="stat-change down">처리 필요</div>
+            <div class="stat-change down" >처리 필요</div>
         </div>
         <div class="stat-card">
             <div class="stat-label">가입자 수</div>
-            <div class="stat-value">1,204명</div>
-            <div class="stat-change up">▲ 8.2%</div>
+            <div class="stat-value">{{totalUserComma}}명</div>
+            {{#isIncrease}}
+            <div class="stat-change up">▲ {{increaseRate}}%</div>
+            {{/isIncrease}}
+            {{^isIncrease}}
+            <div class="stat-change down">▼ {{increaseRate}}%</div>
+            {{/isIncrease}}
         </div>
     </div>
 
@@ -384,7 +264,7 @@
                 <div class="menu-icon qna-bg">📫</div>
                 <div class="menu-info">
                     <span class="menu-title">Q&A 관리</span>
-                    <span class="menu-desc">새로운 문의 5건</span>
+                    <span class="menu-desc" id="qnaText">새로운 문의 -건</span>
                 </div>
             </div>
 
@@ -392,7 +272,7 @@
                 <div class="menu-icon review-bg">⭐</div>
                 <div class="menu-info">
                     <span class="menu-title">리뷰 내역</span>
-                    <span class="menu-desc">평균 별점 4.8</span>
+                    <span class="menu-desc" id="avgRatingText">평균 별점 -</span>
                 </div>
             </div>
 
@@ -400,7 +280,7 @@
                 <div class="menu-icon user-bg">🫥</div>
                 <div class="menu-info">
                     <span class="menu-title">회원 관리</span>
-                    <span class="menu-desc">누적 회원 1.2k</span>
+                    <span class="menu-desc">누적 회원 {{totalUserK}}</span>
                 </div>
             </div>
 
@@ -420,32 +300,31 @@
                 <canvas class="pie" id="pieChart"></canvas>
             </div>
         </div>
+    </div>
 
-        <div class="content-surface">
-            <div class="section-header">
-                <h2>최근 결제 현황</h2>
-                <button class="paymentBtn" onclick="location.href='/admin/payment'">전체보기</button>
-            </div>
-            <table class="data-table">
-                <thead class="thead-box">
-                <tr>
-                    <th>결제번호</th>
-                    <th>이용자</th>
-                    <th>장소/방</th>
-                    <th>결제금액</th>
-                    <th>결제경로</th>
-                    <th>결제완료 시간</th>
-                    <th>결제상태</th>
-                </tr>
-                </thead>
-                <tbody class="table-body">
-                </tbody>
-            </table>
+    <div class="content-surface">
+        <div class="section-header">
+            <h2>최근 결제 현황</h2>
+            <button class="paymentBtn" onclick="location.href='/admin/payment'">전체보기</button>
         </div>
+        <table class="data-table">
+            <thead class="thead-box">
+            <tr>
+                <th>결제번호</th>
+                <th>이용자</th>
+                <th>장소/방</th>
+                <th>결제금액</th>
+                <th>결제경로</th>
+                <th>결제완료 시간</th>
+                <th>결제상태</th>
+            </tr>
+            </thead>
+            <tbody class="table-body">
+            </tbody>
+        </table>
     </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     let salesChart;
 
@@ -454,10 +333,14 @@
         fetchTodaySales();
         fetchTodayBookingCounts()
         fetchRefundStatusInRequests()
+        fetchAvgRating();
+        fetchQnaCount();
 
         setInterval(fetchTodaySales, 30000);
         setInterval(fetchTodayBookingCounts, 30000);
         setInterval(fetchRefundStatusInRequests, 30000);
+        setInterval(fetchAvgRating, 30000);
+        setInterval(fetchQnaCount, 30000);
     });
 
     async function fetchPaymentList() {
@@ -514,11 +397,11 @@
             let percent = 0;
 
             if (yesterdaySales > 0) {
-                percent = ((todaySale - yesterdaySales) / yesterdaySales) * 100;
+                percent = ((todaySale - yesterdaySales) / yesterdaySales ) * 100;
 
-                if (percent > 0) {
+                if (percent > 0)  {
                     statValueEl.classList.add('up')
-                } else if (percent < 0) {
+                } else if (percent < 0 ) {
                     statValueEl.classList.add('down');
                 }
 
@@ -611,20 +494,55 @@
         }
     }
 
+    async function fetchAvgRating() {
+        const el = document.getElementById('avgRatingText');
+        if (!el) return;
+
+        try {
+            const res = await fetch('/api/admin/reviews/avg-rating');
+            if (!res.ok) throw new Error('평균 별점 조회 실패');
+
+            const data = await res.json();
+            const avg = Number(data.avgRating || 0);
+
+            el.innerText = `평균 별점 ${avg.toFixed(1)}`;
+
+        } catch (e) {
+            console.error(e);
+            el.innerText = '평균 별점 -';
+        }
+    }
+
+    async function fetchQnaCount() {
+        const el = document.getElementById('qnaText');
+        if (!el) return;
+
+        try {
+            const res = await fetch('/api/admin/qna/count');
+            if (!res.ok) throw new Error('QnA 수 조회 실패');
+
+            const data = await res.json();
+            const n = Number(data.todayCount || 0);
+
+            el.innerText = `새로운 문의 ${n}건`;
+        } catch (e) {
+            console.error(e);
+            el.innerText = '새로운 문의 -건';
+        }
+    }
+
     // 환불 카테고리 차트
     const ctx = document.getElementById('pieChart').getContext('2d');
-
     fetch('/api/admin/category')
             .then(res => res.json())
             .then(result => {
-
                 const labels = result.map(item => item.category);
                 const values = result.map(item => item.count);
 
                 new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                        labels: labels,
+                        labels,
                         datasets: [{
                             label: '환불 건수',
                             data: values,

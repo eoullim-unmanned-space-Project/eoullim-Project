@@ -10,16 +10,20 @@ public class PlaceResponse {
 
     @Data
     public static class ListDTO {
-        private Long Id;
+        private Long id;
         private String name;
         private String address;
+        private BigDecimal latitude;
+        private BigDecimal longitude;
         private Category category;
         private String profilePath;
 
         public ListDTO(Place place) {
-            this.Id = place.getId();
+            this.id = place.getId();
             this.name = place.getName();
             this.address = place.getAddress();
+            this.latitude = place.getLatitude();
+            this.longitude = place.getLongitude();
             this.category = place.getCategory();
             this.profilePath = "/images/" + place.getProfileImage();
         }

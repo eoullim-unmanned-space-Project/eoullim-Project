@@ -55,10 +55,6 @@ public class PaymentRefundResponse {
                 case FAILED -> "환불실패";
                 case REJECTED -> "환불거절";
             };
-
-            if (!timeSlots.isEmpty()) {
-                TimeSlotResponse.DetailDTO first = timeSlots.get(0);
-            }
         }
     }
 
@@ -110,11 +106,11 @@ public class PaymentRefundResponse {
 
     @Data
     public static class RefundCategoryCountDTO  {
-        private Category category;
+        private String category;
         private long count;
 
         public RefundCategoryCountDTO(String category, long count) {
-            this.category = Category.valueOf(category); // String -> Enum
+            this.category = category;
             this.count = count;
         }
     }

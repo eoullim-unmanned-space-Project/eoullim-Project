@@ -46,7 +46,7 @@
                     <td>{{updatedAt}}</td>
                     <td>
                         <button class="action-button detail place-update-btn" data-id="{{id}}"
-                                data-name="{{name}}">수정
+                                    data-name="{{name}}" data-category="{{category}}" data-profilePath="{{profilePath}}" >수정
                         </button>
                         <button class="action-button delete place-delete-btn" data-id="{{id}}">삭제</button>
                         <button class="action-button update place-detail-btn" data-id="{{id}}"
@@ -288,9 +288,6 @@
                     </div>
                 </div>
             </div>
-            <!--            <div class="input-label">-->
-            <!--                -->
-            <!--            </div>-->
             <div class="input-label">
                 <span class="data-label">상태</span>
                 <select class="data-value" id="room-status" required>
@@ -446,11 +443,15 @@
             button.addEventListener('click', () => {
                 const id = button.getAttribute('data-id');
                 const name = button.getAttribute('data-name');
+                const category = button.getAttribute('data-category')
+                const profilePath = button.getAttribute('data-profilePath');
 
                 placeUpdateModal.style.display = 'flex';
 
                 document.getElementById("update-place-id").textContent = id;
                 document.getElementById("update-place-name").value = name;
+                document.getElementById("update-place-category").value = category;
+                document.getElementById("update-place-profileImage").value = profilePath;
             })
         });
 
@@ -485,7 +486,7 @@
                 if (!confirmDelete) return;
 
                 try {
-                    const response = await fetch(`/api/place/${id}`, {
+                    const response = await fetch(`/api/admin/places/${id}`, {
                         method: 'DELETE',
                     });
 
@@ -516,7 +517,7 @@
             formData.append("profileImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/api/place/create`, {
+        const response = await fetch(`/api/admin/places`, {
             method: "POST",
             body: formData
         });
@@ -543,7 +544,7 @@
             formData.append("profileImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/api/place/${id}`, {
+        const response = await fetch(`/api/admin/places/${id}`, {
             method: "PUT",
             body: formData
         });
@@ -640,7 +641,7 @@
                 if (!confirmDelete) return;
 
                 try {
-                    const response = await fetch(`/api/room/${roomId}`, {
+                    const response = await fetch(`/api/admin/rooms/${roomId}`, {
                         method: 'DELETE',
                     });
 
@@ -674,7 +675,7 @@
             formData.append("roomImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/api/room/create`, {
+        const response = await fetch(`/api/admin/rooms`, {
             method: "POST",
             body: formData
         });
@@ -704,7 +705,7 @@
             formData.append("roomImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/api/room/${roomId}`, {
+        const response = await fetch(`/api/admin/rooms/${roomId}`, {
             method: "PUT",
             body: formData
         });

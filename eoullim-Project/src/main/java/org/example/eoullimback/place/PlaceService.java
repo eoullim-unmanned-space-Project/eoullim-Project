@@ -1,7 +1,9 @@
 package org.example.eoullimback.place;
 
+import jakarta.servlet.http.HttpSession;
 import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback.room.RoomRequest;
+import org.example.eoullimback.user_auth.user.User;
 
 import java.util.List;
 

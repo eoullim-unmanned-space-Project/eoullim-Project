@@ -1,9 +1,11 @@
 package org.example.eoullimback.geminichatbot;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception500;
+import org.example.eoullimback.event.EventResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -175,5 +177,61 @@ public class GeminiServiceImpl implements GeminiService{
                 "이제 사용자가 작성한 리뷰 글을 판별해줘."
                 "[ 사용자가 작성한 글 ] : %s
                 """, clearContent);
+    }
+
+    public EventResponse.FortuneResultDTO createForture(String name) {
+        try {
+            String formattedPrompt = String.format("""
+                                "너는 지금부터 전문 사주 풀이가야."
+                                "사용자 '%s'의 오늘의 운세를 분석해줘."
+                                "너가 준 답변으로 DB에 저장을 할거야. "
+                                "결과는 반드시 { \\"luckyScore\\": 정수, \\"luckyItem\\": \\"문자열\\", \\"content\\": \\"문자열\\" } 이렇게 JSON 형식으로만 대답해."
+                                "'content'는 3~4문장의 경어체로 작성할 것."
+                                """, name);
+
+            Map<String, Object> body = Map.of("contents", List.of(Map.of(
+                    "parts", List.of(Map.of("text", formattedPrompt))
+            )));
+
+            String responseJson = webClient.post()
+                    .uri(uriBuilder -> uriBuilder
+                        .path("/v1beta/models/gemini-2.5-flash:generateContent")
+                        .queryParam("key", apiKey)
+                        .build())
+                        .bodyValue(body)
+                        .retrieve()
+                        .bodyToMono(Map.class)
+                        .map(response -> {
+                            List<Map<String, Object>> candidates = (List<Map<String, Object>>) response.get("candidates");
+                            if (candidates == null || candidates.isEmpty()) return "ERROR";
+
+                            Map<String, Object> firstCandidates = (Map<String, Object>) candidates.get(0);
+                            Map<String, Object> aiContent = (Map<String, Object>)  firstCandidates.get("content");
+                            List<Map<String, Object>> parts = (List<Map<String, Object>>) aiContent.get("parts");
+
+                            return parts.get(0).get("text").toString().trim();
+                        }).block();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            if (responseJson.contains("```")) {
+                responseJson = responseJson
+                        .replaceAll("```json", "")
+                        .replaceAll("```", "")
+                        .trim();
+            }
+
+            System.out.println(responseJson);
+
+            return objectMapper.readValue(
+                    responseJson,
+                    EventResponse.FortuneResultDTO.class
+            );
+
+        } catch (Exception e) {
+            System.out.println("AI 서비스 통신 에러: " + e.getMessage());
+            throw new Exception500(ErrorCode.GEMINI_AI_SERVICE_ERROR);
+        }
+
     }
 }

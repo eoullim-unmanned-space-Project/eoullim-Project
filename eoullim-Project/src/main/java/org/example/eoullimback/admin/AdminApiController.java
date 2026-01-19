@@ -10,12 +10,17 @@ import org.example.eoullimback.place.PlaceService;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.room.RoomRequest;
 import org.example.eoullimback.room.RoomService;
+import org.example.eoullimback.user_auth.user.DashboardUserService;
+import org.example.eoullimback.user_auth.user.UserService;
+import org.example.eoullimback.user_auth.user.dto.response.UserCountResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+import static org.example.eoullimback._common.util.NumberFormatUtils.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +29,8 @@ public class AdminApiController {
     private final PaymentRefundService paymentRefundService;
     private final PlaceService placeService;
     private final RoomService roomService;
+    private final UserService userService;
+    private final DashboardUserService dashboardUserService;
 
     @GetMapping("/admin/refund/detail/{id}")
     public ResponseEntity<PaymentRefundResponse.AdminDetailDTO> detail(@PathVariable Long id) {
@@ -68,7 +75,7 @@ public class AdminApiController {
     // 장소(place)
     // ====
 
-    @PostMapping("/api/place/create")
+    @PostMapping("/api/admin/places")
     public ResponseEntity<Place> createProc(PlaceRequest.CreateDTO request) {
 
         request.validate();
@@ -77,7 +84,7 @@ public class AdminApiController {
         return ResponseEntity.ok().body(place);
     }
 
-    @PutMapping("/api/place/{placeId}")
+    @PutMapping("/api/admin/places/{placeId}")
     public ResponseEntity<Map<String, Place>> UpdateProc(@PathVariable Long placeId,
                                                          PlaceRequest.UpdateDTO request
     ) {
@@ -88,7 +95,7 @@ public class AdminApiController {
         return ResponseEntity.ok().body(Map.of("place", place));
     }
 
-    @DeleteMapping("/api/place/{id}")
+    @DeleteMapping("/api/admin/places/{id}")
     public ResponseEntity<Void> deleteProc(@PathVariable(name = "id") Long placeId) {
 
         placeService.placeDelete(placeId);
@@ -101,7 +108,7 @@ public class AdminApiController {
     // 방(room)
     // ====
 
-    @PostMapping("/api/room/create")
+    @PostMapping("/api/admin/rooms")
     public ResponseEntity<Room> createRoom(Model model,
                                            RoomRequest.CreateDTO createDTO
     ) {
@@ -113,7 +120,7 @@ public class AdminApiController {
         return ResponseEntity.ok().body(room);
     }
 
-    @PutMapping("/api/room/{roomId}")
+    @PutMapping("/api/admin/rooms/{roomId}")
     public ResponseEntity<Map<String, Room>> updateRoom(@PathVariable Long roomId,
                                                         RoomRequest.UpdateDTO updateDTO
     ) {
@@ -126,7 +133,7 @@ public class AdminApiController {
     }
 
 
-    @DeleteMapping("/api/room/{roomId}")
+    @DeleteMapping("/api/admin/rooms/{roomId}")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
 
         roomService.deleteRoom(roomId);
