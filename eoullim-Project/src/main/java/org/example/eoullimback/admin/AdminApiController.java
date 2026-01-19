@@ -70,7 +70,6 @@ public class AdminApiController {
         return "admin/user-chart";
     }
 
-
     // =====
     // 장소(place)
     // ====
