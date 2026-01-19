@@ -260,7 +260,7 @@
     <div class="chart-section">
         <div class="quick-menu-grid">
 
-            <div class="menu-card" onclick="location.href='/admin/qna'">
+            <div class="menu-card" onclick="location.href='/admin/qnas'">
                 <div class="menu-icon qna-bg">📫</div>
                 <div class="menu-info">
                     <span class="menu-title">Q&A 관리</span>
@@ -284,11 +284,11 @@
                 </div>
             </div>
 
-            <div class="menu-card" onclick="location.href='/admin/support'">
+            <div class="menu-card" onclick="location.href='/admin/notices'">
                 <div class="menu-icon support-bg">🎧</div>
                 <div class="menu-info">
-                    <span class="menu-title">고객 지원</span>
-                    <span class="menu-desc">긴급 장애 접수</span>
+                    <span class="menu-title">공지사항</span>
+                    <span class="menu-desc">공지사항 작성</span>
                 </div>
             </div>
         </div>
@@ -518,7 +518,7 @@
         if (!el) return;
 
         try {
-            const res = await fetch('/api/admin/qna/count');
+            const res = await fetch('/api/admin/qnas/count');
             if (!res.ok) throw new Error('QnA 수 조회 실패');
 
             const data = await res.json();

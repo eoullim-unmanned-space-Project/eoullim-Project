@@ -9,9 +9,11 @@
 
             <div class="notice-card">
                 <h2 style="margin:0 0 10px 0;">공지사항 관리</h2>
-                <a class="notice-btn notice-btn-primary" href="/admin/notices/new">
-                    공지 작성
-                </a>
+                <div class="notice-btn-group">
+                    <a class="notice-btn notice-btn-primary" style="text-decoration: none" href="/admin/notices/new">
+                        공지 작성
+                    </a>
+                </div>
             </div>
 
             {{#noticePage.content}}
@@ -48,7 +50,7 @@
                         <button class="notice-btn notice-btn-primary" type="submit">
                             검색
                         </button>
-                        <a class="notice-btn notice-btn-secondary" href="/admin/notices">
+                        <a class="notice-btn notice-btn-secondary" style="text-decoration: none" href="/admin/notices">
                             초기화
                         </a>
                     </div>
