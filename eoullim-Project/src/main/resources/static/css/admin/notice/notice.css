@@ -55,11 +55,16 @@ body {
 
 .notice-card {
     background: var(--white);
+    /*display: flex;*/
     border-radius: 20px;
     padding: 32px;
     box-shadow: var(--card-shadow);
     margin-bottom: 24px;
 }
+
+/*.notice-card a{*/
+/*    justify-content: end;*/
+/*}*/
 
 .notice-list-item {
     background: var(--white);
