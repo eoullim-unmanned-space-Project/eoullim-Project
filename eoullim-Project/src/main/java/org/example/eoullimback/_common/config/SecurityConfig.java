@@ -112,27 +112,47 @@ public class SecurityConfig  {
 
                         // QnA
                         .requestMatchers(HttpMethod.GET, "/public/qnas").permitAll() // R
-                        .requestMatchers(HttpMethod.GET, "/public/qnas/**").permitAll() // R 단일상세
+                        .requestMatchers(HttpMethod.GET, "/public/qnas/{qnaId}").permitAll() // R 단일상세
 
                         // QnA 마이페이지
                         .requestMatchers(HttpMethod.POST, "/user/qna").hasRole("USER")// C
                         .requestMatchers(HttpMethod.GET, "/user/qna").hasRole("USER") // R
-                        .requestMatchers(HttpMethod.GET, "/user/qna/**").hasRole("USER") // R 단일상세
-                        .requestMatchers(HttpMethod.GET, "/user/qna/**").hasRole("USER") // U 화면요청
-                        .requestMatchers(HttpMethod.POST, "/qna/**").hasRole("USER") // U
-                        .requestMatchers(HttpMethod.POST, "/user/qna/**").hasRole("USER") // D
+                        .requestMatchers(HttpMethod.GET, "/user/qna/{qnaId}").hasRole("USER") // R 단일상세
+                        .requestMatchers(HttpMethod.GET, "/user/qna/{qnaId}/edit").hasRole("USER") // U 화면요청
+                        .requestMatchers(HttpMethod.POST, "/qna/{qnaId}/update").hasRole("USER") // U
+                        .requestMatchers(HttpMethod.POST, "/user/qna/{qnaId}/delete").hasRole("USER") // D
+
+                        // QnA 관리자
+                        .requestMatchers(HttpMethod.GET, "/admin/qnas").hasRole("ADMIN") // R
+                        .requestMatchers(HttpMethod.GET, "/admin/qnas/{qnaId}").hasRole("ADMIN") // R 단일상세
+                        .requestMatchers(HttpMethod.POST, "/admin/qnas/{qnaId}/delete").hasRole("ADMIN") // D
+
+                        // QnA 관리자 api
+                        .requestMatchers(HttpMethod.GET, "/api/admin/qnas/count").hasRole("ADMIN") // R 관리자 대시보드 문의 수
+
+                        // Comment 관리자
+                        .requestMatchers(HttpMethod.POST, "/admin/qnas/{qnaId}/comments/new").hasRole("ADMIN") // C
+                        .requestMatchers(HttpMethod.POST, "/admin/comments/{commentId}/delete").hasRole("ADMIN") // D
 
                         // 마이페이지 리뷰
-                        .requestMatchers(HttpMethod.GET, "/rooms/**").hasAnyRole("ADMIN", "USER") // C 리뷰 생성 화면
-                        .requestMatchers(HttpMethod.POST, "/rooms/**").hasRole("USER") // C
-                        .requestMatchers(HttpMethod.GET, "/reviews/**").hasRole("USER") // U 화면요청
-                        .requestMatchers(HttpMethod.POST, "reviews/**").hasRole("USER") // U
-                        .requestMatchers(HttpMethod.POST, "/rooms/reviews/**").hasRole("USER") // D
+                        .requestMatchers(HttpMethod.GET, "/rooms/{roomId}/reviews/new").hasAnyRole("ADMIN", "USER") // C 리뷰 생성 화면
+                        .requestMatchers(HttpMethod.POST, "/rooms/{roomId}/reviews").hasRole("USER") // C
+                        .requestMatchers(HttpMethod.GET, "/reviews/{reviewId}/update").hasRole("USER") // U 화면요청
+                        .requestMatchers(HttpMethod.POST, "reviews/{reviewId}").hasRole("USER") // U
+                        .requestMatchers(HttpMethod.POST, "/rooms/reviews/{reviewId}/delete").hasRole("USER") // D
                         .requestMatchers(HttpMethod.GET, "/user/reviews").hasRole("USER") // R
 
                         // 마이페이지 리뷰 api
                         .requestMatchers(HttpMethod.GET, "/api/user/reviews").hasRole("USER") // R 리뷰리스트
-                        .requestMatchers(HttpMethod.DELETE, "/api/user/reviews/**").hasRole("USER") // D
+                        .requestMatchers(HttpMethod.DELETE, "/api/user/reviews/{reviewId}").hasRole("USER") // D
+
+                        // 관리자 리뷰
+                        .requestMatchers(HttpMethod.GET, "/admin/reviews").hasRole("ADMIN") // R
+
+                        // 관리자 리뷰 api
+                        .requestMatchers(HttpMethod.GET, "/api/admin/reviews").hasRole("ADMIN") // R
+                        .requestMatchers(HttpMethod.DELETE, "/api/admin/reviews/{reviewId}").hasRole("ADMIN") // D
+                        .requestMatchers(HttpMethod.GET, "/api/admin/reviews/avg-rating").hasRole("ADMIN") // R 대시보드 평균 별점
 
                         // 알림
                         .requestMatchers(HttpMethod.GET, "/notifications").hasRole("USER") // R 나의 알림 리스트
@@ -140,36 +160,16 @@ public class SecurityConfig  {
 
                         // 공지사항
                         .requestMatchers(HttpMethod.GET, "/public/notices").permitAll() // R
-                        .requestMatchers(HttpMethod.GET, "/public/notices/**").permitAll() // R 단일상세
-
-                        // Comment 관리자
-                        .requestMatchers(HttpMethod.POST, "/admin/qnas/**").hasRole("ADMIN") // C
-                        .requestMatchers(HttpMethod.POST, "/admin/comments/**").hasRole("ADMIN") // D
-
-                        // 관리자 리뷰
-                        .requestMatchers(HttpMethod.GET, "/admin/reviews").hasRole("ADMIN") // R
-
-                        // 관리자 리뷰 api
-                        .requestMatchers(HttpMethod.GET, "/api/admin/reviews").hasRole("ADMIN") // R
-                        .requestMatchers(HttpMethod.DELETE, "/api/admin/reviews/**").hasRole("ADMIN") // D
-                        .requestMatchers(HttpMethod.GET, "/api/admin/reviews/avg-rating").hasRole("ADMIN") // R 대시보드 평균 별점
-
-                        // QnA 관리자
-                        .requestMatchers(HttpMethod.GET, "/admin/qnas").hasRole("ADMIN") // R
-                        .requestMatchers(HttpMethod.GET, "/admin/qnas/**").hasRole("ADMIN") // R 단일상세
-                        .requestMatchers(HttpMethod.POST, "/admin/qnas/**").hasRole("ADMIN") // D
-
-                        // QnA 관리자 api
-                        .requestMatchers(HttpMethod.GET, "/api/admin/qnas/count").hasRole("ADMIN") // R 관리자 대시보드 문의 수
+                        .requestMatchers(HttpMethod.GET, "/public/notices/{noticesId}").permitAll() // R 단일상세
 
                         // 공지사항 관리자
                         .requestMatchers(HttpMethod.GET, "/admin/notices").hasRole("ADMIN") // R
-                        .requestMatchers(HttpMethod.GET, "/admin/notices/**").hasRole("ADMIN") // R 단일상세
+                        .requestMatchers(HttpMethod.GET, "/admin/notices/{noticesId}").hasRole("ADMIN") // R 단일상세
                         .requestMatchers(HttpMethod.GET, "/admin/notices/new").hasRole("ADMIN") // C 작성 화면요청
                         .requestMatchers(HttpMethod.POST, "/admin/notices/new").hasRole("ADMIN") // C
-                        .requestMatchers(HttpMethod.GET, "/admin/notices/**").hasRole("ADMIN") // U 화면요청
-                        .requestMatchers(HttpMethod.POST, "/admin/notices/**").hasRole("ADMIN") // U
-                        .requestMatchers(HttpMethod.POST, "/admin/notices/**").hasRole("ADMIN") // D
+                        .requestMatchers(HttpMethod.GET, "/admin/notices/{noticesId}/edit").hasRole("ADMIN") // U 화면요청
+                        .requestMatchers(HttpMethod.POST, "/admin/notices/{noticesId}/edit").hasRole("ADMIN") // U
+                        .requestMatchers(HttpMethod.POST, "/admin/notices/{noticesId}/delete").hasRole("ADMIN") // D
 
                         // 어드민
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

@@ -543,8 +543,11 @@
     fetch('/api/admin/category')
             .then(res => res.json())
             .then(result => {
-                const labels = result.map(item => item.category);
-                const values = result.map(item => item.count);
+                const defaultCategories = ['PARTY', 'STUDY', 'PRACTICE'];
+                const defaultCounts = [0, 0, 0];
+
+                const labels = result.length ? result.map(item => item.category) : defaultCategories;
+                const values = result.length ? result.map(item => item.count) : defaultCounts;
 
                 new Chart(ctx, {
                     type: 'doughnut',
@@ -575,7 +578,6 @@
                     }
                 });
             });
-
 </script>
 </body>
 </html>
