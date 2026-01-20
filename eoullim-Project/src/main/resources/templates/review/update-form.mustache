@@ -7,6 +7,7 @@
     <h2>리뷰 수정</h2>
 
     <form action="/rooms/reviews/{{review.id}}" method="post">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <input type="hidden" name="placeId" value="{{placeId}}">
 
         <div class="review-form-group">

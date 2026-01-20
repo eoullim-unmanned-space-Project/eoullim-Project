@@ -22,6 +22,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -135,6 +136,8 @@ public class UserServiceImpl implements UserService{
                     .status(Status.ACTIVE)
                     .build();
 
+            newUser.addRole(Role.USER);
+
             String profileImage = kakaoProfile.getProperties().getProfileImage();
 
             if (profileImage != null && !profileImage.isEmpty()) {
@@ -241,7 +244,6 @@ public class UserServiceImpl implements UserService{
 
     public void signupSocialUser(User user) {
         userRepository.save(user);
-        user.addRole(Role.USER);
     }
 
     /**
@@ -252,8 +254,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean verifyPassword(Long id, String password) {
 
+        System.out.println(id);
+        System.out.println(password);
+
         User userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new Exception400(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(password, userEntity.getPassword())) {
             throw new Exception401(ErrorCode.INVALID_PASSWORD);
@@ -342,5 +347,19 @@ public class UserServiceImpl implements UserService{
         }
 
         user.restore();
+    }
+
+    @Override
+    public long countTodayUsers() {
+        LocalDate today = LocalDate.now();
+
+        return userRepository.countByCreatedAtBetween(today.atStartOfDay(), today.plusDays(1).atStartOfDay());
+    }
+
+    @Override
+    public long countYesterdayUser() {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+
+        return userRepository.countByCreatedAtBetween(yesterday.atStartOfDay(), yesterday.plusDays(1).atStartOfDay());
     }
 }

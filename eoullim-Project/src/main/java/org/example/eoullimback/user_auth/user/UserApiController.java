@@ -14,6 +14,8 @@ import org.example.eoullimback.user_auth.auth.AuthService;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,54 +34,30 @@ public class UserApiController {
     private final PaymentRefundService paymentRefundService;
     private final NotificationService notificationService;
 
-    @PostMapping("/user/{userId}/email-verifications")
-    public ResponseEntity<?> sendVerificationCode(@PathVariable Long userId,
-                                                  @RequestBody UserRequest.EmailCheckDTO reqDTO
+
+    /**
+     * 비밀번호 확인
+     */
+    @PostMapping("/user/password-verify")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Boolean> verifyPassword(
+            @RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        reqDTO.validate();
-
-        User user = userService.findById(userId);
-        mailService.sendVerificationCode(reqDTO.getEmail());
-
-        return ResponseEntity.ok().body(Map.of("message", "인증번호가 발송되었습니다."));
-    }
-
-    @PostMapping("/user/{userId}/email-verifications/verify")
-    public ResponseEntity<?> verifyEmailVerificationCode(@PathVariable Long userId,
-                                                         @RequestBody UserRequest.EmailCheckDTO reqDTO) {
-
-        reqDTO.validate();
-
-        if (reqDTO.getCode() == null || reqDTO.getCode().trim().isEmpty()) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(Map.of("message", "인증번호를 입력해주세요."));
-        }
-
-        User user = userService.findById(userId);
-        boolean isVerified = mailService.verifyVerificationCode(reqDTO.getEmail(), reqDTO.getCode());
-        if (isVerified) {
-            return ResponseEntity
-                    .ok()
-                    .body(Map.of("message", "인증되었습니다."));
-        } else {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("message", "인증번호가 일치하지 않습니다."));
-        }
-    }
-
-    @PostMapping("/user/{userId}/password-verify")
-    public ResponseEntity<Boolean> verifyPassword(@RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
         passwordCheckDTO.validate();
 
-        authService.verifyPassword(sessionUser, passwordCheckDTO.getPassword());
+        boolean isValid = authService.verifyPassword(user.getId(), passwordCheckDTO.getPassword());
 
-        return ResponseEntity.ok().body(true);
+        return ResponseEntity.ok().body(isValid);
     }
 
+    /**
+     * 이메일 인증번호 발송
+     */
     @PostMapping("/user/email-find-verifications")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> sendFindEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO
     ) {
@@ -92,7 +70,11 @@ public class UserApiController {
         );
     }
 
+    /**
+     * 이메일 찾기 확인
+     */
     @PostMapping("/user/email-find-verifications/verify")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> verifyFindIdEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO,
             HttpSession session
@@ -115,34 +97,17 @@ public class UserApiController {
         );
     }
 
-    @PostMapping("/user/find-login-id")
-    public ResponseEntity<String> findLoginId(HttpSession session
-    ) {
-        Boolean verified =
-                (Boolean)  session.getAttribute("findIdVerified");
-
-        String email =
-                (String)   session.getAttribute("findIdEmail");
-
-        if (verified == null || !verified) {
-            throw new Exception401(ErrorCode.MISSING_EMAIL);
-        }
-
-        User user = userService.findByEmail(email);
-
-        session.removeAttribute("findIdVerified");
-        session.removeAttribute("findIdEmail");
-
-        return ResponseEntity.ok(user.getLoginId());
-    }
-
-    @GetMapping("/user/search")
+    /**
+     * 사용자 검색
+     */
+    @GetMapping("/user/profile/bookings")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<UserResponse.UserBookingDTO>> searchBookings(
             @RequestParam(value = "code", required = false) String bookingCode,
             @RequestParam(value = "status", required = false) BookingStatus status,
-            HttpSession session
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        User user = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
         if (user == null) {
             throw new Exception401(ErrorCode.ACCESS_DENIED);
@@ -153,39 +118,56 @@ public class UserApiController {
         return ResponseEntity.ok().body(searchBookings);
     }
 
-    @GetMapping("/user/payment")
+    /**
+     * 결제내역
+     */
+    @GetMapping("/user/profile/payments")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserResponse.UserPaymentDTO> paymentDetail(
             @RequestParam(value = "code") String bookingCode,
-            HttpSession session
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        if (sessionUser == null) {
+        if (user == null) {
             throw new Exception401(ErrorCode.ACCESS_DENIED);
         }
 
-        UserResponse.UserPaymentDTO userPaymentDTO = paymentService.paymentDetail(bookingCode, sessionUser.getId());
+        UserResponse.UserPaymentDTO userPaymentDTO = paymentService.paymentDetail(bookingCode, user.getId());
 
         return ResponseEntity.ok().body(userPaymentDTO);
     }
 
-    @PostMapping("/user/refund")
-    public ResponseEntity<Map<String, String>> createRefund(@RequestBody PaymentRefundRequest.CreateRefundDTO createRefundDTO, HttpSession session) {
+    /**
+     * 사용자 환불 기능
+     */
+    @PostMapping("/user/profile/refunds")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Map<String, String>> createRefund(
+            @RequestBody PaymentRefundRequest.CreateRefundDTO createRefundDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        paymentRefundService.createRefund(createRefundDTO.getPaymentKey(), createRefundDTO.getReason(), sessionUser.getId());
+        paymentRefundService.createRefund(createRefundDTO.getPaymentKey(), createRefundDTO.getReason(), user.getId());
 
         return ResponseEntity.ok().body(Map.of("message", "환불요청을 접수했습니다."));
     }
 
-    @PostMapping("/user/use-qrCode/{id}")
-    public ResponseEntity<?> useQrcode(HttpSession session, @PathVariable Long id) {
+    /**
+     * qr코드
+     */
+    @PostMapping("/user/profile/use-qrCode/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> useQrcode(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+        ) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        notificationService.useQrcode(sessionUser.getId(), id);
+        notificationService.useQrcode(user.getId(), id);
         return ResponseEntity.ok().body(null);
     }
-
 }

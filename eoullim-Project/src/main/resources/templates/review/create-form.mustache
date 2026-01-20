@@ -7,6 +7,7 @@
     <h2>리뷰 작성</h2>
 
     <form action="/rooms/{{roomId}}/reviews" method="post">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <input type="hidden" name="placeId" value="{{placeId}}">
         <input type="hidden" name="paymentId" value="{{paymentId}}">
 

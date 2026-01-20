@@ -7,6 +7,8 @@
             <div class="qna-title">Q&A 수정</div>
             <div>
                 <form class="qna-form" action="/qnas/{{qna.id}}/update" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
                     <div>
                         <input type="text"
                         placeholder="Enter name"

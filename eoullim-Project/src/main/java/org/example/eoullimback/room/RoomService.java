@@ -1,5 +1,8 @@
 package org.example.eoullimback.room;
 
+import org.example.eoullimback._common.dto.PageResponse;
+import org.example.eoullimback._common.enums.room.RoomStatus;
+
 import java.util.List;
 
 public interface RoomService {
@@ -9,5 +12,6 @@ public interface RoomService {
     RoomResponse.DetailDTO detailRoom(Long roomId);
     Room updateRoom(Long roomId, RoomRequest.UpdateDTO updateDTO);
     void deleteRoom(Long roomId);
-    List<RoomResponse.AdminDetailDTO> roomAdminList();
+
+    PageResponse.PageDTO<Room, RoomResponse.AdminDetailDTO> roomAdminList(int pageIndex, int size, String keyword, RoomStatus status);
 }

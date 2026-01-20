@@ -3,11 +3,13 @@ package org.example.eoullimback.place;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
+import org.example.eoullimback._common.enums.place.Category;
 import org.example.eoullimback.review.dto.ReviewResponse;
 import org.example.eoullimback.review.ReviewService;
 import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
 import org.example.eoullimback.user_auth.user.User;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,21 +27,26 @@ public class PlaceController {
 
     // 전체 조회
     @GetMapping("/public/map")
+    @PreAuthorize("permitAll()")
     public String ListPlace(Model model,
+                            @RequestParam(required = false) Category category,
                             @RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "8") int size,
                             @RequestParam(required = false) String keyword
+
     ) {
         int pageIndex = Math.max(0, page - 1);
-        PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placePage = placeService.placeList(pageIndex, size, keyword);
+        PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placePage = placeService.placeList(pageIndex, size, keyword, category);
         model.addAttribute("placePage", placePage);
         model.addAttribute("placeKeyword", keyword != null ? keyword : "");
+        model.addAttribute("category", category);
 
         return "/map/map";
     }
 
     // 새로운 장소 4개만 조회
     @GetMapping("/public")
+    @PreAuthorize("permitAll()")
     public String newPlace(Model model
     ) {
         List<PlaceResponse.ListDTO> place = placeService.newPlace();
@@ -52,9 +59,9 @@ public class PlaceController {
     }
 
     @GetMapping("/public/place/{placeId}/room")
+    @PreAuthorize("permitAll()")
     public String ListRoom(Model model,
                            @PathVariable Long placeId,
-//                           @RequestParam(required = false) Long roomId,
                            HttpSession session
     ) {
         // 리뷰 작성 시 로그인

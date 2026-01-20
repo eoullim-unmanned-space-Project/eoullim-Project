@@ -225,13 +225,8 @@
         </div>
         <div class="stat-card">
             <div class="stat-label">가입자 수</div>
-            <div class="stat-value">{{totalUserComma}}명</div>
-            {{#isIncrease}}
-            <div class="stat-change up">▲ {{increaseRate}}%</div>
-            {{/isIncrease}}
-            {{^isIncrease}}
-            <div class="stat-change down">▼ {{increaseRate}}%</div>
-            {{/isIncrease}}
+            <div class="stat-value">-명</div>
+            <div class="stat-change">-</div>
         </div>
     </div>
 
@@ -254,11 +249,11 @@
                 </div>
             </div>
 
-            <div class="menu-card" onclick="location.href='/admin/users'">
+            <div class="menu-card" onclick="location.href='/admin/user'">
                 <div class="menu-icon user-bg">🫥</div>
                 <div class="menu-info">
                     <span class="menu-title">회원 관리</span>
-                    <span class="menu-desc">누적 회원 {{totalUserK}}</span>
+                    <span class="menu-desc">누적 회원 </span>
                 </div>
             </div>
 
@@ -356,6 +351,40 @@
             `
             tableBodyEl.appendChild(row);
         });
+    }
+
+    async function fetchTodayUserCounts() {
+        const statCard = document.querySelector(".stat-grid .stat-card:nth-child(4)")
+        const statValueEl = statCard.querySelector(".stat-value");
+        const statChangeEl = statCard.querySelector(".stat-change");
+
+        try {
+            const res = await fetch("/api/admin/users");
+            const data = await res.json();
+
+            const today = data.todayCount || 0;
+            const yesterday = data.yesterdayCount || 0;
+
+            statValueEl.innerText = today.toLocaleString() + "명";
+
+            const diff = today - yesterday;
+            statChangeEl.classList.remove('up','down');
+
+            if (diff > 0) {
+                statChangeEl.classList.add('up');
+                statChangeEl.innerText = `▲${diff.toLocaleString()}명 증가`;
+            } else if (diff < 0) {
+                statChangeEl.classList.add('down');
+                statChangeEl.innerText = `▼${Math.abs(diff).toLocaleString()}명 감소`;
+            } else {
+                statChangeEl.innerText = "변동 없음";
+            }
+
+        } catch(e) {
+            console.error(e);
+            statValueEl.innerText = "-명";
+            statChangeEl.innerText = "-";
+        }
     }
 
     async function fetchTodaySales() {

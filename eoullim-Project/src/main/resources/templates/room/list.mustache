@@ -157,12 +157,18 @@
         // 1. 룸 리스트 가져오기
         document.querySelectorAll('.room-card').forEach(card => {
             card.addEventListener('click', async () => {
+
                 let roomRoot = card.dataset.roomId;
                 let roomId = Number(roomRoot);
 
+                console.log("=== 룸 클릭 ===");
+                console.log("roomId:", roomId);
+
                 const response = await fetch(`/api/public/rooms/${roomId}`, {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
+                    headers: {"Content-Type": "application/json",
+                        ...getCsrfHeaders()
+                    },
                     body: JSON.stringify({
                         roomId: roomId
                     })
@@ -477,7 +483,8 @@
                 const response = await fetch("/api/user/bookings/amount", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        ...getCsrfHeaders()
                     },
                     body: JSON.stringify({
                         roomId: Number(roomId),
@@ -551,7 +558,9 @@
                 // 예약 API 호출
                 const response = await fetch("/api/user/bookings", {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
+                    headers: {"Content-Type": "application/json",
+                        ...getCsrfHeaders()
+                    },
                     body: JSON.stringify({
                         roomId: roomId,
                         qty: qty,

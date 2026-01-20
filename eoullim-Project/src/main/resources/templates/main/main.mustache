@@ -72,7 +72,7 @@
     <!-- chatBot -->
         <div class="chat-popup" id="chat-popup" aria-hidden="true">
             <div class="header">
-                <h1>ChatBot</h1>
+                <h1>어울릿 챗봇 🤖</h1>
                 <button class="btn-close" id="btn-close" type="button" aria-label="닫기">✕</button>
             </div>
 
@@ -80,11 +80,33 @@
 
             <form class="input-area" id="chat-form">
                 <input type="text" class="input-msg" id="chat-input" placeholder="내용을 입력해주세요..." required>
-                <button type="submit" class="btn-send" id="btn-send">보내기</button>
+                <button type="submit" class="btn-send" id="btn-send">전송</button>
             </form>
         </div>
+
+        <!-- 1:1 문의 (관리자) -->
+        <div class="chat-popup" id="chat-popup-inquiry" aria-hidden="true">
+            <div class="header">
+                <h1>1:1 문의</h1>
+                <button class="btn-close" id="btn-close-inquiry" type="button">✕</button>
+            </div>
+            <div class="chat-box" id="chat-box-inquiry"></div>
+            <form class="input-area" id="chat-form-inquiry">
+                <input type="text" class="input-msg" id="chat-input-inquiry" placeholder="문의 내용을 입력해주세요..." required>
+                <button type="submit" class="btn-send" id="btn-send-inquiry">보내기</button>
+            </form>
+        </div>
+
         <div class="fab-wrapper" id="fabContainer">
             <div class="fab-menu">
+                <!-- 관리자 1:1 채팅 -->
+                <div class="fab-item">
+                    <span class="fab-tooltip">바로 채팅하기</span>
+                    <button class="sub-btn chat-direct" id="chat-direct-btn">
+                        <span class="emoji">💬</span>
+                    </button>
+                </div>
+
                 <div class="fab-item">
                     <span class="fab-tooltip">문의하기</span>
                     <button class="sub-btn contact" onclick="location.href='/qna/form'">
@@ -224,12 +246,12 @@
 
                 const res = await fetch("/chat", {
                     method: "POST",
+                    credentials: "same-origin",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        ...getCsrfHeaders()
                     },
-                    body: JSON.stringify({
-                        text: userMsg
-                    })
+                    body: JSON.stringify({ text: userMsg })
                 });
 
                 if (!res.ok) {
@@ -346,7 +368,12 @@
     }
 
     async function initCreateEvent() {
-        const response = await fetch('/api/user/events', { method: 'POST' });
+        const response = await fetch('/api/user/events', {
+            method: 'POST',
+            headers: {
+                ...getCsrfHeaders()
+            },
+        });
 
         if (response.ok) {
             const resData = await response.json();
@@ -355,6 +382,57 @@
             alert("운세 생성에 실패했습니다. 잠시 후 다시 시도해주세요.");
         }
     }
+    const popupInquiry=document.getElementById("chat-popup-inquiry");
+    const btnCloseInquiry=document.getElementById("btn-close-inquiry");
+    const chatFormInquiry=document.getElementById("chat-form-inquiry");
+    const chatBoxInquiry=document.getElementById("chat-box-inquiry");
+    const inputInquiry=document.getElementById("chat-input-inquiry");
+
+    function openInquiryChat(){
+        popupInquiry.classList.add("open");
+        popupInquiry.setAttribute("aria-hidden","false");
+        inputInquiry.focus();
+    }
+
+    function closeInquiryChat(){
+        popupInquiry.classList.remove("open");
+        popupInquiry.setAttribute("aria-hidden","true");
+    }
+
+    btnCloseInquiry.addEventListener("click", closeInquiryChat);
+
+    // --- 새 버튼: 바로 채팅하기 --- (추가)
+    const chatDirectBtn=document.getElementById("chat-direct-btn");
+    chatDirectBtn.addEventListener("click", () => {
+        openInquiryChat(); // 기존 1:1 문의 모달 열기 재사용
+    });
+
+    // SSE & 메시지 전송
+    const clientId = `guest_${Date.now()}`;
+    let roomId = 1;
+    const sse = new EventSource(`/inquiry/chat/connect?clientId=${clientId}&roomId=${roomId}`);
+    sse.addEventListener("newMessage", e => { appendInquiryMessage("상대", e.data); });
+
+    function appendInquiryMessage(sender,message){
+        const wrap = document.createElement("div");
+        wrap.className = "msg-box"+(sender==="나"?" me":"");
+        wrap.innerHTML=`<span class="name">${sender}</span><span class="msg">${message}</span>`;
+        chatBoxInquiry.appendChild(wrap);
+        chatBoxInquiry.scrollTop=chatBoxInquiry.scrollHeight;
+    }
+
+    chatFormInquiry.addEventListener("submit", async(e)=>{
+        e.preventDefault();
+        const msg=inputInquiry.value.trim(); if(!msg) return;
+        appendInquiryMessage("나", msg); inputInquiry.value="";
+        try{
+            await fetch("/inquiry/chat/send", {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body: JSON.stringify({sender:clientId, receiver:"admin1", message:msg, roomId:roomId})
+            });
+        } catch(err){ appendInquiryMessage("시스템","(전송 실패)"); }
+    });
 </script>
 
 {{> layout/footer}}

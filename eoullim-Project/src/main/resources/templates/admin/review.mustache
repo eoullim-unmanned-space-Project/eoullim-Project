@@ -469,7 +469,11 @@
         const url = keyword ? `${API_LIST}?keyword=${encodeURIComponent(keyword)}` : API_LIST;
 
         try {
-            const res = await fetch(url, {headers: {'Accept': 'application/json'}});
+            const res = await fetch(url, {
+                headers: {'Accept': 'application/json',
+                    ...getCsrfHeaders()
+                }
+            });
             if (!res.ok) {
                 // 401/403/409 같은 상황 메시지
                 const text = await res.text().catch(() => '');
@@ -509,7 +513,9 @@
         try {
             const res = await fetch(API_DELETE(reviewId), {
                 method: 'DELETE',
-                headers
+                headers: {
+                    ...getCsrfHeaders()
+                }
             });
 
             if (!res.ok) {
