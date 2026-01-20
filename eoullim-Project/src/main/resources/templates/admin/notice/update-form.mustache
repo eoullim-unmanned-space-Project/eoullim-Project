@@ -10,10 +10,8 @@
             <div class="notice-card">
                 <h2 style="margin:0 0 12px 0;">공지사항 수정</h2>
 
-                <form class="notice-form"
-                      action="/admin/notices/{{notice.id}}/edit"
-                      method="post">
-
+                <form class="notice-form" action="/admin/notices/{{notice.id}}/edit" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <input type="text"
                            name="title"
                            value="{{notice.title}}"
