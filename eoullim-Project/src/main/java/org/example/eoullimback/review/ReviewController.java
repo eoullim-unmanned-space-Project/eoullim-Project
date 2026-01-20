@@ -1,13 +1,15 @@
 package org.example.eoullimback.review;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception409;
 import org.example.eoullimback.review.dto.ReviewRequest;
 import org.example.eoullimback.review.dto.ReviewResponse;
+import org.example.eoullimback.user_auth.user.CustomUserDetails;
 import org.example.eoullimback.user_auth.user.User;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +21,9 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    // 리뷰 생성 화면
     @GetMapping("/rooms/{roomId}/reviews/new")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public String createForm(@RequestParam Long placeId,
                              @PathVariable Long roomId,
                              @RequestParam Long paymentId,
@@ -35,16 +39,18 @@ public class ReviewController {
         return "review/create-form";
     }
 
+    // 리뷰 생성
     @PostMapping("/rooms/{roomId}/reviews")
-    public String create(HttpSession session,
+    @PreAuthorize("hasRole('USER')")
+    public String create(@AuthenticationPrincipal CustomUserDetails userDetails,
                          @PathVariable Long roomId,
                          @RequestParam Long placeId,
                          @ModelAttribute("review") @Valid ReviewRequest.CreateDTO request,
                          BindingResult bindingResult,
                          Model model
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
+        User user = userDetails.getUser();
+        Long userId = (user != null) ? user.getId() : null;
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("roomId", roomId);
@@ -56,7 +62,9 @@ public class ReviewController {
         return "redirect:/place/" + placeId + "/room";
     }
 
+    // 리뷰 수정 화면
     @GetMapping("/reviews/{reviewId}/update")
+    @PreAuthorize("hasRole('USER')")
     public String updateForm(@RequestParam Long placeId,
                              @PathVariable Long reviewId,
                              Model model
@@ -67,8 +75,10 @@ public class ReviewController {
         return "review/update-form";
     }
 
-    @PostMapping("/rooms/reviews/{reviewId}")
-    public String update(HttpSession session,
+    // 리뷰 수정
+    @PostMapping("/reviews/{reviewId}")
+    @PreAuthorize("hasRole('USER')")
+    public String update(@AuthenticationPrincipal CustomUserDetails userDetails,
                          @RequestParam Long placeId,
                          @PathVariable Long reviewId,
                          @ModelAttribute("review") @Valid ReviewRequest.UpdateDTO request,
@@ -82,33 +92,37 @@ public class ReviewController {
             return "review/update-form";
         }
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
+        User user = userDetails.getUser();
+        Long userId = (user != null) ? user.getId() : null;
 
         reviewService.update(userId, reviewId, request);
 
         return "redirect:/place/" + placeId + "/room";
     }
 
+    // 리뷰 삭제
     @PostMapping("/rooms/reviews/{reviewId}/delete")
-    public String delete(HttpSession session,
+    @PreAuthorize("hasRole('USER')")
+    public String delete(@AuthenticationPrincipal CustomUserDetails userDetails,
                          @RequestParam Long placeId,
                          @PathVariable Long reviewId) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        Long userId = (sessionUser != null) ? sessionUser.getId() : null;
+        User user = userDetails.getUser();
+        Long userId = (user != null) ? user.getId() : null;
         reviewService.delete(userId, reviewId);
 
         return "redirect:/place/" + placeId + "/room";
     }
 
     // 마이페이지 내 리뷰 리스트 확인
-    @GetMapping("/my/reviews")
-    public String page(HttpSession session, Model model) {
+    @GetMapping("/user/reviews")
+    @PreAuthorize("hasRole('USER')")
+    public String page(@AuthenticationPrincipal CustomUserDetails userDetails,
+                       Model model) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        model.addAttribute("user", sessionUser);
+        model.addAttribute("user", user);
 
         return "user/review";
     }

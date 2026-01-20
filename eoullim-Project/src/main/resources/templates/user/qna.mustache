@@ -10,7 +10,7 @@
 
         <div class="qna-form">
             <h3>질문 작성</h3>
-            <form action="/my/qna" method="post">
+            <form action="/user/qna" method="post">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <div class="info-row">
                     <label>제목</label>
@@ -31,7 +31,7 @@
                 <div class="qna-item">
                     <div class="qna-question">
                         <span>Q.</span>
-                        <a href="/my/qna/{{id}}">{{title}}</a>
+                        <a href="/user/qna/{{id}}">{{title}}</a>
                         <span class="qna-meta">조회수 {{viewCount}} · {{createdAt}}</span>
                     </div>
                 </div>
