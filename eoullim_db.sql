@@ -363,12 +363,12 @@ CREATE TABLE inquiry_chat_room (
 
 CREATE TABLE inquiry_chat (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '메시지 고유 ID',
-    room_id BIGINT NOT NULL COMMENT '채팅방 ID',
+    inquiry_room_id BIGINT NOT NULL COMMENT '채팅방 ID',
     sender VARCHAR(36) NOT NULL COMMENT '작성자 ID',
     receiver VARCHAR(36) NOT NULL COMMENT '수신자 ID',
     message TEXT NOT NULL COMMENT '채팅 내용',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '메시지 전송 시간',
-    FOREIGN KEY (room_id) REFERENCES chat_room(id)
+    FOREIGN KEY (inquiry_room_id) REFERENCES inquiry_chat_room (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='1:1 SSE 실시간 채팅';
 
 -- --------------------------
