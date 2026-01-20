@@ -62,18 +62,40 @@ public class SecurityConfig  {
 
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
 
-                        // 어드민
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/find-id/send").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/find-id/verify").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login-id/recovery").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/find-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/find-password/send-code").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/password/verify-code").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/password/reset").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/password/reset").permitAll()
 
                         // 사용자
-                        .requestMatchers(HttpMethod.GET, "/user/verify-password").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST, "/api/user/password-verify").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.GET, "/user/kakao").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/user/profile").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/user/profile").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/user/profile/edit").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/user/profile/image").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/user/profile/leave").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/user/profile/verify-password").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET,"/user/profile/bookings").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/user/profile/bookings").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/user/profile/payments").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/user/profile/refund").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/user/profile/use-qrCode/{id}").hasRole("USER")
+
+                        .requestMatchers(HttpMethod.POST, "/api/user/password-verify").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/user/email-find-verifications").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/user/email-find-verifications/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/user/email-find-verifications/verify").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/user/password-verify").permitAll()
 
                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+
+                        // 어드민
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         // 전체 이용
                         .requestMatchers("/public/**").permitAll()
