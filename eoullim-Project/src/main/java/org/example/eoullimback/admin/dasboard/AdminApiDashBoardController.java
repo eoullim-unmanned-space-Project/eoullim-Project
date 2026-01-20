@@ -5,6 +5,7 @@ import org.example.eoullimback.booking.BookingResponse;
 import org.example.eoullimback.booking.BookingService;
 import org.example.eoullimback.payment.PaymentResponse;
 import org.example.eoullimback.payment.PaymentService;
+import org.example.eoullimback.payment_refund.PaymentRefundResponse;
 import org.example.eoullimback.payment_refund.PaymentRefundService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,4 +47,10 @@ public class AdminApiDashBoardController {
        return ResponseEntity.ok().body(Map.of("refundCounts", paymentRefundService.countPaymentsInRefundRequested()));
     }
 
+    @GetMapping("/api/admin/category")
+    public ResponseEntity<List<PaymentRefundResponse.RefundCategoryCountDTO>> getCategory() {
+
+        List<PaymentRefundResponse.RefundCategoryCountDTO> categoryCountList = paymentRefundService.getRefundCategoryCounts();
+        return ResponseEntity.ok().body(categoryCountList);
+    }
 }
