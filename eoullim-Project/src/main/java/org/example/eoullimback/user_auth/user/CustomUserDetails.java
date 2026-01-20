@@ -3,6 +3,7 @@ package org.example.eoullimback.user_auth.user;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.user.Role;
+import org.example.eoullimback._common.enums.user.Status;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,7 +40,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getStatus().equals(Status.SUSPENDED);
     }
 
     @Override
@@ -49,6 +50,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !user.getStatus().equals(Status.WITHDRAWN);
     }
 }
