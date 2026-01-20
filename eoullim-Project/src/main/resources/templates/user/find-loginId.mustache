@@ -7,10 +7,10 @@
 
         <h2>아이디 찾기</h2>
 
-        <div class="field">
-            <label for="name">이름</label>
-            <input type="text" id="name" name="name" required>
-        </div>
+<!--        <div class="field">-->
+<!--            <label for="name">이름</label>-->
+<!--            <input type="text" id="name" name="name" required>-->
+<!--        </div>-->
 
         <div class="field">
             <label for="email">이메일</label>
@@ -36,6 +36,7 @@
                 <button type="button" id="findPasswordBtn">비밀번호 찾기</button>
             </div>
         </div>
+        <input type="hidden" id="csrfToken" name="_csrf" value="{{csrfToken}}">
     </form>
 </div>
 <script>
@@ -54,6 +55,13 @@
                 .addEventListener("submit", submitForm);
     });
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
     async function sendEmail() {
         if (emailSending) return;
 
@@ -65,11 +73,17 @@
 
         emailSending = true;
 
+        const csrfToken = document.getElementById("csrfToken").value;
+
         try {
             // 이메일 전송
-            const res = await fetch("/api/auth/find-id/send", {
+            const res = await fetch("/auth/find-id/send", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": csrfToken
+                },
+                credentials: "include",
                 body: JSON.stringify({email})
             });
 
@@ -92,11 +106,15 @@
             return;
         }
 
+        const csrfToken = document.getElementById("csrfToken").value;
+
         try {
             // 이메일 - 검증
-            const res = await fetch("/api/auth/find-id/verify", {
+            const res = await fetch("/auth/find-id/verify", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: {"Content-Type": "application/json",
+                    "X-XSRF-TOKEN": csrfToken
+                },
                 body: JSON.stringify({
                     email: document.getElementById("email").value,
                     code
@@ -129,9 +147,15 @@
             alert("이메일 인증을 완료해주세요.");
             return;
         }
+
+        const csrfToken = document.getElementById("csrfToken").value;
+
         try {
-            const res = await fetch("/api/auth/login-id/recovery", {
-                method: "POST"
+            const res = await fetch("/auth/login-id/recovery", {
+                method: "POST",
+                headers: {
+                    "X-XSRF-TOKEN": csrfToken
+                }
             });
 
             if (!res.ok) throw new Error();
@@ -146,11 +170,11 @@
             actionBtns.classList.remove("hidden");
 
             document.getElementById("loginBtn").addEventListener("click", () => {
-                location.href = "/user/login";
+                location.href = "/auth/login";
             });
 
             document.getElementById("findPasswordBtn").addEventListener("click", () => {
-                location.href = "/user/find-password";
+                location.href = "/auth/find-password";
             });
 
             document.getElementById("submitBtn").disabled = true;

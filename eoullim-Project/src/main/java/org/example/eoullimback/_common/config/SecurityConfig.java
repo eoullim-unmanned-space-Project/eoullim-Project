@@ -3,6 +3,8 @@ package org.example.eoullimback._common.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -64,6 +66,7 @@ public class SecurityConfig  {
 
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/auth/find-id").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/find-id/send").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/find-id/verify").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login-id/recovery").permitAll()
@@ -195,7 +198,15 @@ public class SecurityConfig  {
                         .usernameParameter("loginId")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/public", true)
-                        .failureForwardUrl("/error-direct/login-fail")
+                        .failureHandler((request, response, exception) -> {
+                            if (exception instanceof LockedException) {
+                                response.sendRedirect("/error-direct/account-locked");
+                            } else if (exception instanceof DisabledException) {
+                                response.sendRedirect("/error-direct/account-disabled");
+                            } else {
+                                response.sendRedirect("/error-direct/login-fail");
+                            }
+                        })
                         .permitAll()
                 )
                 .logout(logout -> logout
