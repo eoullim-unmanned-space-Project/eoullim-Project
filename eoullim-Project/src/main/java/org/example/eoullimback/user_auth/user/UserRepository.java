@@ -43,4 +43,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             """)
     Optional<User> findByUsernameWithRoles(@Param("loginId") String loginId);
 
+
+    long countByCreatedAtBetween(LocalDateTime localDateTime, LocalDateTime localDateTime1);
 }

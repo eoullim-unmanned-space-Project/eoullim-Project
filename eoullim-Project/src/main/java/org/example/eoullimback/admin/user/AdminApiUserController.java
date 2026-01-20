@@ -8,6 +8,8 @@ import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/users")
@@ -29,10 +31,24 @@ public class AdminApiUserController {
         userService.restoreUser(userId);
         return ResponseEntity.ok().build();
     }
+
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse.AdminUserDetailDTO> getUserDetail(@PathVariable Long userId) {
         User user = userService.findById(userId);
 
         return ResponseEntity.ok(new UserResponse.AdminUserDetailDTO(user));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Map<String, Long>> getUserCount() {
+        long todayCont = userService.countTodayUsers();
+        long yesterdayCount = userService.countYesterdayUser();
+
+        Map<String, Long> response = Map.of(
+                "todayCount", todayCont,
+                "yesterdayCount", yesterdayCount
+        );
+
+        return  ResponseEntity.ok(response);
     }
 }
