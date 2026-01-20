@@ -4,8 +4,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback.payment_refund.PaymentRefundResponse;
 import org.example.eoullimback.payment_refund.PaymentRefundService;
+import org.example.eoullimback.user_auth.user.CustomUserDetails;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +30,9 @@ public class AdminPaymentRefundController {
     }
 
     @GetMapping("/admin/refund")
-    public String payment(HttpSession session, Model model) {
+    public String payment(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
         List<PaymentRefundResponse.AdminListDTO> refundList = paymentRefundService.getRefundList();
 
