@@ -62,8 +62,9 @@
                 </div>
 
                 <div class="btn-wrapper">
-                    <form action="/user/leave" method="POST"
+                    <form action="/user/profile/leave" method="POST"
                           onsubmit="return confirm('정말 탈퇴하시겠습니까?')">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
 <!--                        <label class="label">회원탈퇴</label>-->
                         <button type="submit" class="edit-btn">
                             탈퇴하기

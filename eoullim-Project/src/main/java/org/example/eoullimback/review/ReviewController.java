@@ -59,7 +59,7 @@ public class ReviewController {
         }
         reviewService.create(userId, roomId, request);
 
-        return "redirect:/place/" + placeId + "/room";
+        return "redirect:/public/place/" + placeId + "/room";
     }
 
     // 리뷰 수정 화면
@@ -97,7 +97,7 @@ public class ReviewController {
 
         reviewService.update(userId, reviewId, request);
 
-        return "redirect:/place/" + placeId + "/room";
+        return "redirect:/public/place/" + placeId + "/room";
     }
 
     // 리뷰 삭제
@@ -111,7 +111,7 @@ public class ReviewController {
         Long userId = (user != null) ? user.getId() : null;
         reviewService.delete(userId, reviewId);
 
-        return "redirect:/place/" + placeId + "/room";
+        return "redirect:/public/place/" + placeId + "/room";
     }
 
     // 마이페이지 내 리뷰 리스트 확인
