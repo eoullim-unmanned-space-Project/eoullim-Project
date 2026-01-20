@@ -13,6 +13,7 @@ import org.example.eoullimback.room.RoomService;
 import org.example.eoullimback.user_auth.user.DashboardUserService;
 import org.example.eoullimback.user_auth.user.User;
 import org.example.eoullimback.user_auth.user.dto.response.UserCountResult;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +57,7 @@ public class AdminController {
     }
 
     @GetMapping("/place")
+    @PreAuthorize("hasRole('ADMIN')")
     public String place(Model model,
                         HttpSession session,
                         @RequestParam(defaultValue = "1") int page,

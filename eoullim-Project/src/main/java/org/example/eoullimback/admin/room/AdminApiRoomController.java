@@ -5,6 +5,7 @@ import org.example.eoullimback.room.Room;
 import org.example.eoullimback.room.RoomRequest;
 import org.example.eoullimback.room.RoomService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ public class AdminApiRoomController {
     private final RoomService roomService;
 
     @PostMapping("/api/admin/rooms")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Room> createRoom(Model model,
                                            RoomRequest.CreateDTO createDTO
     ) {
@@ -29,6 +31,7 @@ public class AdminApiRoomController {
     }
 
     @PutMapping("/api/admin/rooms/{roomId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Room>> updateRoom(@PathVariable Long roomId,
                                                         RoomRequest.UpdateDTO updateDTO
     ) {
@@ -42,6 +45,7 @@ public class AdminApiRoomController {
 
 
     @DeleteMapping("/api/admin/rooms/{roomId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
 
         roomService.deleteRoom(roomId);

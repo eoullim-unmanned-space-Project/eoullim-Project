@@ -162,7 +162,9 @@
 
                 const response = await fetch(`/api/public/rooms/${roomId}`, {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
+                    headers: {"Content-Type": "application/json",
+                        ...getCsrfHeaders()
+                    },
                     body: JSON.stringify({
                         roomId: roomId
                     })
@@ -477,7 +479,8 @@
                 const response = await fetch("/api/user/bookings/amount", {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        ...getCsrfHeaders()
                     },
                     body: JSON.stringify({
                         roomId: Number(roomId),
@@ -551,7 +554,9 @@
                 // 예약 API 호출
                 const response = await fetch("/api/user/bookings", {
                     method: "POST",
-                    headers: {"Content-Type": "application/json"},
+                    headers: {"Content-Type": "application/json",
+                        ...getCsrfHeaders()
+                    },
                     body: JSON.stringify({
                         roomId: roomId,
                         qty: qty,

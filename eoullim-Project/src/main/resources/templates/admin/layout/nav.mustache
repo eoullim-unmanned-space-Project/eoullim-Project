@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="{{csrfToken}}">
+    <meta name="_csrf_header" content="{{csrfHeader}}">
     <title>Management Console</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -26,3 +28,27 @@
         <li class="nav-item" onclick="location.href='/admin/notices'">🎧 고객 지원</li>
     </ul>
 </nav>
+<script>
+    function getCsrfHeaders() {
+        const token = document.querySelector('meta[name="_csrf"]').content;
+        const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+        return {
+            [header]: token
+        };
+    }
+
+    const logoutLink = document.getElementById('logoutLink');
+    if(logoutLink) {
+        logoutLink.addEventListener('click', function(e){
+            e.preventDefault();
+
+            fetch('/auth/logout', {
+                method: 'POST',
+                headers: {
+                    ...getCsrfHeaders()
+                }
+            }).then(() => window.location.href = '/public');
+        });
+    }
+</script>
