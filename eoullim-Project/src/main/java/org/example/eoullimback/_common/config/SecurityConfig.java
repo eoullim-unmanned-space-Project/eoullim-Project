@@ -62,6 +62,7 @@ public class SecurityConfig  {
 
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/auth/find-id").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/find-id/send").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/find-id/verify").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login-id/recovery").permitAll()

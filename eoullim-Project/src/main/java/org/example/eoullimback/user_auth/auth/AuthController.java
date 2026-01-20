@@ -147,18 +147,22 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
+    @GetMapping("/find-id")
+    @PreAuthorize("permitAll()")
+    public String findIdForm() {
+        return "user/find-loginId"; // templates/user/verify-loginId.html
+    }
+
     /**
      * 아이디 찾기 - 이메일 전송
      */
-    @PostMapping("/auth/find-id/send")
+    @PostMapping("/find-id/send")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> sendVerificationCode(
-            @PathVariable Long userId,
             @RequestBody UserRequest.EmailCheckDTO reqDTO
     ) {
         reqDTO.validate();
 
-        userService.findById(userId);
         mailService.sendVerificationCode(reqDTO.getEmail());
 
         return ResponseEntity.ok().body(Map.of("message", "인증번호가 발송되었습니다."));
@@ -169,11 +173,11 @@ public class AuthController {
      *
      *  ---------------------- 수정 -----------------------------
      */
-    @PostMapping("/auth/find-id/verify")
+    @PostMapping("/find-id/verify")
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> verifyEmailVerificationCode(
-            @PathVariable Long userId,
-            @RequestBody UserRequest.EmailCheckDTO reqDTO
+            @RequestBody UserRequest.EmailCheckDTO reqDTO,
+            HttpSession session
     ) {
 
         reqDTO.validate();
@@ -184,9 +188,12 @@ public class AuthController {
                     .body(Map.of("message", "인증번호를 입력해주세요."));
         }
 
-        userService.findById(userId);
         boolean isVerified = mailService.verifyVerificationCode(reqDTO.getEmail(), reqDTO.getCode());
+
         if (isVerified) {
+            session.setAttribute("findIdVerified", true);
+            session.setAttribute("findIdEmail", reqDTO.getEmail());
+
             return ResponseEntity
                     .ok()
                     .body(Map.of("message", "인증되었습니다."));
@@ -199,7 +206,7 @@ public class AuthController {
     /**
      * 아이디 찾기 - 아이디 확인
      */
-    @PostMapping("/auth/login-id/recovery")
+    @PostMapping("/login-id/recovery")
     @PreAuthorize("permitAll()")
     public ResponseEntity<String> findLoginId(
             HttpSession session
