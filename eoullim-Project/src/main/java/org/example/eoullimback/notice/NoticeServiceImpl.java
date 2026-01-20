@@ -76,6 +76,9 @@ public class NoticeServiceImpl implements NoticeService {
     public Notice saveAsAdmin(NoticeRequest.CreateDTO request, User sessionUser) {
         assertAdmin(sessionUser);
 
+        request.setTitle(request.getTitle() == null ? null : request.getTitle().trim());
+        request.setContent(request.getContent() == null ? "" : request.getContent().trim());
+
         Notice notice = request.toEntity(sessionUser);
         return noticeRepository.save(notice);
     }
@@ -95,6 +98,9 @@ public class NoticeServiceImpl implements NoticeService {
 
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new Exception404(ErrorCode.NOTICE_NOT_FOUND));
+
+        request.setTitle(request.getTitle() == null ? null : request.getTitle().trim());
+        request.setContent(request.getContent() == null ? "" : request.getContent().trim());
 
         request.updateEntity(notice);
         return new NoticeResponse.UpdateFormDTO(notice);
