@@ -488,6 +488,9 @@
                 try {
                     const response = await fetch(`/api/admin/places/${id}`, {
                         method: 'DELETE',
+                        headers: {
+                            ...getCsrfHeaders()
+                        }
                     });
 
                     if (response.ok) {
@@ -519,7 +522,10 @@
 
         const response = await fetch(`/api/admin/places`, {
             method: "POST",
-            body: formData
+            body: formData,
+            headers: {
+                ...getCsrfHeaders()
+            }
         });
 
         if (!response.ok) {
@@ -546,7 +552,10 @@
 
         const response = await fetch(`/api/admin/places/${id}`, {
             method: "PUT",
-            body: formData
+            body: formData,
+            headers: {
+                ...getCsrfHeaders()
+            }
         });
 
         closePlaceModal();
@@ -643,6 +652,9 @@
                 try {
                     const response = await fetch(`/api/admin/rooms/${roomId}`, {
                         method: 'DELETE',
+                        headers: {
+                            ...getCsrfHeaders()
+                        }
                     });
 
                     if (response.ok) {
@@ -677,7 +689,10 @@
 
         const response = await fetch(`/api/admin/rooms`, {
             method: "POST",
-            body: formData
+            body: formData,
+            headers: {
+                ...getCsrfHeaders()
+            }
         });
 
         if (!response.ok) {
@@ -707,7 +722,10 @@
 
         const response = await fetch(`/api/admin/rooms/${roomId}`, {
             method: "PUT",
-            body: formData
+            body: formData,
+            headers: {
+                ...getCsrfHeaders()
+            }
         });
 
         closeRoomModal();

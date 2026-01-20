@@ -5,6 +5,7 @@ import org.example.eoullimback.place.Place;
 import org.example.eoullimback.place.PlaceRequest;
 import org.example.eoullimback.place.PlaceService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -16,6 +17,7 @@ public class AdminApiPlaceController {
     private final PlaceService placeService;
 
     @PostMapping("/api/admin/places")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Place> createProc(PlaceRequest.CreateDTO request) {
 
         request.validate();
@@ -25,6 +27,7 @@ public class AdminApiPlaceController {
     }
 
     @PutMapping("/api/admin/places/{placeId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Place>> UpdateProc(@PathVariable Long placeId,
                                                          PlaceRequest.UpdateDTO request
     ) {
@@ -36,6 +39,7 @@ public class AdminApiPlaceController {
     }
 
     @DeleteMapping("/api/admin/places/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProc(@PathVariable(name = "id") Long placeId) {
 
         placeService.placeDelete(placeId);

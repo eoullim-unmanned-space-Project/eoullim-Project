@@ -8,6 +8,7 @@ import org.example.eoullimback.review.ReviewService;
 import org.example.eoullimback.room.RoomResponse;
 import org.example.eoullimback.room.RoomService;
 import org.example.eoullimback.user_auth.user.User;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class PlaceController {
 
     // 전체 조회
     @GetMapping("/public/map")
+    @PreAuthorize("permitAll()")
     public String ListPlace(Model model,
                             @RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "8") int size,
@@ -40,6 +42,7 @@ public class PlaceController {
 
     // 새로운 장소 4개만 조회
     @GetMapping("/public")
+    @PreAuthorize("permitAll()")
     public String newPlace(Model model
     ) {
         List<PlaceResponse.ListDTO> place = placeService.newPlace();
@@ -52,6 +55,7 @@ public class PlaceController {
     }
 
     @GetMapping("/public/place/{placeId}/room")
+    @PreAuthorize("permitAll()")
     public String ListRoom(Model model,
                            @PathVariable Long placeId,
 //                           @RequestParam(required = false) Long roomId,
