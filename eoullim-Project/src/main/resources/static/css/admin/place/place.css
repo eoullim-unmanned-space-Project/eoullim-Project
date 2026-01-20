@@ -106,3 +106,147 @@
     display: flex;
     align-items: center;
 }
+
+/* 페이지 네이션*/
+
+.pagination-admin-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.pagination-admin-container button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #e5e7eb;
+    transition: background-color 0.3s;
+}
+
+.pagination-admin-container button:hover {
+    background-color: #d1d5db;
+}
+
+.pagination-admin-container button.active {
+    background-color: #4f46e5;
+    color: #fff;
+}
+
+.pagination-admin-container button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.admin-pagination {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    gap: 4px; /* 페이지 버튼 사이 간격 */
+}
+
+.admin-page-move {
+    display: inline-block;
+}
+
+.admin-page-link {
+    display: block;
+    padding: 6px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    color: #6366f1;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.admin-page-link:hover {
+    background-color: #e0e7ff;
+    color: #000;
+}
+
+.admin-page-move.active .admin-page-link {
+    background-color: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+    pointer-events: none;
+}
+
+
+.admin-page-move.disabled .admin-page-link {
+    color: #adb5bd;
+    pointer-events: none;
+    cursor: default;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+}
+
+/* 검색 */
+
+.place-admin-search {
+    display: flex;
+    justify-content: space-between;
+}
+
+.section-admin-header {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-bottom: 20px;
+}
+
+.admin-place-form {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.admin-place-search-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-place-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-place-select,
+.admin-place-input,
+.admin-place-search-btn {
+    height: 42px;
+    font-size: 14px;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+}
+
+.admin-place-input {
+    padding-left: 10px;
+}
+
+.admin-place-search-btn {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 0 18px;
+    cursor: pointer;
+}
+
+.admin-place-search-btn.red {
+    background: indianred;
+}
+
+.admin-place-select,
+.admin-place-input {
+    flex: 1;
+}
+
+.admin-place-search-btn {
+    flex: none;
+}

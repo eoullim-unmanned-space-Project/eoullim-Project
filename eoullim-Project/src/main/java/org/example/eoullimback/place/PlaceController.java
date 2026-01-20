@@ -3,6 +3,7 @@ package org.example.eoullimback.place;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
+import org.example.eoullimback._common.enums.place.Category;
 import org.example.eoullimback.review.dto.ReviewResponse;
 import org.example.eoullimback.review.ReviewService;
 import org.example.eoullimback.room.RoomResponse;
@@ -28,14 +29,17 @@ public class PlaceController {
     @GetMapping("/public/map")
     @PreAuthorize("permitAll()")
     public String ListPlace(Model model,
+                            @RequestParam(required = false) Category category,
                             @RequestParam(defaultValue = "1") int page,
                             @RequestParam(defaultValue = "8") int size,
                             @RequestParam(required = false) String keyword
+
     ) {
         int pageIndex = Math.max(0, page - 1);
-        PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placePage = placeService.placeList(pageIndex, size, keyword);
+        PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placePage = placeService.placeList(pageIndex, size, keyword, category);
         model.addAttribute("placePage", placePage);
         model.addAttribute("placeKeyword", keyword != null ? keyword : "");
+        model.addAttribute("category", category);
 
         return "/map/map";
     }
@@ -58,7 +62,6 @@ public class PlaceController {
     @PreAuthorize("permitAll()")
     public String ListRoom(Model model,
                            @PathVariable Long placeId,
-//                           @RequestParam(required = false) Long roomId,
                            HttpSession session
     ) {
         // 리뷰 작성 시 로그인

@@ -3,6 +3,7 @@ package org.example.eoullimback.place;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.enums.place.Category;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception500;
@@ -26,7 +27,7 @@ public class PlaceServiceImpl implements PlaceService{
     private final RoomRepository roomRepository;
 
     @Override
-    public PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placeList(int page, int size, String keyword) {
+    public PageResponse.PageDTO<Place, PlaceResponse.ListDTO> placeList(int page, int size, String keyword, Category category) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(20, size));
 
@@ -34,9 +35,21 @@ public class PlaceServiceImpl implements PlaceService{
         Pageable pageable = PageRequest.of(validPage, validSize, sort);
 
         Page<Place> placePage;
-        if (keyword != null && !keyword.trim().isEmpty()) {
+
+        boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+        boolean hasCategory = category != null;
+
+        if (hasKeyword && hasCategory) {
+            // keyword + category
+            placePage = placeRepository.searchByKeywordAndCategory(keyword.trim(), category, pageable);
+        } else if (hasKeyword) {
+            // keyword만
             placePage = placeRepository.searchByKeyword(keyword.trim(), pageable);
+        } else if (hasCategory) {
+            // category만
+            placePage = placeRepository.searchByCategory(category, pageable);
         } else {
+            // 둘 다 없는 경우 전체 조회
             placePage = placeRepository.findAll(pageable);
         }
 
@@ -77,7 +90,7 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public PageResponse.PageDTO<Place, PlaceResponse.DetailDTO> placeAdminList(int page, int size, String keyword) {
+    public PageResponse.PageDTO<Place, PlaceResponse.DetailDTO> placeAdminList(int page, int size, String keyword, Category category) {
         int validPage = Math.max(0, page);
         int validSize = Math.max(1, Math.min(20, size));
 
@@ -85,8 +98,16 @@ public class PlaceServiceImpl implements PlaceService{
         Pageable pageable = PageRequest.of(validPage, validSize, sort);
 
         Page<Place> placePage;
-        if (keyword != null && !keyword.trim().isEmpty()) {
+
+        boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+        boolean hasCategory = category != null;
+
+        if (hasKeyword && hasCategory) {
+            placePage = placeRepository.searchByKeywordAndCategory(keyword.trim(), category, pageable);
+        } else if (hasKeyword) {
             placePage = placeRepository.searchByKeyword(keyword.trim(), pageable);
+        } else if (hasCategory) {
+            placePage = placeRepository.searchByCategory(category, pageable);
         } else {
             placePage = placeRepository.findAll(pageable);
         }
