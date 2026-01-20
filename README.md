@@ -166,7 +166,7 @@
 |------------|-----|------|------|
 | GET | `/public` | 메인 페이지 (신규 장소 4개) | |
 | GET | `/public/map` | 장소 목록 (지도) | |
-| POST | `/api/admin/place` | 장소 생성 (관리자) | 수정 요망 (RESTful: POST `/api/places`) |
+| POST | `/api/admin/place` | 장소 생성 (관리자) | |
 | PUT | `/api/admin/place/{placeId}` | 장소 수정 (관리자) | |
 | DELETE | `/api/admin/place/{placeId}` | 장소 삭제 (관리자) | |
 
