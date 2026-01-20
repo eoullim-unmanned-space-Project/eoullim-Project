@@ -53,10 +53,6 @@ public class UserApiController {
         return ResponseEntity.ok().body(isValid);
     }
 
-
-
-
-
     /**
      * 이메일 인증번호 발송
      */

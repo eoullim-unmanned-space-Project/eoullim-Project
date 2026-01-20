@@ -85,10 +85,24 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.POST, "/user/profile/refund").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/user/profile/use-qrCode/{id}").hasRole("USER")
 
+
                         .requestMatchers(HttpMethod.POST, "/api/user/password-verify").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/api/user/email-find-verifications").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/user/email-find-verifications/verify").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/user/password-verify").permitAll()
+
+                        // 부킹
+                        .requestMatchers(HttpMethod.POST, "/api/user/bookings").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/user/bookings/amount").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/user/bookings/cancel/{bookingCode}").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/user/bookings/detail").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/user/bookings/complete").hasRole("USER")
+
+
+                        // 페이먼츠 - 결제
+                        .requestMatchers(HttpMethod.POST, "/api/user/payments/prepare").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/user/payments/complete").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/user/payments/cancel").hasRole("USER")
 
                         .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/user/**").hasAnyRole("ADMIN", "USER")

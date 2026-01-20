@@ -157,8 +157,12 @@
         // 1. 룸 리스트 가져오기
         document.querySelectorAll('.room-card').forEach(card => {
             card.addEventListener('click', async () => {
+
                 let roomRoot = card.dataset.roomId;
                 let roomId = Number(roomRoot);
+
+                console.log("=== 룸 클릭 ===");
+                console.log("roomId:", roomId);
 
                 const response = await fetch(`/api/public/rooms/${roomId}`, {
                     method: "POST",
