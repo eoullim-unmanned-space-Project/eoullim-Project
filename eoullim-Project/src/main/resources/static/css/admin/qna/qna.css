@@ -16,6 +16,7 @@
 body {
     display: block;
     min-height: auto;
+    width: 100%;
 }
 
 /* =========================
@@ -40,8 +41,8 @@ body {
 }
 
 .qna-container {
-    width: 100%;
-    max-width: 980px; /* 적당한 폭 */
+    width: 1920px;
+    height: 100%;
     margin: 0 auto;
 }
 
@@ -115,13 +116,6 @@ body {
     resize: vertical;
 }
 
-.qna-form input[type="text"]:focus,
-.qna-form textarea:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-}
-
 /* form 간격 */
 .qna-form {
     margin: 0;
@@ -150,39 +144,52 @@ body {
 }
 
 .qna-btn {
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 800;
-    border: 1px solid transparent;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
     cursor: pointer;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.2s ease, transform 0.1s ease;
+    vertical-align: middle;
     line-height: 1;
 }
 
+
 .qna-btn-primary {
-    background: var(--primary);
-    color: #fff;
+    color: #3182F6;
+    background-color: #E8F3FF;
+}
+
+.qna-btn-primary:hover {
+    opacity: 0.8;
 }
 
 .qna-btn-secondary {
-    background: #e5e7eb;
-    color: var(--text-sub);
+    background-color: #F2F4F6;
+    color: #8B95A1;;
+}
+
+
+.qna-btn-secondary:hover {
+    background: #e5e8eb;
 }
 
 .qna-btn-danger {
-    background: #fee2e2;
-    color: #b91c1c;
+    background: #feebee;
+    color: #f04452;
+}
+.qna-btn-danger:hover {
+    background: #fcdadd;
 }
 
-/* hover (애니메이션 없이 색만) */
-.qna-btn-primary:hover { filter: brightness(0.95); }
-.qna-btn-secondary:hover { filter: brightness(0.97); }
-.qna-btn-danger:hover { filter: brightness(0.97); }
-
+.qna-btn:active {
+    transform: scale(0.96);
+}
 /* =========================
    Pagination
 ========================= */
@@ -207,10 +214,6 @@ body {
     border: 1px solid transparent;
 }
 
-.pagination a:hover {
-    border-color: var(--primary);
-    color: var(--primary);
-}
 
 /* Previous/Next 비활성 처리 */
 .pagination a[href="#"] {
