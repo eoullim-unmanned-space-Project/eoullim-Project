@@ -151,14 +151,13 @@ public class BookingServiceImpl implements BookingService {
        }
 
        for (Booking booking : bookingEntities) {
-           booking.changeCanceled();
 
            if (booking.getTimeSlot() != null) {
                booking.getTimeSlot().open();
            }
        }
 
-
+       bookingRepository.deleteAll(bookingEntities);
     }
 
     @Override
