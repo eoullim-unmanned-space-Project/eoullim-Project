@@ -11,9 +11,14 @@
         --negative: #f04452;
     }
 
-    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    * {
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+    }
+
     body {
-        margin: 0; padding: 0;
+        margin: 0;
+        padding: 0;
         font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
         background-color: var(--bg-canvas);
         color: var(--text-primary);
@@ -22,22 +27,56 @@
     }
 
     nav {
-        width: 260px; height: 100vh;
-        background: white; padding: 40px 20px;
-        position: fixed; border-right: 1px solid var(--line-default);
+        width: 260px;
+        height: 100vh;
+        background: white;
+        padding: 40px 20px;
+        position: fixed;
+        border-right: 1px solid var(--line-default);
     }
-    .nav-brand { font-size: 22px; font-weight: 800; margin-bottom: 40px; padding-left: 12px; }
-    .nav-menu { list-style: none; padding: 0; }
-    .nav-item {
-        padding: 14px 16px; border-radius: 12px;
-        font-weight: 600; color: var(--text-secondary);
-        cursor: pointer; margin-bottom: 4px; transition: 0.2s;
-    }
-    .nav-item.active { background-color: #f9fafb; color: var(--point-color); }
 
-    main { margin-left: 260px; padding: 40px 48px; width: 100%; }
-    header { margin-bottom: 32px; }
-    header h1 { font-size: 28px; font-weight: 700; margin: 0; }
+    .nav-brand {
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 40px;
+        padding-left: 12px;
+    }
+
+    .nav-menu {
+        list-style: none;
+        padding: 0;
+    }
+
+    .nav-item {
+        padding: 14px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        cursor: pointer;
+        margin-bottom: 4px;
+        transition: 0.2s;
+    }
+
+    .nav-item.active {
+        background-color: #f9fafb;
+        color: var(--point-color);
+    }
+
+    main {
+        margin-left: 260px;
+        padding: 40px 48px;
+        width: 100%;
+    }
+
+    header {
+        margin-bottom: 32px;
+    }
+
+    header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+    }
 
     .stat-grid {
         display: grid;
@@ -50,23 +89,65 @@
         background: var(--bg-surface);
         padding: 24px;
         border-radius: 24px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
     }
 
-    .stat-label { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
-    .stat-value { font-size: 24px; font-weight: 700; color: var(--text-primary); }
-    .stat-change { margin-top: 8px; font-size: 13px; font-weight: 600; }
-    .stat-change.up { color: var(--positive); }
-    .stat-change.down { color: var(--negative); }
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
 
-    .todayPercent { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
-    .todayPercent.up { color: var(--positive); }
-    .todayPercent.down { color: var(--negative); }
+    .stat-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
 
-    .todayCount { color: var(--text-secondary); font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+    .stat-change {
+        margin-top: 8px;
+        font-size: 13px;
+        font-weight: 600;
+    }
 
-    .todayCount.up { color: var(--positive); }
-    .todayCount.down { color: var(--negative); }
+    .stat-change.up {
+        color: var(--positive);
+    }
+
+    .stat-change.down {
+        color: var(--negative);
+    }
+
+    .todayPercent {
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .todayPercent.up {
+        color: var(--positive);
+    }
+
+    .todayPercent.down {
+        color: var(--negative);
+    }
+
+    .todayCount {
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .todayCount.up {
+        color: var(--positive);
+    }
+
+    .todayCount.down {
+        color: var(--negative);
+    }
 
     .chart-section {
         display: grid;
@@ -79,32 +160,62 @@
         background: var(--bg-surface);
         border-radius: 24px;
         padding: 28px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
     }
 
     .section-header {
-        display: flex; justify-content: space-between;
-        align-items: center; margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
     }
 
-    .section-header h2 { font-size: 18px; font-weight: 700; margin: 0; }
+    .section-header h2 {
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+    }
 
-    .chart-container { width: 300px; height: 150px;}
+    .chart-container {
+        width: 300px;
+        height: 150px;
+    }
 
-    .pie { width: 100%; height: 100%; }
+    .pie {
+        width: 100%;
+        height: 100%;
+    }
 
-    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
     .data-table th {
-        text-align: left; padding: 12px 16px;
-        color: var(--text-tertiary); font-size: 13px;
+        text-align: left;
+        padding: 12px 16px;
+        color: var(--text-tertiary);
+        font-size: 13px;
         border-bottom: 1px solid var(--line-default);
     }
-    .data-table td { padding: 16px; font-size: 14px; border-bottom: 1px solid var(--line-subs); }
-    .status-badge {
-        padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;
+
+    .data-table td {
+        padding: 16px;
+        font-size: 14px;
+        border-bottom: 1px solid var(--line-subs);
     }
-    .status-active { background: #e8f8ee; color: #32c35a; }
+
+    .status-badge {
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background: #e8f8ee;
+        color: #32c35a;
+    }
 
     .quick-menu-grid {
         display: grid;
@@ -144,10 +255,21 @@
         flex-shrink: 0;
     }
 
-    .qna-bg { background-color: #e8f3ff; }
-    .review-bg { background-color: #fff9e5; }
-    .user-bg { background-color: #f2f4f6; }
-    .support-bg { background-color: #e8f8ee; }
+    .qna-bg {
+        background-color: #e8f3ff;
+    }
+
+    .review-bg {
+        background-color: #fff9e5;
+    }
+
+    .user-bg {
+        background-color: #f2f4f6;
+    }
+
+    .support-bg {
+        background-color: #e8f8ee;
+    }
 
     .menu-info {
         display: flex;
@@ -174,11 +296,11 @@
         }
     }
 
-    .thead-box>tr>th {
+    .thead-box > tr > th {
         text-align: center;
     }
 
-    .tr-box>td {
+    .tr-box > td {
         text-align: center;
     }
 
@@ -192,11 +314,11 @@
     }
 
     .paymentBtn {
-        border:none;
-        background:none;
-        color:var(--point-color);
-        font-weight:600;
-        cursor:pointer;
+        border: none;
+        background: none;
+        color: var(--point-color);
+        font-weight: 600;
+        cursor: pointer;
         color: var(--point-color);
     }
 </style>
@@ -221,7 +343,7 @@
         <div class="stat-card">
             <div class="stat-label">대기 중인 환불</div>
             <div class="stat-value refund-count">5건</div>
-            <div class="stat-change down" >처리 필요</div>
+            <div class="stat-change down">처리 필요</div>
         </div>
         <div class="stat-card">
             <div class="stat-label">가입자 수</div>
@@ -306,6 +428,7 @@
         fetchTodaySales();
         fetchTodayBookingCounts()
         fetchRefundStatusInRequests()
+        fetchTodayUserCounts();
         fetchAvgRating();
         fetchQnaCount();
 
@@ -314,6 +437,7 @@
         setInterval(fetchRefundStatusInRequests, 30000);
         setInterval(fetchAvgRating, 30000);
         setInterval(fetchQnaCount, 30000);
+
     });
 
     async function fetchPaymentList() {
@@ -354,7 +478,45 @@
     }
 
     async function fetchTodayUserCounts() {
-        const statCard = document.querySelector(".stat-grid .stat-card:nth-child(4)")
+        // const statCard = document.querySelector(".stat-card");
+        // const statValueEl = statCard.querySelector(".stat-value");
+        // const statChangeEl = statCard.querySelector(".stat-change");
+        // console.log(1111111111);
+        // try {
+        //     const res = await fetch("/api/admin/users");
+        //     const data = await res.json();
+        //     console.log(data);
+        //     console.log(2222222222);
+        //
+        //     const today = data.todayCount || 0;
+        //     const yesterday = data.yesterdayCount || 0;
+        //
+        //     statValueEl.innerText = today.toLocaleString() + "명";
+        //
+        //     const diff = today - yesterday;
+        //     statChangeEl.classList.remove('up','down');
+        //     console.log(333333333333);
+        //
+        //     if (diff > 0) {
+        //         statChangeEl.classList.add('up');
+        //         statChangeEl.innerText = `▲${diff.toLocaleString()}명 증가`;
+        //     } else if (diff < 0) {
+        //         statChangeEl.classList.add('down');
+        //         statChangeEl.innerText = `▼${Math.abs(diff).toLocaleString()}명 감소`;
+        //     } else {
+        //         statChangeEl.innerText = "변동 없음";
+        //     }
+        //
+        //     console.log(333444444444444);
+        // } catch(e) {
+        //     console.error(e);
+        //     statValueEl.innerText = "-명";
+        //     statChangeEl.innerText = "-";
+        // }
+        const statCard = Array.from(document.querySelectorAll(".stat-card"))
+                .find(card => card.querySelector(".stat-label")?.innerText === "가입자 수");
+        if (!statCard) return;
+
         const statValueEl = statCard.querySelector(".stat-value");
         const statChangeEl = statCard.querySelector(".stat-change");
 
@@ -368,19 +530,19 @@
             statValueEl.innerText = today.toLocaleString() + "명";
 
             const diff = today - yesterday;
-            statChangeEl.classList.remove('up','down');
+            statChangeEl.classList.remove("up", "down");
 
             if (diff > 0) {
-                statChangeEl.classList.add('up');
+                statChangeEl.classList.add("up");
                 statChangeEl.innerText = `▲${diff.toLocaleString()}명 증가`;
             } else if (diff < 0) {
-                statChangeEl.classList.add('down');
+                statChangeEl.classList.add("down");
                 statChangeEl.innerText = `▼${Math.abs(diff).toLocaleString()}명 감소`;
             } else {
                 statChangeEl.innerText = "변동 없음";
             }
 
-        } catch(e) {
+        } catch (e) {
             console.error(e);
             statValueEl.innerText = "-명";
             statChangeEl.innerText = "-";
@@ -404,11 +566,11 @@
             let percent = 0;
 
             if (yesterdaySales > 0) {
-                percent = ((todaySale - yesterdaySales) / yesterdaySales ) * 100;
+                percent = ((todaySale - yesterdaySales) / yesterdaySales) * 100;
 
-                if (percent > 0)  {
+                if (percent > 0) {
                     statValueEl.classList.add('up')
-                } else if (percent < 0 ) {
+                } else if (percent < 0) {
                     statValueEl.classList.add('down');
                 }
 
@@ -436,8 +598,6 @@
         const todayCountEl = document.querySelector(".todayCount");
         try {
             const response = await fetch("/api/admin/bookings/new/count");
-
-            console.log(response);
 
             const data = await response.json();
 
@@ -573,7 +733,7 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { position: 'right' }
+                            legend: {position: 'right'}
                         }
                     }
                 });
