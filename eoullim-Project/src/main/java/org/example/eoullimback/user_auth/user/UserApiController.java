@@ -14,6 +14,8 @@ import org.example.eoullimback.user_auth.auth.AuthService;
 import org.example.eoullimback.user_auth.user.dto.request.UserRequest;
 import org.example.eoullimback.user_auth.user.dto.response.UserResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,20 +35,25 @@ public class UserApiController {
     private final NotificationService notificationService;
 
     @PostMapping("/user/{userId}/email-verifications")
-    public ResponseEntity<?> sendVerificationCode(@PathVariable Long userId,
-                                                  @RequestBody UserRequest.EmailCheckDTO reqDTO
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> sendVerificationCode(
+            @PathVariable Long userId,
+            @RequestBody UserRequest.EmailCheckDTO reqDTO
     ) {
         reqDTO.validate();
 
-        User user = userService.findById(userId);
+        userService.findById(userId);
         mailService.sendVerificationCode(reqDTO.getEmail());
 
         return ResponseEntity.ok().body(Map.of("message", "인증번호가 발송되었습니다."));
     }
 
     @PostMapping("/user/{userId}/email-verifications/verify")
-    public ResponseEntity<?> verifyEmailVerificationCode(@PathVariable Long userId,
-                                                         @RequestBody UserRequest.EmailCheckDTO reqDTO) {
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> verifyEmailVerificationCode(
+            @PathVariable Long userId,
+            @RequestBody UserRequest.EmailCheckDTO reqDTO
+    ) {
 
         reqDTO.validate();
 
@@ -56,7 +63,7 @@ public class UserApiController {
                     .body(Map.of("message", "인증번호를 입력해주세요."));
         }
 
-        User user = userService.findById(userId);
+        userService.findById(userId);
         boolean isVerified = mailService.verifyVerificationCode(reqDTO.getEmail(), reqDTO.getCode());
         if (isVerified) {
             return ResponseEntity
@@ -68,18 +75,23 @@ public class UserApiController {
         }
     }
 
-    @PostMapping("/user/{userId}/password-verify")
-    public ResponseEntity<Boolean> verifyPassword(@RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO, HttpSession session) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+    @PostMapping("/user/password-verify")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<Boolean> verifyPassword(
+            @RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+          ) {
+        User user = userDetails.getUser();
 
         passwordCheckDTO.validate();
 
-        authService.verifyPassword(sessionUser, passwordCheckDTO.getPassword());
+        boolean isValid = authService.verifyPassword(user.getId(), passwordCheckDTO.getPassword());
 
-        return ResponseEntity.ok().body(true);
+        return ResponseEntity.ok().body(isValid);
     }
 
     @PostMapping("/user/email-find-verifications")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<?> sendFindEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO
     ) {
@@ -93,6 +105,7 @@ public class UserApiController {
     }
 
     @PostMapping("/user/email-find-verifications/verify")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<?> verifyFindIdEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO,
             HttpSession session
@@ -116,7 +129,9 @@ public class UserApiController {
     }
 
     @PostMapping("/user/find-login-id")
-    public ResponseEntity<String> findLoginId(HttpSession session
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<String> findLoginId(
+            HttpSession session
     ) {
         Boolean verified =
                 (Boolean)  session.getAttribute("findIdVerified");
@@ -137,12 +152,13 @@ public class UserApiController {
     }
 
     @GetMapping("/user/search")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<List<UserResponse.UserBookingDTO>> searchBookings(
             @RequestParam(value = "code", required = false) String bookingCode,
             @RequestParam(value = "status", required = false) BookingStatus status,
-            HttpSession session
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        User user = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
         if (user == null) {
             throw new Exception401(ErrorCode.ACCESS_DENIED);
@@ -154,37 +170,46 @@ public class UserApiController {
     }
 
     @GetMapping("/user/payment")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<UserResponse.UserPaymentDTO> paymentDetail(
             @RequestParam(value = "code") String bookingCode,
-            HttpSession session
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        if (sessionUser == null) {
+        if (user == null) {
             throw new Exception401(ErrorCode.ACCESS_DENIED);
         }
 
-        UserResponse.UserPaymentDTO userPaymentDTO = paymentService.paymentDetail(bookingCode, sessionUser.getId());
+        UserResponse.UserPaymentDTO userPaymentDTO = paymentService.paymentDetail(bookingCode, user.getId());
 
         return ResponseEntity.ok().body(userPaymentDTO);
     }
 
     @PostMapping("/user/refund")
-    public ResponseEntity<Map<String, String>> createRefund(@RequestBody PaymentRefundRequest.CreateRefundDTO createRefundDTO, HttpSession session) {
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<Map<String, String>> createRefund(
+            @RequestBody PaymentRefundRequest.CreateRefundDTO createRefundDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        paymentRefundService.createRefund(createRefundDTO.getPaymentKey(), createRefundDTO.getReason(), sessionUser.getId());
+        paymentRefundService.createRefund(createRefundDTO.getPaymentKey(), createRefundDTO.getReason(), user.getId());
 
         return ResponseEntity.ok().body(Map.of("message", "환불요청을 접수했습니다."));
     }
 
     @PostMapping("/user/use-qrCode/{id}")
-    public ResponseEntity<?> useQrcode(HttpSession session, @PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<?> useQrcode(
+            @PathVariable Long id,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+        ) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        notificationService.useQrcode(sessionUser.getId(), id);
+        notificationService.useQrcode(user.getId(), id);
         return ResponseEntity.ok().body(null);
     }
 

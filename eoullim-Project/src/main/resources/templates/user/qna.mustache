@@ -11,6 +11,7 @@
         <div class="qna-form">
             <h3>질문 작성</h3>
             <form action="/my/qna" method="post">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <div class="info-row">
                     <label>제목</label>
                     <input type="text" name="title" placeholder="질문 제목을 입력하세요" required>

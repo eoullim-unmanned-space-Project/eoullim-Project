@@ -48,6 +48,7 @@
 
                         <!--    인증 완료 여부 저장 (hidden 필드)    -->
                         <input type="hidden" id="isEmailVerified" name="isEmailVerified" value="false">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     </div>
 
                     <div class="label-item">
@@ -57,8 +58,8 @@
                     </div>
                     <div>
                         <button id="signupBtn" type="submit">회원가입</button>
+                        <input type="hidden" name="csrfToken">
                     </div>
-
                 </form>
             </div>
         </div>
@@ -197,7 +198,6 @@
             e.preventDefault();
             return;
         }
-
     });
 
     // 이메일 전송 API 호출 (AJAX)
@@ -209,10 +209,11 @@
         }
 
         try {
-            let response = await fetch("/api/users/email-find-verifications", {
+            let response = await fetch("/api/user/email-find-verifications", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...getCsrfHeaders()
                 },
                 body: JSON.stringify({email: email})
             });
@@ -242,10 +243,11 @@
         }
 
         try {
-            let response = await fetch("/api/users/email-find-verifications/verify", {
+            let response = await fetch("/api/user/email-find-verifications/verify", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...getCsrfHeaders()
                 },
                 body: JSON.stringify({email: email, code: code})
             });

@@ -154,7 +154,13 @@
                     const reviewId = btn.dataset.reviewid;
                     if (!confirm("리뷰를 삭제할까요?")) return;
 
-                    const res = await fetch(`/api/user/reviews/${reviewId}`, { method: "DELETE" });
+                    const res = await fetch(`/api/user/reviews/${reviewId}`, {
+                        method: "DELETE",
+                        headers: {
+                            ...getCsrfHeaders()
+                        }
+                    });
+
                     if (!res.ok) {
                         alert("리뷰 삭제 실패");
                         return;

@@ -2,6 +2,8 @@ package org.example.eoullimback.user_auth.user;
 
 import org.example.eoullimback._common.enums.user.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -32,6 +34,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
             Status status,
             LocalDateTime createdAt
     );
+
+
+    @Query("""
+            SELECT u FROM User u
+            JOIN FETCH u.roles
+            WHERE u.loginId = :loginId
+            """)
+    Optional<User> findByUsernameWithRoles(@Param("loginId") String loginId);
+
 
     long countByCreatedAtBetween(LocalDateTime localDateTime, LocalDateTime localDateTime1);
 }

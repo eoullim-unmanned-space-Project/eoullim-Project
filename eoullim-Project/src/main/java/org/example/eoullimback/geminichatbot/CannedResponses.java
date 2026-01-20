@@ -1,5 +1,7 @@
 package org.example.eoullimback.geminichatbot;
 
+import org.example.eoullimback._common.enums.geminichatbot.Intent;
+
 public class CannedResponses {
     public static String respond(Intent intent) {
         return switch (intent) {

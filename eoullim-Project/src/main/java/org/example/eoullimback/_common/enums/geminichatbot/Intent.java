@@ -1,4 +1,4 @@
-package org.example.eoullimback.geminichatbot;
+package org.example.eoullimback._common.enums.geminichatbot;
 
 public enum Intent {
     GREETING,
