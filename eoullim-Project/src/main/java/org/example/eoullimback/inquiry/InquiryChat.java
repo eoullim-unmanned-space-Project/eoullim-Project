@@ -19,7 +19,7 @@ public class InquiryChat {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", nullable = false)
+    @JoinColumn(name = "inquiry_room_id", nullable = false)
     private InquiryChatRoom room;
 
     @Column(nullable = false)
