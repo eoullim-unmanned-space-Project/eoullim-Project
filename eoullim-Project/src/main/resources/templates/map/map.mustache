@@ -5,8 +5,8 @@
 <section class="section">
     <div id="map" class="map-image"></div>
     <div class="place-search">
-        <div class="section-title">새로운 공간</div>
         <div class="place-search-controls">
+            <div class="section-title">새로운 공간</div>
             <form action="/public/map" method="get">
                 <select name="category" class="place-select">
                     <option value="">전체</option>
@@ -17,9 +17,6 @@
                 <input class="place-input" type="text" name="keyword" placeholder="장소를 입력해주세요."
                        value="{{placeKeyword}}">
                 <button class="place-search-btn" type="submit">검색</button>
-            </form>
-            <form action="/public/map" method="get">
-                <button class="place-search-btn red" type="submit">초기화</button>
             </form>
         </div>
     </div>
