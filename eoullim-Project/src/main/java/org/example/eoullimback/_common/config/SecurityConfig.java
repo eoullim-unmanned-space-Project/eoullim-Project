@@ -113,16 +113,16 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.POST, "/user/qna").hasRole("USER")// C
                         .requestMatchers(HttpMethod.GET, "/user/qna").hasRole("USER") // R
                         .requestMatchers(HttpMethod.GET, "/user/qna/**").hasRole("USER") // R 단일상세
-                        .requestMatchers(HttpMethod.GET, "/user/qna/**/edit").hasRole("USER") // U 화면요청
-                        .requestMatchers(HttpMethod.POST, "/qna/**/update").hasRole("USER") // U
-                        .requestMatchers(HttpMethod.POST, "/user/qna/**/delete").hasRole("USER") // D
+                        .requestMatchers(HttpMethod.GET, "/user/qna/**").hasRole("USER") // U 화면요청
+                        .requestMatchers(HttpMethod.POST, "/qna/**").hasRole("USER") // U
+                        .requestMatchers(HttpMethod.POST, "/user/qna/**").hasRole("USER") // D
 
                         // 마이페이지 리뷰
-                        .requestMatchers(HttpMethod.GET, "/rooms/**/reviews/new").hasAnyRole("ADMIN", "USER") // C 리뷰 생성 화면
-                        .requestMatchers(HttpMethod.POST, "/rooms/**/reviews").hasRole("USER") // C
-                        .requestMatchers(HttpMethod.GET, "/reviews/**/update").hasRole("USER") // U 화면요청
+                        .requestMatchers(HttpMethod.GET, "/rooms/**").hasAnyRole("ADMIN", "USER") // C 리뷰 생성 화면
+                        .requestMatchers(HttpMethod.POST, "/rooms/**").hasRole("USER") // C
+                        .requestMatchers(HttpMethod.GET, "/reviews/**").hasRole("USER") // U 화면요청
                         .requestMatchers(HttpMethod.POST, "reviews/**").hasRole("USER") // U
-                        .requestMatchers(HttpMethod.POST, "/rooms/reviews/**/delete").hasRole("USER") // D
+                        .requestMatchers(HttpMethod.POST, "/rooms/reviews/**").hasRole("USER") // D
                         .requestMatchers(HttpMethod.GET, "/user/reviews").hasRole("USER") // R
 
                         // 마이페이지 리뷰 api
@@ -138,8 +138,8 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.GET, "/public/notices/**").permitAll() // R 단일상세
 
                         // Comment 관리자
-                        .requestMatchers(HttpMethod.POST, "/admin/qnas/**/comments/new").hasRole("ADMIN") // C
-                        .requestMatchers(HttpMethod.POST, "/admin/comments/**/delete").hasRole("ADMIN") // D
+                        .requestMatchers(HttpMethod.POST, "/admin/qnas/**").hasRole("ADMIN") // C
+                        .requestMatchers(HttpMethod.POST, "/admin/comments/**").hasRole("ADMIN") // D
 
                         // 관리자 리뷰
                         .requestMatchers(HttpMethod.GET, "/admin/reviews").hasRole("ADMIN") // R
@@ -152,7 +152,7 @@ public class SecurityConfig  {
                         // QnA 관리자
                         .requestMatchers(HttpMethod.GET, "/admin/qnas").hasRole("ADMIN") // R
                         .requestMatchers(HttpMethod.GET, "/admin/qnas/**").hasRole("ADMIN") // R 단일상세
-                        .requestMatchers(HttpMethod.POST, "/admin/qnas/**/delete").hasRole("ADMIN") // D
+                        .requestMatchers(HttpMethod.POST, "/admin/qnas/**").hasRole("ADMIN") // D
 
                         // QnA 관리자 api
                         .requestMatchers(HttpMethod.GET, "/api/admin/qnas/count").hasRole("ADMIN") // R 관리자 대시보드 문의 수
@@ -162,9 +162,9 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.GET, "/admin/notices/**").hasRole("ADMIN") // R 단일상세
                         .requestMatchers(HttpMethod.GET, "/admin/notices/new").hasRole("ADMIN") // C 작성 화면요청
                         .requestMatchers(HttpMethod.POST, "/admin/notices/new").hasRole("ADMIN") // C
-                        .requestMatchers(HttpMethod.GET, "/admin/notices/**/edit").hasRole("ADMIN") // U 화면요청
-                        .requestMatchers(HttpMethod.POST, "/admin/notices/**/edit").hasRole("ADMIN") // U
-                        .requestMatchers(HttpMethod.POST, "/admin/notices/**/delete").hasRole("ADMIN") // D
+                        .requestMatchers(HttpMethod.GET, "/admin/notices/**").hasRole("ADMIN") // U 화면요청
+                        .requestMatchers(HttpMethod.POST, "/admin/notices/**").hasRole("ADMIN") // U
+                        .requestMatchers(HttpMethod.POST, "/admin/notices/**").hasRole("ADMIN") // D
 
                         // 어드민
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

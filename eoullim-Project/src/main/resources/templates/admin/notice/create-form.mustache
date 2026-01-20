@@ -11,6 +11,7 @@
                 <h2 style="margin:0 0 12px 0;">공지사항 작성</h2>
 
                 <form class="notice-form" action="/admin/notices/new" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <input type="text"
                            name="title"
                            placeholder="제목을 입력해주세요.">
