@@ -157,60 +157,67 @@ body {
     border-radius: 6px;
 }
 
-.second {
-    color: #6b7280;
-    font-size: 12px;
-}
-
-.place-search {
-    display: flex;
-    justify-content: space-between;
-}
-
 .place-search-controls {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+    width: 100%;
 }
 
-.place-select {
-    padding: 12px 14px;
-    border-radius: 14px;
-    border: 1px solid #e5e7eb;
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.place-search-controls form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.place-select, .place-input, .place-search-btn {
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
     font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.place-select, .place-input {
+    padding: 0 12px;
 }
 
 .place-input {
-    padding: 12px 14px;
-    border-radius: 14px;
-    border: 1px solid #e5e7eb;
-    font-size: 14px;
+    width: 220px;
 }
 
 .place-search-btn {
-    padding: 0 18px;
-    border-radius: 14px;
-    border: none;
-    background: #6366f1;
+    padding: 0 16px;
+    background: #4f46e5;
     color: #ffffff;
-    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    height: 80%;
+    white-space: nowrap;
 }
 
-.place-search-btn.red{
-    padding: 0 18px;
-    border-radius: 14px;
-    border: none;
-    background: indianred;
-    color: #ffffff;
-    font-size: 14px;
-    cursor: pointer;
-    height: 80%;
+.place-search-btn.red {
+    background: #ffffff;
+    color: #9ca3af;
+    border: 1px solid #f3f4f6;
+    box-shadow: none;
 }
 
-/* 장소 CSS */
+.place-search-btn:hover {
+    background: #4338ca;
+}
 
 .section-title {
     font-size: 22px;

@@ -4,7 +4,6 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
-
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS sse_chat;
 DROP TABLE IF EXISTS notices;
@@ -52,6 +51,9 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 정보 테이블';
 
 select * from users WHERE id = 1;
+
+INSERT INTO user_roles (user_id, role_name) 
+VALUES (1, 'ADMIN');
 
 CREATE TABLE IF NOT EXISTS user_roles (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
