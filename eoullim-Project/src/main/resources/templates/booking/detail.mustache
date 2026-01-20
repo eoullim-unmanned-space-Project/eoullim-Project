@@ -131,7 +131,8 @@
                  const paymentKeyResponse = await fetch("/api/user/payments/prepare", {
                      method: "POST",
                      headers: {
-                         "Content-Type": "application/json"
+                         "Content-Type": "application/json",
+                         ...getCsrfHeaders()
                      },
                      body: JSON.stringify({ bookingCode: bookingCode })
                  });
@@ -163,7 +164,8 @@
                          const notified = await fetch("/api/user/payments/complete", {
                              method: "POST",
                              headers: {
-                                 "Content-Type": "application/json"
+                                 "Content-Type": "application/json",
+                                 ...getCsrfHeaders()
                              },
                              body: JSON.stringify({
                                  imp_uid: response.imp_uid,
@@ -197,7 +199,8 @@
                 await fetch("/api/user/payments/cancel", {
                    method: "POST",
                    headers: {
-                       "Content-Type" : "application/json"
+                       "Content-Type" : "application/json",
+                       ...getCsrfHeaders()
                    },
                    body: JSON.stringify({
                        merchant_uid: paymentKey
@@ -219,7 +222,8 @@
             const response = await fetch(`/api/user/bookings/cancel/${bookingCode}`, {
                 method: "POST",
                 headers: {
-                    "Content-Type" : "application/json"
+                    "Content-Type" : "application/json",
+                    ...getCsrfHeaders()
                 }
             });
 
