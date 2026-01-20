@@ -136,6 +136,8 @@ public class UserServiceImpl implements UserService{
                     .status(Status.ACTIVE)
                     .build();
 
+            newUser.addRole(Role.USER);
+
             String profileImage = kakaoProfile.getProperties().getProfileImage();
 
             if (profileImage != null && !profileImage.isEmpty()) {
@@ -242,7 +244,6 @@ public class UserServiceImpl implements UserService{
 
     public void signupSocialUser(User user) {
         userRepository.save(user);
-        user.addRole(Role.USER);
     }
 
     /**
