@@ -189,7 +189,7 @@
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| GET | `/api/sse/{roomId}/item-connect` | 아이템 실시간 업데이트 (SSE) | |
+| POST | `Scheduled` | 아이템 실시간 업데이트 (SSE) | |
 
 ### 리뷰 관련
 
