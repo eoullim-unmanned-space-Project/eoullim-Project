@@ -4,8 +4,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception401;
+import org.example.eoullimback.user_auth.user.CustomUserDetails;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,13 +23,11 @@ public class BookingApiController {
      * 기능: amount 요금계산
      */
     @PostMapping("/api/user/bookings/amount")
-    public ResponseEntity<?> calculateAmount(Model model, @RequestBody BookingRequest.CalculateAmountDTO calculateAmountDTO, HttpSession session) {
+    public ResponseEntity<?> calculateAmount(Model model, @RequestBody BookingRequest.CalculateAmountDTO calculateAmountDTO,
+                                             @AuthenticationPrincipal CustomUserDetails userDetails
+    ) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
-
-        if (sessionUser == null) {
-            return ResponseEntity.status(401).body(Map.of("message", "로그인이 필요합니다"));
-        }
+        User user = userDetails.getUser();
 
         BookingResponse.CalculateAmountDTO amount = bookingService.calculateAmount(calculateAmountDTO);
 
@@ -39,17 +39,13 @@ public class BookingApiController {
      */
     @PostMapping("/api/user/bookings")
     public ResponseEntity<?> saveBooking(
-            HttpSession session,
-            @RequestBody BookingRequest.createDTO createDTO
+            @RequestBody BookingRequest.createDTO createDTO,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        if (sessionUser == null) {
-            throw new Exception401(ErrorCode.ACCESS_DENIED);
-        }
-
-        String bookingCode = bookingService.saveBooking(sessionUser.getId(), createDTO);
+        String bookingCode = bookingService.saveBooking(user.getId(), createDTO);
 
         return ResponseEntity.ok().body(Map.of("bookingCode", bookingCode));
     }

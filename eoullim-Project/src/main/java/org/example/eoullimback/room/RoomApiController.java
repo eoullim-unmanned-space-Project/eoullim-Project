@@ -2,6 +2,7 @@ package org.example.eoullimback.room;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,7 @@ public class RoomApiController {
     private final RoomService roomService;
 
     @PostMapping("/api/public/rooms/{roomId}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> DetailRoom(@PathVariable Long roomId, Model model) {
 
         RoomResponse.DetailDTO room = roomService.detailRoom(roomId);

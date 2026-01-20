@@ -56,7 +56,7 @@ public class SecurityConfig  {
         http
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/img/**", "/favicon.ico", "/error").permitAll()
+                        .requestMatchers("/css/**", "/js/**","/map/**", "/images/**", "/img/**", "/favicon.ico", "/error").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/auth/signup", "/auth/login", "/auth/logout").permitAll()
 
@@ -77,6 +77,7 @@ public class SecurityConfig  {
 
                         // 전체 이용
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/api/public/**").permitAll()
 
                         .anyRequest().authenticated()
                 )
