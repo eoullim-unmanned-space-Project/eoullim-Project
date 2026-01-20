@@ -612,7 +612,7 @@
             formData.append("profileImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/api/admin/places`, {
+        const response = await fetch(`/api/admin/places/create`, {
             method: "POST",
             body: formData,
             headers: {
@@ -779,7 +779,7 @@
             formData.append("roomImage", imageInput.files[0]);
         }
 
-        const response = await fetch(`/api/admin/rooms`, {
+        const response = await fetch(`/api/admin/rooms/create`, {
             method: "POST",
             body: formData,
             headers: {

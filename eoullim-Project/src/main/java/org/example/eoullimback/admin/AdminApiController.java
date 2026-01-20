@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminApiController {
 
@@ -34,82 +33,10 @@ public class AdminApiController {
 
         List<PaymentRefundResponse.RefundCategoryCountDTO> categoryCountList = paymentRefundService.getRefundCategoryCounts();
 
+        System.out.println("==================================================");
+        System.out.println(categoryCountList);
         return ResponseEntity.ok().body(categoryCountList);
     }
 
-    @GetMapping("/users/chart")
-    public String getUserChart() {
 
-        return "admin/user-chart";
-    }
-
-    // =====
-    // 장소(place)
-    // ====
-
-    @PostMapping("/api/admin/places")
-    public ResponseEntity<Place> createProc(PlaceRequest.CreateDTO request) {
-
-        request.validate();
-        Place place = placeService.placeCreate(request);
-
-        return ResponseEntity.ok().body(place);
-    }
-
-    @PutMapping("/api/admin/places/{placeId}")
-    public ResponseEntity<Map<String, Place>> UpdateProc(@PathVariable Long placeId,
-                                                         PlaceRequest.UpdateDTO request
-    ) {
-        request.validate();
-
-        Place place = placeService.placeUpdate(placeId, request);
-
-        return ResponseEntity.ok().body(Map.of("place", place));
-    }
-
-    @DeleteMapping("/api/admin/places/{id}")
-    public ResponseEntity<Void> deleteProc(@PathVariable(name = "id") Long placeId) {
-
-        placeService.placeDelete(placeId);
-
-        return ResponseEntity.ok().body(null);
-
-    }
-
-    // =====
-    // 방(room)
-    // ====
-
-    @PostMapping("/api/admin/rooms")
-    public ResponseEntity<Room> createRoom(Model model,
-                                           RoomRequest.CreateDTO createDTO
-    ) {
-        createDTO.validate();
-
-        Room room = roomService.createRoom(createDTO);
-        model.addAttribute("room", room);
-
-        return ResponseEntity.ok().body(room);
-    }
-
-    @PutMapping("/api/admin/rooms/{roomId}")
-    public ResponseEntity<Map<String, Room>> updateRoom(@PathVariable Long roomId,
-                                                        RoomRequest.UpdateDTO updateDTO
-    ) {
-
-        updateDTO.validate();
-
-        Room room = roomService.updateRoom(roomId, updateDTO);
-
-        return ResponseEntity.ok().body(Map.of("room", room));
-    }
-
-
-    @DeleteMapping("/api/admin/rooms/{roomId}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId) {
-
-        roomService.deleteRoom(roomId);
-
-        return ResponseEntity.ok().body(null);
-    }
 }
