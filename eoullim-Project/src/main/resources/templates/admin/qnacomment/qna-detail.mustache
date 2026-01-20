@@ -14,12 +14,14 @@
                 <div style="white-space: pre-wrap;">{{qna.content}}</div>
 
                 <form action="/admin/qnas/{{qna.id}}/delete" method="post" style="margin-top:15px;">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <button class="qna-btn qna-btn-danger" type="submit">QnA 삭제</button>
                 </form>
             </div>
 
             <div class="qna-card">
                 <form class="qna-form" action="/admin/qnas/{{qna.id}}/comments/new" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <input type="hidden" name="qnaId" value="{{qna.id}}">
                     <textarea name="content" placeholder="댓글을 입력해주세요."></textarea>
 
@@ -39,6 +41,7 @@
 
                         {{#isEditing}}
                             <form class="qna-form" action="/admin/comments/{{id}}/update" method="post">
+                                <input type="hidden" name="_csrf" value="{{csrfToken}}">
                                 <textarea name="content">{{content}}</textarea>
                                 <div class="qna-btn-group">
                                     <a href="/admin/qnas/{{qna.id}}" class="qna-btn qna-btn-secondary">취소</a>
@@ -50,6 +53,7 @@
                             <div style="white-space: pre-wrap;">{{content}}</div>
                             <div class="qna-btn-group" style="justify-content:flex-end;">
                                 <form action="/admin/comments/{{id}}/delete" method="post">
+                                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                                     <button class="qna-btn qna-btn-danger" type="submit">삭제</button>
                                 </form>
                             </div>

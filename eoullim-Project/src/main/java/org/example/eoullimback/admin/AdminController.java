@@ -44,18 +44,7 @@ public class AdminController {
     public String dashboard(HttpSession session, Model model) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        UserCountResult result = dashboardUserService.getUserCount();
-
         model.addAttribute("user", sessionUser);
-
-        // User 통계
-        long today = result.getTodayCount();
-        long yesterday = result.getYesterdayCount();
-
-        model.addAttribute("totalUserComma", formatComma(today));
-        model.addAttribute("totalUserK", formatK(today));
-        model.addAttribute("increaseRate", calculateRate(today, yesterday));
-        model.addAttribute("isIncrease", today >= yesterday);
 
         return "admin/dashboard";
     }

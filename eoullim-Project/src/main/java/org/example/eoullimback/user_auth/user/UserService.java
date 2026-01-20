@@ -34,4 +34,8 @@ public interface UserService {
     void suspendUser(Long userId, String reason);
 
     void restoreUser(Long userId);
+
+    long countTodayUsers();
+
+    long countYesterdayUser();
 }

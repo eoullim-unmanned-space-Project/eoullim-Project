@@ -43,7 +43,7 @@
             const activeBtn = document.querySelector('.booking-filter-btn.active');
             let status = (activeBtn && activeBtn.dataset.status) ? activeBtn.dataset.status : '';
             try {
-                 const response = await fetch(`/api/user/search?code=${[bookingCode]}&status=${status}`, {
+                 const response = await fetch(`/api/user/profile/bookings?code=${[bookingCode]}&status=${status}`, {
                     method: "GET",
                     headers: {
                         "Content-Type" : "application/json"
@@ -182,7 +182,7 @@
                     const bookingCode = btn.dataset.code;
 
                     try {
-                        const response = await fetch(`/api/user/payment?code=${bookingCode}`);
+                        const response = await fetch(`/api/user/profile/payments?code=${bookingCode}`);
 
                         console.log(response);
 
@@ -353,7 +353,7 @@
                                    }
 
                                    try {
-                                       const response = await fetch("/api/user/refund", {
+                                       const response = await fetch("/api/user/profile/refunds", {
                                            method: "POST",
                                            headers: {
                                                "Content-Type" : "application/json",

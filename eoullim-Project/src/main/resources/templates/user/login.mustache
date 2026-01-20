@@ -10,6 +10,7 @@
             </div>
             <div class="inner-right">
                 <form action="/auth/login" method="post">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <div class="form-group">
                         <label>아이디</label>
                         <input type="text" placeholder="아이디를 입력해주세요" name="loginId" id="loginId">
@@ -47,8 +48,11 @@
 {{/loginError}}
 <script>
     const loginForm = document.querySelector("form");
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
     loginForm.addEventListener("submit", function (e) {
+        alert(csrfToken);
+
         const id = document.querySelector("#loginId").value.trim();
         const pw = document.querySelector("#password").value.trim();
 
@@ -57,6 +61,14 @@
             e.preventDefault();
             return;
         }
+
+        // CSRF hidden input 생성
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = '_csrf';
+        hidden.value = csrfToken;
+
+        loginForm.appendChild(hidden);
     });
 </script>
 </body>

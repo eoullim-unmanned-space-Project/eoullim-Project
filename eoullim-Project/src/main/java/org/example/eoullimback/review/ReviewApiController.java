@@ -1,12 +1,14 @@
 package org.example.eoullimback.review;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception409;
 import org.example.eoullimback.review.dto.ReviewListItemResponse;
+import org.example.eoullimback.user_auth.user.CustomUserDetails;
 import org.example.eoullimback.user_auth.user.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,24 +19,28 @@ public class ReviewApiController {
 
     private final ReviewService reviewService;
 
+    // 마이페이지 리뷰
     @GetMapping("/api/user/reviews")
-    public List<ReviewListItemResponse> list(HttpSession session,
+    @PreAuthorize("hasRole('USER')")
+    public List<ReviewListItemResponse> list(@AuthenticationPrincipal CustomUserDetails userDetails,
                                              @RequestParam(defaultValue = "") String code) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
+        User user = userDetails.getUser();
+        if (user == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
 
-        return reviewService.findList(sessionUser.getId(), code);
+        return reviewService.findList(user.getId(), code);
     }
 
+    // 마이페이지 리뷰 삭제
     @DeleteMapping("/api/user/reviews/{reviewId}")
-    public ResponseEntity<?> delete(HttpSession session,
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> delete(@AuthenticationPrincipal CustomUserDetails userDetails,
                                     @PathVariable Long reviewId) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
-        if (sessionUser == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
+        User user = userDetails.getUser();
+        if (user == null) throw new Exception409(ErrorCode.USER_NOT_FOUND);
 
-        reviewService.delete(sessionUser.getId(), reviewId);
+        reviewService.delete(user.getId(), reviewId);
 
         return ResponseEntity.ok().build();
     }

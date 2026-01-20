@@ -1,10 +1,10 @@
 package org.example.eoullimback.booking;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.eoullimback._common.enums.errors.ErrorCode;
-import org.example.eoullimback._common.error.exception.Exception401;
+import org.example.eoullimback.user_auth.user.CustomUserDetails;
 import org.example.eoullimback.user_auth.user.User;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,34 +20,36 @@ public class BookingController {
      * 화면 - 예약 화면
      */
     @GetMapping("/user/bookings/detail")
-    public String detailBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
+    @PreAuthorize("hasRole('USER')")
+    public String detailBooking(
+            @RequestParam("code") String bookingCode,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            Model model
+    ) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        if (sessionUser == null) {
-            throw new Exception401(ErrorCode.ACCESS_DENIED);
-        }
+        BookingResponse.DetailDTO booking = bookingService.detailBooking(user.getId(), bookingCode);
 
-        BookingResponse.DetailDTO booking = bookingService.detailBooking(sessionUser.getId(), bookingCode);
-
-        model.addAttribute("user", sessionUser);
+        model.addAttribute("user", user);
         model.addAttribute("booking", booking);
 
         return "booking/detail";
     }
 
     @GetMapping("/user/bookings/complete")
-    public String completeBooking(@RequestParam("code") String bookingCode, HttpSession session, Model model) {
+    @PreAuthorize("hasRole('USER')")
+    public String completeBooking(
+            @RequestParam("code") String bookingCode,
+            @AuthenticationPrincipal CustomUserDetails userDetails ,
+            Model model
+    ) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        if (sessionUser == null) {
-            throw new Exception401(ErrorCode.ACCESS_DENIED);
-        }
+        BookingResponse.DetailDTO booking = bookingService.detailBooking(user.getId(), bookingCode);
 
-        BookingResponse.DetailDTO booking = bookingService.detailBooking(sessionUser.getId(), bookingCode);
-
-        model.addAttribute("user", sessionUser);
+        model.addAttribute("user", user);
         model.addAttribute("booking", booking);
 
         return "booking/complete";

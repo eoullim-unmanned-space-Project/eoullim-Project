@@ -31,8 +31,8 @@
                         수정
                     </a>
 
-                    <form action="/admin/notices/{{notice.id}}/delete"
-                          method="post">
+                    <form action="/admin/notices/{{notice.id}}/delete" method="post">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <button class="notice-btn notice-btn-danger"
                                 type="submit">
                             삭제

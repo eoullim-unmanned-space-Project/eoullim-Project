@@ -1,9 +1,10 @@
 package org.example.eoullimback.notification;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback.user_auth.user.CustomUserDetails;
 import org.example.eoullimback.user_auth.user.User;
-import org.example.eoullimback.user_auth.user.UserRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,26 +18,32 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
+    // 내 알림 리스트
     // http://localhost:8080/notifications
     @GetMapping("/notifications")
-    public String notificationList(HttpSession session, Model model) {
+    @PreAuthorize("hasRole('USER')")
+    public String notificationList(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
 
-        User sessionUser = (User) session.getAttribute("sessionUser");
+        User user = userDetails.getUser();
 
-        List<NotificationResponse.NotificationResponseDTO> notifications = notificationService.notificationList(sessionUser.getId());
+        List<NotificationResponse.NotificationResponseDTO> notifications = notificationService.notificationList(user.getId());
 
         model.addAttribute("notifications", notifications);
-        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("sessionUser", user);
 
         return "notification/list";
     }
 
+    // 문자 메시지에서 온 URL - Qr 확인용
     // 메세지 링크 QrCode 페이지
     // http://localhost:8080/notifications/qr
     @GetMapping("/notifications/qr")
+    @PreAuthorize("hasRole('USER')")
     public String showQrPage(@RequestParam("code") String code,
-                             Model model) {
+                             Model model,
+                             @AuthenticationPrincipal CustomUserDetails userDetails) {
 
+        User user = userDetails.getUser();
         Notification notification = notificationService.validateQr(code);
 
         model.addAttribute("qrPayload", notification.getQrCode());

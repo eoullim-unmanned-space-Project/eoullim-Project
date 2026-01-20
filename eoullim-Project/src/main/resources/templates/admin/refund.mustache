@@ -305,6 +305,9 @@
     cursor: pointer;
     border: none;
     transition: all 0.2s;
+    text-align: center;
+    display: block;
+    margin: 0 auto;  
 }
 
 .btn-blue { background-color: var(--point-color); color: white; }
@@ -344,7 +347,6 @@
                 <th>결제코드</th>
                 <th>결제금액</th>
                 <th>이용시간</th>
-                <th>환불일</th>
                 <th>결제경로</th>
                 <th>버튼</th>
             </tr>
@@ -479,7 +481,6 @@
 
         approveBtn.forEach(btn => {
             btn.addEventListener('click', async () => {
-                alert('승인 아이디: ' + btn.dataset.id);
 
                 let id = btn.dataset.id;
 
@@ -489,7 +490,10 @@
 
                 try {
                     const response = await fetch(`/api/admin/refunds/${id}/approve`, {
-                        method: 'POST'
+                        method: 'POST',
+                        headers: {
+                            ...getCsrfHeaders()
+                        },
                     });
 
                     if (response.ok) {
@@ -505,7 +509,6 @@
                     console.error(error);
                     alert("환불을 승인하는 도중 오류가 발생했습니다.");
                 }
-
             });
         });
 
@@ -541,7 +544,8 @@
                 const response = await fetch(`/api/admin/refunds/${id}/rejection`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        ...getCsrfHeaders()
                     },
                     body: JSON.stringify({
                         reason: reasonInput.value
