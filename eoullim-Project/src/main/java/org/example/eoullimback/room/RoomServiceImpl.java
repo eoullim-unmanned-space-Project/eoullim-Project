@@ -1,15 +1,22 @@
 package org.example.eoullimback.room;
 
 import lombok.RequiredArgsConstructor;
+import org.example.eoullimback._common.dto.PageResponse;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
+import org.example.eoullimback._common.enums.room.RoomStatus;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback._common.error.exception.Exception500;
 import org.example.eoullimback._common.util.FileUtil;
 import org.example.eoullimback.place.Place;
 import org.example.eoullimback.place.PlaceRepository;
+import org.example.eoullimback.place.PlaceResponse;
 import org.example.eoullimback.timeslot.TimeSlotRepository;
 import org.example.eoullimback.timeslot.TimeSlotServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,14 +129,31 @@ public class RoomServiceImpl implements RoomService{
         roomRepository.deleteById(roomId);
     }
 
-
     @Override
-    public List<RoomResponse.AdminDetailDTO> roomAdminList() {
+    public PageResponse.PageDTO<Room, RoomResponse.AdminDetailDTO> roomAdminList(int page, int size, String keyword, RoomStatus status) {
+        int validPage = Math.max(0, page);
+        int validSize = Math.max(1, Math.min(20, size));
 
-        return roomRepository.findAllWithPlace()
-                .stream()
-                .map(RoomResponse.AdminDetailDTO::new)
-                .toList();
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(validPage, validSize, sort);
 
+        Page<Room> roomPage;
+
+        boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+        boolean hasStatus = status != null;
+
+        if (hasKeyword && hasStatus) {
+            roomPage = roomRepository.searchByKeywordAndStatus(keyword.trim(), status, pageable);
+        } else if (hasKeyword) {
+            roomPage = roomRepository.searchByKeyword(keyword.trim(), pageable);
+        } else if (hasStatus) {
+            roomPage = roomRepository.searchByStatus(status, pageable);
+        } else {
+            roomPage = roomRepository.findAll(pageable);
+        }
+
+        return new PageResponse.PageDTO<>(roomPage, RoomResponse.AdminDetailDTO::new);
     }
+
+
 }

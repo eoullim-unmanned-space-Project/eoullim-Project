@@ -18,9 +18,24 @@
     </div>
 
     <div class="content-surface">
-        <div class="section-header">
-            <h2>최근 장소 조회</h2>
-            <button class="text-link-btn">전체보기</button>
+        <div class="place-admin-search">
+            <div class="section-admin-header"><h2>최근 장소 조회</h2></div>
+            <div class="admin-place-search-controls">
+                <form action="/admin/place" method="get" class="admin-place-form">
+                    <select name="category" class="admin-place-select">
+                        <option value="">전체</option>
+                        <option value="PARTY">파티룸</option>
+                        <option value="STUDY">스터디</option>
+                        <option value="PRACTICE">연습실</option>
+                    </select>
+                    <input class="admin-place-input" type="text" name="placeKeyword" placeholder="장소를 입력해주세요."
+                           value="{{placeKeyword}}">
+                    <button class="admin-place-search-btn" type="submit">검색</button>
+                </form>
+                <form action="/admin/place" method="get">
+                    <button class="admin-place-search-btn red" type="submit">초기화</button>
+                </form>
+            </div>
         </div>
         <table class="data-table">
             <thead>
@@ -46,7 +61,7 @@
                     <td>{{updatedAt}}</td>
                     <td>
                         <button class="action-button detail place-update-btn" data-id="{{id}}"
-                                    data-name="{{name}}" data-category="{{category}}" data-profilePath="{{profilePath}}" >수정
+                                data-name="{{name}}" data-category="{{category}}" data-profilePath="{{profilePath}}">수정
                         </button>
                         <button class="action-button delete place-delete-btn" data-id="{{id}}">삭제</button>
                         <button class="action-button update place-detail-btn" data-id="{{id}}"
@@ -58,15 +73,58 @@
                 </tr>
             {{/placePage.content}}
             </tbody>
-
         </table>
+        <div class="admin-pagination">
+            <ul class="pagination-admin-container">
+                {{#placePage.previousPageNumber}}
+                    <li class="admin-page-move">
+                        <a href="/admin/place?page={{placePage.previousPageNumber}}" class="admin-page-link"><</a>
+                    </li>
+                {{/placePage.previousPageNumber}}
+                {{^placePage.previousPageNumber}}
+                    <li class="admin-page-move disabled">
+                        <a href="#" class="admin-page-link"><</a>
+                    </li>
+                {{/placePage.previousPageNumber}}
+                {{#placePage.pageLinks}}
+                    <li class="admin-page-move {{#active}}active{{/active}}">
+                        <a href="/admin/place?page={{displayNumber}}&size={{placePage.size}}"
+                        class="admin-page-link">{{displayNumber}}</a>
+                    </li>
+                {{/placePage.pageLinks}}
+                {{#placePage.nextPageNumber}}
+                    <li class="admin-page-move">
+                        <a href="/admin/place?page={{placePage.nextPageNumber}}" class="admin-page-link">></a>
+                    </li>
+                {{/placePage.nextPageNumber}}
+                {{^placePage.nextPageNumber}}
+                    <li class="admin-page-move disabled">
+                        <a href="#" class="admin-page-link">></a>
+                    </li>
+                {{/placePage.nextPageNumber}}
+            </ul>
+        </div>
     </div>
 
     <!-- 방 페이지 -->
     <div class="content-surface">
-        <div class="section-header">
-            <h2>최근 방 조회</h2>
-            <button class="text-link-btn">전체보기</button>
+        <div class="place-admin-search">
+            <div class="section-admin-header"><h2>최근 방 조회</h2></div>
+            <div class="admin-place-search-controls">
+                <form action="/admin/place" method="get" class="admin-place-form">
+                    <select name="status" class="admin-place-select">
+                        <option value="">전체</option>
+                        <option value="OPEN">열림</option>
+                        <option value="CLOSED">닫힘</option>
+                    </select>
+                    <input class="admin-place-input" type="text" name="roomKeyword" placeholder="방을 입력해주세요."
+                           value="{{roomKeyword}}">
+                    <button class="admin-place-search-btn" type="submit">검색</button>
+                </form>
+                <form action="/admin/place" method="get">
+                    <button class="admin-place-search-btn red" type="submit">초기화</button>
+                </form>
+            </div>
         </div>
         <table class="data-table">
             <thead>
@@ -83,7 +141,7 @@
             </thead>
 
             <tbody>
-            {{#roomList}}
+            {{#roomList.content}}
                 <tr class="tr-list">
                     <td>{{roomId}}</td>
                     <td><span class="badge">{{status}}</span></td>
@@ -108,10 +166,39 @@
                         </button>
                     </td>
                 </tr>
-            {{/roomList}}
+            {{/roomList.content}}
             </tbody>
-
         </table>
+        <div class="admin-pagination">
+            <ul class="pagination-admin-container">
+                {{#roomList.previousPageNumber}}
+                    <li class="admin-page-move">
+                        <a href="/admin/place?page={{roomList.previousPageNumber}}" class="admin-page-link"><</a>
+                    </li>
+                {{/roomList.previousPageNumber}}
+                {{^roomList.previousPageNumber}}
+                    <li class="admin-page-move disabled">
+                        <a href="#" class="admin-page-link"><</a>
+                    </li>
+                {{/roomList.previousPageNumber}}
+                {{#roomList.pageLinks}}
+                    <li class="admin-page-move {{#active}}active{{/active}}">
+                        <a href="/admin/place?page={{displayNumber}}&size={{roomList.size}}"
+                        class="admin-page-link">{{displayNumber}}</a>
+                    </li>
+                {{/roomList.pageLinks}}
+                {{#roomList.nextPageNumber}}
+                    <li class="admin-page-move">
+                        <a href="/admin/place?page={{roomList.nextPageNumber}}" class="admin-page-link">></a>
+                    </li>
+                {{/roomList.nextPageNumber}}
+                {{^roomList.nextPageNumber}}
+                    <li class="admin-page-move disabled">
+                        <a href="#" class="admin-page-link">></a>
+                    </li>
+                {{/roomList.nextPageNumber}}
+            </ul>
+        </div>
     </div>
 
 </main>
@@ -274,17 +361,20 @@
             </div>
             <div class="input-label">
                 <span class="data-label">내용</span>
-                <textarea type="text" class="data-value" id="room-content" placeholder="내용을 입력해주세요." required></textarea>
+                <textarea type="text" class="data-value" id="room-content" placeholder="내용을 입력해주세요."
+                          required></textarea>
             </div>
             <div class="input-label">
                 <div class="input-label-flex">
                     <div>
                         <span class="data-label">최대 인원</span>
-                        <input type="text" class="data-value" id="room-max-capacity" placeholder="최대 인원을 입력해주세요." required>
+                        <input type="text" class="data-value" id="room-max-capacity" placeholder="최대 인원을 입력해주세요."
+                               required>
                     </div>
                     <div>
                         <span class="data-label">기본 가격</span>
-                        <input type="text" class="data-value" id="room-default-price" placeholder="기본 가격을 입력해주세요." required>
+                        <input type="text" class="data-value" id="room-default-price" placeholder="기본 가격을 입력해주세요."
+                               required>
                     </div>
                 </div>
             </div>
@@ -341,11 +431,13 @@
             </div>
             <div class="input-label">
                 <span class="data-label">최대 인원</span>
-                <input type="text" class="data-value" id="update-room-max-capacity" placeholder="최대 인원을 입력해주세요." required>
+                <input type="text" class="data-value" id="update-room-max-capacity" placeholder="최대 인원을 입력해주세요."
+                       required>
             </div>
             <div class="input-label">
                 <span class="data-label">기본 가격</span>
-                <input type="text" class="data-value" id="update-room-default-price" placeholder="기본 가격을 입력해주세요." required>
+                <input type="text" class="data-value" id="update-room-default-price" placeholder="기본 가격을 입력해주세요."
+                       required>
             </div>
             <div class="input-label">
                 <span class="data-label">상태</span>
@@ -620,7 +712,7 @@
         roomDetailBtns.forEach(button => {
             button.addEventListener('click', () => {
                 const placeId = button.getAttribute('data-place-id');
-                const id = button.getAttribute('data-id');
+                const id = button.getAttribute('data-room-id');
                 const name = button.getAttribute('data-name');
                 const content = button.getAttribute('data-content');
                 const maxCapacity = button.getAttribute('data-max-capacity');

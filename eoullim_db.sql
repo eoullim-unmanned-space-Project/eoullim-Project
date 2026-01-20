@@ -4,7 +4,6 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
-
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS sse_chat;
 DROP TABLE IF EXISTS notices;
@@ -52,6 +51,9 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 정보 테이블';
 
 select * from users WHERE id = 1;
+
+INSERT INTO user_roles (user_id, role_name) 
+VALUES (1, 'ADMIN');
 
 CREATE TABLE IF NOT EXISTS user_roles (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -380,6 +382,8 @@ SELECT * FROM places;
 SELECT * FROM rooms;
 
 SELECT * FROM rooms WHERE place_id = 2;
+insert into user_roles (user_id, role_name)
+value (1, 'ADMIN');
 
 SELECT * FROM time_slots;
 SELECT * FROM users;
@@ -390,24 +394,39 @@ SELECT * FROM payments;
 SELECT * FROM roles;
 SELECT * FROM payment_refunds;
 SELECT * FROM reviews;
-
-DELETE FROM payments WHERE id =1;
-DELETE FROM bookings WHERE id = 1;
-
-INSERT INTO places (name, address, latitude, longitude, category, profile_image, created_at, updated_at)
-VALUES
-('해운대 파티룸', '부산광역시 해운대구 우동 123-45', 35.1631, 129.1631, 'PARTY', null, NOW(), NOW()),
-('광안리 스터디하우스', '부산광역시 수영구 광안동 67-12', 35.1534, 129.1186, 'STUDY', null, NOW(), NOW()),
-('부산 연습실', '부산광역시 부산진구 부전동 88-9', 35.1650, 129.0605, 'PRACTICE', null, NOW(), NOW()),
-('서면 파티앤펀', '부산광역시 부산진구 부전동 42-1', 35.1595, 129.0606, 'PARTY', null, NOW(), NOW()),
-('조용한 공부방 부산', '부산광역시 남구 대연동 21-7', 35.1363, 129.0883, 'STUDY', null, NOW(), NOW());
 SELECT * FROM places;
-
-INSERT INTO rooms (place_id, name, content, max_capacity, default_price, status, room_image) VALUES
-(3, '스탠다드룸', '기본적인 편의시설을 갖춘 방', 2, 50000, 'OPEN', NULL),
-(3, '디럭스룸', '넓고 쾌적한 방', 3, 80000, 'OPEN', NULL),
-(3, '스위트룸', '럭셔리 스위트룸, 침대 2개', 4, 150000, 'CLOSED', NULL),
-(4, '커넥팅룸', '2개의 방이 연결된 구조', 6, 120000, 'OPEN', NULL),
-(5, '패밀리룸', '가족 단위 숙박에 적합', 5, 100000, 'OPEN', NULL);
 SELECT * FROM rooms;
 SELECT * FROM room_images;
+
+INSERT INTO places (name, address, latitude, longitude, category, profile_image)
+VALUES
+('부산 파티 스페이스 해운대', '부산 해운대구 해운대해변로 123', 35.158698, 129.160384, 'PARTY', NULL),
+('부산 스터디존 서면', '부산 부산진구 중앙대로 689', 35.157889, 129.059534, 'STUDY', NULL),
+('부산 연습실 남포', '부산 중구 남포길 45', 35.097993, 129.035144, 'PRACTICE', NULL),
+('광안리 파티룸 블루', '부산 수영구 광안해변로 210', 35.153169, 129.118666, 'PARTY', NULL),
+('센텀 스터디랩', '부산 해운대구 센텀중앙로 90', 35.170913, 129.129234, 'STUDY', NULL),
+('부산 댄스 연습실 서면', '부산 부산진구 전포대로 181', 35.154442, 129.063291, 'PRACTICE', NULL),
+('해운대 스터디카페 집중', '부산 해운대구 좌동순환로 433', 35.168245, 129.177512, 'STUDY', NULL),
+('광복동 파티하우스', '부산 중구 광복로 55', 35.100921, 129.031299, 'PARTY', NULL),
+('부산 음악 연습실 사상', '부산 사상구 사상로 201', 35.162833, 128.984120, 'PRACTICE', NULL),
+('부산 파티룸 마린시티', '부산 해운대구 마린시티2로 38', 35.158112, 129.150921, 'PARTY', NULL);
+
+INSERT INTO rooms (place_id, name, content, max_capacity, default_price, status, room_image)
+VALUES
+(1, '해운대 오션 파티룸', '바다 전망 파티룸', 20, 200000, 'OPEN', NULL),
+(2, '서면 스터디룸 A', '조용한 스터디 공간', 6, 50000, 'OPEN', NULL),
+(3, '남포 음악 연습실', '방음 완비 연습실', 5, 80000, 'OPEN', NULL),
+(4, '광안리 VIP 파티룸', '광안대교 뷰 파티룸', 25, 250000, 'OPEN', NULL),
+(5, '센텀 스터디룸 프리미엄', '넓은 스터디 공간', 8, 70000, 'OPEN', NULL),
+(6, '서면 댄스 연습실', '대형 거울 완비', 10, 90000, 'OPEN', NULL),
+(7, '해운대 집중 스터디룸', '장시간 학습용', 6, 60000, 'OPEN', NULL),
+(8, '광복동 파티 스위트', '단체 파티 가능', 30, 300000, 'OPEN', NULL),
+(9, '사상 밴드 연습실', '밴드 연습 최적', 7, 85000, 'OPEN', NULL),
+(10, '마린시티 럭셔리 파티룸', '프리미엄 파티룸', 40, 350000, 'OPEN', NULL);
+
+SELECT
+    i.price,
+    t.start_time
+FROM items i
+JOIN time_slots t ON i.time_slot_id = t.id
+WHERE DATE(t.start_time) IN ('2026-01-24');

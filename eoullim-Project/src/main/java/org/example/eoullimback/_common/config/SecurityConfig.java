@@ -14,6 +14,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.io.PrintWriter;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -58,7 +60,7 @@ public class SecurityConfig  {
 
                         .requestMatchers("/css/**", "/js/**","/map/**", "/images/**", "/img/**", "/favicon.ico", "/error").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
-                        .requestMatchers("/auth/signup", "/auth/login", "/auth/logout").permitAll()
+                        .requestMatchers("/auth/signup", "/auth/login", "/auth/logout", "/error-direct/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
 
@@ -194,6 +196,7 @@ public class SecurityConfig  {
                         .usernameParameter("loginId")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/public", true)
+                        .failureForwardUrl("/error-direct/login-fail")
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -206,14 +209,10 @@ public class SecurityConfig  {
                 )
                 .exceptionHandling(conf -> conf
                     .accessDeniedHandler((request, response, accessDeniedException) -> {
-                        response.setStatus(403);
-                        response.setContentType("application/json; charset=utf-8");
-                        response.getWriter().write("{\"message\":\"CSRF 토큰이 유효하지 않거나 권한이 없습니다.\"}");
+                        request.getRequestDispatcher("/error-direct/403").forward(request, response);
                     })
                     .authenticationEntryPoint((request, response, authException) -> {
-                        response.setStatus(401);
-                        response.setContentType("application/json; charset=utf-8");
-                        response.getWriter().write("{\"message\":\"로그인이 필요합니다.\"}");
+                        request.getRequestDispatcher("/error-direct/401").forward(request, response);
                     })
                 )
                 .httpBasic(basic -> basic.disable());

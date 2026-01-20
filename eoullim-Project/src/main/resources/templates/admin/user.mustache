@@ -2,22 +2,20 @@
 {{> admin/layout/nav}}
 <main>
     <header>
-        <h1>관리</h1>
+        <h1>회원관리</h1>
     </header>
-
     <div class="content-surface">
         <div class="section-header">
             <h2>최근 회원 내역</h2>
-            <!--            <button class="text-link-btn">전체보기</button>-->
         </div>
         <table class="data-table">
             <thead>
             <tr class="th-list">
                 <th>회원번호</th>
+                <th>현재상태</th>
                 <th>아이디</th>
                 <th>이름</th>
                 <th>가입경로</th>
-                <th>현재상태</th>
                 <th>가입일</th>
                 <th>버튼</th>
             </tr>
@@ -27,22 +25,20 @@
             {{#adminUserList}}
                 <tr class="tr-list">
                     <td>{{id}}</td>
+                    <td>
+                        <span class="user-status" >
+                            {{displayStatus}}
+                        </span>
+                    </td>
                     <td>{{loginId}}</td>
                     <td>{{name}}</td>
                     <td>
-                        <span class="{{providerClass}}">
+                        <span class="provider">
                             {{displayProvider}}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="user-status {{statusClass}}">
-                            {{displayStatus}}
                         </span>
                     </td>
                     <td>{{createdAt}}</td>
                     <td style="display: flex; justify-content: center; gap: 12px;">
-                        <!--                        <button class="action-button detail approve-btn" >승인</button>-->
-                        <!--                        <button class="action-button delete rejection-btn">거절</button>-->
                         <button class="action-button update detail-btn" onclick="userDetailModal({{id}})">상세보기</button>
                     </td>
                 </tr>
@@ -53,7 +49,6 @@
 
 </main>
 
-<!--  ★ modal ★ : 회원 수정 페이지 (?) -->
 <div class="modal-overlay" id="modal-detail">
     <div class="modal-card">
         <div class="modal-header">
@@ -107,6 +102,11 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        providerStatus();
+        userStatus();
+    })
+
     function updateActionBtn(actionBtn, text, colorClass, clickHandler) {
         actionBtn.innerText = text;
         actionBtn.className = "btn-confirm" + colorClass;
@@ -238,7 +238,39 @@
         return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
     }
 
+    function providerStatus() {
+        const providerList = document.querySelectorAll('.provider');
 
+        providerList.forEach(providerEl => {
+            if (providerEl) {
+                const status = providerEl.innerText.trim();
+
+                if (status === 'LOCAL') {
+                    providerEl.classList.add('local');
+                } else if (status === 'KAKAO') {
+                    providerEl.classList.add('kakao');
+                }
+            }
+        });
+    }
+
+    function userStatus() {
+        const userStatusList = document.querySelectorAll('.user-status');
+
+        userStatusList.forEach(userStatusEl => {
+            if (userStatusEl) {
+                const userStatus = userStatusEl.innerHTML.trim();
+
+                if (userStatus === '활성화') {
+                    userStatusEl.classList.add('active');
+                } else if (userStatus === '탈퇴') {
+                    userStatusEl.classList.add('suspended');
+                } else {
+                    userStatusEl.classList.add('unknown');
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>

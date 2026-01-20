@@ -5,21 +5,24 @@
 <section class="section">
     <div id="map" class="map-image"></div>
     <div class="place-search">
-        <div class="section-title">새로운 공간</div>
         <div class="place-search-controls">
-            <form action="/map" method="get">
+            <div class="section-title">새로운 공간</div>
+            <form action="/public/map" method="get">
+                <select name="category" class="place-select">
+                    <option value="">전체</option>
+                    <option value="PARTY">파티룸</option>
+                    <option value="STUDY">스터디</option>
+                    <option value="PRACTICE">연습실</option>
+                </select>
                 <input class="place-input" type="text" name="keyword" placeholder="장소를 입력해주세요."
                        value="{{placeKeyword}}">
                 <button class="place-search-btn" type="submit">검색</button>
-            </form>
-            <form action="/map" method="get">
-                <button class="place-search-btn red" type="submit">초기화</button>
             </form>
         </div>
     </div>
     <div class="space-list">
         {{#placePage.content}}
-            <a href="/place/{{id}}/room" class="space-card">
+            <a href="/public/place/{{id}}/room" class="space-card">
                 <div class="space-img">
                     <img src="{{profilePath}}" alt="장소사진" class="space-img">
                 </div>
@@ -38,7 +41,7 @@
     <ul class="pagination-container">
         {{#placePage.previousPageNumber}}
             <li class="page-move">
-                <a href="/map?page={{placePage.previousPageNumber}}" class="page-link"><</a>
+                <a href="/public/map?page={{placePage.previousPageNumber}}" class="page-link"><</a>
             </li>
         {{/placePage.previousPageNumber}}
         {{^placePage.previousPageNumber}}
@@ -48,12 +51,12 @@
         {{/placePage.previousPageNumber}}
         {{#placePage.pageLinks}}
             <li class="page-move {{#active}}active{{/active}}">
-                <a href="/map?page={{displayNumber}}&size={{placePage.size}}" class="page-link">{{displayNumber}}</a>
+                <a href="/public/map?page={{displayNumber}}&size={{placePage.size}}" class="page-link">{{displayNumber}}</a>
             </li>
         {{/placePage.pageLinks}}
         {{#placePage.nextPageNumber}}
             <li class="page-move">
-                <a href="/map?page={{placePage.nextPageNumber}}" class="page-link">></a>
+                <a href="/public/map?page={{placePage.nextPageNumber}}" class="page-link">></a>
             </li>
         {{/placePage.nextPageNumber}}
         {{^placePage.nextPageNumber}}

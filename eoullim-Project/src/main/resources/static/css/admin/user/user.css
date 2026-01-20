@@ -136,14 +136,6 @@ header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0
     color: var(--point-color);
 }
 
-.channel-kakao {
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    background: #FEE500;
-    color: #191919;
-}
 
 .action-button {
     padding: 10px 16px;
@@ -399,18 +391,18 @@ header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0
 .user-status {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 999px;
+    padding: 4px 10px;
+    border-radius: 5px;
     font-size: 12px;
     font-weight: 700;
-    letter-spacing: -0.2px;
-    white-space: nowrap;
+
+    background-color: #f2f4f6;
+    color: #4e5968;
 }
 
 .user-status.active {
-    background-color: #E8F8FF;
-    color: #3182f6;
+    background-color: #e7f9ed;
+    color: #1eb651;
 }
 .user-status.withdrawn {
     background-color: #F2F4F6;
@@ -435,13 +427,26 @@ header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.6px; margin: 0
     font-weight: 700;
 }
 
-.provider-local {
+.provider {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+
+    background-color: #f2f4f6;
+    color: #4e5968;
+}
+
+.provider.local {
     background-color: #f2f4f6;
     color: #8b95a1;
 }
 
-.provider-kakao {
+.provider.kakao {
     background-color: #FEE500;
     color: #191919;
 }
+
 

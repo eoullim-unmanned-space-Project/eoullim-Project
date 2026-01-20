@@ -13,6 +13,7 @@ import org.example.eoullimback.timeslot.TimeSlotRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -26,9 +27,8 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
     private final RoomRepository roomRepository;
     private final TimeSlotRepository timeSlotRepository;
 
-    private static final int WEEKEND_PRICE = 5000;
-
-    private static final int CHUCK_SIZE = 500;
+    private static final int WEEKEND_PRICE = 10000;
+    private static final int CHUNK_SIZE = 500;
 
     @PersistenceContext
     private EntityManager em;
@@ -36,29 +36,18 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
     @Override
     @Transactional
     public void createNextMonthTimeSlot(YearMonth nextMonth) {
-
-        List<Room> roomsEntity = roomRepository.findByStatus(RoomStatus.OPEN);
-
+        List<Room> rooms = roomRepository.findByStatus(RoomStatus.OPEN);
         List<Long> existRoomIds = timeSlotRepository.findExistedRoomIdByMonth(nextMonth.toString());
 
-        List<TimeSlot> timeSlotList = new ArrayList<>();
-
         LocalDate startDate = nextMonth.atDay(1);
-
         LocalDate endDate = nextMonth.atEndOfMonth();
 
-        for (Room room : roomsEntity) {
+        int counter = 0;
 
-            if (existRoomIds.contains(room.getId())) {
-                continue;
-            }
-
-            if (room.getStatus() != RoomStatus.OPEN) {
-                continue;
-            }
+        for (Room room : rooms) {
+            if (existRoomIds.contains(room.getId())) continue;
 
             for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-
                 for (int hour = 0; hour < 24; hour++) {
                     LocalDateTime start = date.atTime(hour, 0);
                     LocalDateTime end = start.plusHours(1);
@@ -72,38 +61,41 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
                             .status(SlotStatus.OPEN)
                             .build();
 
-                    timeSlotList.add(timeSlot);
+                    em.persist(timeSlot);
+                    em.flush();
 
-                    if (timeSlotList.size() >= CHUCK_SIZE) {
-                        persistTimeSlotsWithItems(timeSlotList);
+                    int price = calculatePrice(room, date);
+
+                    Item item = Item.builder()
+                            .timeSlot(timeSlot)
+                            .price(price)
+                            .build();
+
+                    em.persist(item);
+
+                    if (++counter % CHUNK_SIZE == 0) {
+                        em.flush();
+                        em.clear();
                     }
                 }
             }
         }
 
-        if (!timeSlotList.isEmpty()) {
-            persistTimeSlotsWithItems(timeSlotList);
-        }
-    }
-    private void persistTimeSlotsWithItems(List<TimeSlot> timeSlotList) {
-        for (TimeSlot timeSlot : timeSlotList) {
-            em.persist(timeSlot);
-
-            int price = calculatePrice(timeSlot.getRoom(), timeSlot.getStartTime().toLocalDate());
-
-            Item item = Item.builder()
-                    .timeSlot(timeSlot)
-                    .price(price)
-                    .build();
-
-            em.persist(item);
-        }
-
         em.flush();
-
         em.clear();
+    }
 
-        timeSlotList.clear();
+    private boolean isWeekend(LocalDate date) {
+        DayOfWeek day = date.getDayOfWeek();
+        return day == DayOfWeek.SATURDAY || day == DayOfWeek.SUNDAY;
+    }
+
+    private int calculatePrice(Room room, LocalDate date) {
+        int base = room.getDefaultPrice();
+        if (isWeekend(date)) {
+            base += WEEKEND_PRICE;
+        }
+        return base;
     }
 
     @Override
@@ -115,20 +107,6 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
         timeSlotEntities.forEach(
                 TimeSlot::open
         );
-    }
-
-    private boolean isWeekend(LocalDate date) {
-        return date.getDayOfWeek().getValue() >= 5;
-    }
-
-    private int calculatePrice(Room room, LocalDate date) {
-        int base = room.getDefaultPrice();
-
-        if (isWeekend(date)) {
-            base = base + WEEKEND_PRICE;
-        }
-
-        return base;
     }
 }
 
