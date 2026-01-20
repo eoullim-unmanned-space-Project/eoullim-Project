@@ -164,29 +164,32 @@
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| GET | `/` | 메인 페이지 (신규 장소 4개) | |
-| GET | `/map` | 장소 목록 (지도) | |
-| GET | `/place/{placeId}/room` | 장소별 룸 목록 | |
-| POST | `/place/create` | 장소 생성 (관리자) | 수정 요망 (RESTful: POST `/api/places`) |
-| PUT | `/place/{placeId}` | 장소 수정 (관리자) | |
-| DELETE | `/place/{id}` | 장소 삭제 (관리자) | |
+| GET | `/public` | 메인 페이지 (신규 장소 4개) | |
+| GET | `/public/map` | 장소 목록 (지도) | |
+| POST | `/api/admin/place` | 장소 생성 (관리자) | 수정 요망 (RESTful: POST `/api/places`) |
+| PUT | `/api/admin/place/{placeId}` | 장소 수정 (관리자) | |
+| DELETE | `/api/admin/place/{placeId}` | 장소 삭제 (관리자) | |
 
 ### 룸 관련
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| GET | `/place/{placeId}/room/create` | 룸 생성 화면 (관리자) | |
-| POST | `/place/{placeId}/room/create` | 룸 생성 처리 (관리자) | 수정 요망 (RESTful: POST `/api/places/{placeId}/rooms`) |
-| GET | `/room/{roomId}/update` | 룸 수정 화면 (관리자) | |
-| POST | `/room/{roomId}/update` | 룸 수정 처리 (관리자) | 수정 요망 (RESTful: PUT `/api/rooms/{roomId}`) |
-| POST | `/room/{roomId}/delete` | 룸 삭제 (관리자) | 수정 요망 (RESTful: DELETE `/api/rooms/{roomId}`) |
-| POST | `/api/room/{roomId}` | 룸 상세 조회 | 수정 요망 (RESTful: GET `/api/rooms/{roomId}`) |
+| GET | `/public/place/{placeId}/room` | 장소별 룸 목록 | |
+| POST | `/api/admin/room/create` | 룸 생성 처리 (관리자) | |
+| PUT | `/api/admin/room/{roomId}` | 룸 수정 처리 (관리자) | |
+| DELTE | `/api/admin/room/{roomId}` | 룸 삭제 (관리자) | ) 
 
 ### 타임슬롯 관련
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
 | GET | `/api/sse/{roomId}/timeslot-connect` | 타임슬롯 실시간 업데이트 (SSE) | |
+
+### 아이템 관련
+
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/api/sse/{roomId}/item-connect` | 아이템 실시간 업데이트 (SSE) | |
 
 ### 리뷰 관련
 
