@@ -177,7 +177,7 @@
 | GET | `/public/place/{placeId}/room` | 장소별 룸 목록 | |
 | POST | `/api/admin/room/create` | 룸 생성 처리 (관리자) | |
 | PUT | `/api/admin/room/{roomId}` | 룸 수정 처리 (관리자) | |
-| DELTE | `/api/admin/room/{roomId}` | 룸 삭제 (관리자) | ) 
+| DELTE | `/api/admin/room/{roomId}` | 룸 삭제 (관리자) | 
 
 ### 타임슬롯 관련
 
