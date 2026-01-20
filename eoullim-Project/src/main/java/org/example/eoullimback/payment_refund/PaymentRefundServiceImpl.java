@@ -234,8 +234,7 @@ public class PaymentRefundServiceImpl implements PaymentRefundService{
         // 환불 카테고리 카운트
         public List<PaymentRefundResponse.RefundCategoryCountDTO> getRefundCategoryCounts() {
             List<Object[]> rawResults = paymentRefundRepository.countRefundByCategory();
-            System.out.println("==================================================================");
-            System.out.println("rawResults size = " + rawResults.size());
+
             for(Object[] row: rawResults) {
                 System.out.println("category = " + row[0] + ", count = " + row[1]);
             }
