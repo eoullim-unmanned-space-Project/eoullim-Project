@@ -76,7 +76,7 @@ public class UserApiController {
     }
 
     @PostMapping("/user/password-verify")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Boolean> verifyPassword(
             @RequestBody UserRequest.PasswordCheckDTO passwordCheckDTO,
             @AuthenticationPrincipal CustomUserDetails userDetails
@@ -91,7 +91,7 @@ public class UserApiController {
     }
 
     @PostMapping("/user/email-find-verifications")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<?> sendFindEmail(
             @RequestBody UserRequest.EmailCheckDTO reqDTO
     ) {
