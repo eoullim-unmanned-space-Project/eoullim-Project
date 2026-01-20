@@ -51,7 +51,7 @@
     const csrfToken = document.querySelector('meta[name="_csrf"]').content;
 
     loginForm.addEventListener("submit", function (e) {
-        alert(csrfToken);
+        // alert(csrfToken);
 
         const id = document.querySelector("#loginId").value.trim();
         const pw = document.querySelector("#password").value.trim();

@@ -5,6 +5,8 @@ import org.example.eoullimback._common.enums.bookig.BookingStatus;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
 import org.example.eoullimback._common.error.exception.Exception400;
 import org.example.eoullimback._common.error.exception.Exception404;
+import org.example.eoullimback.item.Item;
+import org.example.eoullimback.item.ItemRepository;
 import org.example.eoullimback.room.Room;
 import org.example.eoullimback.room.RoomRepository;
 import org.example.eoullimback.timeslot.SseTimeSlotService;
@@ -31,6 +33,7 @@ public class BookingServiceImpl implements BookingService {
 
     private final UserRepository userRepository;
     private final RoomRepository roomRepository;
+    private final ItemRepository itemRepository;
     private final TimeSlotRepository timeSlotRepository;
     private final BookingRepository bookingRepository;
     private final SseTimeSlotService sseTimeSlotService;
@@ -90,14 +93,20 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponse.CalculateAmountDTO calculateAmount(BookingRequest.CalculateAmountDTO calculateAmountDTO) {
 
-       Room roomEntity = roomRepository.findById(calculateAmountDTO.getRoomId())
+        Room roomEntity = roomRepository.findById(calculateAmountDTO.getRoomId())
                 .orElseThrow(() -> new Exception404(ErrorCode.ROOM_NOT_FOUND));
 
-       int defaultPrice = roomEntity.getDefaultPrice();
+        List<Long> timeSlotIds = calculateAmountDTO.getTimeSlotIds();
 
-       int slotCount = calculateAmountDTO.getTimeSlotIds().size();
+        List<Item> items = itemRepository.findAllByTimeSlotIdIn(timeSlotIds);
 
-       long amount = (long) defaultPrice * slotCount;
+        if (items.isEmpty()) {
+            throw new IllegalArgumentException("선택한 시간대에 대한 상품이 없습니다.");
+        }
+
+        long amount = items.stream()
+                .mapToLong(Item::getPrice)  // Item.price 가져오기
+                .sum();
 
         return new BookingResponse.CalculateAmountDTO(amount);
     }
