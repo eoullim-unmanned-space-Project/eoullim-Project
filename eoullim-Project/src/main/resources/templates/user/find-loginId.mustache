@@ -66,7 +66,8 @@
         emailSending = true;
 
         try {
-            const res = await fetch("/api/users/{userId}/email-verifications", {
+            // 이메일 전송
+            const res = await fetch("/api/auth/find-id/send", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({email})
@@ -92,7 +93,8 @@
         }
 
         try {
-            const res = await fetch("/api/users/{userId}/email-verifications/verify", {
+            // 이메일 - 검증
+            const res = await fetch("/api/auth/find-id/verify", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
@@ -128,7 +130,7 @@
             return;
         }
         try {
-            const res = await fetch("/api/users/find-login-id", {
+            const res = await fetch("/api/auth/login-id/recovery", {
                 method: "POST"
             });
 
