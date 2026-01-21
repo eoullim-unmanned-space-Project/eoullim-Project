@@ -80,7 +80,11 @@
                     <div class="review-header">
                         <div class="review-user">
                             <p class="user-name">{{name}}</p>
-                            <p class="user-star">{{#stars}}★{{/stars}}{{#emptyStars}}☆{{/emptyStars}}</p>
+
+                            <p class="user-star">
+                                {{#stars}}<span class="star filled">★</span>{{/stars}}
+                                {{#emptyStars}}<span class="star empty">☆</span>{{/emptyStars}}
+                            </p>
                         </div>
                     </div>
 

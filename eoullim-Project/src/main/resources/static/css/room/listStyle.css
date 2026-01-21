@@ -541,6 +541,25 @@ body {
     filter: brightness(0.98);
 }
 
+.user-star {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.star {
+    margin-right: 2px;
+}
+
+/* 채워진 별 */
+.star.filled {
+    color: #facc15;
+}
+
+/* 빈 별 */
+.star.empty {
+    color: #d1d5db;
+}
+
 #map {
     pointer-events: none;
 }
