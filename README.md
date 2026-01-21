@@ -130,7 +130,7 @@
 | GET | `/user/profile/edit` | 프로필 수정 화면 | |
 | POST | `/user/profile` | 프로필 수정 처리 | 수정 요망 (RESTful: PUT `/api/users/profile`) |
 | POST | `/user/profile-delete` | 프로필 이미지 삭제 | 수정 요망 (RESTful: DELETE `/api/users/profile/image`) |
-| POST | `/user/leave` | 회원 탈퇴 | 수정 요망 (RESTful: DELETE `/api/users`) |
+| POST | `/api/user/withdraw` | 회원 탈퇴 | |
 | GET | `/user/verify-password` | 비밀번호 확인 화면 | |
 | GET | `/user/bookings` | 예약 내역 화면 | |
 | GET | `/user/reviews` | 리뷰 목록 화면 | |
