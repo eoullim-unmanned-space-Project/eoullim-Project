@@ -287,8 +287,6 @@
 - comments: 댓글 정보
 - notices: 공지사항 정보
 - notifications: 알림 정보
-- file_infos: 파일 정보
-- room_images: 룸 이미지 정보
 
 ## 프로젝트 구조
 
@@ -313,11 +311,9 @@ eoullim-Project/
 │   │   │       ├── qaa/              # Q&A
 │   │   │       ├── review/           # 리뷰
 │   │   │       ├── room/             # 룸 관리
-│   │   │       ├── room_image/       # 룸 이미지
 │   │   │       ├── timeslot/         # 타임슬롯
 │   │   │       ├── timeslot_auto/    # 타임슬롯 자동화
-│   │   │       ├── user_auth/        # 사용자 인증
-│   │   │       └── file/             # 파일 관리
+│   │   │       └── user_auth/        # 사용자 인증
 │   │   └── resources/
 │   │       ├── application.yml       # 설정 파일
 │   │       ├── templates/            # Mustache 템플릿
