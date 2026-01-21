@@ -11,27 +11,27 @@
 />
 </p>
 
-## 기술 스택
+🛠️ ## 기술 스택
 
-### 💻 백엔드
+### 백엔드
 ![Java](https://img.shields.io/badge/Java_17-ED8A00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.4.1-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
 ![JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL_8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 
-### 🎨 프론트엔드
+### 프론트엔드
 ![Mustache](https://img.shields.io/badge/Mustache-FF530F?style=for-the-badge&logo=mustache&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-### 🔌 API
+### API
 ![SOLAPI](https://img.shields.io/badge/SOLAPI-FF6F00?style=for-the-badge&logo=messagebird&logoColor=white) 
 ![PortOne](https://img.shields.io/badge/PortOne_KakaoPay-FF5D5D?style=for-the-badge&logo=p&logoColor=white)
 ![Kakao](https://img.shields.io/badge/Kakao_Login-FFCD00?style=for-the-badge&logo=kakaotalk&logoColor=black)
 ![Gemini](https://img.shields.io/badge/Gemini_AI-8E75C2?style=for-the-badge&logo=googlegemini&logoColor=white)
 ![Gmail](https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white)
 
-### 🤝 협업 툴
+### 협업 툴
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
