@@ -31,7 +31,6 @@
 <div style="display: flex; align-items: center; gap: 16px;">
   <div>
     <strong>서비스 플로우</strong><br/>
-    예약 → 결제 → 이용 → 종료
   </div>
   <img src="https://github.com/user-attachments/assets/a2f23115-523d-4df5-957b-2298fff346a6"
        width="689" />
