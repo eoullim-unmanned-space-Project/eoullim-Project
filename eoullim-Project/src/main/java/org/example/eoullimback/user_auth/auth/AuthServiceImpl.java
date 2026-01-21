@@ -36,6 +36,11 @@ public class AuthServiceImpl implements AuthService {
 
         String hashPwd = passwordEncoder.encode(request.getPassword());
 
+        boolean loginIdExists = userRepository.existsByLoginIdAndStatus(request.getLoginId(), Status.ACTIVE);
+        if (loginIdExists) {
+            throw new Exception400(ErrorCode.DUPLICATE_LOGIN_ID); // 새로운 에러 코드 추가 필요
+        }
+
         User user = request.toEntity();
         user.setPassword(hashPwd);
 

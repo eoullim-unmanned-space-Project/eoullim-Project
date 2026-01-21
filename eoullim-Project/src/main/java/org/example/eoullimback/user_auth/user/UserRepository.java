@@ -45,4 +45,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     long countByCreatedAtBetween(LocalDateTime localDateTime, LocalDateTime localDateTime1);
+
+    boolean existsByLoginIdAndStatus(String loginId, Status status);
 }

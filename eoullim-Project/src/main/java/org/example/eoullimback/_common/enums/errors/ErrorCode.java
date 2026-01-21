@@ -44,6 +44,7 @@ public enum ErrorCode {
     BOOKING_ALREADY_CANCELED("이미 취소 처리된 예약입니다."),
     BAD_CONTENT("욕설이 섞여있는 댓글은 금지입니다."),
     EVENT_ALREADY_CREATED("이미 생성된 이벤트 입니다. 이벤트는 하루에 한 번 가능합니다."),
+    DUPLICATE_LOGIN_ID("이미 사용 중인 아이디입니다."),
 
     // ====
     // 401 Unauthorized
