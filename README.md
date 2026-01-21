@@ -243,7 +243,6 @@ java -jar -Dspring.profiles.active=prod build/libs/eoullim-0.0.1-SNAPSHOT.jar
 - **기본 관리자 계정**: 
   - ID: `admin`
   - PW: `admin1234!` (최초 로그인 후 변경 필수)
----
 
 ## 주요 기능
 
