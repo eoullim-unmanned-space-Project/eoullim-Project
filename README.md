@@ -98,10 +98,10 @@
 |------------|-----|------|------|
 | GET | `/auth/signup` | 회원가입 화면 | |
 | POST | `/auth/signup` | 회원가입 처리 | |
-| GET | `/auth/signup-check-login-id` | 아이디 중복 확인 | 수정 요망 (RESTful: GET `/api/users/check-login-id`) |
+| GET | `/api/users/check-login-id` | 아이디 중복 확인 | |
 | GET | `/auth/login` | 로그인 화면 | |
 | POST | `/auth/login` | 로그인 처리 | |
-| GET | `/auth/logout` | 로그아웃 | 수정 요망 (RESTful: DELETE `/api/auth/session`) |
+| DELETE | `/api/auth/session` | 로그아웃 | |
 | GET | `/auth/find-password` | 비밀번호 찾기 화면 | |
 | POST | `/auth/find-password/send-code` | 비밀번호 찾기 인증번호 발송 | 수정 요망 (RESTful: POST `/api/auth/password-reset/code`) |
 | POST | `/auth/verify-password-code` | 비밀번호 찾기 인증번호 확인 | 수정 요망 (RESTful: POST `/api/auth/password-reset/verify`) |
