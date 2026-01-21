@@ -29,7 +29,7 @@
   모든 과정을 한 번에 처리할 수 있습니다.
 
 **서비스 플로우**
-<img width="686" height="134" alt="Image" src="https://github.com/user-attachments/assets/4258d473-cc23-4969-9da1-d30ec0c88668" />
+<img width="689" height="104" alt="Image" src="https://github.com/user-attachments/assets/a2f23115-523d-4df5-957b-2298fff346a6" />
 
 ## 팀 소개
    
