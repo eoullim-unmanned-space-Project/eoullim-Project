@@ -13,29 +13,22 @@
 
 ## 기술 스택
 
-### 백엔드
-- **Java 17**: 애플리케이션의 비즈니스 로직을 구현한 주 언어
-- **Spring Boot 3.4.12**: 빠르고 효율적인 서버 및 RESTful API 개발을 위한 기반 프레임워크
-- **Spring Data JPA**: 데이터베이스 접근 및 ORM 구현
-- **Spring Security**: 사용자 인증 및 권한 관리 (비밀번호 암호화, CSRF Token 기반 보안통신 구현)
-- **Spring Mail**: 이메일 인증 기능
+### 💻 Backend
+![Java](https://img.shields.io/badge/Java_17-ED8A00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.4.1-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
+![JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL_8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 
-### 데이터베이스
-- **MySQL 8.0**: 관계형 데이터의 저장, 조회 및 관리
+### 🎨 Frontend
+![Mustache](https://img.shields.io/badge/Mustache-FF530F?style=for-the-badge&logo=mustache&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-### 프론트엔드
-- **Mustache (SSR)**: 서버 측 렌더링을 통한 동적 뷰 페이지 생성
-- **JavaScript**: 클라이언트 사이드 상호작용
-
-### 외부 연동
-- **포트원 (아임포트)**: 결제 시스템 연동
-- **카카오 OAuth**: 소셜 로그인 연동
-- **제미나이(Gemini AI)**: AI 콘텐츠 및 챗봇 연동
-- **솔라피 (SOLAPI)**: 문자 전송 및 인증 연동  
-
-### 형상 관리 및 협업
-- **Git**: 소스 코드 버전 관리 및 팀원 간의 코드 병합 관리
-- **Notion**: 프로젝트 기획, 문서화 및 회의록 관리
+### 🔌 External API & Tools
+![Gemini](https://img.shields.io/badge/Gemini_AI-8E75C2?style=for-the-badge&logo=googlegemini&logoColor=white)
+![PortOne](https://img.shields.io/badge/PortOne-FF5D5D?style=for-the-badge&logo=p&logoColor=white)
+![Kakao](https://img.shields.io/badge/Kakao_Login-FFCD00?style=for-the-badge&logo=kakaotalk&logoColor=black)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
 ## 서비스 흐름
 
