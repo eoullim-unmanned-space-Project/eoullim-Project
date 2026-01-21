@@ -1,4 +1,4 @@
-# 어울림 (Eoulrim) - 무인공간 대여 서비스
+# 🚀 어울림 (Eoulrim) - 무인공간 대여 서비스
 
 <p align="center">
   <img width="500" 
@@ -6,6 +6,14 @@
   src="https://github.com/user-attachments/assets/0ac8498e-0360-49ff-9eb4-e6ed6cad6021"
 />
 </p>
+
+## 프로젝트 소개
+
+**어울림(Eoulrim)**은 **Gemini AI**와 **Server-Sent Events(SSE)**를 활용한  
+차세대 **무인 공간 대여 서비스**입니다.
+
+실시간 예약 동기화, AI 기반 콘텐츠 필터링, 지능형 고객 지원을 통해  
+사용자에게 **안전하고 편리한 공간 대여 경험**을 제공합니다.
 
 ## 팀 소개
    
