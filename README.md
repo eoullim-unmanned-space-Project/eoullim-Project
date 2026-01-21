@@ -285,6 +285,9 @@ java -jar -Dspring.profiles.active=prod build/libs/eoullim-0.0.1-SNAPSHOT.jar
 - 환불 승인/거절
 - 공지사항 관리
 
+https://github.com/user-attachments/assets/b47bee19-b89f-4b17-b65f-794a09d74f00
+
+
 ## API 엔드포인트
 
 ### 인증 관련
