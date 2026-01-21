@@ -620,17 +620,13 @@ eoullim-Project/
 - **지능형 Q&A 도우미**: 자주 묻는 질문 자동 응답
 - **오늘의 운세**: 개인화된 AI 운세 콘텐츠
 
-<p align="center">
-  <img src="eoullim-Project/assets/chatbot.gif" width="45%" />
-</p>
-
 ### 🎧 고객 지원
 - **실시간 1:1 상담**: SSE 기반 관리자 채팅
 - **AI 챗봇**: 24/7 자동 응답 시스템
 - **알림 시스템**: 예약, 결제, 환불 상태 알림
 
 <p align="center">
-  <img src="eoullim-Project/assets/map.gif" width="45%" />
+  <img src="eoullim-Project/assets/chatbot.gif" width="45%" />
 </p>
 
 ### 🧑🏻‍💼 관리자 기능
