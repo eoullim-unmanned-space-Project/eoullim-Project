@@ -14,9 +14,7 @@
 ## 팀 소개
 
 <table align="center">
-
   <tr>
-
     <td align="center">
       <img src="https://github.com/user-attachments/assets/9fb828f4-df4a-4a25-b7cc-d16745757dce" width="120px;" style="border-radius:50%"/><br />
       <b>이름1</b>
