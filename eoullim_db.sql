@@ -18,7 +18,7 @@ DROP TABLE IF EXISTS time_slots;
 DROP TABLE IF EXISTS rooms;
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS comments;
-DROP TABLE IF EXISTS qans;
+DROP TABLE IF EXISTS qnas;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS user_roles;
 DROP TABLE IF EXISTS users;
@@ -169,7 +169,7 @@ CREATE TABLE time_slots (
 
   UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_Month, start_time),
   
-  INDEX `idx_time_slots_slot_Month` (slot_Month),
+  INDEX `idx_time_slots_slot_month` (slot_month),
   INDEX `idx_time_slots_start_time` (start_time),
   INDEX `idx_time_slots_end_time` (end_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='시간 슬롯 테이블';
