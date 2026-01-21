@@ -94,27 +94,6 @@ public class UserController {
         return "user/profile";
     }
 
-    /**
-     * 회원 수정(프로필)
-     */
-    // // http://localhost:8080/users/profile/1
-    @PostMapping("/profile")
-    @PreAuthorize("hasAnyRole('ADMIN','USER')")
-    public String updateProfile(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @ModelAttribute UserRequest.UpDateDTO update,
-            HttpSession session
-    ) {
-        update.validate();
-
-        User user = userDetails.getUser();
-        User updateUser = userService.updateProfile(user.getId(), update);
-
-        session.setAttribute("sessionUser", updateUser);
-
-        return "redirect:/user/profile";
-    }
-
     @GetMapping("/profile/edit")
     @PreAuthorize("hasRole('USER')")
     public String editProfile(
@@ -128,43 +107,6 @@ public class UserController {
         model.addAttribute("user", user);
 
         return "user/update-profile";
-    }
-
-    /**
-     * 회원 수정(프로필 이미지 삭제)
-     */
-    // // http://localhost:8080/users/profile-delete/1
-    @PostMapping("/profile/image")
-    @PreAuthorize("hasRole('USER')")
-    public String deleteProfileImage(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            HttpSession session
-    ) {
-        User user = userDetails.getUser();
-        userService.deleteProfileImage(user.getId());
-
-        User updateUser = userService.getMyProfile(user.getId());
-        session.setAttribute("sessionUser", updateUser);
-
-        return "redirect:/user/profile";
-    }
-
-    /**
-     * 회원 탈퇴
-     */
-    // // http://localhost:8080/users/leave/1
-    @PostMapping("/profile/leave")
-    @PreAuthorize("hasRole('USER')")
-    public String leaveUser(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            HttpSession session
-            ) {
-        User user = userDetails.getUser();
-        userService.leaveUser(user.getId());
-
-        session.invalidate();
-
-        return "redirect:/auth/login";
     }
 
     /**

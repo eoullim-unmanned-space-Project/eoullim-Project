@@ -67,6 +67,9 @@ public class SecurityConfig  {
 
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
 
+                        .requestMatchers(HttpMethod.POST, "/api/auth/find-id/code").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/find-id/verify").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/find-id").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/password-reset/code").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/password-reset/verify").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/auth/password-reset").permitAll()
