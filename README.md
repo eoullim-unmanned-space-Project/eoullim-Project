@@ -12,14 +12,7 @@
 </p>
 
 ## 팀 소개
-<table align="center">
-  <tr>
-    <td align="center"><img src="이미지주소" width="120px;" alt=""/><br /><b>이름1</b><br />(Leader/BE)</td>
-    <td align="center"><img src="이미지주소" width="120px;" alt=""/><br /><b>이름2</b><br />(BE)</td>
-    <td align="center"><img src="이미지주소" width="120px;" alt=""/><br /><b>이름3</b><br />(BE)</td>
-    <td align="center"><img src="이미지주소" width="120px;" alt=""/><br /><b>이름4</b><br />(BE)</td>
-  </tr>
-</table>
+<table align="center"> <tr> <td align="center"> <a href="GitHub주소1"> <img src="이미지주소1" width="120px;" style="border-radius:50%" alt="팀원1"/><br /> <sub><b>이름1</b></sub> </a><br /> <img src="https://img.shields.io/badge/Leader-FFD700?style=flat-square&logo=star&logoColor=white"/><br /> <sub><b>Project Manager / BE</b></sub> </td> <td align="center"> <a href="GitHub주소2"> <img src="이미지주소2" width="120px;" style="border-radius:50%" alt="팀원2"/><br /> <sub><b>이름2</b></sub> </a><br /> <img src="https://img.shields.io/badge/Member-6DB33F?style=flat-square&logo=spring&logoColor=white"/><br /> <sub><b>Backend Developer</b></sub> </td> <td align="center"> <a href="GitHub주소3"> <img src="이미지주소3" width="120px;" style="border-radius:50%" alt="팀원3"/><br /> <sub><b>이름3</b></sub> </a><br /> <img src="https://img.shields.io/badge/Member-6DB33F?style=flat-square&logo=spring&logoColor=white"/><br /> <sub><b>Backend Developer</b></sub> </td> <td align="center"> <a href="GitHub주소4"> <img src="이미지주소4" width="120px;" style="border-radius:50%" alt="팀원4"/><br /> <sub><b>이름4</b></sub> </a><br /> <img src="https://img.shields.io/badge/Member-6DB33F?style=flat-square&logo=spring&logoColor=white"/><br /> <sub><b>Backend Developer</b></sub> </td> </tr> </table>
 
 ## 🛠️ 기술 스택
 
