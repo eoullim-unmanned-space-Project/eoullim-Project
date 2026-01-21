@@ -45,6 +45,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 12px;
+    overflow-y: auto;
 }
 
 .input-label {
