@@ -7,7 +7,7 @@
 />
 </p>
 
-![서비스 플로우](https://github.com/user-attachments/assets/377551b6-647e-4f43-9adf-3efec645dd7a)
+<img width="686" height="134" alt="Image" src="https://github.com/user-attachments/assets/377551b6-647e-4f43-9adf-3efec645dd7a" />
 
 ## 프로젝트 소개
 
