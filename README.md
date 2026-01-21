@@ -197,22 +197,29 @@
 |------------|-----|------|------|
 | GET | `/rooms/{roomId}/reviews/new` | 리뷰 작성 화면 | |
 | POST | `/rooms/{roomId}/reviews` | 리뷰 작성 처리 | |
-| GET | `/reviews/{reviewId}/update` | 리뷰 수정 화면 | |
-| POST | `/rooms/reviews/{reviewId}` | 리뷰 수정 처리 | 수정 요망 (RESTful: PUT `/api/reviews/{reviewId}`) |
-| POST | `/rooms/reviews/{reviewId}/delete` | 리뷰 삭제 | 수정 요망 (RESTful: DELETE `/api/reviews/{reviewId}`) |
+| POST | `/rooms/reviews/{reviewId}` | 리뷰 수정 처리 | |
+| GET | `/user/reviews` | 사용자 리뷰 목록 조회 | |
 | GET | `/api/user/reviews` | 사용자 리뷰 목록 조회 | |
 | DELETE | `/api/user/reviews/{reviewId}` | 사용자 리뷰 삭제 | |
+| GET | `/admin/reviews` | 관리자 리뷰 목록 | |
+| GET | `/api/admin/reviews` | 관리자 리뷰 목록 | |
+| DELETE | `/api/admin/reviews/{reviewId}` | 관리자 리뷰 삭제 | |
 
 ### Q&A 관련
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| GET | `/qaas/new` | Q&A 작성 화면 | |
-| POST | `/qaas/new` | Q&A 작성 처리 | 수정 요망 (RESTful: POST `/api/qaas`) |
-| GET | `/qaas` | Q&A 목록 화면 | |
-| GET | `/qaas/{id}` | Q&A 상세 화면 | |
-| POST | `/qaas/{id}/update` | Q&A 수정 처리 | 수정 요망 (RESTful: PUT `/api/qaas/{id}`) |
-| POST | `/qaas/{id}/delete` | Q&A 삭제 | 수정 요망 (RESTful: DELETE `/api/qaas/{id}`) |
+| GET | `/public/qnas` | Q&A 전체 조회 | |
+| GET | `/public/qnas/{qnaId}` | Q&A 전체 상세 조회 | |
+| POST | `/user/qna` | Q&A 작성 처리 | |
+| GET | `/user/qna` | 마이페이지 Q&A 조회 | |
+| GET | `/user/qna/{qnaId}/edit` | 마이페이지 Q&A 수정 화면 | |
+| GET | `/qna/{qnaId}/update` | 마이페이지 Q&A 수정 처리 | |
+| POST | `/user/qna/{qnaId}/delete` | 마이페이지 Q&A 수정 처리 | |
+| POST | `/qaas/new` | Q&A 삭제 처리 | |
+| GET | `/admin/qnas` | Q&A 관리자 목록 조회 | |
+| GET | `/admin/qnas/{qnaId}` | Q&A 관리자 목록 상세 조회 | |
+| POST | `/admin/qnas/{qnaId}/delete` | Q&A 관리자 삭제 | |
 
 ### 공지사항 관련
 
@@ -232,8 +239,8 @@
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 (관리자) | 수정 요망 (RESTful: POST `/api/admin/qaas/{qaaId}/comments`) |
-| POST | `/admin/comments/{id}/delete` | 댓글 삭제 (관리자) | 수정 요망 (RESTful: DELETE `/api/admin/comments/{id}`) |
+| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 (관리자) | |
+| POST | `/admin/comments/{qaaId}/delete` | 댓글 삭제 (관리자) | |
 
 ### 알림 관련
 
