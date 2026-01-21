@@ -1,46 +1,45 @@
 <link rel="stylesheet" href="/css/notice/notice.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div class="notice-content">
+<div class="notice-container">
     {{#noticePage.content}}
-        <div class="notice-list-item" style="justify-content: flex-end">
+        <div class="notice-list-item">
             <h4>
-                <a href="/notices/{{id}}">{{title}}</a>
+                <a href="/public/notices/{{id}}">{{title}}</a>
             </h4>
-            <p>작성자 : {{name}} | 작성일 : {{createdAt}}</p>
+            <p>
+                작성자 : {{name}}
+                | 작성일 : {{createdAt}}
+            </p>
         </div>
     {{/noticePage.content}}
 
-    <div class="notice-card" style="background-color: #f1f5f9">
-        <form class="notice-form" action="/notices" method="get">
-            <label>
-                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
-            </label>
-            <div>
-                <input type="hidden" name="page" value="1">
-                <input type="hidden" name="size" value="{{noticePage.size}}">
-                <div class="notice-btn-group" style="justify-content: flex-end">
-                    <button class="notice-btn notice-btn-primary" type="submit">검색</button>
-                    <a href="/notices" class="notice-btn notice-btn-secondary">초기화</a>
-                </div>
+    <div class="notice-card notice-search">
+        <form class="notice-form" action="/public/notices" method="get">
+            <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
+            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="size" value="{{noticePage.size}}">
+            <div class="notice-btn-group right">
+                <button class="notice-btn notice-btn-primary" type="submit">검색</button>
+                <a href="/public/notices" class="notice-btn notice-btn-secondary">초기화</a>
             </div>
         </form>
     </div>
 
     <div class="pagination">
         {{#noticePage.previousPageNumber}}
-            <a href="/notices?page={{noticePage.previousPageNumber}}">Previous </a>
+            <a href="/public/notices?page={{noticePage.previousPageNumber}}">Previous </a>
         {{/noticePage.previousPageNumber}}
         {{^noticePage.previousPageNumber}}
             <a href="#">Previous</a>
         {{/noticePage.previousPageNumber}}
 
         {{#noticePage.pageLinks}}
-            <a href="/notices?page={{displayNumber}}&size={{noticePage.size}}">{{displayNumber}} </a>
+            <a href="/public/notices?page={{displayNumber}}&size={{noticePage.size}}">{{displayNumber}} </a>
         {{/noticePage.pageLinks}}
 
         {{#noticePage.nextPageNumber}}
-            <a href="/notices?page={{noticePage.nextPageNumber}}">Next </a>
+            <a href="/public/notices?page={{noticePage.nextPageNumber}}">Next </a>
         {{/noticePage.nextPageNumber}}
         {{^noticePage.nextPageNumber}}
             <a href="#">Next</a>

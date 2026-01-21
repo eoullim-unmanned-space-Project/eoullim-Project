@@ -57,8 +57,8 @@ public class QnaController {
 
         QnaResponse.DetailDTO qna = qnaService.qnaDetailResponse(id);
 
-        User user = userDetails.getUser();
-        Long sessionUserId = user != null ? user.getId() : null;
+        User user = (userDetails != null) ? userDetails.getUser() : null;
+        Long sessionUserId = (user != null) ? user.getId() : null;
 
         boolean isOwner = user != null
                 && qna.getUserId() != null

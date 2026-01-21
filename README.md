@@ -2,34 +2,62 @@
 
 ## 프로젝트 개요
 
-**어울림**은 사용자가 다양한 무인 공간을 손쉽게 예약하고 이용할 수 있는 **스마트 무인 공간 대여 서비스**입니다.  
-기본적인 예약 및 결제 시스템에 **Gemini AI**를 결합하여 지능형 고객 응대와 건전한 리뷰 환경을 구축하였으며, 실시간 타임슬롯 동기화(SSE)와 QR코드 기반의 출입 통제 시스템을 통해 진정한 무인 운영 솔루션을 제공합니다.
+🚀 **어울림**은 Gemini AI와 실시간 동기화 기술을 결합한 **스마트 무인 공간 대여 서비스**
+
+<p align="center">
+  <img width="500" 
+  height="400" alt="Image"
+  src="https://github.com/user-attachments/assets/0ac8498e-0360-49ff-9eb4-e6ed6cad6021"
+/>
+</p>
+
+## 팀 소개
+   
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/9fb828f4-df4a-4a25-b7cc-d16745757dce" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
+      <b>이름1</b>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/9f63f970-1cd6-442f-991b-7c98645e404c" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
+      <b>이름2</b>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/4b7b26f3-6967-41ad-826d-fba0aa156209" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
+      <b>이름3</b>
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/00b6b6a8-f9e2-4a6b-999b-1d893ff45818" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
+      <b>이름4</b>
+    </td>
+  </tr>
+</table>
 
 ## 기술 스택
 
 ### 백엔드
-- **Java 17**: 애플리케이션의 비즈니스 로직을 구현한 주 언어
-- **Spring Boot 3.4.12**: 빠르고 효율적인 서버 및 RESTful API 개발을 위한 기반 프레임워크
-- **Spring Data JPA**: 데이터베이스 접근 및 ORM 구현
-- **Spring Security**: 사용자 인증 및 권한 관리 (비밀번호 암호화, CSRF Token 기반 보안통신 구현)
-- **Spring Mail**: 이메일 인증 기능
-
-### 데이터베이스
-- **MySQL 8.0**: 관계형 데이터의 저장, 조회 및 관리
+![Java](https://img.shields.io/badge/Java_17-ED8A00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.4.1-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
+![JPA](https://img.shields.io/badge/Spring_Data_JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL_8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 
 ### 프론트엔드
-- **Mustache (SSR)**: 서버 측 렌더링을 통한 동적 뷰 페이지 생성
-- **JavaScript**: 클라이언트 사이드 상호작용
+![Mustache](https://img.shields.io/badge/Mustache-FF530F?style=for-the-badge&logo=mustache&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-### 외부 연동
-- **포트원 (아임포트)**: 결제 시스템 연동
-- **카카오 OAuth**: 소셜 로그인 연동
-- **제미나이(Gemini AI)**: AI 콘텐츠 및 챗봇 연동
-- **솔라피 (SOLAPI)**: 문자 전송 및 인증 연동  
+### API
+![SOLAPI](https://img.shields.io/badge/SOLAPI-FF6F00?style=for-the-badge&logo=messagebird&logoColor=white) 
+![PortOne](https://img.shields.io/badge/PortOne_KakaoPay-FF5D5D?style=for-the-badge&logo=p&logoColor=white)
+![Kakao](https://img.shields.io/badge/Kakao_Login-FFCD00?style=for-the-badge&logo=kakaotalk&logoColor=black)
+![Gemini](https://img.shields.io/badge/Gemini_AI-8E75C2?style=for-the-badge&logo=googlegemini&logoColor=white)
+![Gmail](https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white)
 
-### 형상 관리 및 협업
-- **Git**: 소스 코드 버전 관리 및 팀원 간의 코드 병합 관리
-- **Notion**: 프로젝트 기획, 문서화 및 회의록 관리
+### 협업 툴
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+
 
 ## 서비스 흐름
 
@@ -103,10 +131,10 @@
 | POST | `/auth/login` | 로그인 처리 | |
 | DELETE | `/api/auth/session` | 로그아웃 | |
 | GET | `/auth/find-password` | 비밀번호 찾기 화면 | |
-| POST | `/auth/find-password/send-code` | 비밀번호 찾기 인증번호 발송 | 수정 요망 (RESTful: POST `/api/auth/password-reset/code`) |
-| POST | `/auth/verify-password-code` | 비밀번호 찾기 인증번호 확인 | 수정 요망 (RESTful: POST `/api/auth/password-reset/verify`) |
+| POST | `/api/auth/password-reset/code` | 비밀번호 찾기 인증번호 발송 | |
+| POST | `/api/auth/password-reset/verify` | 비밀번호 찾기 인증번호 확인 | |
 | GET | `/auth/reset-password` | 비밀번호 재설정 화면 | |
-| POST | `/auth/reset-password` | 비밀번호 재설정 처리 | 수정 요망 (RESTful: PUT `/api/auth/password-reset`) |
+| PUT | `/api/auth/password-reset` | 비밀번호 재설정 처리 | |
 
 ### 사용자 관련
 
@@ -115,9 +143,9 @@
 | GET | `/user/kakao` | 카카오 소셜 로그인 콜백 | |
 | GET | `/user/profile` | 프로필 조회 화면 | |
 | GET | `/user/profile/edit` | 프로필 수정 화면 | |
-| POST | `/user/profile` | 프로필 수정 처리 | 수정 요망 (RESTful: PUT `/api/users/profile`) |
-| POST | `/user/profile-delete` | 프로필 이미지 삭제 | 수정 요망 (RESTful: DELETE `/api/users/profile/image`) |
-| POST | `/user/leave` | 회원 탈퇴 | 수정 요망 (RESTful: DELETE `/api/users`) |
+| PUT | `/api/users/profile` | 프로필 수정 처리 | |
+| DELETE | `/api/users/profile/image` | |
+| POST | `/api/user/withdraw` | 회원 탈퇴 | |
 | GET | `/user/verify-password` | 비밀번호 확인 화면 | |
 | GET | `/user/bookings` | 예약 내역 화면 | |
 | GET | `/user/reviews` | 리뷰 목록 화면 | |
@@ -135,9 +163,9 @@
 | POST | `/api/email/send` | 이메일 인증번호 발송 | |
 | POST | `/api/email/verify` | 이메일 인증번호 확인 | |
 | POST | `/api/verify-password` | 비밀번호 확인 | |
-| POST | `/api/find/email/send` | 아이디 찾기 인증번호 발송 | 수정 요망 (RESTful: POST `/api/auth/find-id/code`) |
-| POST | `/api/find/email/verify` | 아이디 찾기 인증번호 확인 | 수정 요망 (RESTful: POST `/api/auth/find-id/verify`) |
-| POST | `/api/find/login-id` | 아이디 찾기 결과 조회 | 수정 요망 (RESTful: GET `/api/auth/find-id`) |
+| POST | `/api/auth/find-id/code` | 아이디 찾기 인증번호 발송 | |
+| POST | `/api/auth/find-id/verify` | 아이디 찾기 인증번호 확인 | |
+| POST | `/api/auth/find-id` | 아이디 찾기 결과 조회 | |
 | GET | `/api/user/search` | 예약 내역 검색 | 수정 요망 (RESTful: GET `/api/users/bookings?code=&status=`) |
 | GET | `/api/user/payment` | 결제 상세 조회 | 수정 요망 (RESTful: GET `/api/users/payments?code=`) |
 | POST | `/api/user/refund` | 환불 요청 | 수정 요망 (RESTful: POST `/api/users/refunds`) |
@@ -201,50 +229,33 @@
 | GET | `/user/reviews` | 사용자 리뷰 목록 조회 | |
 | GET | `/api/user/reviews` | 사용자 리뷰 목록 조회 | |
 | DELETE | `/api/user/reviews/{reviewId}` | 사용자 리뷰 삭제 | |
-| GET | `/admin/reviews` | 관리자 리뷰 목록 | |
-| GET | `/api/admin/reviews` | 관리자 리뷰 목록 | |
-| DELETE | `/api/admin/reviews/{reviewId}` | 관리자 리뷰 삭제 | |
 
 ### Q&A 관련
 
-| HTTP Method | URL | 설명 | 비고 |
-|------------|-----|------|------|
-| GET | `/public/qnas` | Q&A 전체 조회 | |
-| GET | `/public/qnas/{qnaId}` | Q&A 전체 상세 조회 | |
-| POST | `/user/qna` | Q&A 작성 처리 | |
-| GET | `/user/qna` | 마이페이지 Q&A 조회 | |
-| GET | `/user/qna/{qnaId}` | 마이페이지 Q&A 상세 조회 | |
-| GET | `/user/qna/{qnaId}/edit` | 마이페이지 Q&A 수정 처리 | |
-| POST | `/qna/{qnaId}/update` | 마이페이지 Q&A 수정 처리 | |
-| POST | `/user/qna/{qnaId}/delete` | Q&A 삭제 처리 | |
+| HTTP Method | URL | 설명 |
+|------------|-----|------|
+| GET | `/public/qnas` | Q&A 전체 조회 |
+| GET | `/public/qnas/{qnaId}` | Q&A 전체 상세 조회 |
+| POST | `/user/qna` | Q&A 작성 처리 |
+| GET | `/user/qna` | 마이페이지 Q&A 조회 |
+| GET | `/user/qna/{qnaId}` | 마이페이지 Q&A 상세 조회 |
+| GET | `/user/qna/{qnaId}/edit` | 마이페이지 Q&A 수정 처리 |
+| POST | `/qna/{qnaId}/update` | 마이페이지 Q&A 수정 처리 |
+| POST | `/user/qna/{qnaId}/delete` | Q&A 삭제 처리 |
 
 ### 공지사항 관련
 
-| HTTP Method | URL | 설명 | 비고 |
-|------------|-----|------|------|
-| GET | `/notices` | 공지사항 목록 화면 | |
-| GET | `/notices/{noticeId}` | 공지사항 상세 화면 | |
-| GET | `/admin/notices` | 관리자 공지사항 목록 화면 | |
-| GET | `/admin/notices/{noticeId}` | 관리자 공지사항 상세 화면 | |
-| GET | `/admin/notices/new` | 공지사항 작성 화면 (관리자) | |
-| POST | `/admin/notices/new` | 공지사항 작성 처리 (관리자) | |
-| GET | `/admin/notices/{noticeId}/edit` | 공지사항 수정 화면 (관리자) | |
-| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 (관리자) | |
-| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 (관리자) | |
-
-### 댓글 관련
-
-| HTTP Method | URL | 설명 | 비고 |
-|------------|-----|------|------|
-| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 (관리자) | |
-| POST | `/admin/comments/{qaaId}/delete` | 댓글 삭제 (관리자) | |
+| HTTP Method | URL | 설명 |
+|------------|-----|------|
+| GET | `/notices` | 공지사항 목록 화면 |
+| GET | `/notices/{noticeId}` | 공지사항 상세 화면 |
 
 ### 알림 관련
 
-| HTTP Method | URL | 설명 | 비고 |
-|------------|-----|------|------|
-| GET | `/notifications` | 알림 목록 화면 | |
-| GET | `/notifications/qr` | QR 코드 화면 | |
+| HTTP Method | URL | 설명 |
+|------------|-----|------|
+| GET | `/notifications` | 알림 목록 화면 |
+| GET | `/notifications/qr` | QR 코드 화면 |
 
 ### 관리자 관련
 
@@ -263,12 +274,23 @@
 | GET | `/admin/qna` | 관리자 Q&A 목록 화면 | |
 | GET | `/admin/qna/{qaaId}` | 관리자 Q&A 상세 화면 | |
 | POST | `/admin/qna/{qaaId}/delete` | 관리자 Q&A 삭제 | |
+| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 | |
+| POST | `/admin/comments/{qaaId}/delete` | Q&A 댓글 삭제 | |
+| GET | `/admin/notices` | 관리자 공지사항 목록 화면 | |
+| GET | `/admin/notices/{noticeId}` | 관리자 공지사항 상세 화면 | |
+| GET | `/admin/notices/new` | 공지사항 작성 화면 | |
+| POST | `/admin/notices/new` | 공지사항 작성 처리 | |
+| GET | `/admin/notices/{noticeId}/edit` | 공지사항 수정 화면 | |
+| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 | |
+| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 | |
+| GET | `/admin/reviews` | 관리자 리뷰 목록 | |
+| DELETE | `/api/admin/reviews/{reviewId}` | 관리자 리뷰 삭제 | |
 
 ### 메인 페이지
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| GET | `/main/main` | 메인 페이지 | |
+| GET | `/public` | 메인 페이지 | |
 
 ## 데이터베이스 구조
 
