@@ -209,9 +209,6 @@
 | GET | `/user/reviews` | 사용자 리뷰 목록 조회 | |
 | GET | `/api/user/reviews` | 사용자 리뷰 목록 조회 | |
 | DELETE | `/api/user/reviews/{reviewId}` | 사용자 리뷰 삭제 | |
-| GET | `/admin/reviews` | 관리자 리뷰 목록 | |
-| GET | `/api/admin/reviews` | 관리자 리뷰 목록 | |
-| DELETE | `/api/admin/reviews/{reviewId}` | 관리자 리뷰 삭제 | |
 
 ### Q&A 관련
 
@@ -232,20 +229,6 @@
 |------------|-----|------|------|
 | GET | `/notices` | 공지사항 목록 화면 | |
 | GET | `/notices/{noticeId}` | 공지사항 상세 화면 | |
-| GET | `/admin/notices` | 관리자 공지사항 목록 화면 | |
-| GET | `/admin/notices/{noticeId}` | 관리자 공지사항 상세 화면 | |
-| GET | `/admin/notices/new` | 공지사항 작성 화면 (관리자) | |
-| POST | `/admin/notices/new` | 공지사항 작성 처리 (관리자) | |
-| GET | `/admin/notices/{noticeId}/edit` | 공지사항 수정 화면 (관리자) | |
-| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 (관리자) | |
-| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 (관리자) | |
-
-### 댓글 관련
-
-| HTTP Method | URL | 설명 | 비고 |
-|------------|-----|------|------|
-| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 (관리자) | |
-| POST | `/admin/comments/{qaaId}/delete` | 댓글 삭제 (관리자) | |
 
 ### 알림 관련
 
@@ -271,12 +254,23 @@
 | GET | `/admin/qna` | 관리자 Q&A 목록 화면 | |
 | GET | `/admin/qna/{qaaId}` | 관리자 Q&A 상세 화면 | |
 | POST | `/admin/qna/{qaaId}/delete` | 관리자 Q&A 삭제 | |
+| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 | |
+| POST | `/admin/comments/{qaaId}/delete` | Q&A 댓글 삭제 | |
+| GET | `/admin/notices` | 관리자 공지사항 목록 화면 | |
+| GET | `/admin/notices/{noticeId}` | 관리자 공지사항 상세 화면 | |
+| GET | `/admin/notices/new` | 공지사항 작성 화면 | |
+| POST | `/admin/notices/new` | 공지사항 작성 처리 | |
+| GET | `/admin/notices/{noticeId}/edit` | 공지사항 수정 화면 | |
+| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 | |
+| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 | |
+| GET | `/admin/reviews` | 관리자 리뷰 목록 | |
+| DELETE | `/api/admin/reviews/{reviewId}` | 관리자 리뷰 삭제 | |
 
 ### 메인 페이지
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| GET | `/main/main` | 메인 페이지 | |
+| GET | `/public` | 메인 페이지 | |
 
 ## 데이터베이스 구조
 
