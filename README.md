@@ -9,7 +9,7 @@
 
 ## 프로젝트 소개
 
-**어울림(Eoulrim)**은 **Gemini AI**와 **Server-Sent Events(SSE)**를 활용한  
+**어울림(Eoulrim)** 은 **Gemini AI**와 **Server-Sent Events(SSE)**를 활용한  
 차세대 **무인 공간 대여 서비스**입니다.
 
 실시간 예약 동기화, AI 기반 콘텐츠 필터링, 지능형 고객 지원을 통해  
