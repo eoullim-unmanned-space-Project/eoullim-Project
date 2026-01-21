@@ -1,9 +1,5 @@
 # 어울림 (Eoulrim) - 무인공간 대여 서비스
 
-## 프로젝트 개요
-
-🚀 **어울림**은 Gemini AI와 실시간 동기화 기술을 결합한 **스마트 무인 공간 대여 서비스**
-
 <p align="center">
   <img width="500" 
   height="400" alt="Image"
