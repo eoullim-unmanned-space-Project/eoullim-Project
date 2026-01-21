@@ -110,9 +110,27 @@
 - XSS자동 방지: HTML 이스케이핑 기본 적용
 - 경량성: 빠른 렌더링 속도
 
-**SSE ()
+**SSE (Server-Sent Events)**
+- 단방향 실시간 통신: 서버 -> 클라이언트 데이터 푸시에 최적
+- WebSocket 대비 간단한 구현: HTTP 프로토콜 기반
+- 자동 재연결: 네트워크 끊김 시 자동 복구
+- 작용
+  - 타임슬롯 실시간 업데이트
+  - 1:1 상담 메시지
 
-## 서비스 흐름
+**Session기반 인증&인가**
+- **서버 측 강력한 제어**: 세션 저장소를 통해 비정상적인 접근 발생 시 즉각적인 세션 무효화 가능
+- **CSRF(Cross-Site Request Forgery)방어**
+  - CSRF 토큰 적용: 상태 변경 요청(POST,PUT,DELETE)에 대해 서버가 발급한 고유번호 <code>X-CSRF-TOKEN 헤더</code>를 검증하여 위조요청 차단
+  - SameSite 쿠키 설정: 외부 사이트에서의 쿠키 전송을 제한하여 보안성 강화
+- **Spring Security기반 권한 관리**
+  - 계층적 권한 제어:<code>@PreAuthorize</code>를 사용한 <code>ROLE_ADMIN</code>,<code>ROLE_USER</code> API별 권한 명시
+  - 보안 필터 체인(Filter Chain): 인증되지 않은 사용자의 보호 자원 접근을 원천 차단하는 표준 보안 프로세스 준수
+
+**Gemini AI**
+- 다국어 지원: 한국어 자연어 처리 우수
+- 빠른 응답 속도: 실시간 필터링에 적합
+- 무료 티어: 개발 단계에서 비용 절
 
 ## 주요 기능
 
