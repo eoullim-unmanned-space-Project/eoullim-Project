@@ -537,7 +537,7 @@ eoullim-Project/
 ## 주요 기능
 
 
-![맵 지도화면](eoullim-Project/eoullim-Project/assets/map.gif)
+![맵 지도화면](assets/map.gif)
 
 ### 🫥 사용자 관리
 - **다양한 인증 방식**
