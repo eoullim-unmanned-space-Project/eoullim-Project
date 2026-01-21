@@ -5,8 +5,8 @@
 **어울림**은**Gemini AI**와 실시간 동기화 기술을 결합한 **스마트 무인 공간 대여 서비스**입니다.
 지능형 AI 상담 및 리뷰 관리로 운영 부담을 줄이고, 실시간 타임슬롯과 QR 출입 시스템을 통해 완벽한 비대면 운영 환경을 제공합니다.
 
-<img width="500" 
-  height="500" alt="Image" 
+<img width="800" 
+  height="800" alt="Image"
   src="https://github.com/user-attachments/assets/0ac8498e-0360-49ff-9eb4-e6ed6cad6021"
 />
 
