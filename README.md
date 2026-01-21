@@ -11,7 +11,7 @@
 />
 </p>
 
-🛠️ ## 기술 스택
+## 🛠️ 기술 스택
 
 ### 백엔드
 ![Java](https://img.shields.io/badge/Java_17-ED8A00?style=for-the-badge&logo=openjdk&logoColor=white)
