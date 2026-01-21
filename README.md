@@ -367,7 +367,7 @@
 주요 테이블:
 - users: 사용자 정보
 - roles, user_roles: 권한 관리
-- event: 이벤트 정보
+- events: 이벤트 정보
 - places: 장소 정보
 - rooms: 룸 정보
 - time_slots: 시간대 정보
@@ -379,6 +379,8 @@
 - comments: 댓글 정보
 - notices: 공지사항 정보
 - notifications: 알림 정보
+- inquirychatroom: 채팅방 정보
+- inquiry_chat: 채팅 정보
 
 ## 프로젝트 구조
 
