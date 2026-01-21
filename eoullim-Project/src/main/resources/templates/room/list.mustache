@@ -23,11 +23,12 @@
                 <div class="room-list">
 
                     {{#roomList}}
-                    <div class="room-item">
-                        <div class="room-card" data-room-id="{{roomId}}"><img src="{{roomImagePath}}" alt="{{name}}">
-                            <p>{{name}}</p>
+                        <div class="room-item">
+                            <div class="room-card" data-room-id="{{roomId}}"><img src="{{roomImagePath}}"
+                                                                                  alt="{{name}}">
+                                <p>{{name}}</p>
+                            </div>
                         </div>
-                    </div>
                     {{/roomList}}
 
                 </div>
@@ -104,33 +105,21 @@
 
     // 1. 카카오 맵 로드 (중복 제거 및 구조 정리)
     kakao.maps.load(function () {
-        const latInput = document.getElementById("latitude");
-        const lngInput = document.getElementById("longitude");
+        const lat = parseFloat(document.getElementById("latitude").value);
+        const lng = parseFloat(document.getElementById("longitude").value);
 
-        // 값 가져오기 (문자열)
-        let latitudeStr = latInput.value;
-        let longitudeStr = lngInput.value;
+        const mapContainer = document.getElementById('map');
+        const mapOption = {
+            center: new kakao.maps.LatLng(lat, lng),
+            level: 5
+        };
 
-        // 숫자로 변환
-        let latitude = parseFloat(latitudeStr);
-        let longitude = parseFloat(longitudeStr);
+        const map = new kakao.maps.Map(mapContainer, mapOption);
 
-
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(() => {
-                var lat = latitude;
-                var lng = longitude;
-                var mapContainer = document.getElementById('map');
-                var mapOption = {center: new kakao.maps.LatLng(lat, lng), level: 6};
-                var map = new kakao.maps.Map(mapContainer, mapOption);
-                var marker = new kakao.maps.Marker({position: new kakao.maps.LatLng(lat, lng)});
-                marker.setMap(map);
-            }, function (error) {
-                console.error("위치 정보를 가져올 수 없습니다.", error);
-            });
-        } else {
-            alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
-        }
+        const marker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(lat, lng)
+        });
+        marker.setMap(map);
     });
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -166,7 +155,8 @@
 
                 const response = await fetch(`/api/public/rooms/${roomId}`, {
                     method: "POST",
-                    headers: {"Content-Type": "application/json",
+                    headers: {
+                        "Content-Type": "application/json",
                         ...getCsrfHeaders()
                     },
                     body: JSON.stringify({
@@ -558,7 +548,8 @@
                 // 예약 API 호출
                 const response = await fetch("/api/user/bookings", {
                     method: "POST",
-                    headers: {"Content-Type": "application/json",
+                    headers: {
+                        "Content-Type": "application/json",
                         ...getCsrfHeaders()
                     },
                     body: JSON.stringify({

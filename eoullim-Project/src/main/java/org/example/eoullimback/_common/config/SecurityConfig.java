@@ -143,7 +143,7 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.GET, "/rooms/{roomId}/reviews/new").hasAnyRole("ADMIN", "USER") // C 리뷰 생성 화면
                         .requestMatchers(HttpMethod.POST, "/rooms/{roomId}/reviews").hasRole("USER") // C
                         .requestMatchers(HttpMethod.GET, "/reviews/{reviewId}/update").hasRole("USER") // U 화면요청
-                        .requestMatchers(HttpMethod.POST, "reviews/{reviewId}").hasRole("USER") // U
+                        .requestMatchers(HttpMethod.POST, "/reviews/{reviewId}").hasRole("USER") // U
                         .requestMatchers(HttpMethod.POST, "/rooms/reviews/{reviewId}/delete").hasRole("USER") // D
                         .requestMatchers(HttpMethod.GET, "/user/reviews").hasRole("USER") // R
 

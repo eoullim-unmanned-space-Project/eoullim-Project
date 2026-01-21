@@ -12,22 +12,15 @@
 
                 <form class="notice-form" action="/admin/notices/{{notice.id}}/edit" method="post">
                     <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                    <input type="text"
-                           name="title"
-                           value="{{notice.title}}"
-                           placeholder="제목을 입력해주세요.">
+                    <input type="text" name="title" value="{{notice.title}}" placeholder="제목을 입력해주세요.">
 
-                    <textarea name="content"
-                              style="min-height:180px;">
-                        {{notice.content}}</textarea>
+                    <textarea name="content" style="min-height:180px;">{{notice.content}}</textarea>
 
                     <div class="notice-btn-group">
-                        <a class="notice-btn notice-btn-secondary"
-                           href="/admin/notices/{{notice.id}}">
+                        <a class="notice-btn notice-btn-secondary" href="/admin/notices/{{notice.id}}">
                             취소
                         </a>
-                        <button class="notice-btn notice-btn-primary"
-                                type="submit">
+                        <button class="notice-btn notice-btn-primary" type="submit">
                             수정 완료
                         </button>
                     </div>

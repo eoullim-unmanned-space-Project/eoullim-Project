@@ -1,80 +1,80 @@
 <style>
     :root {
-        --sidebar-width: 280px;
+        --point-color: #3182f6;
+        --bg-canvas: #f2f4f6;
+        --bg-surface: #ffffff;
 
-        --text-main: #111827;
-        --text-sub: #6b7280;
+        --text-primary: #191f28;
+        --text-secondary: #4e5968;
+        --text-tertiary: #8b95a1;
 
-        --bg: #f8fafc;
-        --card: #ffffff;
+        --line-default: #e5e8eb;
+        --line-subs: #f9fafb;
 
-        --border: #e5e7eb;
+        --danger: #f04452;
+        --danger-bg: #feecef;
+
         --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-
-        --primary: gray;
-        --danger: #ef4444;
-        --danger-bg: #fee2e2;
-
-        --btn-black: #111827;
-        --btn-white: #ffffff;
     }
 
     * {
         box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
     }
 
     body {
         margin: 0;
-        font-family: Pretendard, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", sans-serif;
-        background: var(--bg);
-        color: var(--text-main);
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+        background: var(--bg-canvas);
+        color: var(--text-primary);
     }
 
-    /* ====== Admin Layout ====== */
+    /* ===== Admin Layout ===== */
     .admin-layout {
         display: flex;
         min-height: 100vh;
     }
 
     .admin-main {
+        margin-left: 280px; /* nav가 fixed일 때 기준 */
         flex: 1;
-        padding: 28px 28px 40px;
+        padding: 40px 20px;
         min-width: 0;
     }
 
-    /* ====== Page Header ====== */
+    /* ===== Page Head ===== */
     .page-head {
-        display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 16px;
         margin-bottom: 18px;
+        padding-left: 8px;
     }
 
     .title-wrap h1 {
         margin: 0;
-        font-size: 22px;
-        letter-spacing: -0.2px;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.6px;
     }
 
     .title-wrap p {
-        margin: 6px 0 0;
-        color: var(--text-sub);
-        font-size: 13px;
+        margin: 8px 0 0;
+        font-size: 14px;
+        color: var(--text-tertiary);
     }
 
-    /* ====== Card ====== */
+    /* ===== Surface Card ===== */
     .card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        box-shadow: var(--shadow);
+        background: var(--bg-surface);
+        border: 1px solid var(--line-default);
+        border-radius: 24px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.01);
+        width: 100%;
         overflow: hidden;
     }
 
     .card-top {
-        padding: 16px 16px 12px;
-        border-bottom: 1px solid var(--border);
+        padding: 24px 24px 18px;
+        border-bottom: 1px solid var(--line-default);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -82,7 +82,7 @@
         flex-wrap: wrap;
     }
 
-    /* ====== Search ====== */
+    /* ===== Search ===== */
     .search {
         display: flex;
         gap: 10px;
@@ -92,34 +92,50 @@
 
     .search input {
         width: min(420px, 70vw);
-        height: 40px;
-        padding: 0 12px;
-        border: 1px solid var(--border);
-        border-radius: 10px;
+        height: 42px;
+        padding: 0 14px;
+        border: 1px solid var(--line-default);
+        border-radius: 12px;
         outline: none;
         background: #fff;
+        color: var(--text-primary);
+    }
+
+    .search input::placeholder {
+        color: var(--text-tertiary);
     }
 
     .search input:focus {
-        border-color: rgba(245, 141, 5, 0.5);
-        box-shadow: 0 0 0 4px rgba(245, 141, 5, 0.14);
+        border-color: rgba(49, 130, 246, 0.55);
+        box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.12);
     }
 
+    /* ===== Buttons ===== */
     .btn {
-        height: 40px;
+        height: 42px;
         padding: 0 14px;
-        border-radius: 10px;
-        border: 1px solid var(--border);
+        border-radius: 12px;
+        border: 1px solid var(--line-default);
         cursor: pointer;
         background: #fff;
-        color: var(--text-main);
-        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .btn:hover {
+        background: #f9fafb;
     }
 
     .btn-primary {
-        background: var(--primary);
-        border-color: var(--primary);
-        color: var(--btn-white);
+        background: var(--point-color);
+        border-color: var(--point-color);
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background: #1b64da;
     }
 
     .btn:disabled {
@@ -127,11 +143,12 @@
         cursor: not-allowed;
     }
 
+    /* ===== Meta / Chip ===== */
     .meta {
         display: flex;
         align-items: center;
         gap: 10px;
-        color: var(--text-sub);
+        color: var(--text-tertiary);
         font-size: 13px;
         white-space: nowrap;
     }
@@ -139,16 +156,31 @@
     .chip {
         display: inline-flex;
         align-items: center;
-        padding: 6px 10px;
+        gap: 8px;
+        padding: 6px 12px;
         border-radius: 999px;
-        border: 1px solid var(--border);
+        border: 1px solid var(--line-default);
         background: #fff;
-        color: var(--text-sub);
-        font-size: 12px;
-        gap: 6px;
+        color: var(--text-secondary);
+        font-size: 13px;
+        font-weight: 600;
     }
 
-    /* ====== Table ====== */
+    .chip b {
+        color: var(--text-primary);
+    }
+
+    /* ===== Error ===== */
+    .error {
+        color: var(--danger);
+        background: #fff;
+        border: 1px solid rgba(240, 68, 82, 0.25);
+        border-radius: 16px;
+        padding: 12px 14px;
+        margin: 14px 24px 0;
+    }
+
+    /* ===== Table ===== */
     .table-wrap {
         overflow-x: auto;
     }
@@ -161,67 +193,49 @@
 
     thead th {
         text-align: left;
-        font-size: 12px;
-        color: var(--text-sub);
-        padding: 12px 14px;
-        background: #fafafa;
-        border-bottom: 1px solid var(--border);
+        padding: 14px 16px;
+        color: var(--text-tertiary);
+        font-size: 13px;
+        font-weight: 700;
+        border-bottom: 1px solid var(--line-default);
+        background: #fff;
         position: sticky;
         top: 0;
         z-index: 1;
     }
 
     tbody td {
-        padding: 14px;
-        border-bottom: 1px solid var(--border);
+        padding: 18px 16px;
+        font-size: 14px;
+        border-bottom: 1px solid var(--line-subs);
+        color: var(--text-secondary);
         vertical-align: top;
-        font-size: 13px;
     }
 
     tbody tr:hover {
-        background: #fcfcfd;
+        background: #fafbfc;
     }
 
-    .col-id {
-        width: 90px;
+    tbody tr:last-child td {
+        border-bottom: none;
     }
 
-    .col-rating {
-        width: 90px;
-    }
+    /* Column widths (기존 구조 유지) */
+    .col-id { width: 90px; }
+    .col-rating { width: 110px; }
+    .col-content { min-width: 320px; }
+    .col-user { width: 180px; }
+    .col-room { width: 220px; }
+    .col-payment { width: 220px; }
+    .col-amount { width: 120px; }
+    .col-date { width: 180px; }
+    .col-actions { width: 140px; text-align: right; }
 
-    .col-content {
-        min-width: 300px;
-    }
-
-    .col-user {
-        width: 180px;
-    }
-
-    .col-room {
-        width: 220px;
-    }
-
-    .col-payment {
-        width: 220px;
-    }
-
-    .col-amount {
-        width: 120px;
-    }
-
-    .col-date {
-        width: 180px;
-    }
-
-    .col-actions {
-        width: 140px;
-        text-align: right;
-    }
-
+    /* ===== Content text ===== */
     .muted {
-        color: var(--text-sub);
+        color: var(--text-tertiary);
         font-size: 12px;
+        margin-top: 6px;
     }
 
     .content {
@@ -229,16 +243,20 @@
         -webkit-line-clamp: 5;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        line-height: 1.45;
+
+        line-height: 1.55;
         word-break: break-word;
         white-space: pre-wrap;
+        color: var(--text-primary);
     }
 
+    /* ===== Stars ===== */
     .stars {
         display: inline-flex;
         gap: 2px;
         font-size: 14px;
         letter-spacing: -1px;
+        margin-top: 2px;
     }
 
     .star-on {
@@ -249,36 +267,29 @@
         color: #d1d5db;
     }
 
+    /* ===== Action Buttons ===== */
     .danger-btn {
-        height: 34px;
+        height: 36px;
         padding: 0 12px;
-        border-radius: 10px;
-        border: 1px solid rgba(239, 68, 68, 0.35);
+        border-radius: 12px;
+        border: none;
         background: var(--danger-bg);
         color: var(--danger);
-        font-weight: 700;
+        font-weight: 800;
         cursor: pointer;
+        white-space: nowrap;
     }
 
     .danger-btn:hover {
-        filter: brightness(0.98);
+        background: #fcd6db;
     }
 
-    /* ====== States ====== */
+    /* ===== States ===== */
     .state {
-        padding: 18px;
+        padding: 22px;
         text-align: center;
-        color: var(--text-sub);
+        color: var(--text-tertiary);
         font-size: 14px;
-    }
-
-    .error {
-        color: var(--danger);
-        background: #fff;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        border-radius: 12px;
-        padding: 12px 14px;
-        margin: 14px 16px;
     }
 </style>
 {{> admin/layout/nav}}

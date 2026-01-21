@@ -98,10 +98,10 @@
 |------------|-----|------|------|
 | GET | `/auth/signup` | 회원가입 화면 | |
 | POST | `/auth/signup` | 회원가입 처리 | |
-| GET | `/auth/signup-check-login-id` | 아이디 중복 확인 | 수정 요망 (RESTful: GET `/api/users/check-login-id`) |
+| GET | `/api/users/check-login-id` | 아이디 중복 확인 | |
 | GET | `/auth/login` | 로그인 화면 | |
 | POST | `/auth/login` | 로그인 처리 | |
-| GET | `/auth/logout` | 로그아웃 | 수정 요망 (RESTful: DELETE `/api/auth/session`) |
+| DELETE | `/api/auth/session` | 로그아웃 | |
 | GET | `/auth/find-password` | 비밀번호 찾기 화면 | |
 | POST | `/auth/find-password/send-code` | 비밀번호 찾기 인증번호 발송 | 수정 요망 (RESTful: POST `/api/auth/password-reset/code`) |
 | POST | `/auth/verify-password-code` | 비밀번호 찾기 인증번호 확인 | 수정 요망 (RESTful: POST `/api/auth/password-reset/verify`) |
@@ -175,7 +175,7 @@
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
 | GET | `/public/place/{placeId}/room` | 장소별 룸 목록 | |
-| POST | `/api/admin/room/create` | 룸 생성 처리 (관리자) | |
+| POST | `/api/admin/room` | 룸 생성 처리 (관리자) | |
 | PUT | `/api/admin/room/{roomId}` | 룸 수정 처리 (관리자) | |
 | DELTE | `/api/admin/room/{roomId}` | 룸 삭제 (관리자) | 
 
@@ -197,22 +197,26 @@
 |------------|-----|------|------|
 | GET | `/rooms/{roomId}/reviews/new` | 리뷰 작성 화면 | |
 | POST | `/rooms/{roomId}/reviews` | 리뷰 작성 처리 | |
-| GET | `/reviews/{reviewId}/update` | 리뷰 수정 화면 | |
-| POST | `/rooms/reviews/{reviewId}` | 리뷰 수정 처리 | 수정 요망 (RESTful: PUT `/api/reviews/{reviewId}`) |
-| POST | `/rooms/reviews/{reviewId}/delete` | 리뷰 삭제 | 수정 요망 (RESTful: DELETE `/api/reviews/{reviewId}`) |
+| POST | `/rooms/reviews/{reviewId}` | 리뷰 수정 처리 | |
+| GET | `/user/reviews` | 사용자 리뷰 목록 조회 | |
 | GET | `/api/user/reviews` | 사용자 리뷰 목록 조회 | |
 | DELETE | `/api/user/reviews/{reviewId}` | 사용자 리뷰 삭제 | |
+| GET | `/admin/reviews` | 관리자 리뷰 목록 | |
+| GET | `/api/admin/reviews` | 관리자 리뷰 목록 | |
+| DELETE | `/api/admin/reviews/{reviewId}` | 관리자 리뷰 삭제 | |
 
 ### Q&A 관련
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| GET | `/qaas/new` | Q&A 작성 화면 | |
-| POST | `/qaas/new` | Q&A 작성 처리 | 수정 요망 (RESTful: POST `/api/qaas`) |
-| GET | `/qaas` | Q&A 목록 화면 | |
-| GET | `/qaas/{id}` | Q&A 상세 화면 | |
-| POST | `/qaas/{id}/update` | Q&A 수정 처리 | 수정 요망 (RESTful: PUT `/api/qaas/{id}`) |
-| POST | `/qaas/{id}/delete` | Q&A 삭제 | 수정 요망 (RESTful: DELETE `/api/qaas/{id}`) |
+| GET | `/public/qnas` | Q&A 전체 조회 | |
+| GET | `/public/qnas/{qnaId}` | Q&A 전체 상세 조회 | |
+| POST | `/user/qna` | Q&A 작성 처리 | |
+| GET | `/user/qna` | 마이페이지 Q&A 조회 | |
+| GET | `/user/qna/{qnaId}` | 마이페이지 Q&A 상세 조회 | |
+| GET | `/user/qna/{qnaId}/edit` | 마이페이지 Q&A 수정 처리 | |
+| POST | `/qna/{qnaId}/update` | 마이페이지 Q&A 수정 처리 | |
+| POST | `/user/qna/{qnaId}/delete` | Q&A 삭제 처리 | |
 
 ### 공지사항 관련
 
@@ -223,17 +227,17 @@
 | GET | `/admin/notices` | 관리자 공지사항 목록 화면 | |
 | GET | `/admin/notices/{noticeId}` | 관리자 공지사항 상세 화면 | |
 | GET | `/admin/notices/new` | 공지사항 작성 화면 (관리자) | |
-| POST | `/admin/notices/new` | 공지사항 작성 처리 (관리자) | 수정 요망 (RESTful: POST `/api/admin/notices`) |
+| POST | `/admin/notices/new` | 공지사항 작성 처리 (관리자) | |
 | GET | `/admin/notices/{noticeId}/edit` | 공지사항 수정 화면 (관리자) | |
-| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 (관리자) | 수정 요망 (RESTful: PUT `/api/admin/notices/{noticeId}`) |
-| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 (관리자) | 수정 요망 (RESTful: DELETE `/api/admin/notices/{noticeId}`) |
+| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 (관리자) | |
+| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 (관리자) | |
 
 ### 댓글 관련
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 (관리자) | 수정 요망 (RESTful: POST `/api/admin/qaas/{qaaId}/comments`) |
-| POST | `/admin/comments/{id}/delete` | 댓글 삭제 (관리자) | 수정 요망 (RESTful: DELETE `/api/admin/comments/{id}`) |
+| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 (관리자) | |
+| POST | `/admin/comments/{qaaId}/delete` | 댓글 삭제 (관리자) | |
 
 ### 알림 관련
 
@@ -258,7 +262,7 @@
 | PATCH | `/admin/user/{userId}/restore` | 사용자 복구 | |
 | GET | `/admin/qna` | 관리자 Q&A 목록 화면 | |
 | GET | `/admin/qna/{qaaId}` | 관리자 Q&A 상세 화면 | |
-| POST | `/admin/qna/{qaaId}/delete` | 관리자 Q&A 삭제 | 수정 요망 (RESTful: DELETE `/api/admin/qaas/{qaaId}`) |
+| POST | `/admin/qna/{qaaId}/delete` | 관리자 Q&A 삭제 | |
 
 ### 메인 페이지
 
@@ -283,8 +287,6 @@
 - comments: 댓글 정보
 - notices: 공지사항 정보
 - notifications: 알림 정보
-- file_infos: 파일 정보
-- room_images: 룸 이미지 정보
 
 ## 프로젝트 구조
 
@@ -309,11 +311,9 @@ eoullim-Project/
 │   │   │       ├── qaa/              # Q&A
 │   │   │       ├── review/           # 리뷰
 │   │   │       ├── room/             # 룸 관리
-│   │   │       ├── room_image/       # 룸 이미지
 │   │   │       ├── timeslot/         # 타임슬롯
 │   │   │       ├── timeslot_auto/    # 타임슬롯 자동화
-│   │   │       ├── user_auth/        # 사용자 인증
-│   │   │       └── file/             # 파일 관리
+│   │   │       └── user_auth/        # 사용자 인증
 │   │   └── resources/
 │   │       ├── application.yml       # 설정 파일
 │   │       ├── templates/            # Mustache 템플릿
