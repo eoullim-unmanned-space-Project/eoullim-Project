@@ -62,9 +62,14 @@ public class SecurityConfig  {
 
                         .requestMatchers("/css/**", "/js/**","/map/**", "/images/**", "/img/**", "/favicon.ico", "/error").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
-                        .requestMatchers("/auth/signup", "/auth/login", "/auth/logout", "/error-direct/**").permitAll()
+                        .requestMatchers("/auth/signup", "/auth/login", "/error-direct/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/auth/session").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/auth/password-reset/code").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/password-reset/verify").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/auth/password-reset").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/auth/find-id").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/find-id/send").permitAll()
@@ -210,7 +215,9 @@ public class SecurityConfig  {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/auth/logout")
+                        .logoutRequestMatcher(
+                                new AntPathRequestMatcher("/api/auth/session", "DELETE")
+                        )
                         .logoutSuccessUrl("/public")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)

@@ -55,14 +55,6 @@ public class AuthController {
         return  "redirect:/auth/login";
     }
 
-    @GetMapping("/signup-check-login-id")
-    @ResponseBody
-    @PreAuthorize("permitAll()")
-    public ResponseEntity<Boolean> checkLoginId(@RequestParam String loginId) {
-        boolean exists = userService.existsByLoginId(loginId);
-        return ResponseEntity.ok(exists);
-    }
-
     // http://localhost:8080/auth/login
     @GetMapping("/login")
     @PreAuthorize("permitAll()")
@@ -76,7 +68,7 @@ public class AuthController {
         return "user/find-password";
     }
 
-    @PostMapping("/find-password/send-code")
+    @PostMapping("/find-password/send-code")// TODO
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> sendVerifiedCode(@RequestParam String userId,
                                @RequestParam String email
@@ -91,7 +83,7 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("message", "인증번호가 발송되었습니다."));
     }
 
-    @PostMapping("/password/verify-code")
+    @PostMapping("/password/verify-code")// TODO
     @ResponseBody
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> verifyPasswordCode(@RequestParam String email,
@@ -123,7 +115,7 @@ public class AuthController {
         return "user/reset-password";
     }
 
-    @PostMapping("/password/reset")
+    @PostMapping("/password/reset")// TODO
     @PreAuthorize("permitAll()")
     public String resetPassword(@RequestParam String newPassword,
                                 HttpSession session,
