@@ -123,7 +123,7 @@
 | GET | `/user/kakao` | 카카오 소셜 로그인 콜백 | |
 | GET | `/user/profile` | 프로필 조회 화면 | |
 | GET | `/user/profile/edit` | 프로필 수정 화면 | |
-| POST | `/user/profile` | 프로필 수정 처리 | 수정 요망 (RESTful: PUT `/api/users/profile`) |
+| PUT | `/api/users/profile` | 프로필 수정 처리 | |
 | POST | `/user/profile-delete` | 프로필 이미지 삭제 | 수정 요망 (RESTful: DELETE `/api/users/profile/image`) |
 | POST | `/api/user/withdraw` | 회원 탈퇴 | |
 | GET | `/user/verify-password` | 비밀번호 확인 화면 | |
