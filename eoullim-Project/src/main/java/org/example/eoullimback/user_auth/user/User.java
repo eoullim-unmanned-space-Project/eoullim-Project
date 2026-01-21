@@ -3,6 +3,7 @@ package org.example.eoullimback.user_auth.user;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.eoullimback._common.base.BaseTimeEntity;
+import org.example.eoullimback._common.enums.inquiry.SenderType;
 import org.example.eoullimback._common.enums.user.OAuthProvider;
 import org.example.eoullimback._common.enums.user.Role;
 import org.example.eoullimback._common.enums.user.Status;

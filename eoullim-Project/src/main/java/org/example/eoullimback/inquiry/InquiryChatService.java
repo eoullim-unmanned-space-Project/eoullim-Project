@@ -1,13 +1,14 @@
 package org.example.eoullimback.inquiry;
 
+import org.example.eoullimback.inquiry.dto.response.InquiryChatResponse;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
 public interface InquiryChatService {
-    SseEmitter connect(String clientId, Long roomId);
+    SseEmitter connectInquiry(Long id);
 
-    void sendMessage(InquiryChatRoom room, String sender, String receiver, String message);
+    InquiryChatResponse.MessageDTO sendMessage(Long id, Long roomId, String message);
 
-    List<InquiryChat> getInquiryChats(InquiryChatRoom room);
+    List<InquiryChatResponse.MessageDTO> findAllByRoomId(Long roomId);
 }

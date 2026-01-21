@@ -7,13 +7,17 @@
   --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 8px rgba(0, 0, 0, 0.02);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
 body {
   background: white;
   font-family: 'Pretendard', sans-serif;
   color: var(--text-main);
-  padding: 60px 20px;
+  padding: 0;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 40px auto;
+  padding: 0 20px;
 }
 
 .container {
@@ -21,7 +25,6 @@ body {
   margin: 0 auto;
 }
 
-/* 상단 메인 비주얼 카드 */
 .hero-card {
   background: var(--white);
   border-radius: 32px;
@@ -97,8 +100,14 @@ body {
   height: 140px;
   border-radius: 16px;
   object-fit: cover;
-  background: #f1f5f9;
-  flex-shrink: 0;
+  background-color: #f1f5f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  display: block;
+}
+
+.room-thumb:hover {
+  transform: scale(1.05);
 }
 
 .room-info h3 { font-size: 20px; margin-bottom: 8px; font-weight: 700; }

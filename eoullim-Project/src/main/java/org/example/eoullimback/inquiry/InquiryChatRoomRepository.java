@@ -1,10 +1,14 @@
 package org.example.eoullimback.inquiry;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface InquiryChatRoomRepository extends JpaRepository<InquiryChatRoom, Long> {
+    Optional<InquiryChatRoom> findByUserId(Long id);
 
-    Optional<InquiryChatRoom> findByUserIdAndAdminId(String userId, String adminId);
+    @Query("SELECT DISTINCT r FROM InquiryChatRoom r JOIN FETCH r.user")
+    List<InquiryChatRoom> findAllWithUser();
 }

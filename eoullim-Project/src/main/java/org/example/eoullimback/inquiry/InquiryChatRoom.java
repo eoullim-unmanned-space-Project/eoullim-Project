@@ -1,37 +1,59 @@
 package org.example.eoullimback.inquiry;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.eoullimback.user_auth.user.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
+@Table(name = "inquiry_chat_room",
+    indexes = {
+        @Index(name = "idx_user_id", columnList = "user_id"),
+        @Index(name = "idx_admin_id", columnList = "admin_id")
+    }
+)
 @Getter
 @Entity
-@Table(name = "inquiry_chat_room")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class InquiryChatRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;  // 사용자 ID
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "user_id",
+        nullable = false,
+        foreignKey = @ForeignKey(name = "fk_inquiry_chat_room_user")
+    )
+    private User user;
 
-    @Column(name = "admin_id", nullable = false)
-    private String adminId; // 관리자 ID
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "admin_id",
+        foreignKey = @ForeignKey(name = "fk_inquiry_chat_room_admin")
+    )
+    private User admin;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Builder
-    public InquiryChatRoom(Long id, String userId, String adminId) {
-        this.id = id;
-        this.userId = userId;
-        this.adminId = adminId;
+    public InquiryChatRoom(User user, User admin) {
+        this.user = user;
+        this.admin = admin;
     }
-}
+
+    public boolean isOwer(Long userId) {
+        if (!this.user.getId().equals(userId)) {
+            return false;
+        }
+
+        return true;
+    }}

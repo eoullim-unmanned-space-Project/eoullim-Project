@@ -82,7 +82,8 @@ public enum ErrorCode {
     PAYMENT_NOT_FOUND("결제 내역이 존재하지 않습니다"),
     PAYMENT_DATA_NOT_FOUND("결제 데이터가 존재하지 않습니다."),
     NOTIFICATION_NOT_FOUND("알림을 찾을 수 없습니다."),
-    PAYMENT_REFUND_NOT_FOUND("환불 결과가 존재하지 않습니다"),
+    PAYMENT_REFUND_NOT_FOUND("환불 결과가 존재하지 않습니다."),
+    INGUIRY_CHAT_ROOM_NOT_FOUND("채팅 방이 존재하지 않습니다."),
 
     // ====
     // 409 Conflict

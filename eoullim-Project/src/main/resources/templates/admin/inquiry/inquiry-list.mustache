@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>1:1 문의 관리</title>
+    <style>
+        :root {
+            --point-color: #3182f6;
+            --bg-canvas: #f2f4f6;
+            --bg-surface: #ffffff;
+            --text-primary: #191f28;
+            --text-secondary: #4e5968;
+            --text-tertiary: #8b95a1;
+            --line-default: #e5e8eb;
+            --line-subs: #f9fafb;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            display: flex;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header { margin-bottom: 24px; flex-shrink: 0; }
+        header h1 { font-size: 26px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
+
+        .chat-main-surface {
+            background: var(--bg-surface);
+            border-radius: 24px;
+            display: flex;
+            flex: 1;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            overflow: hidden;
+            border: 1px solid var(--line-default);
+            margin-bottom: 20px;
+        }
+
+        /* 왼쪽 리스트 */
+        .chat-sidebar-list {
+            width: 340px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--line-default);
+            background: white;
+        }
+
+        .list-header { padding: 24px; border-bottom: 1px solid var(--line-subs); }
+        .list-header h2 { font-size: 18px; margin: 0; font-weight: 700; }
+        .room-container { flex: 1; overflow-y: auto; }
+
+        .room-item {
+            padding: 20px 24px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--line-subs);
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .room-item:hover { background-color: var(--line-subs); }
+        .room-item.active { background-color: #f2f8ff; }
+        .room-item.active::after {
+            content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+            width: 4px; background: var(--point-color);
+        }
+
+        .u-name { display: block; font-weight: 700; font-size: 15px; margin-bottom: 4px; color: var(--text-primary); }
+        .u-msg { font-size: 13px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+
+        /* 오른쪽 채팅창 */
+        .chat-content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f9fafb;
+        }
+
+        .chat-content-header {
+            padding: 20px 32px;
+            background: white;
+            border-bottom: 1px solid var(--line-default);
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .status-dot { width: 8px; height: 8px; background: #32d74b; border-radius: 50%; margin-right: 10px; }
+
+        .chat-scroll-view {
+            flex: 1;
+            padding: 32px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .admin-msg-box { display: flex; flex-direction: column; max-width: 70%; }
+        .admin-msg-box.me { align-self: flex-end; align-items: flex-end; }
+        .admin-msg-box.opponent { align-self: flex-start; align-items: flex-start; }
+
+        .admin-bubble {
+            padding: 12px 18px;
+            font-size: 14px;
+            line-height: 1.6;
+            border-radius: 18px;
+            word-break: break-all;
+        }
+
+        .admin-msg-box.me .admin-bubble {
+            background: var(--point-color);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .admin-msg-box.opponent .admin-bubble {
+            background-color: white;
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--line-default);
+        }
+
+        .admin-msg-time { font-size: 11px; color: var(--text-tertiary); margin-top: 6px; }
+
+        .admin-chat-footer {
+            padding: 20px 32px;
+            background: white;
+            border-top: 1px solid var(--line-default);
+        }
+
+        .admin-input-group { display: flex; gap: 12px; }
+
+        .admin-chat-input {
+            flex: 1;
+            height: 48px;
+            background: var(--bg-canvas);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .admin-chat-input:focus { background: white; border-color: var(--point-color); }
+
+        .admin-send-btn {
+            padding: 0 24px;
+            background: var(--point-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .admin-send-btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+{{> admin/layout/nav}}
+
+<main>
+    <header>
+        <h1>1:1 문의 관리</h1>
+    </header>
+
+    <div class="chat-main-surface">
+        <aside class="chat-sidebar-list">
+            <div class="list-header">
+                <h2>문의 목록</h2>
+            </div>
+            <div class="room-container">
+                {{#chatRoomList}}
+                    <div class="room-item" data-room-id="{{chatRoomId}}">
+                        <span class="u-name">{{userName}}</span>
+                        <span class="u-msg">{{lastMessage}}</span>
+                        <input type="hidden" value="{{chatRoomId}}">
+                    </div>
+                {{/chatRoomList}}
+            </div>
+        </aside>
+
+        <section class="chat-content-area" id="chatArea" style="display:none">
+            <div class="chat-content-header" id="chatHeader">
+                <span class="status-dot"></span>
+                대화방을 선택해주세요.
+            </div>
+
+            <div class="chat-scroll-view" id="chatScrollView">
+            </div>
+
+            <footer class="admin-chat-footer">
+                <div class="admin-input-group">
+                    <input type="text" class="admin-chat-input" id="chatInput" placeholder="답변을 입력하세요..." autocomplete="off">
+                    <button type="button" class="admin-send-btn" id="sendBtn">전송</button>
+                </div>
+            </footer>
+        </section>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let inquiryEventSource = null;
+        let currentActiveRoomId = null;
+
+        const chatScrollView = document.getElementById('chatScrollView');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatArea = document.getElementById('chatArea');
+        const chatHeader = document.getElementById('chatHeader');
+
+        // 메시지 렌더링 함수
+        function appendInquiryMessage(senderType, message, createdAt) {
+            const msgBox = document.createElement('div');
+
+            // [수정] 대소문자 상관없이 ADMIN이면 오른쪽(me), 아니면 왼쪽(opponent)
+            const isMe = (senderType && senderType.toUpperCase() === 'ADMIN');
+            msgBox.className = `admin-msg-box ${isMe ? 'me' : 'opponent'}`;
+
+            const timeDisplay = createdAt ? new Date(createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "방금 전";
+
+            msgBox.innerHTML = `
+                <div class="admin-bubble">${message}</div>
+                <span class="admin-msg-time">${timeDisplay}</span>
+            `;
+
+            chatScrollView.appendChild(msgBox);
+            chatScrollView.scrollTop = chatScrollView.scrollHeight;
+        }
+
+        // 방 클릭 이벤트
+        document.addEventListener('click', async (e) => {
+            const roomItem = e.target.closest('.room-item');
+            if (!roomItem) return;
+
+            document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
+            roomItem.classList.add('active');
+
+            const selectedRoomId = roomItem.querySelector('input[type="hidden"]').value;
+            const userName = roomItem.querySelector('.u-name').innerText;
+
+            if (currentActiveRoomId === selectedRoomId) return;
+            currentActiveRoomId = selectedRoomId;
+
+            if (inquiryEventSource) inquiryEventSource.close();
+
+            chatHeader.innerHTML = `<span class="status-dot"></span>${userName}님과 대화 중`;
+            chatScrollView.innerHTML = '';
+            chatArea.style.display = 'flex';
+
+            // 1. 이전 메시지 내역 로드
+            try {
+                const response = await fetch(`/api/admin/inquiry-rooms/${selectedRoomId}/messages`);
+                const messages = await response.json();
+                messages.forEach(msg => appendInquiryMessage(msg.senderType, msg.message, msg.createdAt));
+            } catch (err) {
+                console.error("내역 로드 실패:", err);
+            }
+
+            // 2. SSE 연결 (실시간 수신)
+            inquiryEventSource = new EventSource(`/api/admin/inquiry-rooms/${selectedRoomId}`);
+            inquiryEventSource.addEventListener("message", (e) => {
+                try {
+                    const data = JSON.parse(e.data);
+
+                    // [핵심 수정]
+                    // SSE가 USER 뿐만 아니라 ADMIN 메시지도 쏴줄 경우 중복 방지를 위해
+                    // 현재 내가 방금 전송한 메시지가 아닐 때만 화면에 추가하거나,
+                    // 그냥 모두 SSE에서 처리하도록 sendMessage의 append 로직을 제거함.
+                    appendInquiryMessage(data.senderType, data.message, data.createdAt);
+
+                    // 목록창의 마지막 메시지 업데이트
+                    const listMsg = roomItem.querySelector('.u-msg');
+                    if (listMsg) listMsg.innerText = data.message;
+                } catch (err) {
+                    console.error("SSE 데이터 파싱 에러:", err);
+                }
+            });
+        });
+
+        // 전송 함수
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message || !currentActiveRoomId) return;
+
+            try {
+                const response = await fetch(`/api/admin/inquiry-rooms/${currentActiveRoomId}/messages`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (response.ok) {
+                    // [중요] SSE에서 본인 메시지도 다시 쏴준다면 여기서 append할 필요 없음.
+                    // 만약 SSE가 본인 메시지를 안 쏴준다면 아래 주석을 해제하세요.
+                    // appendInquiryMessage('ADMIN', message, new Date());
+
+                    chatInput.value = '';
+                }
+            } catch (err) {
+                alert("전송에 실패했습니다.");
+            }
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+    });
+</script>
+</body>
+</html>

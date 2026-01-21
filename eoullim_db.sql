@@ -60,6 +60,15 @@ UNIQUE KEY `uk_user_role` (user_id, role_name)
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 권한 매핑';
 
+
+INSERT INTO user_roles (user_id, role_name)
+VALUES
+(1, 'ADMIN');
+
+
+SELECT * FROM users;
+SELECT * FROM user_roles;
+
 CREATE TABLE events (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
@@ -348,20 +357,44 @@ CREATE TABLE sse_chat (
     message TEXT NOT NULL COMMENT '채팅 내용'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='SSE 실시간 채팅';
 
+DROP TABLE inquiry_chat_room;
+DROP TABLE inquiry_chat;
+
 CREATE TABLE inquiry_chat_room (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '채팅방 고유 ID',
-    user_id VARCHAR(36) NOT NULL COMMENT '사용자 ID (로그인/비로그인 UUID)',
-    admin_id VARCHAR(36) NOT NULL COMMENT '관리자 ID',
+    user_id BIGINT NOT NULL COMMENT '사용자 ID',
+    admin_id BIGINT NULL COMMENT '배정된 관리자 ID (users 테이블 참조)',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '채팅방 생성 시간',
-    UNIQUE(user_id, admin_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='관리자-사용자 1:1 채팅방';
+    
+    INDEX `idx_user_id` (user_id),
+    INDEX `idx_admin_id` (admin_id),
+    
+    CONSTRAINT `fk_inquiry_chat_room_user` FOREIGN KEY (user_id) REFERENCES users(id),
+    CONSTRAINT `fk_inquiry_chat_room_admin` FOREIGN KEY (admin_id) REFERENCES users(id)
+    
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci 
+COMMENT='관리자-사용자 1:1 문의 채팅방';
+
+SELECT * FROM inquiry_chat_room;
+SELECT * FROM inquiry_chat;
 
 CREATE TABLE inquiry_chat (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '메시지 고유 ID',
+    
     inquiry_room_id BIGINT NOT NULL COMMENT '채팅방 ID',
-    sender VARCHAR(36) NOT NULL COMMENT '작성자 ID',
-    receiver VARCHAR(36) NOT NULL COMMENT '수신자 ID',
-    message TEXT NOT NULL COMMENT '채팅 내용',
+    
+    sender VARCHAR(30) NOT NULL COMMENT '발신자 이름',
+    receiver VARCHAR(30) NULL COMMENT '수신자 이름',
+    sender_type VARCHAR(30) NOT NULL COMMENT '발신자 타입 (사용자/관리자)',
+    message TEXT NOT NULL COMMENT '메시지 내용',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '메시지 전송 시간',
-    FOREIGN KEY (inquiry_room_id) REFERENCES inquiry_chat_room (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='1:1 SSE 실시간 채팅';
+    
+    CHECK (sender_type IN('USER', 'ADMIN')),
+    
+    INDEX `idx_inquiry_room_id` (inquiry_room_id),
+    INDEX `idx_created_at` (created_at),
+    
+    CONSTRAINT `fk_inquiry_chat_room` FOREIGN KEY (inquiry_room_id) REFERENCES inquiry_chat_room(id) ON DELETE CASCADE
+        
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci 
+COMMENT='1:1 문의 채팅 메시지';

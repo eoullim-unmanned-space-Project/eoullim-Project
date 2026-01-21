@@ -28,12 +28,14 @@ public class BookingResponse {
         private BigDecimal longitude;
         private Long roomId;
         private String roomName;
+        private String roomImage;
         private String content;
         private Long amount;
         private LocalDate bookingDate;
         private int qty;
         private String bookingCode;
         private BookingStatus status;
+        private String profileImage;
         private List<TimeSlotResponse.DetailDTO> timeSlots;
 
         public DetailDTO(List<Booking> bookings) {
@@ -44,15 +46,16 @@ public class BookingResponse {
             this.address = grouping.getRoom().getPlace().getAddress();
             this.latitude = grouping.getRoom().getPlace().getLatitude();
             this.longitude = grouping.getRoom().getPlace().getLongitude();
+            this.profileImage = grouping.getRoom().getPlace().getProfileImage();
             this.roomId = grouping.getRoom().getId();
             this.roomName = grouping.getRoom().getName();
+            this.roomImage = grouping.getRoom().getRoomImage();
             this.content = grouping.getRoom().getContent();
             this.amount = grouping.getItemSnapshotPrice();
             this.bookingDate = grouping.getBookingDate();
             this.qty = grouping.getQty();
             this.bookingCode = grouping.getBookingCode();
             this.status = grouping.getStatus();
-            // 3개의 타임슬롯을 List로 묶어준다
             this.timeSlots = bookings.stream()
                     .map(booking -> new TimeSlotResponse.DetailDTO(booking.getTimeSlot())).toList();
         }
