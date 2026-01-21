@@ -162,9 +162,9 @@
 | POST | `/api/email/send` | 이메일 인증번호 발송 | |
 | POST | `/api/email/verify` | 이메일 인증번호 확인 | |
 | POST | `/api/verify-password` | 비밀번호 확인 | |
-| POST | `/api/find/email/send` | 아이디 찾기 인증번호 발송 | 수정 요망 (RESTful: POST `/api/auth/find-id/code`) |
-| POST | `/api/find/email/verify` | 아이디 찾기 인증번호 확인 | 수정 요망 (RESTful: POST `/api/auth/find-id/verify`) |
-| POST | `/api/find/login-id` | 아이디 찾기 결과 조회 | 수정 요망 (RESTful: GET `/api/auth/find-id`) |
+| POST | `/api/auth/find-id/code` | 아이디 찾기 인증번호 발송 | |
+| POST | `/api/auth/find-id/verify` | 아이디 찾기 인증번호 확인 | |
+| POST | `/api/auth/find-id` | 아이디 찾기 결과 조회 | |
 | GET | `/api/user/search` | 예약 내역 검색 | 수정 요망 (RESTful: GET `/api/users/bookings?code=&status=`) |
 | GET | `/api/user/payment` | 결제 상세 조회 | 수정 요망 (RESTful: GET `/api/users/payments?code=`) |
 | POST | `/api/user/refund` | 환불 요청 | 수정 요망 (RESTful: POST `/api/users/refunds`) |
