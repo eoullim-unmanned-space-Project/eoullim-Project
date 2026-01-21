@@ -107,10 +107,10 @@
 | POST | `/auth/login` | 로그인 처리 | |
 | DELETE | `/api/auth/session` | 로그아웃 | |
 | GET | `/auth/find-password` | 비밀번호 찾기 화면 | |
-| POST | `/auth/find-password/send-code` | 비밀번호 찾기 인증번호 발송 | 수정 요망 (RESTful: POST `/api/auth/password-reset/code`) |
-| POST | `/auth/verify-password-code` | 비밀번호 찾기 인증번호 확인 | 수정 요망 (RESTful: POST `/api/auth/password-reset/verify`) |
+| POST | `/api/auth/password-reset/code` | 비밀번호 찾기 인증번호 발송 | |
+| POST | `/api/auth/password-reset/verify` | 비밀번호 찾기 인증번호 확인 | |
 | GET | `/auth/reset-password` | 비밀번호 재설정 화면 | |
-| POST | `/auth/reset-password` | 비밀번호 재설정 처리 | 수정 요망 (RESTful: PUT `/api/auth/password-reset`) |
+| PUT | `/api/auth/password-reset` | 비밀번호 재설정 처리 | |
 
 ### 사용자 관련
 
