@@ -104,24 +104,15 @@
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
+## 채택한 기술과 이슈 & 깃 브랜치 전략
+**Mustache**
+- 로직 없는 템플릿: View와 비즈니스 로직 완전 분리
+- XSS자동 방지: HTML 이스케이핑 기본 적용
+- 경량성: 빠른 렌더링 속도
+
+**SSE ()
 
 ## 서비스 흐름
-
-1. 회원가입
-2. 로그인 (세션 기반 인증)
-3. 카테고리 선택
-4. 장소 선택
-5. 룸 선택
-6. 날짜 선택 → 해당 날짜의 타임슬롯 조회
-7. 타임슬롯 선택 → 예약 생성(PENDING_PAYMENT)
-8. 결제 진행
-9. 결제 완료 → QR 코드 발급(PAID)
-10. QR 코드 스캔 → 무인 공간 입장(USED)
-11. 이용 종료 처리
-12. 리뷰 작성 가능 (AI 실시간 비속어 필터링)
-13. Q&A 게시판 이용 가능
-14. 오늘의 운세 (AI 오늘의 운세)
-15. 챗(1:1 상담 & Q&A 도우미)
 
 ## 주요 기능
 
