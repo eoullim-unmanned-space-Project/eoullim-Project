@@ -550,10 +550,11 @@ eoullim-Project/
 - **중복 예약 방지**: 낙관적 락을 통한 동시 요청 처리
 - **자동 금액 계산**: 시간대별 요금 자동 산출
 - **예약 상태 관리**
-  - `PENDING_PAYMENT`: 결제 대기
-  - `PAID`: 결제 완료
-  - `USED`: 사용 완료
-  - `CANCELED`: 취소
+  - `READY`: 결제 대기
+  - `SUCCESS`: 결제 완료
+  - `COMPLETED`: 사용 완료
+  - `CANCELLED`: 취소
+  - `FAILED`: 실패
   - `REFUNDED`: 환불 완료
 - **QR 코드 발급**: 결제 완료 시 자동 생성 및 발송
 - **예약 내역 관리**: 조회, 검색, 상태별 필터링
