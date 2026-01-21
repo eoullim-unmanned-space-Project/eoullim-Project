@@ -68,42 +68,6 @@ public class AuthController {
         return "user/find-password";
     }
 
-    @PostMapping("/find-password/send-code")// TODO
-    @PreAuthorize("permitAll()")
-    public ResponseEntity<?> sendVerifiedCode(@RequestParam String userId,
-                               @RequestParam String email
-    ) {
-        User user = userService.findByUserIdAndEmail(userId, email);
-        if (user == null) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("message", "아이디와 이메일이 일치하지 않습니다."));
-        }
-        mailService.sendVerificationCode(email);
-
-        return ResponseEntity.ok(Map.of("message", "인증번호가 발송되었습니다."));
-    }
-
-    @PostMapping("/password/verify-code")// TODO
-    @ResponseBody
-    @PreAuthorize("permitAll()")
-    public ResponseEntity<?> verifyPasswordCode(@RequestParam String email,
-                                     @RequestParam String code,
-                                     @RequestParam String userId,
-                                     HttpSession session
-    ) {
-        boolean verified = mailService.verifyVerificationCode(email, code);
-
-        if (!verified) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("message", "인증번호가 일치하지 않습니다."));
-        }
-
-        session.setAttribute("passwordResetVerified", true);
-        session.setAttribute("passwordUserId", userId);
-
-        return ResponseEntity.ok(Map.of("message", "인증이 완료되었습니다."));
-    }
-
     @GetMapping("/password/reset")
     @PreAuthorize("permitAll()")
     public String resetPasswordForm(HttpSession session) {
@@ -115,30 +79,6 @@ public class AuthController {
         return "user/reset-password";
     }
 
-    @PostMapping("/password/reset")// TODO
-    @PreAuthorize("permitAll()")
-    public String resetPassword(@RequestParam String newPassword,
-                                HttpSession session,
-                                Model model
-    ) {
-        Boolean verified = (Boolean) session.getAttribute("passwordResetVerified");
-        String userId = (String) session.getAttribute("passwordUserId");
-
-        if (verified == null || !verified || userId == null) {
-            model.addAttribute("error", "잘못된 접근입니다.");
-            return "user/find-password";
-        }
-
-        userService.updatePassword(userId, newPassword);
-
-        session.removeAttribute("passwordResetVerified");
-        session.removeAttribute("passwordUserId");
-
-        model.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
-
-        return "redirect:/auth/login";
-    }
-
     @GetMapping("/find-id")
     @PreAuthorize("permitAll()")
     public String findIdForm() {
@@ -148,7 +88,7 @@ public class AuthController {
     /**
      * 아이디 찾기 - 이메일 전송
      */
-    @PostMapping("/find-id/send")
+    @PostMapping("/find-id/send") // TODO
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> sendVerificationCode(
             @RequestBody UserRequest.EmailCheckDTO reqDTO
@@ -165,7 +105,7 @@ public class AuthController {
      *
      *  ---------------------- 수정 -----------------------------
      */
-    @PostMapping("/find-id/verify")
+    @PostMapping("/find-id/verify") //TODO
     @PreAuthorize("permitAll()")
     public ResponseEntity<?> verifyEmailVerificationCode(
             @RequestBody UserRequest.EmailCheckDTO reqDTO,
@@ -199,7 +139,7 @@ public class AuthController {
      * 아이디 찾기 - 아이디 확인
      */
     @PostMapping("/login-id/recovery")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("permitAll()") // TODO
     public ResponseEntity<String> findLoginId(
             HttpSession session
     ) {

@@ -62,8 +62,7 @@
                 </div>
 
                 <div class="btn-wrapper">
-                    <form action="/user/profile/leave" method="POST"
-                          onsubmit="return confirm('정말 탈퇴하시겠습니까?')">
+                    <form id="withdrawForm">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
 <!--                        <label class="label">회원탈퇴</label>-->
                         <button type="submit" class="edit-btn">
@@ -95,6 +94,37 @@
         </div>
     </main>
 </div>
+
+<script>
+    document.getElementById("withdrawForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (!confirm("정말 탈퇴하시겠습니까?")) return;
+
+        const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+        try {
+            const res = await fetch("/api/user/withdraw", {
+                method: "POST",
+                headers: {
+                    "X-XSRF-TOKEN": csrfToken
+                },
+                credentials: "include"
+            });
+
+            if (res.ok) {
+                alert("회원 탈퇴가 완료되었습니다.");
+                window.location.href = "/auth/login"; // JS에서 로그인 페이지로 이동
+            } else {
+                const text = await res.text();
+                alert("탈퇴 실패: " + text);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("오류가 발생했습니다.");
+        }
+    });
+</script>
 
 </body>
 {{> layout/footer}}
