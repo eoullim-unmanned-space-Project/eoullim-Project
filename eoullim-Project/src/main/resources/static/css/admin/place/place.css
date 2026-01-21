@@ -42,9 +42,11 @@
     padding: 10px;
     margin-bottom: 5px;
     display: flex;
+    padding: 0 25px;
     flex-direction: column;
     justify-content: center;
     gap: 12px;
+    overflow-y: auto;
 }
 
 .input-label {

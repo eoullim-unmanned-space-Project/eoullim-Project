@@ -28,13 +28,12 @@
   직원 대기 없이 예약부터 입장까지  
   모든 과정을 한 번에 처리할 수 있습니다.
 
-<div style="display: flex; align-items: center; gap: 16px;">
-  <div>
-    <strong>서비스 플로우</strong><br/>
-  </div>
-  <img src="https://github.com/user-attachments/assets/a2f23115-523d-4df5-957b-2298fff346a6"
-       width="689" />
-</div>
+⏩**서비스 플로우**
+```
+회원가입/로그인 → 카테고리/장소 선택 → 룸 및 날짜 선택 
+→ 타임슬롯 예약 (실시간 동기화) → 결제 → QR 코드 발급 
+→ 공간 입장 → 이용 완료 → 리뷰 작성 (AI 필터링)
+```
 
 ## 왜 어울림인가?
 **🤖 AI 기반 지능형 서비스**
@@ -105,14 +104,145 @@
 ![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
 ## 채택한 기술과 이슈 & 깃 브랜치 전략
-**Mustache**
+🎨 **Mustache**
 - 로직 없는 템플릿: View와 비즈니스 로직 완전 분리
 - XSS자동 방지: HTML 이스케이핑 기본 적용
 - 경량성: 빠른 렌더링 속도
 
-**SSE ()
+ ⚡**SSE (Server-Sent Events)**
+- 단방향 실시간 통신: 서버 -> 클라이언트 데이터 푸시에 최적
+- WebSocket 대비 간단한 구현: HTTP 프로토콜 기반
+- 자동 재연결: 네트워크 끊김 시 자동 복구
+- 작용
+  - 타임슬롯 실시간 업데이트
+  - 1:1 상담 메시지
 
-## 서비스 흐름
+🔐 **Session기반 인증&인가**
+- **서버 측 강력한 제어**: 세션 저장소를 통해 비정상적인 접근 발생 시 즉각적인 세션 무효화 가능
+- **CSRF(Cross-Site Request Forgery)방어**
+  - CSRF 토큰 적용: 상태 변경 요청(POST,PUT,DELETE)에 대해 서버가 발급한 고유번호 <code>X-CSRF-TOKEN 헤더</code>를 검증하여 위조요청 차단
+  - SameSite 쿠키 설정: 외부 사이트에서의 쿠키 전송을 제한하여 보안성 강화
+- **Spring Security기반 권한 관리**
+  - 계층적 권한 제어:<code>@PreAuthorize</code>를 사용한 <code>ROLE_ADMIN</code>,<code>ROLE_USER</code> API별 권한 명시
+  - 보안 필터 체인(Filter Chain): 인증되지 않은 사용자의 보호 자원 접근을 원천 차단하는 표준 보안 프로세스 준수
+
+🤖 **Gemini AI**
+- 다국어 지원: 한국어 자연어 처리 우수
+- 빠른 응답 속도: 실시간 필터링에 적합
+- 무료 티어: 개발 단계에서 비용 절감
+
+🔴 **깃 브랜치전략**
+
+👉 [컨벤션 문서 (CONVENTION.md)](https://github.com/eoullim-unmanned-space-Project/eoullim-Project/blob/develop/CONVENTION.md)
+
+## 시작하기
+사전 요구사항
+- **Java**: 17이상
+- **MySQL**: 8.0이상
+- **Gradle**: 8.x
+- **IDE**: IntelliJ IDEA 권장
+
+**⚙️ 환경설정**
+
+#### 1. 데이터베이스 설정
+
+```sql
+CREATE DATABASE eoullim CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'eoullim_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON eoullim.* TO 'eoullim_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+#### 2. 환경 변수 설정
+
+`src/main/resources/application-local.yml` 생성:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/eoullim?serverTimezone=Asia/Seoul
+    username: eoullim_user
+    password: your_password
+    
+  # 카카오 로그인
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+
+# 포트원 결제
+portone:
+  api-key: ${PORTONE_API_KEY}
+  api-secret: ${PORTONE_API_SECRET}
+
+# Gemini AI
+gemini:
+  api-key: ${GEMINI_API_KEY}
+
+# Gmail SMTP
+spring:
+  mail:
+    username: ${GMAIL_USERNAME}
+    password: ${GMAIL_APP_PASSWORD}
+
+# SOLAPI (문자 발송)
+solapi:
+  api-key: ${SOLAPI_API_KEY}
+  api-secret: ${SOLAPI_API_SECRET}
+```
+
+#### 3. 환경 변수 등록
+
+**Linux/Mac**:
+```bash
+export KAKAO_CLIENT_ID=your_kakao_client_id
+export KAKAO_CLIENT_SECRET=your_kakao_secret
+export PORTONE_API_KEY=your_portone_key
+export PORTONE_API_SECRET=your_portone_secret
+export GEMINI_API_KEY=your_gemini_key
+export GMAIL_USERNAME=your_email@gmail.com
+export GMAIL_APP_PASSWORD=your_app_password
+export SOLAPI_API_KEY=your_solapi_key
+export SOLAPI_API_SECRET=your_solapi_secret
+```
+
+**Windows**:
+```cmd
+set KAKAO_CLIENT_ID=your_kakao_client_id
+set KAKAO_CLIENT_SECRET=your_kakao_secret
+...
+```
+
+### 실행
+
+#### 개발 환경
+
+```bash
+# 빌드
+./gradlew clean build
+
+# 실행
+./gradlew bootRun --args='--spring.profiles.active=local'
+```
+
+#### 프로덕션 환경
+
+```bash
+# JAR 빌드
+./gradlew clean build -x test
+# 실행
+java -jar -Dspring.profiles.active=prod build/libs/eoullim-0.0.1-SNAPSHOT.jar
+```
+
+### 접속
+- **애플리케이션**: http://localhost:8080
+- **관리자 페이지**: http://localhost:8080/admin/dashboard
+- **기본 관리자 계정**: 
+  - ID: `admin`
+  - PW: `admin1234!` (최초 로그인 후 변경 필수)
 
 ## 주요 기능
 
@@ -334,7 +464,7 @@
 주요 테이블:
 - users: 사용자 정보
 - roles, user_roles: 권한 관리
-- event: 이벤트 정보
+- events: 이벤트 정보
 - places: 장소 정보
 - rooms: 룸 정보
 - time_slots: 시간대 정보
@@ -346,6 +476,8 @@
 - comments: 댓글 정보
 - notices: 공지사항 정보
 - notifications: 알림 정보
+- inquirychatroom: 채팅방 정보
+- inquiry_chat: 채팅 정보
 
 ## 프로젝트 구조
 
@@ -381,26 +513,105 @@ eoullim-Project/
 └── build.gradle                      # Gradle 빌드 설정
 ```
 
-## 실행 방법
+## 아키텍쳐
+🛠️ 시스템 아키텍쳐
+```
+┌─────────────┐      ┌──────────────┐      ┌─────────────┐
+│   Client    │◄────►│ Spring Boot  │◄────►│   MySQL     │
+│  (Browser)  │      │  Application │      │  Database   │
+└─────────────┘      └──────────────┘      └─────────────┘
+       │                    │
+       │                    ├──────► Gemini AI (비속어 필터링, Q&A, 운세)
+       │                    │
+       │                    ├──────► PortOne (결제)
+       │                    │
+       │                    ├──────► Kakao (소셜 로그인)
+       │                    │
+       │                    ├──────► Gmail API (이메일 발송)
+       │                    │
+       │                    └──────► SOLAPI (SMS 발송)
+       │
+       └────── SSE ─────────┘ (실시간 타임슬롯, 채팅)
+```
 
-1. MySQL 데이터베이스 생성 및 설정
-2. `application.yml` 파일에 데이터베이스 연결 정보 설정
-3. 프로젝트 빌드: `./gradlew build`
-4. 애플리케이션 실행: `./gradlew bootRun`
-5. 브라우저에서 `http://localhost:8080` 접속
+## 주요 기능
 
-## 주요 특징
+### 🫥 사용자 관리
+- **다양한 인증 방식**
+  - 일반 회원가입/로그인
+  - 카카오 소셜 로그인
+  - 이메일 인증 시스템
+- **프로필 관리**: 정보 수정, 프로필 이미지 업로드/삭제
+- **비밀번호 관리**: 분실 시 이메일 인증을 통한 재설정
+- **회원 탈퇴**: 안전한 계정 삭제
 
-- 세션 기반 인증 시스템
-- 포트원(아임포트) 결제 연동
-- 카카오 소셜 로그인 지원
-- 이메일 인증 기능
-- 실시간 타임슬롯 업데이트 (SSE)
-- 예약 자동 해제 스케줄러
-- 관리자 대시보드 및 관리 기능
-- 파일 업로드 및 이미지 관리
-- AI 기반 실시간 비속어 필터링 (Gemini AI)
-- 지능형 Q&A 도우미 및 개인화 운세 (Gemini AI)
-- 실시간 1:1 상담 (SSE)
+### 📆 예약 시스템
+- **실시간 타임슬롯 조회**: SSE 기반 동시성 제어
+- **중복 예약 방지**: 낙관적 락을 통한 동시 요청 처리
+- **자동 금액 계산**: 시간대별 요금 자동 산출
+- **예약 상태 관리**
+  - `READY`: 결제 대기
+  - `SUCCESS`: 결제 완료
+  - `COMPLETED`: 사용 완료
+  - `CANCELLED`: 취소
+  - `FAILED`: 실패
+  - `REFUNDED`: 환불 완료
+- **QR 코드 발급**: 결제 완료 시 자동 생성 및 발송
+- **예약 내역 관리**: 조회, 검색, 상태별 필터링
 
+### 💳 결제 시스템
+- **포트원 결제 연동**
+  - 카카오페이
+  - 신용카드
+  - 기타 간편결제
+- **결제 프로세스**
+  1.결제 준비 (사전 검증)
+  2.결제 진행
+  3.결제 완료 확인
+  4.QR 코드 발급
+- **환불 관리**
+  - 사용자 환불 요청
+  - 관리자 승인/거절
+  - 자동 환불 처리
+
+### 💬 커뮤니티 기능
+- **리뷰 시스템**
+  - AI 기반 실시간 비속어 필터링 (Gemini AI)
+  - 별점 평가
+  - 사진 첨부
+  - 수정/삭제 기능
+- **Q&A 게시판**
+  - 질문 작성 및 관리
+  - 관리자 댓글 기능
+  - 검색 및 필터링
+- **공지사항**
+  - 관리자 전용 작성
+  - 중요 공지 상단 고정
+
+### 🤖 AI 기능
+- **비속어 실시간 필터링**: Gemini AI를 통한 리뷰 품질 관리
+- **지능형 Q&A 도우미**: 자주 묻는 질문 자동 응답
+- **오늘의 운세**: 개인화된 AI 운세 콘텐츠
+
+### 🎧 고객 지원
+- **실시간 1:1 상담**: SSE 기반 관리자 채팅
+- **AI 챗봇**: 24/7 자동 응답 시스템
+- **알림 시스템**: 예약, 결제, 환불 상태 알림
+
+### 🧑🏻‍💼 관리자 기능
+- **대시보드**
+  - 회원 통계
+  - 결제/환불 현황
+  - 예약 현황
+- **장소/룸 관리**: CRUD 작업
+- **사용자 관리**
+  - 계정 정지/복구
+  - 사용자 상세 조회
+- **환불 관리**: 승인/거절 처리
+- **콘텐츠 관리**
+  - 리뷰 삭제
+  - Q&A 답변
+  - 공지사항 작성
+
+## 프로젝트를 진행하면서 기술적 도전과 해결
 
