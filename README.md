@@ -143,8 +143,107 @@
 - **IDE**: IntelliJ IDEA 권장
 
 **⚙️ 환경설정**
-1. 프로젝트클론
 
+#### 1. 데이터베이스 설정
+
+```sql
+CREATE DATABASE eoullim CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'eoullim_user'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON eoullim.* TO 'eoullim_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+#### 2. 환경 변수 설정
+
+`src/main/resources/application-local.yml` 생성:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/eoullim?serverTimezone=Asia/Seoul
+    username: eoullim_user
+    password: your_password
+    
+  # 카카오 로그인
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+
+# 포트원 결제
+portone:
+  api-key: ${PORTONE_API_KEY}
+  api-secret: ${PORTONE_API_SECRET}
+
+# Gemini AI
+gemini:
+  api-key: ${GEMINI_API_KEY}
+
+# Gmail SMTP
+spring:
+  mail:
+    username: ${GMAIL_USERNAME}
+    password: ${GMAIL_APP_PASSWORD}
+
+# SOLAPI (문자 발송)
+solapi:
+  api-key: ${SOLAPI_API_KEY}
+  api-secret: ${SOLAPI_API_SECRET}
+```
+
+#### 3. 환경 변수 등록
+
+**Linux/Mac**:
+```bash
+export KAKAO_CLIENT_ID=your_kakao_client_id
+export KAKAO_CLIENT_SECRET=your_kakao_secret
+export PORTONE_API_KEY=your_portone_key
+export PORTONE_API_SECRET=your_portone_secret
+export GEMINI_API_KEY=your_gemini_key
+export GMAIL_USERNAME=your_email@gmail.com
+export GMAIL_APP_PASSWORD=your_app_password
+export SOLAPI_API_KEY=your_solapi_key
+export SOLAPI_API_SECRET=your_solapi_secret
+```
+
+**Windows**:
+```cmd
+set KAKAO_CLIENT_ID=your_kakao_client_id
+set KAKAO_CLIENT_SECRET=your_kakao_secret
+...
+```
+
+### 실행
+
+#### 개발 환경
+
+```bash
+# 빌드
+./gradlew clean build
+
+# 실행
+./gradlew bootRun --args='--spring.profiles.active=local'
+```
+
+#### 프로덕션 환경
+
+```bash
+# JAR 빌드
+./gradlew clean build -x test
+# 실행
+java -jar -Dspring.profiles.active=prod build/libs/eoullim-0.0.1-SNAPSHOT.jar
+```
+
+### 접속
+- **애플리케이션**: http://localhost:8080
+- **관리자 페이지**: http://localhost:8080/admin/dashboard
+- **기본 관리자 계정**: 
+  - ID: `admin`
+  - PW: `admin1234!` (최초 로그인 후 변경 필수)
+---
 
 ## 주요 기능
 
