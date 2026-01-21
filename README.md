@@ -28,7 +28,8 @@
   직원 대기 없이 예약부터 입장까지  
   모든 과정을 한 번에 처리할 수 있습니다.
 
-<img width="686" height="134" alt="Image" src="https://github.com/user-attachments/assets/377551b6-647e-4f43-9adf-3efec645dd7a" />
+**서비스 플로우**
+<img width="686" height="134" alt="Image" src="https://github.com/user-attachments/assets/4258d473-cc23-4969-9da1-d30ec0c88668" />
 
 ## 팀 소개
    
