@@ -19,15 +19,15 @@
       <b>이름1</b>
     </td>
     <td align="center">
-      <img src="이미지주소2" width="120px;" style="border-radius:50%"/><br />
+      <img src="https://github.com/user-attachments/assets/9f63f970-1cd6-442f-991b-7c98645e404c" width="120px;" style="border-radius:50%"/><br />
       <b>이름2</b>
     </td>
     <td align="center">
-      <img src="이미지주소3" width="120px;" style="border-radius:50%"/><br />
+      <img src="https://github.com/user-attachments/assets/4b7b26f3-6967-41ad-826d-fba0aa156209" width="120px;" style="border-radius:50%"/><br />
       <b>이름3</b>
     </td>
     <td align="center">
-      <img src="이미지주소4" width="120px;" style="border-radius:50%"/><br />
+      <img src="https://github.com/user-attachments/assets/00b6b6a8-f9e2-4a6b-999b-1d893ff45818" width="120px;" style="border-radius:50%"/><br />
       <b>이름4</b>
     </td>
   </tr>
