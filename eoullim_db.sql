@@ -160,7 +160,7 @@ CREATE TABLE time_slots (
   CHECK (status IN('OPEN','CLOSED','HOLD')),
   CONSTRAINT `fk_timeslots_room` FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
 
-  UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_Month, start_time),
+  UNIQUE KEY `uk_time_slots_room_start` (room_id, slot_month, start_time),
   
   INDEX `idx_time_slots_slot_month` (slot_month),
   INDEX `idx_time_slots_start_time` (start_time),
@@ -365,61 +365,3 @@ CREATE TABLE inquiry_chat (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '메시지 전송 시간',
     FOREIGN KEY (inquiry_room_id) REFERENCES inquiry_chat_room (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='1:1 SSE 실시간 채팅';
-
--- --------------------------
-USE eoullim_db;
-
-SELECT * FROM time_slots;
-SELECT * FROM items;
-SELECT * FROM places;	
-SELECT * FROM rooms;
-
-SELECT * FROM rooms WHERE place_id = 2;
-insert into user_roles (user_id, role_name)
-value (1, 'ADMIN');
-
-SELECT * FROM time_slots;
-SELECT * FROM users;
-SELECT * FROM rooms;
-SELECT * FROM user_roles;	
-SELECT * FROM bookings;
-SELECT * FROM payments;	
-SELECT * FROM roles;
-SELECT * FROM payment_refunds;
-SELECT * FROM reviews;
-SELECT * FROM places;
-SELECT * FROM rooms;
-SELECT * FROM room_images;
-
-INSERT INTO places (name, address, latitude, longitude, category, profile_image)
-VALUES
-('부산 파티 스페이스 해운대', '부산 해운대구 해운대해변로 123', 35.158698, 129.160384, 'PARTY', NULL),
-('부산 스터디존 서면', '부산 부산진구 중앙대로 689', 35.157889, 129.059534, 'STUDY', NULL),
-('부산 연습실 남포', '부산 중구 남포길 45', 35.097993, 129.035144, 'PRACTICE', NULL),
-('광안리 파티룸 블루', '부산 수영구 광안해변로 210', 35.153169, 129.118666, 'PARTY', NULL),
-('센텀 스터디랩', '부산 해운대구 센텀중앙로 90', 35.170913, 129.129234, 'STUDY', NULL),
-('부산 댄스 연습실 서면', '부산 부산진구 전포대로 181', 35.154442, 129.063291, 'PRACTICE', NULL),
-('해운대 스터디카페 집중', '부산 해운대구 좌동순환로 433', 35.168245, 129.177512, 'STUDY', NULL),
-('광복동 파티하우스', '부산 중구 광복로 55', 35.100921, 129.031299, 'PARTY', NULL),
-('부산 음악 연습실 사상', '부산 사상구 사상로 201', 35.162833, 128.984120, 'PRACTICE', NULL),
-('부산 파티룸 마린시티', '부산 해운대구 마린시티2로 38', 35.158112, 129.150921, 'PARTY', NULL);
-
-INSERT INTO rooms (place_id, name, content, max_capacity, default_price, status, room_image)
-VALUES
-(1, '해운대 오션 파티룸', '바다 전망 파티룸', 20, 200000, 'OPEN', NULL),
-(2, '서면 스터디룸 A', '조용한 스터디 공간', 6, 50000, 'OPEN', NULL),
-(3, '남포 음악 연습실', '방음 완비 연습실', 5, 80000, 'OPEN', NULL),
-(4, '광안리 VIP 파티룸', '광안대교 뷰 파티룸', 25, 250000, 'OPEN', NULL),
-(5, '센텀 스터디룸 프리미엄', '넓은 스터디 공간', 8, 70000, 'OPEN', NULL),
-(6, '서면 댄스 연습실', '대형 거울 완비', 10, 90000, 'OPEN', NULL),
-(7, '해운대 집중 스터디룸', '장시간 학습용', 6, 60000, 'OPEN', NULL),
-(8, '광복동 파티 스위트', '단체 파티 가능', 30, 300000, 'OPEN', NULL),
-(9, '사상 밴드 연습실', '밴드 연습 최적', 7, 85000, 'OPEN', NULL),
-(10, '마린시티 럭셔리 파티룸', '프리미엄 파티룸', 40, 350000, 'OPEN', NULL);
-
-SELECT
-    i.price,
-    t.start_time
-FROM items i
-JOIN time_slots t ON i.time_slot_id = t.id
-WHERE DATE(t.start_time) IN ('2026-01-24');

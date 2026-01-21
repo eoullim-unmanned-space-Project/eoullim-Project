@@ -30,5 +30,8 @@ public class SecurityErrorController {
         throw new Exception401(ErrorCode.USER_STATUS_WITHDRAWN);
     }
 
-
+    @GetMapping("/error-direct/login-fail")
+    public void errorLoginFail() {
+        throw new Exception400(ErrorCode.LOGIN_FAILED);
+    }
 }

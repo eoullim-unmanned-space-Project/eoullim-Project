@@ -12,6 +12,7 @@ public enum ErrorCode {
     MISSING_PARAMETER("비워 둘수 없는 항목입니다."),
     LOGIN_ID_REQUIRED("아이디는 필수입니다"),
     LOGIN_ID_LENGTH("아이디는 6자이상 20자 이하여야 합니다."),
+    LOGIN_FAILED("아이디 또는 비밀번호가 일치하지 않습니다."),
     SOCIAL_USER_CANNOT_FIND_LOGIN_ID("소셜 유저는 아이디 찾기를 할 수 없습니다."),
     PASSWORD_REQUIRED("비밀번호는 필수입니다"),
     PASSWORD_POLITY("비밀번호는 8자이상 20자 이하여야 합니다."),
@@ -43,6 +44,7 @@ public enum ErrorCode {
     BOOKING_ALREADY_CANCELED("이미 취소 처리된 예약입니다."),
     BAD_CONTENT("욕설이 섞여있는 댓글은 금지입니다."),
     EVENT_ALREADY_CREATED("이미 생성된 이벤트 입니다. 이벤트는 하루에 한 번 가능합니다."),
+    DUPLICATE_LOGIN_ID("이미 사용 중인 아이디입니다."),
 
     // ====
     // 401 Unauthorized

@@ -39,6 +39,7 @@
 
 .modal-input-box{
     flex: 1;
+    padding: 10px;
     margin-bottom: 5px;
     display: flex;
     padding: 0 25px;
