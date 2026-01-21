@@ -2,7 +2,7 @@
 
 ## 프로젝트 개요
 
-🚀 **어울림**은 Gemini AI와 실시간 동기화 기술을 결합한 **스마트 무인 공간 대여 서비스**입니다.
+🚀 **어울림**은 Gemini AI와 실시간 동기화 기술을 결합한 **스마트 무인 공간 대여 서비스**
 
 <p align="center">
   <img width="500" 
@@ -10,6 +10,14 @@
   src="https://github.com/user-attachments/assets/0ac8498e-0360-49ff-9eb4-e6ed6cad6021"
 />
 </p>
+
+## 팀 소개
+| 프로필 | 이름 | 역할 | 담당 업무 |
+| :---: | :---: | :---: | :--- |
+| <img src="이미지주소" width="100"> | **이름1** | 팀장 / BE | 프로젝트 총괄, DB 설계, 결제 API(PortOne) 연동 |
+| <img src="이미지주소" width="100"> | **이름2** | BE | Gemini AI 연동, 챗봇 구현, SMS/Mail 알림 시스템 |
+| <img src="이미지주소" width="100"> | **이름3** | FE / BE | Mustache 화면 렌더링, SSE 실시간 예약 현황 구현 |
+| <img src="이미지주소" width="100"> | **이름4** | BE | Spring Security 보안 설정, QR 코드 출입 통제 로직 |
 
 ## 🛠️ 기술 스택
 
