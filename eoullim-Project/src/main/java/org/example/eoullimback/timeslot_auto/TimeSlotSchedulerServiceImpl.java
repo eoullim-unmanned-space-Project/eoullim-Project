@@ -17,6 +17,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +37,17 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
     @Override
     @Transactional
     public void createNextMonthTimeSlot(YearMonth nextMonth) {
+
+        String slotMonth = nextMonth.format(
+                DateTimeFormatter.ofPattern("yyyy-MM")
+        );
         List<Room> rooms = roomRepository.findByStatus(RoomStatus.OPEN);
-        List<Long> existRoomIds = timeSlotRepository.findExistedRoomIdByMonth(nextMonth.toString());
+        List<Long> existRoomIds = timeSlotRepository.findExistedRoomIdByMonth(slotMonth);
 
         LocalDate startDate = nextMonth.atDay(1);
         LocalDate endDate = nextMonth.atEndOfMonth();
+
+
 
         int counter = 0;
 
@@ -54,7 +61,7 @@ public class TimeSlotSchedulerServiceImpl implements TimeSlotSchedulerService {
 
                     TimeSlot timeSlot = TimeSlot.builder()
                             .room(room)
-                            .slotMonth(nextMonth.toString())
+                            .slotMonth(slotMonth)
                             .startTime(start)
                             .endTime(end)
                             .capacity(room.getMaxCapacity())

@@ -154,7 +154,7 @@
 
                     // 마커 클릭 시 해당 장소 상세 페이지로 이동
                     kakao.maps.event.addListener(marker, 'click', function() {
-                        window.location.href = `/place/${place.id}/room`;
+                        window.location.href = `/public/place/${place.id}/room`;
                     });
 
                     // markers 배열에 새로 생성한 마커 추가 (나중에 제거할 때 사용)
