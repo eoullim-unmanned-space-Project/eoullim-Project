@@ -16,7 +16,7 @@
 <table align="center">
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/875e8cd6-a104-418b-b28c-9491715c3936" width="150" height="200" style="display: block; object-fit: full; border-radius: 50%;"/><br />
+      <img src="https://github.com/user-attachments/assets/482bfc07-58ff-4c94-940e-43a2dd31e83f" width="150" height="200" style="display: block; object-fit: full; border-radius: 50%;"/><br />
       <b>이름1</b>
     </td>
     <td align="center">
@@ -24,11 +24,11 @@
       <b>이름2</b>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/4b7b26f3-6967-41ad-826d-fba0aa156209" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
+      <img src="https://github.com/user-attachments/assets/fa2bafaa-d5ce-439c-a5fc-f5dabff2d4ec" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
       <b>이름3</b>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/00b6b6a8-f9e2-4a6b-999b-1d893ff45818" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
+      <img src="https://github.com/user-attachments/assets/594cd046-dcd8-4403-a091-d1c6aa2856fe" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
       <b>이름4</b>
     </td>
   </tr>
