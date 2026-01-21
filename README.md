@@ -16,7 +16,7 @@
 <table align="center">
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/9fb828f4-df4a-4a25-b7cc-d16745757dce" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
+      <img src="https://github.com/user-attachments/assets/875e8cd6-a104-418b-b28c-9491715c3936" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
       <b>이름1</b>
     </td>
     <td align="center">
