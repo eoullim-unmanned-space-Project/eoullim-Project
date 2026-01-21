@@ -34,6 +34,13 @@ public class UserApiController {
     private final PaymentRefundService paymentRefundService;
     private final NotificationService notificationService;
 
+    @GetMapping("/user/check-login-id")
+    @ResponseBody
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Boolean> checkLoginId(@RequestParam String loginId) {
+        boolean exists = userService.existsByLoginId(loginId);
+        return ResponseEntity.ok(exists);
+    }
 
     /**
      * 비밀번호 확인

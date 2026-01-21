@@ -62,8 +62,8 @@
             logoutLink.addEventListener('click', function(e){
                 e.preventDefault();
 
-                fetch('/auth/logout', {
-                    method: 'POST',
+                fetch('/api/auth/session', {
+                    method: 'DELETE',
                     headers: {
                         ...getCsrfHeaders()
                     }
