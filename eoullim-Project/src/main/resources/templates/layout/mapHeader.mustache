@@ -46,4 +46,29 @@
             {{/sessionUser}}
         </div>
     </div>
+
+    <script>
+        function getCsrfHeaders() {
+            const token = document.querySelector('meta[name="_csrf"]').content;
+            const header = document.querySelector('meta[name="_csrf_header"]').content;
+
+            return {
+                [header]: token
+            };
+        }
+
+        const logoutLink = document.getElementById('logoutLink');
+        if(logoutLink) {
+            logoutLink.addEventListener('click', function(e){
+                e.preventDefault();
+
+                fetch('/api/auth/session', {
+                    method: 'DELETE',
+                    headers: {
+                        ...getCsrfHeaders()
+                    }
+                }).then(() => window.location.href = '/public');
+            });
+        }
+    </script>
 </header>

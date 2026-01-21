@@ -50,11 +50,6 @@ CREATE TABLE users (
   UNIQUE KEY `uk_users_email` (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 정보 테이블';
 
-select * from users WHERE id = 1;
-
-INSERT INTO user_roles (user_id, role_name) 
-VALUES (1, 'ADMIN');
-
 CREATE TABLE IF NOT EXISTS user_roles (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
   
@@ -64,8 +59,6 @@ CREATE TABLE IF NOT EXISTS user_roles (
 UNIQUE KEY `uk_user_role` (user_id, role_name)
   
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 권한 매핑';
-
-
 
 CREATE TABLE events (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
