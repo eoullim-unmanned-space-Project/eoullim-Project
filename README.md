@@ -536,6 +536,13 @@ eoullim-Project/
 
 ## 주요 기능
 
+<p align="center">
+  <img src="eoullim-Project/assets/map.gif" width="45%" />
+</p>
+<p align="center">
+  <img src="eoullim-Project/assets/place_room.gif" width="45%" />
+</p>
+
 ### 🫥 사용자 관리
 - **다양한 인증 방식**
   - 일반 회원가입/로그인
@@ -544,6 +551,10 @@ eoullim-Project/
 - **프로필 관리**: 정보 수정, 프로필 이미지 업로드/삭제
 - **비밀번호 관리**: 분실 시 이메일 인증을 통한 재설정
 - **회원 탈퇴**: 안전한 계정 삭제
+
+<p align="center">
+  <img src="eoullim-Project/assets/login&signup.gif" width="45%" />
+</p>
 
 ### 📆 예약 시스템
 - **실시간 타임슬롯 조회**: SSE 기반 동시성 제어
@@ -559,6 +570,8 @@ eoullim-Project/
 - **QR 코드 발급**: 결제 완료 시 자동 생성 및 발송
 - **예약 내역 관리**: 조회, 검색, 상태별 필터링
 
+
+
 ### 💳 결제 시스템
 - **포트원 결제 연동**
   - 카카오페이
@@ -573,6 +586,10 @@ eoullim-Project/
   - 사용자 환불 요청
   - 관리자 승인/거절
   - 자동 환불 처리
+ 
+<p align="center">
+  <img src="eoullim-Project/assets/booking.gif" width="45%" />
+</p>
 
 ### 💬 커뮤니티 기능
 - **리뷰 시스템**
@@ -588,6 +605,13 @@ eoullim-Project/
   - 관리자 전용 작성
   - 중요 공지 상단 고정
 
+<p align="center">
+  <img src="eoullim-Project/assets/qna.gif" width="45%" />
+  <img src="eoullim-Project/assets/comment.gif" width="45%" />
+  <img src="eoullim-Project/assets/notice.gif" width="45%" />
+  <img src="eoullim-Project/assets/review.gif" width="45%" />
+</p>
+
 ### 🤖 AI 기능
 - **비속어 실시간 필터링**: Gemini AI를 통한 리뷰 품질 관리
 - **지능형 Q&A 도우미**: 자주 묻는 질문 자동 응답
@@ -597,6 +621,10 @@ eoullim-Project/
 - **실시간 1:1 상담**: SSE 기반 관리자 채팅
 - **AI 챗봇**: 24/7 자동 응답 시스템
 - **알림 시스템**: 예약, 결제, 환불 상태 알림
+
+<p align="center">
+  <img src="eoullim-Project/assets/chatbot.gif" width="45%" />
+</p>
 
 ### 🧑🏻‍💼 관리자 기능
 - **대시보드**
@@ -612,6 +640,11 @@ eoullim-Project/
   - 리뷰 삭제
   - Q&A 답변
   - 공지사항 작성
+ 
+<p align="center">
+  <img src="eoullim-Project/assets/admin_user_block.gif" width="45%" />
+  <img src="eoullim-Project/assets/admin_create_place_room.gif" width="45%" />
+</p>
 
 ---
 ## ⚙️프로젝트를 진행하면서 기술적 도전과 해결 경험 (각자 파트)
