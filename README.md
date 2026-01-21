@@ -606,13 +606,10 @@ eoullim-Project/
   - 중요 공지 상단 고정
 
 <p align="center">
-  <img src="assets/qna.gif" width="45%" />
-  <img src="assets/comment.gif" width="45%" />
-</p>
-
-<p align="center">
-  <img src="assets/notice.gif" width="45%" />
-  <img src="assets/review.gif" width="45%" />
+  <img src="eoullim-Project/assets/qna.gif" width="50%" />
+  <img src="eoullim-Project/assets/comment.gif" width="50%" />
+  <img src="eoullim-Project/assets/notice.gif" width="50%" />
+  <img src="eoullim-Project/assets/review.gif" width="50%" />
 </p>
 
 ### 🤖 AI 기능
