@@ -415,25 +415,8 @@ eoullim-Project/
 ```
 
 ## 아키텍쳐
-시스템 아키텍쳐
-
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│   Client    │◄────►│ Spring Boot  │◄────►│   MySQL     │
-│  (Browser)  │      │  Application │      │  Database   │
-└─────────────┘      └──────────────┘      └─────────────┘
-       │                    │
-       │                    ├──────► Gemini AI (비속어 필터링, Q&A, 운세)
-       │                    │
-       │                    ├──────► PortOne (결제)
-       │                    │
-       │                    ├──────► Kakao (소셜 로그인)
-       │                    │
-       │                    ├──────► Gmail API (이메일 발송)
-       │                    │
-       │                    └──────► SOLAPI (SMS 발송)
-       │
-       └────── SSE ─────────┘ (실시간 타임슬롯, 채팅)
-
+🛠️ 시스템 아키텍쳐
+<img width="688" height="411" alt="Image" src="https://github.com/user-attachments/assets/3e5f2149-24ce-4339-a67d-920eac21c744" />
 
 ## 주요 특징
 
