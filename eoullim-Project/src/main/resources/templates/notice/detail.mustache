@@ -7,24 +7,13 @@
             <b>작성자</b> : {{notice.name}}
         </div>
 
-    <div class="notice-title">
-        <h2><b>{{notice.title}}</b></h2>
+        <div class="notice-title">
+            <h2><b>{{notice.title}}</b></h2>
+        </div>
+
+        <div class="notice-content">
+            {{notice.content}}
+        </div>
     </div>
-
-    <div class="notice-btn-group" style="justify-content: flex-end">
-        <form action="/notices/{{notice.id}}/update" method="get">
-            <button class="notice-btn notice-btn-secondary">수정</button>
-        </form>
-        <form action="/notices/{{notice.id}}/delete" method="post">
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <button class="notice-btn notice-btn-danger">삭제</button>
-        </form>
-    </div>
-
-    <div class="notice-content">
-        {{notice.content}}
-    </div>
-
-
 </div>
 {{> layout/footer}}

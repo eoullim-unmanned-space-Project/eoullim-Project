@@ -1,12 +1,12 @@
 <link rel="stylesheet" href="/css/qna/qna.css">
 <link rel="stylesheet" href="/css/layout/header.css"/>
 {{> layout/header}}
-<div class="qna-content">
+<div class="qna-container">
 
     {{#qnaPage.content}}
         <div class="qna-list-item">
             <h4>
-                <a href="/qnas/{{id}}">{{title}}</a>
+                <a href="/public/qnas/{{id}}">{{title}}</a>
             </h4>
             <p>
                 작성자 : {{name}}
@@ -16,36 +16,33 @@
         </div>
     {{/qnaPage.content}}
 
-    <div class="qna-card" style="background-color: #f1f5f9">
-        <form class="qna-form" action="/qnas" method="get">
-            <label>
-                <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{#keyword}}{{keyword}}{{/keyword}}">
-            </label>
-            <div>
-                <input type="hidden" name="page" value="1">
-                <input type="hidden" name="size" value="{{qnaPage.size}}">
-                <div class="qna-btn-group" style="justify-content: flex-end">
-                    <button class="qna-btn qna-btn-primary" type="submit">검색</button>
-                    <a href="/qnas" class="qna-btn qna-btn-secondary">초기화</a>
-                </div>
+    <div class="qna-card qna-search">
+        <form class="qna-form" action="/public/qnas" method="get">
+            <input type="text" name="keyword" placeholder="검색어를 입력해주세요." value="{{keyword}}">
+            <input type="hidden" name="page" value="1">
+            <input type="hidden" name="size" value="{{qnaPage.size}}">
+
+            <div class="qna-btn-group right">
+                <button class="qna-btn qna-btn-primary">검색</button>
+                <a href="/public/qnas" class="qna-btn qna-btn-secondary">초기화</a>
             </div>
         </form>
     </div>
 
     <div class="pagination">
         {{#qnaPage.previousPageNumber}}
-            <a href="/qnas?page={{qnaPage.previousPageNumber}}" >Previous </a>
+            <a href="/public/qnas?page={{qnaPage.previousPageNumber}}" >Previous </a>
         {{/qnaPage.previousPageNumber}}
         {{^qnaPage.previousPageNumber}}
             <a href="#">Previous</a>
         {{/qnaPage.previousPageNumber}}
 
         {{#qnaPage.pageLinks}}
-            <a href="/qnas?page={{displayNumber}}&size={{qnaPage.size}}" >{{displayNumber}} </a>
+            <a href="/public/qnas?page={{displayNumber}}&size={{qnaPage.size}}" >{{displayNumber}} </a>
         {{/qnaPage.pageLinks}}
 
         {{#qnaPage.nextPageNumber}}
-            <a href="/qnas?page={{qnaPage.nextPageNumber}}" >Next </a>
+            <a href="/public/qnas?page={{qnaPage.nextPageNumber}}" >Next </a>
         {{/qnaPage.nextPageNumber}}
         {{^qnaPage.nextPageNumber}}
             <a href="#">Next</a>
