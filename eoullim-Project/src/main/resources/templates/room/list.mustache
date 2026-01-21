@@ -429,6 +429,8 @@
             container.innerHTML = "";
 
             updateSlots.forEach(slot => {
+                const div = document.createElement("div");
+
                 div.className = "timeslot";
                 div.dataset.id = slot.timeSlotId;
                 div.dataset.start = slot.startTime;
