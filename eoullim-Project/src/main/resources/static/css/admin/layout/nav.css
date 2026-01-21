@@ -310,12 +310,13 @@ thead>.th-list>th {
     cursor: pointer;
     border: none;
     transition: all 0.2s;
+
 }
 
 .btn-blue { background-color: var(--point-color); color: white; }
 .btn-blue:hover { background-color: #1b64da; transform: translateY(-2px); }
 
-.btn-red { background-color: #FEECEF; color: #F04452; }
+.btn-red { background-color: #FEECEF; color: #F04452; margin-bottom: 10px;}
 .btn-red:hover { background-color: #FCD6DB; }
 
 .btn-ghost {
