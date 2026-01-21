@@ -28,13 +28,12 @@
   직원 대기 없이 예약부터 입장까지  
   모든 과정을 한 번에 처리할 수 있습니다.
 
-<div style="display: flex; align-items: center; gap: 16px;">
-  <div>
-    <strong>서비스 플로우</strong><br/>
-  </div>
-  <img src="https://github.com/user-attachments/assets/a2f23115-523d-4df5-957b-2298fff346a6"
-       width="689" />
-</div>
+**서비스 플로우**
+```
+회원가입/로그인 → 카테고리/장소 선택 → 룸 및 날짜 선택 
+→ 타임슬롯 예약 (실시간 동기화) → 결제 → QR 코드 발급 
+→ 공간 입장 → 이용 완료 → 리뷰 작성 (AI 필터링)
+```
 
 ## 왜 어울림인가?
 **🤖 AI 기반 지능형 서비스**
