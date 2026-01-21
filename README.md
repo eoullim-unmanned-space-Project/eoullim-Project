@@ -212,30 +212,30 @@
 
 ### Q&A 관련
 
-| HTTP Method | URL | 설명 | 비고 |
-|------------|-----|------|------|
-| GET | `/public/qnas` | Q&A 전체 조회 | |
-| GET | `/public/qnas/{qnaId}` | Q&A 전체 상세 조회 | |
-| POST | `/user/qna` | Q&A 작성 처리 | |
-| GET | `/user/qna` | 마이페이지 Q&A 조회 | |
-| GET | `/user/qna/{qnaId}` | 마이페이지 Q&A 상세 조회 | |
-| GET | `/user/qna/{qnaId}/edit` | 마이페이지 Q&A 수정 처리 | |
-| POST | `/qna/{qnaId}/update` | 마이페이지 Q&A 수정 처리 | |
-| POST | `/user/qna/{qnaId}/delete` | Q&A 삭제 처리 | |
+| HTTP Method | URL | 설명 |
+|------------|-----|------|
+| GET | `/public/qnas` | Q&A 전체 조회 |
+| GET | `/public/qnas/{qnaId}` | Q&A 전체 상세 조회 |
+| POST | `/user/qna` | Q&A 작성 처리 |
+| GET | `/user/qna` | 마이페이지 Q&A 조회 |
+| GET | `/user/qna/{qnaId}` | 마이페이지 Q&A 상세 조회 |
+| GET | `/user/qna/{qnaId}/edit` | 마이페이지 Q&A 수정 처리 |
+| POST | `/qna/{qnaId}/update` | 마이페이지 Q&A 수정 처리 |
+| POST | `/user/qna/{qnaId}/delete` | Q&A 삭제 처리 |
 
 ### 공지사항 관련
 
-| HTTP Method | URL | 설명 | 비고 |
-|------------|-----|------|------|
-| GET | `/notices` | 공지사항 목록 화면 | |
-| GET | `/notices/{noticeId}` | 공지사항 상세 화면 | |
+| HTTP Method | URL | 설명 |
+|------------|-----|------|
+| GET | `/notices` | 공지사항 목록 화면 |
+| GET | `/notices/{noticeId}` | 공지사항 상세 화면 |
 
 ### 알림 관련
 
-| HTTP Method | URL | 설명 | 비고 |
-|------------|-----|------|------|
-| GET | `/notifications` | 알림 목록 화면 | |
-| GET | `/notifications/qr` | QR 코드 화면 | |
+| HTTP Method | URL | 설명 |
+|------------|-----|------|
+| GET | `/notifications` | 알림 목록 화면 |
+| GET | `/notifications/qr` | QR 코드 화면 |
 
 ### 관리자 관련
 
