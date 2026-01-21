@@ -22,7 +22,7 @@ public class SseTimeSlotService {
     public SseEmitter createConnection(Long userId, Long roomId) {
 
         String key = userId + "_" + roomId;
-        SseEmitter emitter = new SseEmitter(60 * 1000L);
+        SseEmitter emitter = new SseEmitter(60L * 60 * 1000);
 
         emitterMap.put(key, emitter);
 

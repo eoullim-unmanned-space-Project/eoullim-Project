@@ -32,6 +32,8 @@
 </div>
 
 <script>
+    let bookingInterval;
+
     document.addEventListener("DOMContentLoaded", () => {
         const bookingBtn = document.querySelector('.booking-search-btn');
         const bookingInput = document.querySelector('.booking-input');
@@ -114,7 +116,7 @@
 
                 card.innerHTML = `
                 <div class="booking-thumb">
-                    <img src="/images/room-sample.jpg" alt="스터디룸 이미지">
+                    <img src="${booking.roomImage}" alt="스터디룸 이미지">
                 </div>
                 <div class="booking-content">
                     <div class="booking-card-header">
@@ -409,6 +411,10 @@
             setInterval(() => {
                 const timerEl = document.querySelectorAll('.booking-timer');
 
+                if (timerEl.length === 0) {
+                     clearInterval(bookingInterval);
+                }
+
                 timerEl.forEach(timer => {
                     const expireStr = timer.dataset.expire;
 
@@ -419,6 +425,8 @@
                     const diff = expireDate - now;
 
                     if (diff <= 0) {
+                        clearInterval(bookingInterval);
+
                         alert("시간이 지나 예약이 취소되었습니다.");
                         location.reload();
                     }

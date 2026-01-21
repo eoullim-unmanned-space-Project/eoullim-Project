@@ -169,9 +169,9 @@ public record UserResponse() {
         private String bookingCode;
         private String status;
         private String roomName;
+        private String roomImage;
         private Long amount;
         private List<TimeSlotResponse.DetailDTO> timeSlots;
-
         private String displayTime;
 
         public static UserBookingDTO empty() {
@@ -188,6 +188,7 @@ public record UserResponse() {
         public UserBookingDTO(List<Booking> bookings) {
             Booking grouping = bookings.get(0);
             this.roomName = grouping.getRoom().getName();
+            this.roomImage = grouping.getRoom().getRoomImage();
             this.amount = grouping.getItemSnapshotPrice();
             this.bookingCode = grouping.getBookingCode();
             this.status = grouping.getStatus().getFormatter();
@@ -199,10 +200,6 @@ public record UserResponse() {
                 TimeSlotResponse.DetailDTO first = timeSlots.get(0);
                 DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy.MM월.dd일 HH:mm");
                 DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-//                this.displayTime = first.getStartTime().format(dateTimeFormatter) + "시"
-//                        + " ~ "
-//                        + first.getEndTime().format(timeFormatter) + "시";
 
                 this.displayTime = first.getStartTime() + "시"
                         + " ~ "

@@ -72,7 +72,7 @@
     <!-- chatBot -->
         <div class="chat-popup" id="chat-popup" aria-hidden="true">
             <div class="header">
-                <h1>어울릿 챗봇 🤖</h1>
+                <h1>🤖 어울릿 챗봇 </h1>
                 <button class="btn-close" id="btn-close" type="button" aria-label="닫기">✕</button>
             </div>
 
@@ -87,7 +87,7 @@
         <!-- 1:1 문의 (관리자) -->
         <div class="chat-popup" id="chat-popup-inquiry" aria-hidden="true">
             <div class="header">
-                <h1>1:1 문의</h1>
+                <h1>💬 1:1 문의</h1>
                 <button class="btn-close" id="btn-close-inquiry" type="button">✕</button>
             </div>
             <div class="chat-box" id="chat-box-inquiry"></div>
@@ -99,14 +99,6 @@
 
         <div class="fab-wrapper" id="fabContainer">
             <div class="fab-menu">
-                <!-- 관리자 1:1 채팅 -->
-<!--                <div class="fab-item">-->
-<!--                    <span class="fab-tooltip">바로 채팅하기</span>-->
-<!--                    <button class="sub-btn chat-direct" id="chat-direct-btn">-->
-<!--                        <span class="emoji">💬</span>-->
-<!--                    </button>-->
-<!--                </div>-->
-
                 <div class="fab-item">
                     <span class="fab-tooltip">관리자 1:1 문의하기</span>
                     <button class="sub-btn contact" id="chat-direct-btn">
@@ -152,7 +144,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
-        // ------------- 배너 슬라이드 ----------------
         const track = document.querySelector('.banner-track');
         const slides = document.querySelectorAll('.banner-slide');
         let currentIndex = 0;
@@ -173,7 +164,6 @@
             });
         }
 
-        // ------------- FAB 및 챗봇 ----------------
         const fabWrapper = document.getElementById("fabContainer");
         const mainFab = document.getElementById("mainFab");
         const chatFab = document.getElementById("chat-fab");
@@ -188,12 +178,10 @@
         const INIT_MESSAGE = `질문을 입력해주세요.\n예) 문의방법/공간안내/운영시간/위치/가격/예약/환불`;
         let hasInitMessage = false;
 
-        // FAB 메뉴 토글
         mainFab.addEventListener("click", () => {
             fabWrapper.classList.toggle("active");
         });
 
-        // 챗봇 열기/닫기 함수
         function openChat() {
             popup.classList.add("open");
             popup.setAttribute("aria-hidden", "false");
@@ -214,25 +202,21 @@
             else openChat();
         }
 
-        // 챗봇 FAB 클릭
         chatFab.addEventListener("click", (e) => {
             e.stopPropagation();
             toggleChat();
         });
 
-        // 닫기 버튼 클릭
         btnClose.addEventListener("click", () => {
             closeChat();
         });
 
-        // ESC 키로 닫기
         document.addEventListener("keydown", (e) => {
             if (e.key === "Escape" && popup.classList.contains("open")) {
                 closeChat();
             }
         });
 
-        // 메시지 전송
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             const userMsg = input.value.trim();
@@ -270,7 +254,6 @@
             }
         });
 
-        // 메시지 추가 함수
         function appendMessage(sender, message) {
             const isMe = sender === "나";
             const wrap = document.createElement("div");
@@ -382,57 +365,109 @@
             alert("운세 생성에 실패했습니다. 잠시 후 다시 시도해주세요.");
         }
     }
-    const popupInquiry=document.getElementById("chat-popup-inquiry");
-    const btnCloseInquiry=document.getElementById("btn-close-inquiry");
-    const chatFormInquiry=document.getElementById("chat-form-inquiry");
-    const chatBoxInquiry=document.getElementById("chat-box-inquiry");
-    const inputInquiry=document.getElementById("chat-input-inquiry");
+    const popupInquiry = document.getElementById("chat-popup-inquiry");
+    const btnCloseInquiry = document.getElementById("btn-close-inquiry");
+    const chatFormInquiry = document.getElementById("chat-form-inquiry");
+    const chatBoxInquiry = document.getElementById("chat-box-inquiry");
+    const inputInquiry = document.getElementById("chat-input-inquiry");
+    const chatDirectBtn = document.getElementById("chat-direct-btn");
 
-    function openInquiryChat(){
+    let inquiryEventSource = null;
+    let roomId = null;
+
+    chatDirectBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        if (inquiryEventSource !== null && inquiryEventSource.readyState !== 2) {
+            openInquiryChat();
+            return;
+        }
+
+        inquiryEventSource = new EventSource("/api/inquiry-rooms");
+
+        inquiryEventSource.onopen = () => console.log("1:1 문의 SSE 연결 성공");
+
+        inquiryEventSource.addEventListener("connect", (e) => {
+            roomId = e.data;
+            openInquiryChat();
+        });
+
+        inquiryEventSource.addEventListener("message", (e) => {
+            try {
+                const data = JSON.parse(e.data);
+                appendInquiryMessage("상대방", data.message);
+            } catch (err) {
+                console.error("메시지 파싱 에러:", err);
+            }
+        });
+
+        inquiryEventSource.onerror = (error) => {
+            console.error("SSE 에러 발생:", error);
+            if (inquiryEventSource) inquiryEventSource.close();
+            inquiryEventSource = null;
+        };
+    });
+
+    chatFormInquiry.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const msg = inputInquiry.value.trim();
+        if (!msg || !roomId) return;
+
+        console.log("요청 주소 확인:", `/api/inquiry-rooms/${roomId}`);
+        appendInquiryMessage("나", msg);
+        inputInquiry.value = "";
+
+        try {
+            const res = await fetch(`/api/inquiry-rooms/${roomId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...getCsrfHeaders()
+                },
+                body: JSON.stringify({
+                    roomId: roomId,
+                    message: msg
+                })
+            });
+            if(!res.ok) throw new Error();
+        } catch (err) {
+            appendInquiryMessage("시스템", "(전송 실패)");
+        }
+    });
+
+    btnCloseInquiry.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeInquiryChat();
+    });
+
+    function openInquiryChat() {
+        popupInquiry.style.display = "flex";
         popupInquiry.classList.add("open");
-        popupInquiry.setAttribute("aria-hidden","false");
+        popupInquiry.setAttribute("aria-hidden", "false");
         inputInquiry.focus();
     }
 
-    function closeInquiryChat(){
+    function closeInquiryChat() {
+        popupInquiry.style.display = "none";
         popupInquiry.classList.remove("open");
-        popupInquiry.setAttribute("aria-hidden","true");
+        popupInquiry.setAttribute("aria-hidden", "true");
     }
 
-    btnCloseInquiry.addEventListener("click", closeInquiryChat);
-
-    // --- 새 버튼: 바로 채팅하기 --- (추가)
-    const chatDirectBtn=document.getElementById("chat-direct-btn");
-    chatDirectBtn.addEventListener("click", () => {
-        openInquiryChat(); // 기존 1:1 문의 모달 열기 재사용
-    });
-
-    // SSE & 메시지 전송
-    const clientId = `guest_${Date.now()}`;
-    let roomId = 1;
-    const sse = new EventSource(`/inquiry/chat/connect?clientId=${clientId}&roomId=${roomId}`);
-    sse.addEventListener("newMessage", e => { appendInquiryMessage("상대", e.data); });
-
-    function appendInquiryMessage(sender,message){
+    function appendInquiryMessage(sender, message) {
+        const isMe = (sender === "나");
         const wrap = document.createElement("div");
-        wrap.className = "msg-box"+(sender==="나"?" me":"");
-        wrap.innerHTML=`<span class="name">${sender}</span><span class="msg">${message}</span>`;
+        wrap.className = "msg-box" + (isMe ? " me" : "");
+
+        wrap.innerHTML = `<span class="name">${sender}</span><span class="msg">${message}</span>`;
+
         chatBoxInquiry.appendChild(wrap);
-        chatBoxInquiry.scrollTop=chatBoxInquiry.scrollHeight;
+        chatBoxInquiry.scrollTop = chatBoxInquiry.scrollHeight;
     }
 
-    chatFormInquiry.addEventListener("submit", async(e)=>{
-        e.preventDefault();
-        const msg=inputInquiry.value.trim(); if(!msg) return;
-        appendInquiryMessage("나", msg); inputInquiry.value="";
-        try{
-            await fetch("/inquiry/chat/send", {
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body: JSON.stringify({sender:clientId, receiver:"admin1", message:msg, roomId:roomId})
-            });
-        } catch(err){ appendInquiryMessage("시스템","(전송 실패)"); }
+    window.addEventListener("beforeunload", () => {
+        if (inquiryEventSource) inquiryEventSource.close();
     });
+
 </script>
 
 {{> layout/footer}}
