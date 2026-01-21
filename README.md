@@ -213,13 +213,10 @@
 | GET | `/public/qnas/{qnaId}` | Q&A 전체 상세 조회 | |
 | POST | `/user/qna` | Q&A 작성 처리 | |
 | GET | `/user/qna` | 마이페이지 Q&A 조회 | |
-| GET | `/user/qna/{qnaId}/edit` | 마이페이지 Q&A 수정 화면 | |
-| GET | `/qna/{qnaId}/update` | 마이페이지 Q&A 수정 처리 | |
-| POST | `/user/qna/{qnaId}/delete` | 마이페이지 Q&A 수정 처리 | |
-| POST | `/qaas/new` | Q&A 삭제 처리 | |
-| GET | `/admin/qnas` | Q&A 관리자 목록 조회 | |
-| GET | `/admin/qnas/{qnaId}` | Q&A 관리자 목록 상세 조회 | |
-| POST | `/admin/qnas/{qnaId}/delete` | Q&A 관리자 삭제 | |
+| GET | `/user/qna/{qnaId}` | 마이페이지 Q&A 상세 조회 | |
+| GET | `/user/qna/{qnaId}/edit` | 마이페이지 Q&A 수정 처리 | |
+| POST | `/qna/{qnaId}/update` | 마이페이지 Q&A 수정 처리 | |
+| POST | `/user/qna/{qnaId}/delete` | Q&A 삭제 처리 | |
 
 ### 공지사항 관련
 
@@ -230,10 +227,10 @@
 | GET | `/admin/notices` | 관리자 공지사항 목록 화면 | |
 | GET | `/admin/notices/{noticeId}` | 관리자 공지사항 상세 화면 | |
 | GET | `/admin/notices/new` | 공지사항 작성 화면 (관리자) | |
-| POST | `/admin/notices/new` | 공지사항 작성 처리 (관리자) | 수정 요망 (RESTful: POST `/api/admin/notices`) |
+| POST | `/admin/notices/new` | 공지사항 작성 처리 (관리자) | |
 | GET | `/admin/notices/{noticeId}/edit` | 공지사항 수정 화면 (관리자) | |
-| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 (관리자) | 수정 요망 (RESTful: PUT `/api/admin/notices/{noticeId}`) |
-| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 (관리자) | 수정 요망 (RESTful: DELETE `/api/admin/notices/{noticeId}`) |
+| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 (관리자) | |
+| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 (관리자) | |
 
 ### 댓글 관련
 
@@ -265,7 +262,7 @@
 | PATCH | `/admin/user/{userId}/restore` | 사용자 복구 | |
 | GET | `/admin/qna` | 관리자 Q&A 목록 화면 | |
 | GET | `/admin/qna/{qaaId}` | 관리자 Q&A 상세 화면 | |
-| POST | `/admin/qna/{qaaId}/delete` | 관리자 Q&A 삭제 | 수정 요망 (RESTful: DELETE `/api/admin/qaas/{qaaId}`) |
+| POST | `/admin/qna/{qaaId}/delete` | 관리자 Q&A 삭제 | |
 
 ### 메인 페이지
 
