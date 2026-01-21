@@ -192,6 +192,10 @@ spring:
 solapi:
   api-key: ${SOLAPI_API_KEY}
   api-secret: ${SOLAPI_API_SECRET}
+
+# Gemini
+gemini:
+  api-key: ${GEMINI_API_KEY}
 ```
 
 #### 3. 환경 변수 등록
