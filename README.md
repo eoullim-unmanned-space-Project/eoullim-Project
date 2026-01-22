@@ -62,11 +62,11 @@
   <tr>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/482bfc07-58ff-4c94-940e-43a2dd31e83f" width="150" height="200" style="display: block; object-fit: full; border-radius: 50%;"/><br />
-      <b>이름1</b>
+      <b>김승민</b>
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/9f63f970-1cd6-442f-991b-7c98645e404c" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
-      <b>이름2</b>
+      <b>박진영</b>
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/fa2bafaa-d5ce-439c-a5fc-f5dabff2d4ec" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
