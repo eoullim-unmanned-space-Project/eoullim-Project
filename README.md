@@ -558,7 +558,7 @@ eoullim-Project/
 - **회원 탈퇴**: 안전한 계정 삭제
 
 <p align="center">
-  <img src="eoullim-Project/assets/login&signup.gif" width="45%" />
+  <img src="https://github.com/user-attachments/assets/5783a9af-ba4f-4cea-bc40-6f927b4b7d62" width="45%" />
 </p>
 
 ### 📆 예약 시스템
@@ -612,10 +612,10 @@ eoullim-Project/
 
 ![Image](https://github.com/user-attachments/assets/993190c2-08a7-4f47-8e3c-7a8f08627398)
 <p align="center">
-  <img src="eoullim-Project/assets/qna.gif" width="45%" />
-  <img src="eoullim-Project/assets/comment.gif" width="45%" />
-  <img src="eoullim-Project/assets/notice.gif" width="45%" />
-  <img src="eoullim-Project/assets/review.gif" width="45%" />
+  <img src="https://github.com/user-attachments/assets/993190c2-08a7-4f47-8e3c-7a8f08627398" width="45%" />
+  <img src="https://github.com/user-attachments/assets/0b601852-422d-4b29-8fc3-6c0b187192f6" width="45%" />
+  <img src="https://github.com/user-attachments/assets/7efe107d-2b1d-4bd2-b426-e43db0298c70" width="45%" />
+  <img src="https://github.com/user-attachments/assets/85d26bde-fd78-487b-9248-c7dd70642771" width="45%" />
 </p>
 
 ### 🤖 AI 기능
@@ -629,7 +629,7 @@ eoullim-Project/
 - **알림 시스템**: 예약, 결제, 환불 상태 알림
 
 <p align="center">
-  <img src="eoullim-Project/assets/chatbot.gif" width="45%" />
+  <img src="https://github.com/user-attachments/assets/9fda74e1-1de2-4626-b49b-7d84eea69ef6" width="45%" />
 </p>
 
 ### 🧑🏻‍💼 관리자 기능
@@ -648,8 +648,8 @@ eoullim-Project/
   - 공지사항 작성
  
 <p align="center">
-  <img src="eoullim-Project/assets/admin_user_block.gif" width="45%" />
-  <img src="eoullim-Project/assets/admin_create_place_room.gif" width="45%" />
+  <img src="https://github.com/user-attachments/assets/a59a8941-4c9b-4db4-add5-f98062a0defd" width="45%" />
+  <img src="https://github.com/user-attachments/assets/885a22fb-70e0-4a1d-93bd-18c5a466bc2e" width="45%" />
 </p>
 
 ---
