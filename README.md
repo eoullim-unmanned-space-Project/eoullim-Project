@@ -65,7 +65,7 @@
       <b>김승민</b>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/9f63f970-1cd6-442f-991b-7c98645e404c" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
+      <img src="https://github.com/user-attachments/assets/a957c359-a4a7-4fb3-bef6-dbec0735840d" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
       <b>박진영</b>
     </td>
     <td align="center">
