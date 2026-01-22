@@ -46,10 +46,10 @@ public class BookingResponse {
             this.address = grouping.getRoom().getPlace().getAddress();
             this.latitude = grouping.getRoom().getPlace().getLatitude();
             this.longitude = grouping.getRoom().getPlace().getLongitude();
-            this.profileImage = grouping.getRoom().getPlace().getProfileImage();
+            this.profileImage = "/images/" + grouping.getRoom().getPlace().getProfileImage();
             this.roomId = grouping.getRoom().getId();
             this.roomName = grouping.getRoom().getName();
-            this.roomImage = grouping.getRoom().getRoomImage();
+            this.roomImage = "/images/" + grouping.getRoom().getRoomImage();
             this.content = grouping.getRoom().getContent();
             this.amount = grouping.getItemSnapshotPrice();
             this.bookingDate = grouping.getBookingDate();
