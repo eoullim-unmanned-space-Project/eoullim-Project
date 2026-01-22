@@ -188,7 +188,7 @@ public record UserResponse() {
         public UserBookingDTO(List<Booking> bookings) {
             Booking grouping = bookings.get(0);
             this.roomName = grouping.getRoom().getName();
-            this.roomImage = grouping.getRoom().getRoomImage();
+            this.roomImage = "/images/" + grouping.getRoom().getRoomImage();
             this.amount = grouping.getItemSnapshotPrice();
             this.bookingCode = grouping.getBookingCode();
             this.status = grouping.getStatus().getFormatter();
