@@ -612,7 +612,7 @@ eoullim-Project/
 
 <p align="center">
   <img src="eoullim-Project/assets/qna.gif" width="45%" />
-  <img src="eoullim-Project/assets/comment.gif" width="45%" />
+  <img src="(https://github.com/user-attachments/assets/0b601852-422d-4b29-8fc3-6c0b187192f6)" width="45%" />
   <img src="eoullim-Project/assets/notice.gif" width="45%" />
   <img src="eoullim-Project/assets/review.gif" width="45%" />
 </p>
