@@ -610,7 +610,6 @@ eoullim-Project/
   - 관리자 전용 작성
   - 중요 공지 상단 고정
 
-![Image](https://github.com/user-attachments/assets/993190c2-08a7-4f47-8e3c-7a8f08627398)
 <p align="center">
   <img src="https://github.com/user-attachments/assets/993190c2-08a7-4f47-8e3c-7a8f08627398" width="45%" />
   <img src="https://github.com/user-attachments/assets/0b601852-422d-4b29-8fc3-6c0b187192f6" width="45%" />
