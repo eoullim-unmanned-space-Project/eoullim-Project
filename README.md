@@ -70,11 +70,11 @@
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/fa2bafaa-d5ce-439c-a5fc-f5dabff2d4ec" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
-      <b>이름3</b>
+      <b>이상은</b>
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/594cd046-dcd8-4403-a091-d1c6aa2856fe" width="150" height="200" style="display: block; object-fit: cover; border-radius: 50%;"/><br />
-      <b>이름4</b>
+      <b>최광섭</b>
     </td>
   </tr>
 </table>
