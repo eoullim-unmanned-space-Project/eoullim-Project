@@ -294,113 +294,113 @@ java -jar -Dspring.profiles.active=prod build/libs/eoullim-0.0.1-SNAPSHOT.jar
 
 ### 인증 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| GET | `/auth/signup` | 회원가입 화면 |
-| POST | `/auth/signup` | 회원가입 처리 |
-| GET | `/api/users/check-login-id` | 아이디 중복 확인 |
-| GET | `/auth/login` | 로그인 화면 |
-| POST | `/auth/login` | 로그인 처리 |
-| DELETE | `/api/auth/session` | 로그아웃 |
-| GET | `/auth/find-password` | 비밀번호 찾기 화면 |
-| POST | `/api/auth/password-reset/code` | 비밀번호 찾기 인증번호 발송 |
-| POST | `/api/auth/password-reset/verify` | 비밀번호 찾기 인증번호 확인 |
-| GET | `/auth/reset-password` | 비밀번호 재설정 화면 |
-| PUT | `/api/auth/password-reset` | 비밀번호 재설정 처리 |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/auth/signup` | 회원가입 화면 | |
+| POST | `/auth/signup` | 회원가입 처리 | |
+| GET | `/api/users/check-login-id` | 아이디 중복 확인 | |
+| GET | `/auth/login` | 로그인 화면 | |
+| POST | `/auth/login` | 로그인 처리 | |
+| DELETE | `/api/auth/session` | 로그아웃 | |
+| GET | `/auth/find-password` | 비밀번호 찾기 화면 | |
+| POST | `/api/auth/password-reset/code` | 비밀번호 찾기 인증번호 발송 | |
+| POST | `/api/auth/password-reset/verify` | 비밀번호 찾기 인증번호 확인 | |
+| GET | `/auth/reset-password` | 비밀번호 재설정 화면 | |
+| PUT | `/api/auth/password-reset` | 비밀번호 재설정 처리 | |
 
 ### 사용자 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| GET | `/user/kakao` | 카카오 소셜 로그인 콜백 |
-| GET | `/user/profile` | 프로필 조회 화면 |
-| GET | `/user/profile/edit` | 프로필 수정 화면 |
-| PUT | `/api/users/profile` | 프로필 수정 처리 |
-| DELETE | `/api/users/profile/image` |
-| POST | `/api/user/withdraw` | 회원 탈퇴 |
-| GET | `/user/verify-password` | 비밀번호 확인 화면 |
-| GET | `/user/bookings` | 예약 내역 화면 |
-| GET | `/user/reviews` | 리뷰 목록 화면 |
-| GET | `/user/qna` | 내 Q&A 목록 화면 |
-| POST | `/user/qna` | Q&A 작성 (마이페이지) |
-| GET | `/user/qna/{id}` | 내 Q&A 상세 화면 |
-| GET | `/user/qna/{id}/edit` | 내 Q&A 수정 화면 |
-| POST | `/user/qna/{id}/edit` | 내 Q&A 수정 처리 |
-| POST | `/user/qna/{id}/delete` | 내 Q&A 삭제 |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/user/kakao` | 카카오 소셜 로그인 콜백 | |
+| GET | `/user/profile` | 프로필 조회 화면 | |
+| GET | `/user/profile/edit` | 프로필 수정 화면 | |
+| PUT | `/api/users/profile` | 프로필 수정 처리 | |
+| DELETE | `/api/users/profile/image` | |
+| POST | `/api/user/withdraw` | 회원 탈퇴 | |
+| GET | `/user/verify-password` | 비밀번호 확인 화면 | |
+| GET | `/user/bookings` | 예약 내역 화면 | |
+| GET | `/user/reviews` | 리뷰 목록 화면 | |
+| GET | `/user/qna` | 내 Q&A 목록 화면 | |
+| POST | `/user/qna` | Q&A 작성 (마이페이지) | 수정 요망 (RESTful: POST `/api/qaas`) |
+| GET | `/user/qna/{id}` | 내 Q&A 상세 화면 | |
+| GET | `/user/qna/{id}/edit` | 내 Q&A 수정 화면 | |
+| POST | `/user/qna/{id}/edit` | 내 Q&A 수정 처리 | 수정 요망 (RESTful: PUT `/api/qaas/{id}`) |
+| POST | `/user/qna/{id}/delete` | 내 Q&A 삭제 | 수정 요망 (RESTful: DELETE `/api/qaas/{id}`) |
 
 ### 사용자 API
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| POST | `/api/email/send` | 이메일 인증번호 발송 |
-| POST | `/api/email/verify` | 이메일 인증번호 확인 |
-| POST | `/api/verify-password` | 비밀번호 확인 |
-| POST | `/api/auth/find-id/code` | 아이디 찾기 인증번호 발송 |
-| POST | `/api/auth/find-id/verify` | 아이디 찾기 인증번호 확인 |
-| POST | `/api/auth/find-id` | 아이디 찾기 결과 조회 |
-| GET | `/api/user/search` | 예약 내역 검색 |
-| GET | `/api/user/payment` | 결제 상세 조회 |
-| POST | `/api/user/refund` | 환불 요청 |
-| POST | `/api/user/use-qrCode/{id}` | QR 코드 사용 처리 |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| POST | `/api/email/send` | 이메일 인증번호 발송 | |
+| POST | `/api/email/verify` | 이메일 인증번호 확인 | |
+| POST | `/api/verify-password` | 비밀번호 확인 | |
+| POST | `/api/auth/find-id/code` | 아이디 찾기 인증번호 발송 | |
+| POST | `/api/auth/find-id/verify` | 아이디 찾기 인증번호 확인 | |
+| POST | `/api/auth/find-id` | 아이디 찾기 결과 조회 | |
+| GET | `/api/user/search` | 예약 내역 검색 | 수정 요망 (RESTful: GET `/api/users/bookings?code=&status=`) |
+| GET | `/api/user/payment` | 결제 상세 조회 | 수정 요망 (RESTful: GET `/api/users/payments?code=`) |
+| POST | `/api/user/refund` | 환불 요청 | 수정 요망 (RESTful: POST `/api/users/refunds`) |
+| POST | `/api/user/use-qrCode/{id}` | QR 코드 사용 처리 | 수정 요망 (RESTful: PATCH `/api/users/bookings/{id}/use-qr`) |
 
 ### 예약 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| GET | `/booking/detail` | 예약 상세 화면 |
-| GET | `/booking/complete` | 예약 완료 화면 |
-| POST | `/api/calculate-amount` | 예약 금액 계산 |
-| POST | `/api/bookings` | 예약 생성 |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/booking/detail` | 예약 상세 화면 | |
+| GET | `/booking/complete` | 예약 완료 화면 | |
+| POST | `/api/calculate-amount` | 예약 금액 계산 | 수정 요망 (RESTful: GET `/api/bookings/calculate-amount`) |
+| POST | `/api/bookings` | 예약 생성 | |
 
 ### 결제 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| POST | `/api/payment/prepare` | 결제 준비 |
-| POST | `/api/payment/complete` | 결제 완료 |
-| POST | `/api/payment/cancel` | 결제 취소 |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| POST | `/api/payment/prepare` | 결제 준비 | |
+| POST | `/api/payment/complete` | 결제 완료 | |
+| POST | `/api/payment/cancel` | 결제 취소 | 수정 요망 (RESTful: POST `/api/payments/{id}/cancel`) |
 
 ### 장소 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| GET | `/public` | 메인 페이지 (신규 장소 4개) |
-| GET | `/public/map` | 장소 목록 (지도) |
-| POST | `/api/admin/place` | 장소 생성 (관리자) |
-| PUT | `/api/admin/place/{placeId}` | 장소 수정 (관리자) |
-| DELETE | `/api/admin/place/{placeId}` | 장소 삭제 (관리자) |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/public` | 메인 페이지 (신규 장소 4개) | |
+| GET | `/public/map` | 장소 목록 (지도) | |
+| POST | `/api/admin/place` | 장소 생성 (관리자) | |
+| PUT | `/api/admin/place/{placeId}` | 장소 수정 (관리자) | |
+| DELETE | `/api/admin/place/{placeId}` | 장소 삭제 (관리자) | |
 
 ### 룸 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| GET | `/public/place/{placeId}/room` | 장소별 룸 목록 |
-| POST | `/api/admin/room` | 룸 생성 처리 (관리자) |
-| PUT | `/api/admin/room/{roomId}` | 룸 수정 처리 (관리자) |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/public/place/{placeId}/room` | 장소별 룸 목록 | |
+| POST | `/api/admin/room` | 룸 생성 처리 (관리자) | |
+| PUT | `/api/admin/room/{roomId}` | 룸 수정 처리 (관리자) | |
 | DELTE | `/api/admin/room/{roomId}` | 룸 삭제 (관리자) | 
 
 ### 타임슬롯 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| GET | `/api/sse/{roomId}/timeslot-connect` | 타임슬롯 실시간 업데이트 (SSE) |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/api/sse/{roomId}/timeslot-connect` | 타임슬롯 실시간 업데이트 (SSE) | |
 
 ### 아이템 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| POST | `Scheduled` | 아이템 실시간 업데이트 (SSE) |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| POST | `Scheduled` | 아이템 실시간 업데이트 (SSE) | |
 
 ### 리뷰 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| GET | `/rooms/{roomId}/reviews/new` | 리뷰 작성 화면 |
-| POST | `/rooms/{roomId}/reviews` | 리뷰 작성 처리 |
-| POST | `/rooms/reviews/{reviewId}` | 리뷰 수정 처리 |
-| GET | `/user/reviews` | 사용자 리뷰 목록 조회 |
-| GET | `/api/user/reviews` | 사용자 리뷰 목록 조회 |
-| DELETE | `/api/user/reviews/{reviewId}` | 사용자 리뷰 삭제 |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/rooms/{roomId}/reviews/new` | 리뷰 작성 화면 | |
+| POST | `/rooms/{roomId}/reviews` | 리뷰 작성 처리 | |
+| POST | `/rooms/reviews/{reviewId}` | 리뷰 수정 처리 | |
+| GET | `/user/reviews` | 사용자 리뷰 목록 조회 | |
+| GET | `/api/user/reviews` | 사용자 리뷰 목록 조회 | |
+| DELETE | `/api/user/reviews/{reviewId}` | 사용자 리뷰 삭제 | |
 
 ### Q&A 관련
 
@@ -431,32 +431,32 @@ java -jar -Dspring.profiles.active=prod build/libs/eoullim-0.0.1-SNAPSHOT.jar
 
 ### 관리자 관련
 
-| HTTP Method | URL | 설명 |
-|------------|-----|------|
-| GET | `/admin/dashboard` | 관리자 대시보드 |
-| GET | `/admin/refund` | 환불 목록 화면 |
-| GET | `/admin/refund/detail/{id}` | 환불 상세 조회 |
-| POST | `/api/refund/rejection/{id}` | 환불 거절 |
-| POST | `/api/refund/approve/{id}` | 환불 승인 |
-| GET | `/admin/place` | 관리자 장소 목록 화면 |
-| GET | `/admin/users` | 사용자 목록 화면 |
-| GET | `/admin/users/{userId}` | 사용자 상세 조회 |
-| PATCH | `/admin/user/{userId}/suspend` | 사용자 정지 |
-| PATCH | `/admin/user/{userId}/restore` | 사용자 복구 |
-| GET | `/admin/qna` | 관리자 Q&A 목록 화면 |
-| GET | `/admin/qna/{qaaId}` | 관리자 Q&A 상세 화면 |
-| POST | `/admin/qna/{qaaId}/delete` | 관리자 Q&A 삭제 |
-| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 |
-| POST | `/admin/comments/{qaaId}/delete` | Q&A 댓글 삭제 |
-| GET | `/admin/notices` | 관리자 공지사항 목록 화면 |
-| GET | `/admin/notices/{noticeId}` | 관리자 공지사항 상세 화면 |
-| GET | `/admin/notices/new` | 공지사항 작성 화면 |
-| POST | `/admin/notices/new` | 공지사항 작성 처리 |
-| GET | `/admin/notices/{noticeId}/edit` | 공지사항 수정 화면 |
-| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 |
-| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 |
-| GET | `/admin/reviews` | 관리자 리뷰 목록 |
-| DELETE | `/api/admin/reviews/{reviewId}` | 관리자 리뷰 삭제 |
+| HTTP Method | URL | 설명 | 비고 |
+|------------|-----|------|------|
+| GET | `/admin/dashboard` | 관리자 대시보드 | |
+| GET | `/admin/refund` | 환불 목록 화면 | |
+| GET | `/admin/refund/detail/{id}` | 환불 상세 조회 | |
+| POST | `/api/refund/rejection/{id}` | 환불 거절 | 수정 요망 (RESTful: PATCH `/api/admin/refunds/{id}/reject`) |
+| POST | `/api/refund/approve/{id}` | 환불 승인 | 수정 요망 (RESTful: PATCH `/api/admin/refunds/{id}/approve`) |
+| GET | `/admin/place` | 관리자 장소 목록 화면 | |
+| GET | `/admin/users` | 사용자 목록 화면 | |
+| GET | `/admin/users/{userId}` | 사용자 상세 조회 | |
+| PATCH | `/admin/user/{userId}/suspend` | 사용자 정지 | |
+| PATCH | `/admin/user/{userId}/restore` | 사용자 복구 | |
+| GET | `/admin/qna` | 관리자 Q&A 목록 화면 | |
+| GET | `/admin/qna/{qaaId}` | 관리자 Q&A 상세 화면 | |
+| POST | `/admin/qna/{qaaId}/delete` | 관리자 Q&A 삭제 | |
+| POST | `/admin/qna/{qaaId}/comments/new` | Q&A 댓글 작성 | |
+| POST | `/admin/comments/{qaaId}/delete` | Q&A 댓글 삭제 | |
+| GET | `/admin/notices` | 관리자 공지사항 목록 화면 | |
+| GET | `/admin/notices/{noticeId}` | 관리자 공지사항 상세 화면 | |
+| GET | `/admin/notices/new` | 공지사항 작성 화면 | |
+| POST | `/admin/notices/new` | 공지사항 작성 처리 | |
+| GET | `/admin/notices/{noticeId}/edit` | 공지사항 수정 화면 | |
+| POST | `/admin/notices/{noticeId}/edit` | 공지사항 수정 처리 | |
+| POST | `/admin/notices/{noticeId}/delete` | 공지사항 삭제 | |
+| GET | `/admin/reviews` | 관리자 리뷰 목록 | |
+| DELETE | `/api/admin/reviews/{reviewId}` | 관리자 리뷰 삭제 | |
 
 ### 메인 페이지
 
