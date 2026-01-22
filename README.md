@@ -611,6 +611,7 @@ eoullim-Project/
   - 관리자 전용 작성
   - 중요 공지 상단 고정
 
+![Image](https://github.com/user-attachments/assets/993190c2-08a7-4f47-8e3c-7a8f08627398)
 <p align="center">
   <img src="eoullim-Project/assets/qna.gif" width="45%" />
   <img src="eoullim-Project/assets/comment.gif" width="45%" />
