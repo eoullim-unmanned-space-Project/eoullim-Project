@@ -611,6 +611,13 @@ eoullim-Project/
   - 중요 공지 상단 고정
 
 <p align="center">
+  <img src="https://github.com/user-attachments/assets/993190c2-08a7-4f47-8e3c-7a8f08627398" width="45%" />
+  <img src="https://github.com/user-attachments/assets/0b601852-422d-4b29-8fc3-6c0b187192f6" width="45%" />
+  <img src="https://github.com/user-attachments/assets/7efe107d-2b1d-4bd2-b426-e43db0298c70" width="45%" />
+  <img src="https://github.com/user-attachments/assets/85d26bde-fd78-487b-9248-c7dd70642771" width="45%" />
+</p>
+
+<p align="center">
   <img src="eoullim-Project/assets/qna.gif" width="45%" />
   <img src="eoullim-Project/assets/comment.gif" width="45%" />
   <img src="eoullim-Project/assets/notice.gif" width="45%" />
