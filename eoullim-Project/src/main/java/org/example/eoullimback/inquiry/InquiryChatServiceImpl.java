@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -108,6 +109,32 @@ public class InquiryChatServiceImpl implements InquiryChatService {
                 .toList();
     }
 
+    @Override
+    @Transactional
+    public void sendAdminReply(Long roomId, String message, Long id) {
+
+        User adminEntity = userRepository.findById(id)
+                .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
+
+        InquiryChatRoom inquiryChatRoomEntity = inquiryChatRoomRepository.findById(id)
+                .orElseThrow(() -> new Exception404(ErrorCode.INGUIRY_CHAT_ROOM_NOT_FOUND));
+
+        inquiryChatRoomEntity.setAdminId(adminEntity);
+
+
+        boolean isAdmin = adminEntity.getRoles().stream()
+                .anyMatch(userRole -> userRole.getRole() == Role.ADMIN);
+
+
+        InquiryChat inquiryChat = InquiryChat.builder()
+                .room(inquiryChatRoomEntity)
+                .receiver(adminEntity.getName())
+                .message(message)
+                .senderType(SenderType.ADMIN)
+                .build();
+
+        inquiryRepository.save(inquiryChat);
+    }
 }
 
 

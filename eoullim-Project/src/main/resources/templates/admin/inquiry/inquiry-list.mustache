@@ -217,7 +217,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         let inquiryEventSource = null;
-        let currentActiveRoomId = null;
+        let roomId = null;
 
         const chatScrollView = document.getElementById('chatScrollView');
         const chatInput = document.getElementById('chatInput');
@@ -225,11 +225,9 @@
         const chatArea = document.getElementById('chatArea');
         const chatHeader = document.getElementById('chatHeader');
 
-        // 메시지 렌더링 함수
         function appendInquiryMessage(senderType, message, createdAt) {
             const msgBox = document.createElement('div');
 
-            // [수정] 대소문자 상관없이 ADMIN이면 오른쪽(me), 아니면 왼쪽(opponent)
             const isMe = (senderType && senderType.toUpperCase() === 'ADMIN');
             msgBox.className = `admin-msg-box ${isMe ? 'me' : 'opponent'}`;
 
@@ -244,7 +242,6 @@
             chatScrollView.scrollTop = chatScrollView.scrollHeight;
         }
 
-        // 방 클릭 이벤트
         document.addEventListener('click', async (e) => {
             const roomItem = e.target.closest('.room-item');
             if (!roomItem) return;
@@ -255,8 +252,8 @@
             const selectedRoomId = roomItem.querySelector('input[type="hidden"]').value;
             const userName = roomItem.querySelector('.u-name').innerText;
 
-            if (currentActiveRoomId === selectedRoomId) return;
-            currentActiveRoomId = selectedRoomId;
+            if (roomId === selectedRoomId) return;
+            roomId = selectedRoomId;
 
             if (inquiryEventSource) inquiryEventSource.close();
 
@@ -264,28 +261,22 @@
             chatScrollView.innerHTML = '';
             chatArea.style.display = 'flex';
 
-            // 1. 이전 메시지 내역 로드
             try {
-                const response = await fetch(`/api/admin/inquiry-rooms/${selectedRoomId}/messages`);
+                const response = await fetch(`/api/admin/inquiry-rooms/${roomId}/messages`);
                 const messages = await response.json();
                 messages.forEach(msg => appendInquiryMessage(msg.senderType, msg.message, msg.createdAt));
             } catch (err) {
                 console.error("내역 로드 실패:", err);
             }
 
-            // 2. SSE 연결 (실시간 수신)
-            inquiryEventSource = new EventSource(`/api/admin/inquiry-rooms/${selectedRoomId}`);
+            inquiryEventSource = new EventSource(`/api/admin/inquiry-rooms/${roomId}`);
             inquiryEventSource.addEventListener("message", (e) => {
                 try {
                     const data = JSON.parse(e.data);
 
-                    // [핵심 수정]
-                    // SSE가 USER 뿐만 아니라 ADMIN 메시지도 쏴줄 경우 중복 방지를 위해
-                    // 현재 내가 방금 전송한 메시지가 아닐 때만 화면에 추가하거나,
-                    // 그냥 모두 SSE에서 처리하도록 sendMessage의 append 로직을 제거함.
+
                     appendInquiryMessage(data.senderType, data.message, data.createdAt);
 
-                    // 목록창의 마지막 메시지 업데이트
                     const listMsg = roomItem.querySelector('.u-msg');
                     if (listMsg) listMsg.innerText = data.message;
                 } catch (err) {
@@ -297,20 +288,19 @@
         // 전송 함수
         async function sendMessage() {
             const message = chatInput.value.trim();
-            if (!message || !currentActiveRoomId) return;
+            if (!message || !roomId) return;
 
             try {
-                const response = await fetch(`/api/admin/inquiry-rooms/${currentActiveRoomId}/messages`, {
+                const response = await fetch(`/api/admin/inquiry-rooms/${roomId}/messages`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({
+                        message: message,
+                        ...getCsrfHeaders()
+                    })
                 });
 
                 if (response.ok) {
-                    // [중요] SSE에서 본인 메시지도 다시 쏴준다면 여기서 append할 필요 없음.
-                    // 만약 SSE가 본인 메시지를 안 쏴준다면 아래 주석을 해제하세요.
-                    // appendInquiryMessage('ADMIN', message, new Date());
-
                     chatInput.value = '';
                 }
             } catch (err) {

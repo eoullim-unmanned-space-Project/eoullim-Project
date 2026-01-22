@@ -50,6 +50,10 @@ public class InquiryChatRoom {
         this.admin = admin;
     }
 
+    public void setAdminId (User admin) {
+        this.admin = admin;
+    }
+
     public boolean isOwer(Long userId) {
         if (!this.user.getId().equals(userId)) {
             return false;

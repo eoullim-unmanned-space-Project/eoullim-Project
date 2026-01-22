@@ -11,4 +11,6 @@ public interface InquiryChatService {
     InquiryChatResponse.MessageDTO sendMessage(Long id, Long roomId, String message);
 
     List<InquiryChatResponse.MessageDTO> findAllByRoomId(Long roomId);
+
+    void sendAdminReply(Long roomId, String message, Long id);
 }
