@@ -17,9 +17,11 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Service
@@ -32,21 +34,22 @@ public class InquiryChatServiceImpl implements InquiryChatService {
     private final InquiryChatRoomRepository inquiryChatRoomRepository;
     private final InquiryChatRoomService inquiryChatRoomService;
 
-    private final Map<Long, SseEmitter> emitterMap = new ConcurrentHashMap<>();
+    private final Map<Long, List<SseEmitter>> emitterMap = new ConcurrentHashMap<>();
 
     @Override
-    @Transactional
     public SseEmitter connectInquiry(Long id) {
 
         Long roomId = inquiryChatRoomService.getOrCreateRoom(id);
 
+        System.out.println(roomId);
+
         SseEmitter emitter = new SseEmitter(60L * 60 * 1000);
 
-        emitterMap.put(roomId, emitter);
+       emitterMap.computeIfAbsent(roomId, k -> new CopyOnWriteArrayList<>()).add(emitter);
 
-        emitter.onCompletion(() -> emitterMap.remove(roomId));
-        emitter.onTimeout(() -> emitterMap.remove(roomId));
-        emitter.onError(e -> emitterMap.remove(roomId));
+        emitter.onCompletion(() -> removeEmitterFromList(roomId, emitter));
+        emitter.onTimeout(() -> removeEmitterFromList(roomId, emitter));
+        emitter.onError(e -> removeEmitterFromList(roomId, emitter));
 
         sendConnectEvent(emitter, roomId);
 
@@ -96,8 +99,15 @@ public class InquiryChatServiceImpl implements InquiryChatService {
                 .build();
 
         inquiryRepository.save(inquiryChat);
+        InquiryChatResponse.MessageDTO response = new InquiryChatResponse.MessageDTO(inquiryChat);
 
-        return new InquiryChatResponse.MessageDTO(inquiryChat);
+        try {
+            broadcastMessage(roomId, response);
+        } catch (IOException e) {
+            log.error("브로드 캐스트 실패", e);
+        }
+
+        return  response ;
     }
 
     @Override
@@ -111,29 +121,61 @@ public class InquiryChatServiceImpl implements InquiryChatService {
 
     @Override
     @Transactional
-    public void sendAdminReply(Long roomId, String message, Long id) {
+    public InquiryChatResponse.MessageDTO sendAdminReply(Long roomId, String message, Long id) throws IOException {
 
         User adminEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
 
-        InquiryChatRoom inquiryChatRoomEntity = inquiryChatRoomRepository.findById(id)
+        InquiryChatRoom inquiryChatRoomEntity = inquiryChatRoomRepository.findByIdWithUser(roomId)
                 .orElseThrow(() -> new Exception404(ErrorCode.INGUIRY_CHAT_ROOM_NOT_FOUND));
 
         inquiryChatRoomEntity.setAdminId(adminEntity);
 
-
-        boolean isAdmin = adminEntity.getRoles().stream()
-                .anyMatch(userRole -> userRole.getRole() == Role.ADMIN);
-
+        String userName = inquiryChatRoomEntity.getUser().getName();
 
         InquiryChat inquiryChat = InquiryChat.builder()
                 .room(inquiryChatRoomEntity)
-                .receiver(adminEntity.getName())
+                .sender(adminEntity.getName())
                 .message(message)
                 .senderType(SenderType.ADMIN)
                 .build();
 
-        inquiryRepository.save(inquiryChat);
+        inquiryRepository.saveAndFlush(inquiryChat);
+
+        InquiryChatResponse.MessageDTO response = new InquiryChatResponse.MessageDTO(inquiryChat);
+
+        broadcastMessage(roomId, response);
+
+        return response;
+    }
+
+    private void removeEmitterFromList(Long roomId, SseEmitter emitter) {
+        List<SseEmitter> emitters = emitterMap.get(roomId);
+
+        if (emitters != null) {
+            emitters.remove(emitter);
+        }
+
+        if (emitters.isEmpty()) {
+            emitterMap.remove(roomId);
+        }
+    }
+
+    private void broadcastMessage(Long roomId, InquiryChatResponse.MessageDTO messageDTO) throws IOException{
+        List<SseEmitter> emitters = emitterMap.get(roomId);
+
+        if (emitters != null) {
+            for (SseEmitter emitter : emitters) {
+                try {
+                    emitter.send(SseEmitter.event()
+                            .name("chat")
+                            .data(messageDTO)
+                    );
+                } catch (IOException e) {
+                    removeEmitterFromList(roomId, emitter);
+                }
+            }
+        }
     }
 }
 

@@ -2,7 +2,6 @@ package org.example.eoullimback.inquiry;
 
 import lombok.RequiredArgsConstructor;
 import org.example.eoullimback._common.enums.errors.ErrorCode;
-import org.example.eoullimback._common.enums.inquiry.SenderType;
 import org.example.eoullimback._common.error.exception.Exception404;
 import org.example.eoullimback.inquiry.dto.response.InquiryChatRoomResponse;
 import org.example.eoullimback.user_auth.user.User;
@@ -23,7 +22,7 @@ public class InquiryChatRoomServiceImpl implements InquiryChatRoomService{
 
     @Override
     @Transactional
-    public InquiryChatRoomResponse.CreateResponse createOrGetRoom(Long id) {
+    public Long createOrGetRoom(Long id) {
 
         User userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new Exception404(ErrorCode.USER_NOT_FOUND));
@@ -34,7 +33,7 @@ public class InquiryChatRoomServiceImpl implements InquiryChatRoomService{
 
         inquiryChatRoomRepository.save(inquiryChatRoom);
 
-        return new InquiryChatRoomResponse.CreateResponse(inquiryChatRoom);
+        return inquiryChatRoom.getId();
     }
 
     @Override

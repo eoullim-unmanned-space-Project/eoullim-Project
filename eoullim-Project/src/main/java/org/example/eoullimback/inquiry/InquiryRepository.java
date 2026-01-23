@@ -17,4 +17,6 @@ public interface InquiryRepository extends CrudRepository<InquiryChat, Long> {
 
     @Query("SELECT ic FROM InquiryChat ic WHERE ic.room.id = :roomId ORDER BY ic.createdAt ASC")
     List<InquiryChat> findAllByRoomIdOrderByCreatedAtAsc(@Param("roomId") Long roomId);
+
+    void saveAndFlush(InquiryChat inquiryChat);
 }

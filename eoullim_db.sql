@@ -4,6 +4,10 @@ CREATE DATABASE IF NOT EXISTS eoullim_db;
 
 USE eoullim_db;
 
+SELECT * FROM events;
+SELECT * FROM users;
+DELETE FROM events where id = 1;
+
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS sse_chat;
 DROP TABLE IF EXISTS notices;
@@ -357,8 +361,7 @@ CREATE TABLE sse_chat (
     message TEXT NOT NULL COMMENT '채팅 내용'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='SSE 실시간 채팅';
 
-DROP TABLE inquiry_chat_room;
-DROP TABLE inquiry_chat;
+
 
 CREATE TABLE inquiry_chat_room (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '채팅방 고유 ID',

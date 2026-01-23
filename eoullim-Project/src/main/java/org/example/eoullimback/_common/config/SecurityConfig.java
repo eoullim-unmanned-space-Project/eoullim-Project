@@ -130,8 +130,9 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.POST, "/qna/{qnaId}/update").hasRole("USER") // U
                         .requestMatchers(HttpMethod.POST, "/user/qna/{qnaId}/delete").hasRole("USER") // D
 
-                        .requestMatchers(HttpMethod.GET,"/api/inquiry-rooms").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/inquiry-rooms/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/inquiry-rooms/**").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/inquiry-rooms/{roomId}/connect").permitAll()
 
                         // QnA 관리자
                         .requestMatchers(HttpMethod.GET, "/admin/qnas").hasRole("ADMIN") // R
@@ -181,6 +182,8 @@ public class SecurityConfig  {
                         .requestMatchers(HttpMethod.GET, "/admin/notices/{noticesId}/edit").hasRole("ADMIN") // U 화면요청
                         .requestMatchers(HttpMethod.POST, "/admin/notices/{noticesId}/edit").hasRole("ADMIN") // U
                         .requestMatchers(HttpMethod.POST, "/admin/notices/{noticesId}/delete").hasRole("ADMIN") // D
+
+                        .requestMatchers(HttpMethod.POST, "/api/admin/inquiry-rooms/{roomId}/messages").hasRole("ADMIN")
 
                         // 어드민
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

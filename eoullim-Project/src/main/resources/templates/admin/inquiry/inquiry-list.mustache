@@ -215,7 +215,7 @@
 </main>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
         let inquiryEventSource = null;
         let roomId = null;
 
@@ -226,91 +226,106 @@
         const chatHeader = document.getElementById('chatHeader');
 
         function appendInquiryMessage(senderType, message, createdAt) {
-            const msgBox = document.createElement('div');
+        const msgBox = document.createElement('div');
 
-            const isMe = (senderType && senderType.toUpperCase() === 'ADMIN');
-            msgBox.className = `admin-msg-box ${isMe ? 'me' : 'opponent'}`;
+        const isMe = (senderType && senderType.toUpperCase() === 'ADMIN');
+        msgBox.className = `admin-msg-box ${isMe ? 'me' : 'opponent'}`;
 
-            const timeDisplay = createdAt ? new Date(createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "방금 전";
+        const timeDisplay = createdAt ? new Date(createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "방금 전";
 
-            msgBox.innerHTML = `
+        msgBox.innerHTML = `
                 <div class="admin-bubble">${message}</div>
                 <span class="admin-msg-time">${timeDisplay}</span>
             `;
 
-            chatScrollView.appendChild(msgBox);
-            chatScrollView.scrollTop = chatScrollView.scrollHeight;
-        }
+        chatScrollView.appendChild(msgBox);
+        chatScrollView.scrollTop = chatScrollView.scrollHeight;
+    }
 
         document.addEventListener('click', async (e) => {
-            const roomItem = e.target.closest('.room-item');
-            if (!roomItem) return;
+        const roomItem = e.target.closest('.room-item');
+        if (!roomItem) return;
 
-            document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
-            roomItem.classList.add('active');
+        document.querySelectorAll('.room-item').forEach(el => el.classList.remove('active'));
+        roomItem.classList.add('active');
 
-            const selectedRoomId = roomItem.querySelector('input[type="hidden"]').value;
-            const userName = roomItem.querySelector('.u-name').innerText;
+        const selectedRoomId = roomItem.querySelector('input[type="hidden"]').value;
+        const userName = roomItem.querySelector('.u-name').innerText;
 
-            if (roomId === selectedRoomId) return;
-            roomId = selectedRoomId;
+        if (roomId === selectedRoomId) return;
+        roomId = selectedRoomId;
 
-            if (inquiryEventSource) inquiryEventSource.close();
+        if (inquiryEventSource) inquiryEventSource.close();
 
-            chatHeader.innerHTML = `<span class="status-dot"></span>${userName}님과 대화 중`;
-            chatScrollView.innerHTML = '';
-            chatArea.style.display = 'flex';
+        chatHeader.innerHTML = `<span class="status-dot"></span>${userName}님과 대화 중`;
+        chatScrollView.innerHTML = '';
+        chatArea.style.display = 'flex';
 
-            try {
-                const response = await fetch(`/api/admin/inquiry-rooms/${roomId}/messages`);
-                const messages = await response.json();
-                messages.forEach(msg => appendInquiryMessage(msg.senderType, msg.message, msg.createdAt));
-            } catch (err) {
-                console.error("내역 로드 실패:", err);
-            }
+        try {
+        const response = await fetch(`/api/admin/inquiry-rooms/${roomId}/messages`);
+        const messages = await response.json();
+        messages.forEach(msg => appendInquiryMessage(msg.senderType, msg.message, msg.createdAt));
+    } catch (err) {
+        console.error("내역 로드 실패:", err);
+    }
 
-            inquiryEventSource = new EventSource(`/api/admin/inquiry-rooms/${roomId}`);
-            inquiryEventSource.addEventListener("message", (e) => {
-                try {
-                    const data = JSON.parse(e.data);
+        inquiryEventSource = new EventSource(`/api/admin/inquiry-rooms/${roomId}/connect`);
+        inquiryEventSource.addEventListener("chat", (e) => {
+        try {
+        console.log(e.data);
 
+        const data = JSON.parse(e.data);
 
-                    appendInquiryMessage(data.senderType, data.message, data.createdAt);
+        appendInquiryMessage(data.senderType, data.message, data.createdAt);
 
-                    const listMsg = roomItem.querySelector('.u-msg');
-                    if (listMsg) listMsg.innerText = data.message;
-                } catch (err) {
-                    console.error("SSE 데이터 파싱 에러:", err);
-                }
-            });
-        });
-
-        // 전송 함수
-        async function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message || !roomId) return;
-
-            try {
-                const response = await fetch(`/api/admin/inquiry-rooms/${roomId}/messages`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: message,
-                        ...getCsrfHeaders()
-                    })
-                });
-
-                if (response.ok) {
-                    chatInput.value = '';
-                }
-            } catch (err) {
-                alert("전송에 실패했습니다.");
-            }
-        }
-
-        sendBtn.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+        const listMsg = roomItem.querySelector('.u-msg');
+        if (listMsg) {
+        listMsg.innerText = data.message;
+    }
+    } catch (err) {
+        console.error("SSE 데이터 파싱 에러:", err);
+    }
     });
+    });
+
+        async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message || !roomId) return;
+
+        try {
+        const response = await fetch(`/api/admin/inquiry-rooms/${roomId}/messages`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        ...getCsrfHeaders()
+    },
+        body: JSON.stringify({
+        message: message,
+    })
+});
+
+        if (response.ok) {
+        const result = await response.json();
+        chatInput.value = '';
+
+        const activeRoom = document.querySelector('.room-item.active .u-msg');
+        if (activeRoom) activeRoom.innerText = result.message;
+    }
+    } catch (err) {
+        console.error("전송 실패:", err);
+        alert("전송에 실패했습니다.");
+    }
+    }
+        // 전송 버튼 클릭 이벤트
+        sendBtn.addEventListener('click', sendMessage);
+
+        // Enter 키로 전송
+        chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+        sendMessage();
+    }
+    });
+    }); // DOMContentLoaded 닫는 괄호 - 여기가 올바른 위치!
 </script>
 </body>
 </html>
