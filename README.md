@@ -132,7 +132,7 @@
 - 빠른 응답 속도: 실시간 필터링에 적합
 - 무료 티어: 개발 단계에서 비용 절감
 
-🔴 **깃 브랜치전략**
+⚫ **깃 브랜치전략**
 
 👉 [컨벤션 문서 (CONVENTION.md)](https://github.com/eoullim-unmanned-space-Project/eoullim-Project/blob/develop/CONVENTION.md)
 
