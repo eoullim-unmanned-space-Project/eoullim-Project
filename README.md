@@ -499,7 +499,6 @@ eoullim-Project/
        │
        └────── SSE ─────────┘ (실시간 타임슬롯, 채팅)
 ```
-
 ## 주요 기능
 <p align="center">
   <img src="eoullim-Project/assets/map.gif" width="45%" />
