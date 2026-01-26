@@ -143,118 +143,42 @@
 
 👉 [컨벤션 문서 (CONVENTION.md)](https://github.com/eoullim-unmanned-space-Project/eoullim-Project/blob/develop/CONVENTION.md)
 
-## 시작하기
-사전 요구사항
-- **Java**: 17이상
-- **MySQL**: 8.0이상
-- **Gradle**: 8.x
-- **IDE**: IntelliJ IDEA 권장
+## 배포환경
 
-**⚙️ 환경설정**
+**🚀 운영 서버 정보**
+- **클라우드 플랫폼**: AWS EC2(무료 프리티어)
+- **인스턴스 타입**: t3.micro
+- **OS**: Ubuntu 22.04 LTS
+- **Java**: OpenJDK 17
+- **데이터베이스**: MySQL 8.0 (EC2 내부 설치)
+- **빌드 도구**: Gradle 8.x
 
-#### 1. 데이터베이스 설정
+**💻 배포 방식** 
+- JAR 파일 빌드 후 직접 배포
+- Systemd 서비스로 백그라운드 실행
+- 애플리케이션 포트: 8080
 
-```sql
-CREATE DATABASE eoullim CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'eoullim_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON eoullim.* TO 'eoullim_user'@'localhost';
-FLUSH PRIVILEGES;
+**🔐 보안 그룹 설정**
+```
+인바운드 규칙:
+- SSH (22): 관리자 IP만 허용
+- HTTP (80): 0.0.0.0/0
+- Custom TCP (8080): 0.0.0.0/0
 ```
 
-#### 2. 환경 변수 설정
-
-`src/main/resources/application-local.yml` 생성:
-
-```yaml
-spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/eoullim?serverTimezone=Asia/Seoul
-    username: eoullim_user
-    password: your_password
-    
-  # 카카오 로그인
-  security:
-    oauth2:
-      client:
-        registration:
-          kakao:
-            client-id: ${KAKAO_CLIENT_ID}
-            client-secret: ${KAKAO_CLIENT_SECRET}
-
-# 포트원 결제
-portone:
-  api-key: ${PORTONE_API_KEY}
-  api-secret: ${PORTONE_API_SECRET}
-
-# Gemini AI
-gemini:
-  api-key: ${GEMINI_API_KEY}
-
-# Gmail SMTP
-spring:
-  mail:
-    username: ${GMAIL_USERNAME}
-    password: ${GMAIL_APP_PASSWORD}
-
-# SOLAPI (문자 발송)
-solapi:
-  api-key: ${SOLAPI_API_KEY}
-  api-secret: ${SOLAPI_API_SECRET}
-
-# Gemini
-gemini:
-  api-key: ${GEMINI_API_KEY}
-```
-
-#### 3. 환경 변수 등록
-
-**Linux/Mac**:
-```bash
-export KAKAO_CLIENT_ID=your_kakao_client_id
-export KAKAO_CLIENT_SECRET=your_kakao_secret
-export PORTONE_API_KEY=your_portone_key
-export PORTONE_API_SECRET=your_portone_secret
-export GEMINI_API_KEY=your_gemini_key
-export GMAIL_USERNAME=your_email@gmail.com
-export GMAIL_APP_PASSWORD=your_app_password
-export SOLAPI_API_KEY=your_solapi_key
-export SOLAPI_API_SECRET=your_solapi_secret
-```
-
-**Windows**:
-```cmd
-set KAKAO_CLIENT_ID=your_kakao_client_id
-set KAKAO_CLIENT_SECRET=your_kakao_secret
-...
-```
-
-### 실행
-
-#### 개발 환경
-
-```bash
-# 빌드
-./gradlew clean build
-
-# 실행
-./gradlew bootRun --args='--spring.profiles.active=local'
-```
-
-#### 프로덕션 환경
-
-```bash
-# JAR 빌드
-./gradlew clean build -x test
-# 실행
-java -jar -Dspring.profiles.active=prod build/libs/eoullim-0.0.1-SNAPSHOT.jar
-```
-
-### 접속
-- **애플리케이션**: http://localhost:8080
-- **관리자 페이지**: http://localhost:8080/admin/dashboard
+**⚙️ 접속 정보**
+- **서비스 URL**: http://your-ec2-ip:8080/public
+- **관리자 페이지**: http://your-ec2-ip:8080/admin/dashboard
 - **기본 관리자 계정**: 
-  - ID: `admin`
-  - PW: `admin1234!` (최초 로그인 후 변경 필수)
+  - ID: `admin` 
+  - PW: `admin1234!`
+
+**🛠️ 환경 변수**
+- Kakao OAuth 2.0 (로그인)
+- PortOne API (결제)
+- Gemini API (AI 챗봇)
+- Gmail SMTP (이메일 발송)
+- SOLAPI (SMS 발송)
 
 ## API 엔드포인트
 
