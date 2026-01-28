@@ -168,8 +168,8 @@
 ```
 
 **⚙️ 접속 정보**
-- **서비스 URL**: http://your-ec2-ip:8080/public
-- **관리자 페이지**: http://your-ec2-ip:8080/admin/dashboard
+- **서비스 URL**: http://eoullim.duckdns.org:8080/public
+- **관리자 페이지**: http://eoullim.duckdns.org:8080/admin/dashboard
 - **기본 관리자 계정**: 
   - ID: `admin` 
   - PW: `admin1234!`
