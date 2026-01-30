@@ -242,6 +242,7 @@
 | GET | `/booking/complete` | 예약 완료 화면 ||
 | POST | `/api/bookings/calculate-amount`| 예약 금액 계산 ||
 | POST | `/api/bookings` | 예약 생성 ||
+| POST | `/api/bookings/{id}/cancel` | 예약 취소 ||
 
 ### 결제 관련
 
