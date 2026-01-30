@@ -213,11 +213,11 @@
 | GET | `/user/bookings` | 예약 내역 화면 | |
 | GET | `/user/reviews` | 리뷰 목록 화면 | |
 | GET | `/user/qna` | 내 Q&A 목록 화면 | |
-| POST | `/user/qna` | Q&A 작성 (마이페이지) | 수정 요망 (RESTful: POST `/api/qaas`) |
+| POST | `/user/api/qaas` | Q&A 작성 (마이페이지) | |
 | GET | `/user/qna/{id}` | 내 Q&A 상세 화면 | |
 | GET | `/user/qna/{id}/edit` | 내 Q&A 수정 화면 | |
-| POST | `/user/qna/{id}/edit` | 내 Q&A 수정 처리 | 수정 요망 (RESTful: PUT `/api/qaas/{id}`) |
-| POST | `/user/qna/{id}/delete` | 내 Q&A 삭제 | 수정 요망 (RESTful: DELETE `/api/qaas/{id}`) |
+| PUT | `/user/api/qaas/{id}` | 내 Q&A 수정 처리 | |
+| DELETE | `/user/api/qaas/{id}` | 내 Q&A 삭제 |  |
 
 ### 사용자 API
 
@@ -229,27 +229,27 @@
 | POST | `/api/auth/find-id/code` | 아이디 찾기 인증번호 발송 | |
 | POST | `/api/auth/find-id/verify` | 아이디 찾기 인증번호 확인 | |
 | POST | `/api/auth/find-id` | 아이디 찾기 결과 조회 | |
-| GET | `/api/user/search` | 예약 내역 검색 | 수정 요망 (RESTful: GET `/api/users/bookings?code=&status=`) |
-| GET | `/api/user/payment` | 결제 상세 조회 | 수정 요망 (RESTful: GET `/api/users/payments?code=`) |
-| POST | `/api/user/refund` | 환불 요청 | 수정 요망 (RESTful: POST `/api/users/refunds`) |
-| POST | `/api/user/use-qrCode/{id}` | QR 코드 사용 처리 | 수정 요망 (RESTful: PATCH `/api/users/bookings/{id}/use-qr`) |
+| GET | `/api/users/bookings?code=&status=` | 예약 내역 검색 ||
+| GET | `/api/users/payments?code=` | 결제 상세 조회 ||
+| POST | `/api/user/refund` | 환불 요청 ||
+| PATCH | /api/users/bookings/{id}/use-qr` | QR 코드 사용 처리 ||
 
 ### 예약 관련
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| GET | `/booking/detail` | 예약 상세 화면 | |
-| GET | `/booking/complete` | 예약 완료 화면 | |
-| POST | `/api/calculate-amount` | 예약 금액 계산 | 수정 요망 (RESTful: GET `/api/bookings/calculate-amount`) |
-| POST | `/api/bookings` | 예약 생성 | |
+| GET | `/booking/detail` | 예약 상세 화면 ||
+| GET | `/booking/complete` | 예약 완료 화면 ||
+| POST | `/api/bookings/calculate-amount`| 예약 금액 계산 ||
+| POST | `/api/bookings` | 예약 생성 ||
 
 ### 결제 관련
 
 | HTTP Method | URL | 설명 | 비고 |
 |------------|-----|------|------|
-| POST | `/api/payment/prepare` | 결제 준비 | |
-| POST | `/api/payment/complete` | 결제 완료 | |
-| POST | `/api/payment/cancel` | 결제 취소 | 수정 요망 (RESTful: POST `/api/payments/{id}/cancel`) |
+| POST | `/api/payment/prepare` | 결제 준비 ||
+| POST | `/api/payment/complete` | 결제 완료 ||
+| POST | `/api/payments/{id}/cancel` | 결제 취소 ||
 
 ### 장소 관련
 
@@ -327,8 +327,8 @@
 | GET | `/admin/dashboard` | 관리자 대시보드 | |
 | GET | `/admin/refund` | 환불 목록 화면 | |
 | GET | `/admin/refund/detail/{id}` | 환불 상세 조회 | |
-| POST | `/api/refund/rejection/{id}` | 환불 거절 | 수정 요망 (RESTful: PATCH `/api/admin/refunds/{id}/reject`) |
-| POST | `/api/refund/approve/{id}` | 환불 승인 | 수정 요망 (RESTful: PATCH `/api/admin/refunds/{id}/approve`) |
+| PATCH | `/api/admin/refunds/{id}/reject` | 환불 거절 | |
+| PATCH | `/api/admin/refunds/{id}/approve` | 환불 승인 | |
 | GET | `/admin/place` | 관리자 장소 목록 화면 | |
 | GET | `/admin/users` | 사용자 목록 화면 | |
 | GET | `/admin/users/{userId}` | 사용자 상세 조회 | |
